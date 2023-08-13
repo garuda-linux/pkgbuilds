@@ -1,0 +1,30 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-setup-assistant
+pkgver=3.1.11
+pkgrel=1
+pkgdesc="A setup utility for Garuda Linux which helps setting up & installing applications"
+arch=('any')
+url="https://gitlab.com/garuda-linux/applications/garuda-setup-assistant"
+license=('GPL3')
+depends=('yad' 'wget' 'garuda-libs' 'qt5-base')
+optdepends=('pamac')
+makedepends=('git' 'cmake')
+groups=('garuda')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+md5sums=('SKIP')
+
+build() {
+    cmake -B build -S "$pkgname-$pkgver" \
+        -DCMAKE_BUILD_TYPE='Release' \
+        -DCMAKE_INSTALL_PREFIX='/usr' \
+        -Wno-dev
+    make -C build
+}
+
+package() {
+    make -C build DESTDIR="$pkgdir" install
+
+    install -d $pkgdir/usr
+    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+}

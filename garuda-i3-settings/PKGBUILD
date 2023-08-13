@@ -1,0 +1,26 @@
+# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Maintainer: SGS <sgs at garudalinux dot org>
+
+pkgname=garuda-i3-settings
+pkgdesc='Garuda Linux i3 settings'
+pkgver=1.1.15
+pkgrel=1
+arch=('any')
+depends=('garuda-common-settings')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+makedepends=('git')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
+install=garuda-i3-settings.install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings')
+
+package() {
+    install -d $pkgdir/etc
+    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+    install -d $pkgdir/usr
+    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+}
+

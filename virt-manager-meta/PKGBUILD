@@ -1,0 +1,27 @@
+# Maintainer: Librewish <librewish@gmail.com>
+
+pkgname=virt-manager-meta
+pkgver=5
+pkgrel=4
+arch=('any')
+url="https://wiki.archlinux.org/index.php/Libvirt"
+license=('GPL')
+pkgdesc="Meta package for libvirt/QEMU/KVM support using virt-manager"
+install=$pkgname.install
+source=(firewall.conf)
+sha256sums=('82aa0099d874a5581dd6c05c268c6ab34dc64525cbf7df341a587099abde26a9')
+
+package() {
+	depends=("bridge-utils"
+		"dnsmasq"
+		"iptables-nft"
+		"edk2-ovmf"
+		"libvirt"
+		"netcat"
+		"qemu-desktop"
+		"radvd"
+		"virt-viewer"
+		"virt-manager")
+	install -d $pkgdir/usr/lib/systemd/system/libvirt.service.d/
+	install -Dm0644 firewall.conf $pkgdir/usr/lib/systemd/system/libvirt.service.d/firewall.conf
+}

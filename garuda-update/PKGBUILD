@@ -1,0 +1,25 @@
+# Maintainer: TNE <tne@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-update
+pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
+pkgver=4.0.3
+pkgrel=1
+arch=('any')
+license=('GPL')
+depends=('coreutils' 'sed' 'gawk' 'pacman' 'wget')
+source=("garuda-update" "update-helper-scripts" "auto-pacman" "main-update" "logrotate")
+sha512sums=('a9cea1d896fd8003c285a2f8e70d1a40f832920e6fd85b05cece04277f296f979c0cb9e39b4b0a11dfb4669751369a72c288e4de3c10aebd3011cae60c539b9c'
+            'f422a4c938ed07255eb4e616260c11c0707df967cf735afb6764923779386ae8f0750ec68b3fbfce4aadf0c4b88b4c57679fa27098e878f114282344a2aad460'
+            '164591e11bfd2cf2fadf1ecfc2594839a1612cfdc61045c80347f07357e3e3f415238b5f6f6a9da3abe4b1e8a341bb12072ff3af89c9d9373128986b4467c697'
+            '1f8864112c9de0663b66ee0d8b52d5a2d52cdaba0dff6e04e724d0db38bc0c1679adf0a6b45abc18ba6d55626c895d1b17eaf6f195132b3c54117e4909aef950'
+            'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de')
+
+package() {
+  install -Dm755 garuda-update $pkgdir/usr/bin/garuda-update
+  ln -s /usr/bin/garuda-update $pkgdir/usr/bin/update
+  install -Dm755 update-helper-scripts $pkgdir/usr/lib/garuda/garuda-update/update-helper-scripts
+  install -Dm755 main-update $pkgdir/usr/lib/garuda/garuda-update/main-update
+  install -Dm755 auto-pacman $pkgdir/usr/lib/garuda/garuda-update/auto-pacman
+  install -Dm644 logrotate $pkgdir/etc/logrotate.d/garuda-update
+}

@@ -1,0 +1,26 @@
+# Maintainer: <dr460nf1r3 at garudalinux dot org>
+# Maintainer: <librewish@garudalinux.org>
+
+pkgname=garuda-assistant
+pkgver=2.7.6
+pkgrel=1
+pkgdesc="An app which helps with all kind of system maintenance related tasks on Garuda Linux"
+arch=('x86_64')
+url="https://gitlab.com/garuda-linux/applications/$pkgname"
+license=('GPL3')
+depends=('qt5-base' 'qt5-svg' 'noto-fonts' 'xdg-utils' 'polkit' 'reflector-simple' 'hblock' 'pace' 'garuda-update' 'garuda-libs' 'btrfs-assistant')
+optdepends=('snapper-tools')
+makedepends=('git' 'cmake' 'qt5-tools')
+groups=('garuda')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+md5sums=('SKIP')
+
+build() {
+	cd "$srcdir"
+	cmake -B build -S "$pkgname-$pkgver" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
+	make -C build
+}
+
+package() {
+	make -C build DESTDIR="$pkgdir" install
+}

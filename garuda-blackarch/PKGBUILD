@@ -1,0 +1,18 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-blackarch
+pkgver=1.1.0
+pkgrel=2
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
+pkgdesc='Garuda BlackArch settings'
+depends=('coreutils')
+install=$pkgname.install
+
+package() {
+    install -d $pkgdir/usr
+    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+}

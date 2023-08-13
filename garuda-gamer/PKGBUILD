@@ -1,0 +1,29 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: librewish <librewish@garudalinux.org>
+
+pkgname=garuda-gamer
+pkgver=1.1.9
+pkgrel=1
+pkgdesc="An application which provides makes installing gaming related utilities easy"
+arch=('any')
+url="https://gitlab.com/garuda-linux/applications/$pkgname"
+license=('GPL3')
+depends=('qt5-base' 'xdg-utils' 'garuda-libs')
+makedepends=('git')
+groups=('garuda')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+md5sums=('SKIP')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	qmake-qt5 $pkgname.pro
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make INSTALL_ROOT=$pkgdir install
+
+	install -Dm0644 org.garuda.garuda-gamer.pkexec.policy $pkgdir/usr/share/polkit-1/actions/org.garuda.garuda-gamer.pkexec.policy
+	install -Dm0755 rootshell.sh $pkgdir/usr/share/garuda/scripts/garuda-gamer/rootshell.sh
+}

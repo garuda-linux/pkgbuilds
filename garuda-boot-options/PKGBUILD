@@ -1,0 +1,28 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
+# Maintainer: librewish <librewish@garudalinux.org>
+
+pkgname=garuda-boot-options
+pkgver=1.0.3
+pkgrel=1
+pkgdesc="A Boot options utility for Garuda Linux"
+arch=('any')
+url="https://gitlab.com/garuda-linux/applications/garuda-boot-options"
+license=('GPL3')
+depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
+optdepends=('plymouth')
+makedepends=('git')
+groups=('garuda')
+source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+md5sums=('SKIP')
+conflicts=('grub-customizer')
+
+build() {
+	cd "$srcdir/$pkgname-$pkgver"
+	qmake-qt5 $pkgname.pro
+	make
+}
+
+package() {
+	cd "$srcdir/$pkgname-$pkgver"
+	make INSTALL_ROOT=$pkgdir install
+}

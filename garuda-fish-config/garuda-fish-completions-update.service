@@ -1,0 +1,9 @@
+[Unit]
+Description=Updates fish completions
+
+[Service]
+Type=oneshot
+ExecStart=fish -c fish_update_completions
+Nice=19
+IOSchedulingClass=idle
+IOSchedulingPriority=7

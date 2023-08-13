@@ -1,0 +1,34 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
+# Maintainer: Librewish <librewish@gmail.com>
+
+pkgname=garuda-sway-settings
+pkgdesc='Garuda Linux Sway settings'
+pkgver=1.1.10
+pkgrel=1
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+makedepends=('coreutils')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
+depends=('capitaine-cursors'
+        'gtk-engine-murrine'
+        'kvantum-qt5'
+        'kvantum-theme-nordic-git'
+        'nordic-darker-theme'
+        'qt5ct'
+        'sway'
+        'swayidle'
+        'swaylock'
+        'swaybg'
+        'tela-circle-icon-theme-git')  
+install=$pkgname.install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings')
+
+package() {
+    install -d $pkgdir/etc
+    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+    install -d $pkgdir/usr
+    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+}

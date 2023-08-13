@@ -1,0 +1,39 @@
+# Maintainer: TNE <tne [at] garudalinux.org>
+
+pkgname=garuda-dracut-support
+pkgdesc="Dracut support for Garuda Linux"
+pkgver=1.0.1
+pkgrel=1
+arch=('any')
+license=('GPL')
+source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install dracut-rebuild dracut-remove 90-dracut-install.hook 60-dracut-remove.hook)
+md5sums=('193b158b3aac9e3671355ea00a8b226d'
+         'c860338a1073c88ea1d36cb5435e44d2'
+         'c3be5d4fdee8cd4c3eff510a97f9641a'
+         '692b1f978efc4df8b0262c0f20c9a4b0'
+         '93f659f7d84146699828b951a1155e1d'
+         '0a27fb930889ff96a9a9eeda96243544'
+         '6d8d5380f9b0d8494d31c54a33cbb9bf'
+         '4b26a0fe783a440d64985792e43272c3')
+
+package() {
+  depends=('dracut' 'zstd')
+  conflicts=('mkinitcpio' 'mkinitcpio-openswap' 'mkinitcpio-systemd-tool' 'garuda-bootctl-dracut' 'dracut-hook')
+  
+  cd $srcdir
+  # Dracut config
+  install -Dm644 05-garuda.conf $pkgdir/usr/lib/dracut/dracut.conf.d/05-garuda.conf
+
+  # Custom dracut module to create an overlayfs if booted from a snapshot
+  install -Dm755 snapshot-overlay.sh $pkgdir/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/snapshot-overlay.sh
+  install -Dm755 module-setup.sh $pkgdir/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/module-setup.sh
+
+  # Custom version of dracut-hook on the AUR
+  install -Dm644 90-dracut-install.hook "${pkgdir}/usr/share/libalpm/hooks/90-dracut-install.hook"
+  install -Dm644 60-dracut-remove.hook "${pkgdir}/usr/share/libalpm/hooks/60-dracut-remove.hook"
+  install -Dm755 dracut-install "${pkgdir}/usr/share/libalpm/scripts/dracut-install"
+  install -Dm755 dracut-remove "${pkgdir}/usr/share/libalpm/scripts/dracut-remove"
+
+  # Rebuild script
+  install -Dm755 dracut-rebuild "${pkgdir}/usr/bin/dracut-rebuild"
+}

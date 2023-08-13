@@ -1,0 +1,17 @@
+#!/bin/bash
+CMDLINE=(quiet
+        splash
+        root=UUID=$(blkid | grep $(df --output=source / | tail -n1) | awk -F'UUID=' '{ print $2 }' | awk '{ print $1 }' | sed -e 's/^"//' -e 's/"$//')
+        rootflags=subvol=@)
+
+CMDLINE_LUKS=(quiet
+            splash
+            rd.luks.uuid=$(blkid | grep $(df --output=source / | tail -n1) | awk -F'/dev/mapper/' '{ print $2 }' | awk '{ print $1 }' | sed -e 's/^"//' -e 's/"$//' -e 's/://')
+            rd.luks.options=$(blkid | grep $(df --output=source / | tail -n1) | awk -F'/dev/mapper/' '{ print $2 }' | awk '{ print $1 }' | sed -e 's/^"//' -e 's/"$//' -e 's/://' | awk -F 'luks-' '{ print $2 }')=tpm2-device=auto
+            root=UUID=$(blkid | grep $(df --output=source / | tail -n1) | awk -F'UUID=' '{ print $2 }' | awk '{ print $1 }' | sed -e 's/^"//' -e 's/"$//')
+            rootflags=subvol=@)
+
+if [[ $(lsblk | grep -c luks) == 0 ]]; then
+    echo kernel_cmdline="\"${CMDLINE[*]}"\" > /etc/dracut.conf.d/dracut-cmdline.conf
+else echo kernel_cmdline="\"${CMDLINE_LUKS[*]}"\" > /etc/dracut.conf.d/dracut-cmdline.conf
+fi

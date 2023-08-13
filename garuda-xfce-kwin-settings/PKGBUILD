@@ -1,0 +1,34 @@
+# Maintainer: zoeruda <forum.garudalinux.org/u/zoeruda>
+
+pkgname=garuda-xfce-kwin-settings
+pkgdesc='Garuda Linux Xfce-Kwin settings'
+pkgver=1.0.3
+pkgrel=2
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+makedepends=('coreutils')
+source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
+depends=('beautyline'
+        'garuda-common-settings'
+        'garuda-fish-config'
+        'garuda-icons'
+        'garuda-wallpapers'
+        'ksysguard'
+        'kvantum-qt5'
+        'nerd-fonts-fantasque-sans-mono'
+        'noto-fonts'
+        'plank'
+        'sweet-theme-full-git'
+        'ttf-fira-sans')
+install=$pkgname.install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings')
+
+package() {
+    install -d $pkgdir/etc
+    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+    install -d $pkgdir/usr
+    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+}

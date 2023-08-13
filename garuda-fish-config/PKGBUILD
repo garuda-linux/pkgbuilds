@@ -1,0 +1,42 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish librewish@gmail.com
+
+pkgname=garuda-fish-config
+pkgver=1.5.15
+pkgrel=1
+pkgdesc="Fish configuration of Garuda Linux"
+arch=(any)
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('MIT')
+depends=('bat'
+	'exa'
+	'expac'
+	'find-the-command-git'
+	'fish'
+	'fish-autopair'
+	'fzf'
+	'garuda-starship-prompt'
+	'pkgfile'
+	'tealdeer')
+makedepends=('git')
+source=("garuda-fish-completions-update.service"
+        "config.fish"
+        "garuda-update.fish"
+        "https://raw.githubusercontent.com/franciscolourenco/done/master/conf.d/done.fish")
+md5sums=('6ca19deceb370d45d506f9cbf3ddfe19'
+         'cfd40b5d32e0eee1d490e09e95d2db27'
+         '5d5b2c4a5dd7591305ad50cd528684b7'
+         'b489bb2c1d0c82fbb4207a7b8d61b17a')
+
+package() {
+	cd $srcdir
+	install -D -m644 config.fish $pkgdir/etc/skel/.config/fish/config.fish
+	install -Dm0644 garuda-update.fish "$pkgdir/usr/share/fish/vendor_conf.d/garuda-update.fish"
+	install -Dm0644 garuda-fish-completions-update.service "$pkgdir/usr/lib/systemd/user/garuda-fish-completions-update.service"
+	install -D -m644 done.fish $pkgdir/etc/skel/.config/fish/conf.d/done.fish
+
+	# Workaround for mcfly complaining about missing history
+	mkdir -p $pkgdir/etc/skel/.local/share/fish
+	touch $pkgdir/etc/skel/.local/share/fish/fish_history
+}
+
