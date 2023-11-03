@@ -8,9 +8,7 @@ check:
   stage: check
   image: nixpkgs/nix-flakes:latest
   script:
-    - ls -la
-    - ls -la .git
-    - nix flake check --show-trace
+    - nix flake check
   only:
     refs: [testing]
 deploy:

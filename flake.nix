@@ -12,10 +12,6 @@
     # The single source of truth
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # Have a local index of nixpkgs for fast launching of apps
-    nix-index-database.url = "github:nix-community/nix-index-database";
-    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
-
     # Easy linting of the flake and all kind of other stuff
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
