@@ -1,29 +1,29 @@
-{ 
-  "homepage" : "https://start.garudalinux.org", 
-  "homepage_is_newtabpage" : true, 
-  "browser" : { 
-    "show_home_button" : true
-  },
-  "session" : {
-    "restore_on_startup" : 4,
-    "startup_urls" : [
-      "https://forum.garudalinux.org"
-    ]
-  },
-  "distribution": {
-    "import_bookmarks": false,
-    "import_bookmarks_from_file": "/usr/lib/chromium/bookmarks.html",
-    "skip_first_run_ui": true
-   },
-  "bookmark_bar" : { 
-    "show_on_all_tabs" : true 
-  }, 
-  "sync_promo" : {
-    "show_on_first_run_allowed": false
-  },
-  "first_run_tabs" : [ 
-    "https://start.garudalinux.org", 
-    "welcome_page", 
-    "new_tab_page" 
-  ] 
+{
+	"homepage" : "https://start.garudalinux.org",
+	"homepage_is_newtabpage" : true,
+	"browser" : {
+	"show_home_button" : true
+	},
+	"session" : {
+	"restore_on_startup" : 4,
+	"startup_urls" : [
+	"https://forum.garudalinux.org"
+	]
+	},
+	"distribution": {
+	"import_bookmarks": false,
+	"import_bookmarks_from_file": "/usr/lib/chromium/bookmarks.html",
+	"skip_first_run_ui": true
+	},
+	"bookmark_bar" : {
+	"show_on_all_tabs" : true
+	},
+	"sync_promo" : {
+	"show_on_first_run_allowed": false
+	},
+	"first_run_tabs" : [
+	"https://start.garudalinux.org",
+	"welcome_page",
+	"new_tab_page"
+	]
 }

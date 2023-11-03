@@ -3,7 +3,7 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver=0.3.4
+pkgver=0.4.79
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -15,10 +15,10 @@ pkgdesc='Garuda Linux Hyprland settings'
 depends=('beautyline'
 	'garuda-common-settings'
 	'gtk-engine-murrine'
-	'sweet-theme-full-git'
-	'waybar-hyprland-git'
+	'plasma5-themes-sweet-full-git'
+	'waybar'
 	'hyprland-git'
-	'kvantum-qt5'
+	'kvantum'
 	'ttf-fira-code'
 	'ttf-firacode-nerd'
 	'qt5ct')

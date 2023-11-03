@@ -2,7 +2,7 @@
 # Contributor: Librewish librewish@gmail.com
 
 pkgname=garuda-fish-config
-pkgver=1.5.18
+pkgver=1.5.20
 pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
@@ -17,16 +17,17 @@ depends=('bat'
 	'fzf'
 	'garuda-starship-prompt'
 	'pkgfile'
-	'tealdeer')
+	'tealdeer'
+	'ugrep')
 makedepends=('git')
 source=("garuda-fish-completions-update.service"
 	"config.fish"
 	"garuda-update.fish"
 	"https://raw.githubusercontent.com/franciscolourenco/done/master/conf.d/done.fish")
 md5sums=('6ca19deceb370d45d506f9cbf3ddfe19'
-	'b87aae62a1ec1b8eb1f9ca0d9a8eb05f'
+	'2bef1e9eb671adceac154177f3dd18a2'
 	'5d5b2c4a5dd7591305ad50cd528684b7'
-	'b489bb2c1d0c82fbb4207a7b8d61b17a')
+	'152e8c8feb30fc7594b8397d3430d073')
 
 package() {
 	cd $srcdir

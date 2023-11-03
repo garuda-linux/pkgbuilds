@@ -2,22 +2,22 @@
 set -e
 
 minimal_pacman_conf() {
-    local TEMP_CONF
-    TEMP_CONF=$(mktemp)
-    echo -e "[chaotic-aur]\nServer = https://garudalinux.org/os/garuda-update/backuprepo/x86_64" > "$TEMP_CONF"
-    echo "$TEMP_CONF"
+	local TEMP_CONF
+	TEMP_CONF=$(mktemp)
+	echo -e "[chaotic-aur]\nServer = https://garudalinux.org/os/garuda-update/backuprepo/x86_64" >"$TEMP_CONF"
+	echo "$TEMP_CONF"
 }
 
 self_update() {
-    # Let the update script self update
-    local EXTRA_PARAMS=()
-    [ "$DATABASE_UPDATED" != "true" ] && $PACMAN -Sy && DATABASE_UPDATED=true || true
-    $INT
-    [ "$DATABASE_UPDATED" != "true" ] && local MIN_PACMAN_CONF && MIN_PACMAN_CONF="$(minimal_pacman_conf)" && $PACMAN --config "$MIN_PACMAN_CONF" -Syy && EXTRA_PARAMS=("--config" "$MIN_PACMAN_CONF") || true
-    $INT
-    $PACMAN -Qu garuda-update &> /dev/null && SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN "${EXTRA_PARAMS[@]}" -Sdd garuda-update --needed --noconfirm && GARUDA_UPDATE_SELFUPDATE=1 exec /usr/bin/garuda-update "$@" || true # whatever, it is how it is
-    # Check if we have received sigint and should exit
-    $INT
+	# Let the update script self update
+	local EXTRA_PARAMS=()
+	[ "$DATABASE_UPDATED" != "true" ] && $PACMAN -Sy && DATABASE_UPDATED=true || true
+	$INT
+	[ "$DATABASE_UPDATED" != "true" ] && local MIN_PACMAN_CONF && MIN_PACMAN_CONF="$(minimal_pacman_conf)" && $PACMAN --config "$MIN_PACMAN_CONF" -Syy && EXTRA_PARAMS=("--config" "$MIN_PACMAN_CONF") || true
+	$INT
+	$PACMAN -Qu garuda-update &>/dev/null && SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN "${EXTRA_PARAMS[@]}" -Sdd garuda-update --needed --noconfirm && GARUDA_UPDATE_SELFUPDATE=1 exec /usr/bin/garuda-update "$@" || true # whatever, it is how it is
+	# Check if we have received sigint and should exit
+	$INT
 }
 
 # Some funny stuff with reflector makes it not exit on sigint, we set up our own sigint handler for that
@@ -26,26 +26,26 @@ trap "INT=false" INT
 
 # Elevate once and stop asking for the password constantly
 if [[ $EUID -ne 0 ]]; then
-    exec sudo --preserve-env="SKIP_MIRRORLIST,UPDATE_AUR,PACMAN_EXE,GARUDA_SNAPSHOT_PACMAN,PACMAN_EXTRA_OPTS" /usr/bin/garuda-update "$@"
-    exit 1
+	exec sudo --preserve-env="SKIP_MIRRORLIST,UPDATE_AUR,PACMAN_EXE,GARUDA_SNAPSHOT_PACMAN,PACMAN_EXTRA_OPTS" /usr/bin/garuda-update "$@"
+	exit 1
 fi
 
 # Run the "I'm too lazy to fix it myself all in one" script
 if [ "$1" == "remote" ]; then
-    exec bash -c "VERSION=6 . <(wget -qO- https://garudalinux.org/os/garuda-update/remote-update) \"\$@\"" remote-update "${@:2}"
+	exec bash -c "VERSION=6 . <(wget -qO- https://garudalinux.org/os/garuda-update/remote-update) \"\$@\"" remote-update "${@:2}"
 fi
 
 if [ ! -z "$PACMAN_EXE" ]; then
-    PACMAN="$PACMAN_EXE"
+	PACMAN="$PACMAN_EXE"
 else
-    PACMAN="pacman"
+	PACMAN="pacman"
 fi
 
 export PACMAN
 
 DATABASE_UPDATED=false
 if [ ! -z "$GARUDA_UPDATE_SELFUPDATE" ]; then
-    DATABASE_UPDATED=true
+	DATABASE_UPDATED=true
 fi
 
 self_update "$@"

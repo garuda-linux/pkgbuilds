@@ -2,7 +2,7 @@
 # Maintainer: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-network-assistant
-pkgver=1.1.2
+pkgver=1.1.3
 pkgrel=1
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')

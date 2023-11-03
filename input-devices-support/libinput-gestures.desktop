@@ -6,4 +6,4 @@ Name=Libinput Gestures
 Exec=/usr/bin/libinput-gestures
 Icon=libinput-gestures
 Comment=Background application to intercept and action libinput gestures from touchpad.
-Categories=System;
+Categories=System

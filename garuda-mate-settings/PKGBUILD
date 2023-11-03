@@ -1,11 +1,11 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org
-# Maintainer: zoeruda <forum.garudalinux.org/u/zoeruda>
+# Contributor: zoeruda <forum.garudalinux.org/u/zoeruda>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-mate-settings
 pkgdesc='Garuda Linux Mate settings'
 pkgver=1.5.2
-pkgrel=1
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -19,8 +19,8 @@ depends=(
 	'garuda-backgrounds'
 	'garuda-common-settings'
 	'garuda-fish-config'
-	'kvantum-qt5'
-	'sweet-theme-full-git'
+	'kvantum'
+	'plasma5-themes-sweet-full-git'
 	'ttf-firacode-nerd'
 	'yaru-icon-theme'
 )

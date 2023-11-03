@@ -1,9 +1,9 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
-# Maintainer: Librewish <librewish@gmail.com>
+# Contributorr: Librewish <librewish@gmail.com>
 
 pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
-pkgver=1.1.10
+pkgver=1.1.15
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -13,7 +13,7 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 sha256sums=('SKIP')
 depends=('capitaine-cursors'
 	'gtk-engine-murrine'
-	'kvantum-qt5'
+	'kvantum'
 	'kvantum-theme-nordic-git'
 	'nordic-darker-theme'
 	'qt5ct'

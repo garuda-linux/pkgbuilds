@@ -1,10 +1,10 @@
-# Maintainer: Librewish <librewish@gmail.com>
-# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Maintainer: SGS <sgs at garudalinux dot org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-i3-settings
 pkgdesc='Garuda Linux i3 settings'
-pkgver=1.1.15
+pkgver=1.1.21
 pkgrel=1
 arch=('any')
 depends=('garuda-common-settings')

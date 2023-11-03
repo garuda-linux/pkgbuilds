@@ -1,8 +1,8 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinuxd dot org>
-# Maintainer: librewish <librewish@garudalinux.org>
+# Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-welcome
-pkgver=1.2.2
+pkgver=1.2.4
 pkgrel=1
 pkgdesc="A Welcome app for Garuda Linux"
 arch=('any')

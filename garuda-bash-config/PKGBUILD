@@ -2,7 +2,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-bash-config
-pkgver=1.0.5
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="Bash configuration for Garuda Linux"
 arch=(any)
@@ -11,7 +11,8 @@ license=('GPL')
 depends=('bash'
 	'bash-completion'
 	'find-the-command-git'
-	'garuda-starship-prompt')
+	'garuda-starship-prompt'
+	'ugrep')
 makedepends=('git')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')

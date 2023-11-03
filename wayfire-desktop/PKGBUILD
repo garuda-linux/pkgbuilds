@@ -1,0 +1,59 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
+
+pkgname=wayfire-desktop
+pkgver=1.0.0
+pkgrel=2
+arch=(any)
+url='https://wayfire.org/'
+pkgdesc='A meta package to use Wayfire as a desktop'
+
+package() {
+	replaces=(wayfire-desktop-git)
+	depends=(
+		'bemenu-wlroots'
+		'brightnessctl'
+		'clipman'
+		'dex'
+		'gammastep'
+		'gnome-keyring'
+		'grim'
+		'kanshi'
+		'kvantum'
+		'mako'
+		'nwg-drawer'
+		'nwg-look'
+		'perl-file-mimeinfo'
+		'playerctl'
+		'polkit-gnome'
+		'qt5-wayland'
+		'qt5ct'
+		'slurp'
+		'swayidle'
+		'swaylock'
+		'waybar'
+		'wayfire'
+		'wayvnc'
+		'wcm'
+		'wcm'
+		'wf-config'
+		'wf-osk-git'
+		'wf-recorder'
+		'wf-shell'
+		'wl-clipboard'
+		'wlogout'
+		'wofi'
+		'wtype'
+		'xdg-desktop-portal-wlr'
+		'xdg-user-dirs-gtk'
+		'xdg-utils'
+	)
+	optdepends=(
+		'blueberry: for bluetooth'
+		'network-manager-applet: for nm gtk frontend'
+		'greetd-qtgreet: recommonded display manager'
+		'xorg-server-xwayland: xwayland support'
+		'xorg-xhost: to run xwayland apps with elevated privilage'
+		'alacritty: recommended terminal'
+	)
+}

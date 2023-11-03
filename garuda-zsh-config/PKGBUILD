@@ -2,7 +2,7 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-zsh-config
-pkgver=1.1.9
+pkgver=1.1.10
 pkgrel=1
 pkgdesc="Zsh configuration for Garuda Linux"
 arch=(any)
@@ -17,7 +17,8 @@ depends=('garuda-starship-prompt'
 	'zsh-syntax-highlighting'
 	'find-the-command-git'
 	'fzf'
-	'mcfly')
+	'mcfly'
+	'ugrep')
 makedepends=('git')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')

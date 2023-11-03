@@ -2,14 +2,14 @@
 
 # Elevate
 if [[ $EUID -ne 0 ]]; then
-    exec pkexec /usr/lib/garuda/pkexec-gui "$@"
-    exit 1
+	exec pkexec /usr/lib/garuda/pkexec-gui "$@"
+	exit 1
 fi
 
 # Restore some variables from parent process
 while IFS= read -rd '' var; do export "$var"; done < <(grep --null-data -ae "^\(XDG_CURRENT_DESKTOP\|WAYLAND_DISPLAY\|XDG_RUNTIME_DIR\|XDG_SESSION_TYPE\|XCURSOR_SIZE\|LC_.*\|LANG\|LANGUAGE\|QT_WAYLAND_FORCE_DPI\|QT_QPA_PLATFORMTHEME\|QT_STYLE_OVERRIDE\|\)=.*\$" /proc/$PPID/environ)
 if [[ -v WAYLAND_DISPLAY ]]; then
-    export WAYLAND_DISPLAY="$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY"
+	export WAYLAND_DISPLAY="$XDG_RUNTIME_DIR/$WAYLAND_DISPLAY"
 fi
 export XDG_RUNTIME_DIR="/run/user/0"
 exec "$@"

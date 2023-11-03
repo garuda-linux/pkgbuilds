@@ -1,10 +1,10 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-wayfire-settings
 pkgdesc='Garuda Linux Wayfire settings'
 pkgver=1.0.30
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -14,7 +14,7 @@ sha256sums=('SKIP')
 depends=('beautyline'
 	'garuda-fish-config'
 	'ttf-fantasque-nerd'
-	'sweet-theme-full-git'
+	'plasma5-themes-sweet-full-git'
 	'ttf-fira-sans'
 	'garuda-common-settings')
 provides=('garuda-desktop-settings')

@@ -2,7 +2,7 @@
 # Maintainer: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-boot-options
-pkgver=1.0.3
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
