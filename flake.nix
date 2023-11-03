@@ -41,10 +41,18 @@
             hooks = {
               commitizen.enable = true;
               nixpkgs-fmt.enable = true;
-              pkgbuilds = {
+              pkgbuilds-shellcheck = {
                 enable = true;
-                name = "PKGBUILD checks";
+                name = "PKGBUILD shellcheck";
                 entry = "${pkgs.shellcheck}/bin/shellcheck";
+                files = "(PKGBUILD|install$)";
+                types = [ "text" ];
+                language = "system";
+              };
+              pkgbuilds-style = {
+                enable = true;
+                name = "PKGBUILD shfmt";
+                entry = "${pkgs.shfmt}/bin/shfmt -d -w";
                 files = "(PKGBUILD|install$)";
                 types = [ "text" ];
                 language = "system";
