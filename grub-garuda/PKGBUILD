@@ -1,0 +1,12 @@
+# Maintainer : Librewish <librewish@gmail.com>
+pkgname='grub-garuda'
+pkgdesc='meta pkg for grub'
+pkgver=2.06
+pkgrel=1
+url='https://www.gnu.org/software/grub/'
+arch=('any')
+license=('GPL3')
+conflicts=('grub-garuda' 'grub-customizer')
+provides=('grub-garuda')
+makedepends=('git')
+depends=('grub' 'update-grub' 'os-prober-btrfs' 'efibootmgr' 'memtest86+')

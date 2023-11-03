@@ -1,0 +1,10 @@
+post_install() {
+    post_upgrade
+}
+
+post_upgrade() {
+    systemctl is-active connman.service >/dev/null || systemctl enable connman.service --force
+    systemctl is-active ofono.service >/dev/null || systemctl enable ofono.service --force
+    systemctl is-active iwd.service >/dev/null || systemctl enable iwd.service
+    systemctl is-active ead.service >/dev/null || systemctl enable ead.service
+}

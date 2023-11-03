@@ -82,7 +82,7 @@ do_update() {
 show_changelog() {
     # Show update notices if the notices file exists
     if [ -e "/var/lib/garuda/tmp/update_notices" ]; then
-        echo -e "\033[1;32mUpdate notices:\n\033[1;34m$(cut -f2 /var/lib/garuda/tmp/update_notices)\n\033[0m"
+        echo -e "\033[1;32mUpdate notices:\n\033[1;34m$(gawk -F '\t' '{print $2}' /var/lib/garuda/tmp/update_notices)\n\033[0m"
         rm /var/lib/garuda/tmp/update_notices
     fi
 }
@@ -170,7 +170,6 @@ if [ -v PACMAN_EXTRA_OPTS ]; then
 fi
 
 do_update
-migrate_dr460nized
 
 if [[ -v UPDATE_AUR ]]; then
     # Check for AUR helper

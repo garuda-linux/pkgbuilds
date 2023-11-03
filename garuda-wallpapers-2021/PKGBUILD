@@ -1,0 +1,26 @@
+pkgname=garuda-wallpapers-2021
+pkgver=r1
+pkgrel=1
+pkgdesc="Wallpaper collection, 2021 edition"
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021"
+license=('GPLv3')
+makedepends=('git')
+depends=()
+source=("git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    	cd "$srcdir/garuda-wallpapers-2021"
+
+        # Git, no tags available
+        	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+
+}
+
+package() {
+        cd ${pkgname}
+
+            install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+                cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+}

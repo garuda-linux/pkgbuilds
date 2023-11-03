@@ -1,0 +1,11 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = firefox-kde-opensuse
+Target = firefox-kde-opensuse-bin
+
+[Action]
+Description = Copy Firefox Distribution Settings
+When = PostTransaction
+Exec = /usr/bin/cp -f /etc/garuda-settings/garuda-firefox-kde.ini /usr/lib/firefox/distribution/distribution.ini

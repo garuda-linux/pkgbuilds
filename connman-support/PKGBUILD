@@ -1,0 +1,33 @@
+# Maintainer: Librewish <librewish@gmail.com>
+
+pkgname=connman-support
+pkgver=1
+pkgrel=2
+arch=('any')
+url="https://wiki.archlinux.org/index.php/ConnMan"
+license=('GPL')
+pkgdesc="Metapkg for packages needed to use ConnMan"
+depends=("connman"
+        "gpsd"
+        "iwd"
+        "mmsd"
+        "mobile-broadband-provider-info"
+        "neard"
+        "ofono"
+        "openconnect"
+        "openresolv"
+        "openssh"
+        "openvpn"
+        "pacrunner"
+        "pptpclient"
+        "rp-pppoe"
+        "usb_modeswitch"
+        "wireguard-tools")
+optdepends=('cmst: A QT GUI for ConnMan'
+            'connman-gtk: A GTK GUI for ConnMan'
+            'modem-manager-gui: A GTK+ GUI for modem manager'
+            'phonesim: Phone Simulator for modem testing'
+            'qomui: OpenVPN/WireGuard QT Gui with advanced features and support for multiple providers')
+conflicts=("networkmanager-support" "wpa_supplicant")
+install=$pkgname.install
+

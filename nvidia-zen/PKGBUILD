@@ -1,0 +1,39 @@
+# Maintainer: TNE <TNE a_t garudalinux dot org>
+# Contributor: Sven-Hendrik Haase <svenstaro@archlinux.org>
+# Contributor: Felix Yan <felixonmars@archlinux.org>
+# Contributor: Thomas Baechler <thomas@archlinux.org>
+
+pkgname=nvidia-zen
+pkgver=515.43.04.1+5.17.8.zen1.1
+pkgrel=1
+pkgdesc="NVIDIA drivers for linux"
+arch=('x86_64')
+url="https://www.nvidia.com/"
+makedepends=('linux-zen-headers' "nvidia-dkms")
+provides=('NVIDIA-MODULE')
+license=('custom')
+options=('!strip')
+
+pkgver() {
+    pacman -Rddp --print-format %v nvidia-dkms linux-zen-headers | head -c -1 | sed -z 's/\n/+/g;s/-/./g'
+}
+
+build() {
+    _kernver=$(</usr/src/linux-zen/version)
+    _nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
+
+    fakeroot dkms build --dkmstree "${srcdir}" -m nvidia/${_nvidiaver%-*} -k ${_kernver}
+}
+
+package() {
+    _kernver="$(</usr/src/linux-zen/version)"
+    _nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
+    depends=("linux-zen=$(pacman -Rddp --print-format %v linux-zen-headers)" "nvidia-utils=${_nvidiaver}" 'libglvnd')
+
+    install -Dt "${pkgdir}/usr/lib/modules/${_kernver}/extramodules" -m644 nvidia/${_nvidiaver%-*}/${_kernver}/${CARCH}/module/*
+
+    # compress each module individually
+    find "$pkgdir" -name '*.ko' -exec xz -T1 {} +
+
+    install -Dm644 /usr/share/licenses/nvidia-dkms/LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

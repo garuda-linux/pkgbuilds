@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = timeshift-autosnap
+Target = timeshift-support
+
+[Action]
+Description = Ensuring timeshift-autosnap has correct settings...
+When = PostTransaction
+Exec = /bin/sh -c "sed -i 's/updateGrub=true/updateGrub=false/g' /etc/timeshift-autosnap.conf"

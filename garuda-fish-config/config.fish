@@ -96,14 +96,21 @@ function copy
     end
 end
 
+# Cleanup local orphaned packages
+function cleanup
+    while pacman -Qdtq
+        sudo pacman -R (pacman -Qdtq)
+    end
+end
+
 ## Useful aliases
 
-# Replace ls with exa
-alias ls 'exa -al --color=always --group-directories-first --icons' # preferred listing
-alias la 'exa -a --color=always --group-directories-first --icons'  # all files and dirs
-alias ll 'exa -l --color=always --group-directories-first --icons'  # long format
-alias lt 'exa -aT --color=always --group-directories-first --icons' # tree listing
-alias l. 'exa -ald --color=always --group-directories-first --icons .*' # show only dotfiles
+# Replace ls with eza
+alias ls 'eza -al --color=always --group-directories-first --icons' # preferred listing
+alias la 'eza -a --color=always --group-directories-first --icons'  # all files and dirs
+alias ll 'eza -l --color=always --group-directories-first --icons'  # long format
+alias lt 'eza -aT --color=always --group-directories-first --icons' # tree listing
+alias l. 'eza -ald --color=always --group-directories-first --icons .*' # show only dotfiles
 
 # Replace some more things with better alternatives
 alias cat 'bat --style header --style snip --style changes --style header'
@@ -120,11 +127,11 @@ alias ..... 'cd ../../../..'
 alias ...... 'cd ../../../../..'
 alias big 'expac -H M "%m\t%n" | sort -h | nl'     # Sort installed packages according to size in MB (expac must be installed)
 alias dir 'dir --color=auto'
-alias egrep 'grep -E --color=auto'
-alias fgrep 'grep -F --color=auto'
 alias fixpacman 'sudo rm /var/lib/pacman/db.lck'
 alias gitpkg 'pacman -Q | grep -i "\-git" | wc -l' # List amount of -git packages
-alias grep 'grep --color=auto'
+alias grep 'ugrep --color=auto'
+alias egrep 'ugrep -E --color=auto'
+alias fgrep 'ugrep -F --color=auto'
 alias grubup 'sudo update-grub'
 alias hw 'hwinfo --short'                          # Hardware Info
 alias ip 'ip -color'
@@ -150,9 +157,6 @@ alias please 'sudo'
 alias tb 'nc termbin.com 9999'
 alias helpme 'echo "To print basic information about a command use tldr <command>"'
 alias pacdiff 'sudo -H DIFFPROG=meld pacdiff'
-
-# Cleanup orphaned packages
-alias cleanup 'sudo pacman -Rns (pacman -Qtdq)'
 
 # Get the error messages from journalctl
 alias jctl 'journalctl -p 3 -xb'

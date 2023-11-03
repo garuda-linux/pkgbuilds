@@ -1,0 +1,12 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = librewolf
+Target = librewolf-bin
+Target = librewolf-hg
+
+[Action]
+Description = Remove Librewolf Distribution Settings
+When = PreTransaction
+Exec = /usr/bin/rm -f /usr/lib/librewolf/distribution/distribution.ini{,.mjo}

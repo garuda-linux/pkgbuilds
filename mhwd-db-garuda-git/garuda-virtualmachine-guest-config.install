@@ -1,0 +1,7 @@
+post_install() {
+    ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target /etc/systemd/system/multi-user.target.wants/garuda-virtualmachine-guest-config.target
+}
+
+post_remove() {
+    rm -f /etc/systemd/system/multi-user.target.wants/garuda-virtualmachine-guest-config.target
+}

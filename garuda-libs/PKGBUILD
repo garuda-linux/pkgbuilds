@@ -2,7 +2,7 @@
 
 pkgname=garuda-libs
 pkgdesc="Libraries commonly used by Garuda Linux software"
-pkgver=1.4.2
+pkgver=1.4.4
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -14,7 +14,7 @@ sha512sums=('7e1d34b3f921721c7886a72d5395f1d9148e9dcea02b2a268c69bfd96169a5cf594
             'dd90626f99921585aede5c814e5ad97f677563b8dd4c359512983558411dd9be030bf11dd97030cab9d6abfbc7fb59fc29e67576d77c036ce78fed8bf9aa0096'
             '75244cbfa724148f8e5e75c964f0548964eca2fa0fd40d53b61e31cf87573f5cbbba1f2029c6564ae993759f273a988091fb888a0d00a13b836095cd9e8102ad'
             '80987b22253b99ba62ebc63d35455949747a5d530afc72782891319a803c2fa2d78ee831a8eb95069d6209bf0f46da6c5be84fc484e84b77054fcb9b6d89b5cd'
-            'a4a9322a8fc5a400d83182f0162710c9b03661fcde05cbfb70254732c1e33687591209fbb7e60760eca8d67ce17fa7d9c30db6a7ac4e04858efb097f0bfe897c')
+            'd2916803054d35694b5f96f2957a57036fa7b3cf41bacfaade754109a042eea546dbf33b1d8ff59734d5c032c43e74db5b1ccabfc7a9ff48733827f510a330db')
 
 package() {
   install -Dm755 launch-terminal $pkgdir/usr/lib/garuda/launch-terminal

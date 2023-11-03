@@ -1,0 +1,33 @@
+post_install() {
+    systemctl enable btrfs-balance.timer
+    systemctl enable btrfs-defrag.timer
+    systemctl enable btrfs-scrub.timer
+    systemctl enable btrfs-trim.timer
+    systemctl enable garuda-pacman-lock
+    systemctl enable nohang-desktop
+    systemctl --global enable psd
+
+    sed -i 's|zram_checking_enabled = False|zram_checking_enabled = True|g' /etc/nohang/nohang-desktop.conf
+}
+
+post_upgrade() {
+    echo "Attempting to enable services..."
+    systemctl enable btrfs-balance.timer
+    systemctl enable btrfs-defrag.timer
+    systemctl enable btrfs-scrub.timer
+    systemctl enable btrfs-trim.timer
+    systemctl enable garuda-pacman-lock
+    systemctl enable nohang-desktop
+    systemctl --global enable psd
+
+    sed -i 's|zram_checking_enabled = False|zram_checking_enabled = True|g' /etc/nohang/nohang-desktop.conf
+
+    echo "Performing misc postinstall operations..."
+    mkfontscale /usr/share/fonts/TTF /usr/share/fonts/OTF /usr/share/fonts/misc > /dev/null 2>&1
+    mkfontdir /usr/share/fonts/TTF /usr/share/fonts/OTF /usr/share/fonts/misc > /dev/null 2>&1
+    fc-cache -s >/dev/null
+
+    glib-compile-schemas usr/share/glib-2.0/schemas
+    gtk-update-icon-cache -ftq usr/share/icons/hicolor
+    /bin/sh -c 'dconf update'
+}

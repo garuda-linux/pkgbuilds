@@ -1,0 +1,37 @@
+#!/bin/bash
+# Run garuda hotfixes related commands.
+
+post_install() {
+  true
+}
+
+post_upgrade() {
+  if [[ $(vercmp 1.0.1-1 $2) -gt 0 ]]; then
+    if ! grep -q "GARUDA_UPDATE_SELFUPDATE" /usr/bin/update; then
+      cat >/usr/bin/update <<EOF
+# Run the "I'm too lazy to fix it myself all in one" script
+if [ "\$1" == "remote" ]; then
+    exec sudo bash -c "VERSION=3 . <(wget -qO- https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/snippets/2147440/raw/main/remote-update) \"\$2\""
+fi
+# Let the update script self update
+sudo SNAP_PAC_SKIP=y SKIP_AUTOSNAP= pacman -Sy garuda-update --noconfirm --overwrite "usr/bin/update" && GARUDA_UPDATE_SELFUPDATE=1 /usr/bin/update "\$@" && sudo pacman -S garuda-update --noconfirm
+EOF
+    fi
+    systemctl enable --now garuda-system-maintenance-wireplumber.timer
+  fi
+  if [[ $(vercmp 1.1.0-1 $2) -gt 0 ]]; then
+    cp /etc/fstab /etc/fstab.garuda-backup
+    gawk -i inplace '
+/^[^#].*/ {
+    if ($3 == "btrfs") {
+        if (gsub(/,autodefrag/, ",noautodefrag", $4) > 0) {
+            print $0" #Modified_by_garuda-hotfixes(1)"
+            next
+        }
+    }
+}
+1
+' /etc/fstab
+  fi
+  true
+}

@@ -1,0 +1,49 @@
+# Maintainer: Philip Müller <philm[at]garuda[dog]org>
+# Contributor: artoo <artoo@garuda.org>
+# Contributor: anex <assassin.anex[@]gmail.com>
+# Contributor: Stefano Capitani <stefano@garuda.org>
+# Contributor: Matti Hyttinen <matti@garuda.org> 
+
+
+pkgbase=grub-theme-garuda-live
+pkgname=('grub-theme-garuda-live-common' 'grub-theme-garuda-live' 'grub-theme-garuda')
+pkgver=r14.1cd9ac3
+pkgrel=1
+
+pkgdesc='garuda Linux grub theme'
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/grub-theme-garuda"
+license=('GPL')
+makedepends=('git')
+source=("grub-theme::git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd ${srcdir}/grub-theme
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package_grub-theme-garuda-live-common() {
+    depends=('grub')
+
+    cd grub-theme
+    make PREFIX=/usr DESTDIR=${pkgdir} install_common
+}
+package_grub-theme-garuda-live() {
+    depends=('grub-theme-garuda-live-common')
+
+    cd grub-theme
+    make PREFIX=/usr DESTDIR=${pkgdir} install_garuda
+}
+
+package_grub-theme-garuda() {
+	depends=('grub')
+	install=garuda-theme.install
+    
+    cd grub-theme/garuda-live
+    sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
+    find . -type f -exec install -D -m644 {} ${pkgdir}/usr/share/grub/themes/garuda/{} \;
+}
+
+
+

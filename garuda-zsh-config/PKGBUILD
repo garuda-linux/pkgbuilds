@@ -1,7 +1,8 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Garuda-Team
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-zsh-config
-pkgver=1.1.7
+pkgver=1.1.9
 pkgrel=1
 pkgdesc="Zsh configuration for Garuda Linux"
 arch=(any)

@@ -22,6 +22,7 @@ array set auto_replace_conflicts {
     qemu-base qemu-desktop
     libretro-mame-git libretro-meta
     jack2 pipewire-jack
+    networkmanager-fortisslvpn networkmanager-support
 }
 
 if { $::conflictsfile_set } {
@@ -87,6 +88,7 @@ expect {
 
 expect {
     "looking for conflicting packages" { exp_continue }
+    "Enter a number (default=1):" { if { $noconfirm } { send "1\r"; }; exp_continue }
     -re {(\S+) and (\S+) are in conflict( \(\S+\))?\.} { parseConflicts $expect_out(1,string) $expect_out(2,string); exp_continue }
     -re {Proceed with installation.*} { if { [info exist ::env(AUTOPACMAN_LOG)] } { log_file $::env(AUTOPACMAN_LOG) }; if { $::noconfirm || $::conflictsfile_set } { send "y\r"; set noconfirm_downloading true } }
     timeout { }

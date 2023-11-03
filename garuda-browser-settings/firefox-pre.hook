@@ -1,0 +1,12 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = firefox
+Target = firefox-appmenu
+Target = firefox-bin
+
+[Action]
+Description = Remove Firefox Distribution Settings
+When = PreTransaction
+Exec = /usr/bin/rm -f /usr/lib/firefox/distribution/distribution.ini{,.mjo}

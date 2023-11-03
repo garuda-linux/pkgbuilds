@@ -1,0 +1,19 @@
+# Maintainer: TNE <tne@garudalinux.org>
+
+pkgname=garuda-reduce-verbosity
+pkgdesc="Reduce verbosity of some actions (sudo, pacman hooks)"
+pkgver=1.0.1
+pkgrel=1
+arch=('any')
+license=('GPL')
+source=("noinsults")
+sha256sums=('0ae5c44a8d0e062f5f6d13b5b8ec723e1753376c16b435c90b51b5e6d62cf338')
+
+package() {
+  install -d $pkgdir/etc/pacman.d/hooks
+  ln -s /dev/null $pkgdir/etc/pacman.d/hooks/99-foreign.hook
+  ln -s /dev/null $pkgdir/etc/pacman.d/hooks/99-orphans.hook
+  ln -s /dev/null $pkgdir/etc/pacman.d/hooks/99-pacnew-check.hook
+  install -dm750 $pkgdir/etc/sudoers.d
+  install -Dm644 noinsults $pkgdir/etc/sudoers.d/noinsults
+}

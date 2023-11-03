@@ -1,0 +1,77 @@
+# Maintainer: Philip Müller <philm[at]garuda[dog]org>
+# Contributor: artoo <artoo@garuda.org>
+# Contributor: anex <assassin.anex[@]gmail.com>
+
+_repo=garuda-tools-livecd
+
+pkgbase=garuda-live
+pkgname=('garuda-live-base'
+	#'garuda-live-openrc'
+	'garuda-live-systemd'
+	'garuda-live-skel'
+	'garuda-live-portable-efi')
+pkgver=r3.19f1cf0
+pkgrel=1
+pkgdesc='garuda Linux live session'
+arch=('any')
+url="https://gitlab.com/garuda-linux/tools/garuda-tools-livecd"
+license=('GPL')
+makedepends=('git')
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd ${srcdir}/garuda-tools-livecd
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc
+}
+
+package_garuda-live-base() {
+	pkgdesc='garuda Linux live base scripts'
+	depends=('garuda-tools-base>=0.13')
+	conflicts=('garuda-livecd-base')
+	replaces=('garuda-livecd-base')
+
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_base
+}
+
+package_garuda-live-openrc() {
+	pkgdesc='garuda Linux live openrc init scripts'
+	depends=('openrc' 'garuda-live-base')
+	conflicts=('garuda-livecd-openrc')
+# 	replaces=('garuda-livecd-openrc')
+
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_rc
+}
+
+package_garuda-live-systemd() {
+	pkgdesc='garuda Linux live systemd units'
+	depends=('systemd' 'garuda-live-base' 'reflector')
+	conflicts=('garuda-livecd-systemd')
+# 	replaces=('garuda-livecd-systemd')
+
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_sd
+}
+
+package_garuda-live-skel() {
+	pkgdesc='garuda Linux live session autostart items'
+
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_xdg
+}
+
+
+package_garuda-live-portable-efi() {
+	pkgdesc='garuda Linux live session portable efi settings'
+    depends=('grub')
+
+	cd ${srcdir}/${_repo} #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_portable_efi
+}

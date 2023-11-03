@@ -2,14 +2,14 @@
 # Contributor: Librewish librewish@gmail.com
 
 pkgname=garuda-fish-config
-pkgver=1.5.15
+pkgver=1.5.18
 pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('MIT')
 depends=('bat'
-	'exa'
+	'eza'
 	'expac'
 	'find-the-command-git'
 	'fish'
@@ -20,13 +20,13 @@ depends=('bat'
 	'tealdeer')
 makedepends=('git')
 source=("garuda-fish-completions-update.service"
-        "config.fish"
-        "garuda-update.fish"
-        "https://raw.githubusercontent.com/franciscolourenco/done/master/conf.d/done.fish")
+	"config.fish"
+	"garuda-update.fish"
+	"https://raw.githubusercontent.com/franciscolourenco/done/master/conf.d/done.fish")
 md5sums=('6ca19deceb370d45d506f9cbf3ddfe19'
-         'cfd40b5d32e0eee1d490e09e95d2db27'
-         '5d5b2c4a5dd7591305ad50cd528684b7'
-         'b489bb2c1d0c82fbb4207a7b8d61b17a')
+	'b87aae62a1ec1b8eb1f9ca0d9a8eb05f'
+	'5d5b2c4a5dd7591305ad50cd528684b7'
+	'b489bb2c1d0c82fbb4207a7b8d61b17a')
 
 package() {
 	cd $srcdir
@@ -39,4 +39,3 @@ package() {
 	mkdir -p $pkgdir/etc/skel/.local/share/fish
 	touch $pkgdir/etc/skel/.local/share/fish/fish_history
 }
-

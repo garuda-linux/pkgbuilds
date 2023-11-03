@@ -1,0 +1,25 @@
+# Maintainer: TNE <tne@garudalinux.org>
+
+pkgname=garuda-migrations
+pkgdesc="Automatically applies system configuration changes"
+pkgver=2.4.2
+pkgrel=1
+arch=('any')
+license=('GPL')
+depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
+source=(garuda-migrations-runner
+        garuda-migrations.hook)
+md5sums=('4afce41b272e40d84f988821a0b6fcef'
+         '22713cfde6e1e366dffcc56cb8af28bd')
+
+package() {
+  install -d $pkgdir/usr/share/garuda/migrations
+  install -d $pkgdir/etc/garuda/migrations
+  echo "$pkgver-$pkgrel" > $pkgdir/usr/share/garuda/migrations/current_version
+
+  cd $srcdir
+  install -d $pkgdir/usr/share/libalpm/hooks
+  install -Dm644 garuda-migrations.hook $pkgdir/usr/share/libalpm/hooks/00-garuda-migrations.hook
+  install -d $pkgdir/usr/share/libalpm/scripts
+  install -Dm755 garuda-migrations-runner $pkgdir/usr/share/libalpm/scripts/garuda-migrations-runner
+}

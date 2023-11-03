@@ -1,0 +1,19 @@
+#!/bin/bash
+
+post_install() {
+    # Change grub snapshot submenu name
+    sed -i /etc/default/grub-btrfs/config \
+        -e 's,.*GRUB_BTRFS_SUBMENUNAME=.*,GRUB_BTRFS_SUBMENUNAME=\"Garuda Linux snapshots\",'
+    
+    # Set timeshift to btrfs mode
+    sed -i 's|"btrfs_mode" : "false",|"btrfs_mode" : "true",|g' /etc/timeshift/default.json
+
+    if [[ $(/usr/bin/systemctl is-enabled grub-btrfs.path) == "enabled" ]]; then 
+        /usr/bin/systemctl disable --now grub-btrfs.path; 
+    fi
+
+    echo "Enabling automatic rebuild of grub-btrfs when snapshots are taken..."
+    /usr/bin/systemctl daemon-reload
+    /usr/bin/systemctl enable --now grub-btrfs-timeshift.path
+}
+

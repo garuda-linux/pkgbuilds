@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = garuda-migrations
+
+[Action]
+Description = Applying Garuda Linux migrations...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-migrations-runner

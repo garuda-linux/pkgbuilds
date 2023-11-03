@@ -22,7 +22,7 @@ install_expect() {
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
     local packages
-    packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack 2> /dev/null | xargs || true)"
+    packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 2> /dev/null | xargs || true)"
     # We replace python-xdg with python-pyxdg from community
     # This is not done automatically for some reason
     if [[ "$packages" =~ (^| )python-xdg($| ) ]]; then
@@ -36,10 +36,6 @@ package-replaces() {
         echo --ignore
         echo pipewire-media-session
     fi
-    if [[ "$packages" =~ (^| )qemu-base($| ) ]] && [[ "$packages" =~ (^| )virt-manager-meta($| ) ]]; then
-        echo --ignore
-        echo qemu-base
-    fi
     if [[ "$packages" =~ (^| )libretro-meta($| ) ]] && [[ "$packages" =~ (^| )libretro-mame-git($| ) ]]; then
         echo --ignore
         echo libretro-mame-git
@@ -47,6 +43,10 @@ package-replaces() {
     if [[ "$packages" =~ (^| )jack2($| ) ]] && [[ "$packages" =~ (^| )pipewire-jack($| ) ]]; then
         echo --ignore
         echo jack2,lib32-jack2,jack2-dbus
+    fi
+    if [[ "$packages" =~ (^| )pipewire($| ) ]]; then
+        echo --ignore
+        echo pipewire-common-git
     fi
 }
 
@@ -61,6 +61,22 @@ migrate-garuda-repo() {
         err=1
     }
     {
+    if (rm)
+    {
+        if ($0 ~ /^ *(Include|Server) *=/)
+        {
+            next
+        }
+        # Check for empty line
+        else if ($0 ~ /^ *$/)
+        {
+            next
+        }
+        else
+        {
+            rm=0
+        }
+    }
     if ($0 == "[options]")
     {
         print
@@ -68,13 +84,29 @@ migrate-garuda-repo() {
     }
     else if ($0 == "[garuda]")
     {
-      if (set)
-        rm=2
+      if (set) {
+        rm=1
+        next
+      }
       set=1
     }
-    if (rm) {
-      rm--
-      next
+    else if ($0 == "[core-testing]")
+    {
+        print "[testing]"
+        err=0
+        next
+    }
+    else if ($0 == "[community-testing]")
+    {
+        print "[extra-testing]"
+        err=0
+        next
+    }
+    else if ($0 == "[community]")
+    {
+        rm=1
+        err=0
+        next
     }
   }
   /^\[[^ \[\]]+\]/ {
@@ -120,18 +152,6 @@ verify-core() {
             fi
         done
     fi
-}
-
-migrate_dr460nized() {
-    # First create a backup of all altered files
-    local backup=(kwinrc kcminputrc kdeglobals plasmarc ksplashrc kscreenlockerrc)
-    if grep -q "Meta=org.kde" "$HOME/.config/kwinrc"; then
-        for i in "${backup[@]}"; do
-            cp "$HOME/.config/$i" "$HOME/.config/$i.bak"
-        done 
-    fi
-    lookandfeeltool -a Dr460nized
-    garudalib_add_update_notice "NOTICE: Latte dock is deprecated and has been replaced by Plasma panels. The desktop theme has been migrated to Plasma panels. Your previous configs are backed up in ~/.config/*.bak."
 }
 
 "$@"

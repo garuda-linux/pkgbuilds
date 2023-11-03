@@ -1,0 +1,24 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-wallpapers-honeycombs
+pkgver=r5.b9b9622
+pkgrel=1
+pkgdesc="Wallpaper collection, honeycombs edition"
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-honeycombs"
+license=('GPLv3')
+makedepends=('git')
+depends=()
+source=("git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-honeycombs.git")
+sha256sums=('SKIP')
+
+pkgver() {
+    cd "$srcdir/garuda-wallpapers-honeycombs"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+    cd ${pkgname}
+    install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+    cp -r $srcdir/garuda-wallpapers-honeycombs/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+}

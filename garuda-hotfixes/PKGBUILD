@@ -1,0 +1,10 @@
+# Maintainer: TNE <tne@garudalinux.org>
+
+pkgname=garuda-hotfixes
+pkgdesc="Emergency hotfixes for Garuda Linux"
+pkgver=1.1.2
+pkgrel=1
+arch=('any')
+license=('GPL')
+depends=('coreutils' 'sed' 'awk')
+install=garuda-hotfixes

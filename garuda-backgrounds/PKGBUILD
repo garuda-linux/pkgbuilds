@@ -1,0 +1,27 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-backgrounds
+pkgver=r4.4e04501
+pkgrel=1
+pkgdesc="Garudas default wallpaper collection"
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
+license=('GPLv3')
+makedepends=('git')
+source=("git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname.git")
+sha256sums=('SKIP')
+
+pkgver() {
+	cd "$srcdir/$pkgname"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+
+}
+
+package() {
+    cd ${pkgname}
+    install -d ${pkgdir}/usr/share/backgrounds/$pkgname
+    cp -r src/$pkgname/* ${pkgdir}/usr/share/backgrounds/$pkgname
+    install -d ${pkgdir}/usr/share/gnome-background-properties
+    cp -r src/$pkgname/*.xml ${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml
+}
+

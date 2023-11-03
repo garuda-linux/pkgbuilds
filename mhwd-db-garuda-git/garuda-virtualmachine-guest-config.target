@@ -1,0 +1,6 @@
+[Unit]
+Description=Garuda Linux virtualmachine guest target
+Wants=vboxservice.service vboxclient.service vmtoolsd.service spice-vdagentd.socket qemu-guest-agent.service
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = thunderbird
+Target = thunderbird-appmenu
+
+[Action]
+Description = Copy Thunderbird Distribution Settings
+When = PostTransaction
+Exec = /usr/bin/cp -f /etc/garuda-settings/garuda-thunderbird.ini /usr/lib/thunderbird/distribution/distribution.ini

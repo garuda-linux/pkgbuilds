@@ -1,0 +1,8 @@
+post_install() {
+    post_upgrade
+}
+
+post_upgrade() {
+sed -i /etc/retroarch.cfg \
+        -e 's,.*joypad_autoconfig_dir =.*,joypad_autoconfig_dir = /usr/share/libretro/autoconfig/udev,'
+}
