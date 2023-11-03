@@ -98,7 +98,7 @@
           packages = {
             deployer =
               pkgs.runCommand "deployer"
-                { nativeBuildInputs = with pkgs; [ bash openssh ]; }
+                { nativeBuildInputs = with pkgs; [ bash gnugrep openssh ]; }
                 (builtins.readFile ./.ci/deployer.sh);
           };
         };
