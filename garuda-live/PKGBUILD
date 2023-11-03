@@ -21,8 +21,8 @@ source=("git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-    cd ${srcdir}/garuda-tools-livecd
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	cd ${srcdir}/garuda-tools-livecd
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
@@ -44,7 +44,7 @@ package_garuda-live-openrc() {
 	pkgdesc='garuda Linux live openrc init scripts'
 	depends=('openrc' 'garuda-live-base')
 	conflicts=('garuda-livecd-openrc')
-# 	replaces=('garuda-livecd-openrc')
+	# 	replaces=('garuda-livecd-openrc')
 
 	cd ${srcdir}/${_repo} #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_rc
@@ -54,7 +54,7 @@ package_garuda-live-systemd() {
 	pkgdesc='garuda Linux live systemd units'
 	depends=('systemd' 'garuda-live-base' 'reflector')
 	conflicts=('garuda-livecd-systemd')
-# 	replaces=('garuda-livecd-systemd')
+	# 	replaces=('garuda-livecd-systemd')
 
 	cd ${srcdir}/${_repo} #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_sd
@@ -67,10 +67,9 @@ package_garuda-live-skel() {
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_xdg
 }
 
-
 package_garuda-live-portable-efi() {
 	pkgdesc='garuda Linux live session portable efi settings'
-    depends=('grub')
+	depends=('grub')
 
 	cd ${srcdir}/${_repo} #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_portable_efi

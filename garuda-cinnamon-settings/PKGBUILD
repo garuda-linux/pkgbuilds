@@ -13,15 +13,15 @@ makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 depends=('kvantum-qt5'
-        'noto-fonts'
-        'garuda-common-settings')
+	'noto-fonts'
+	'garuda-common-settings')
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

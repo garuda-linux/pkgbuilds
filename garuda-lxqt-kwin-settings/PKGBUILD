@@ -9,12 +9,12 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 depends=('beautyline'
-        'garuda-common-settings'
-        'kvantum-qt5'
-        'lxqt-kwin-desktop-git'
-        'ttf-firacode-nerd'
-        'sweet-theme-full-git'
-        'ttf-fira-sans')
+	'garuda-common-settings'
+	'kvantum-qt5'
+	'lxqt-kwin-desktop-git'
+	'ttf-firacode-nerd'
+	'sweet-theme-full-git'
+	'ttf-fira-sans')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
@@ -23,8 +23,8 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

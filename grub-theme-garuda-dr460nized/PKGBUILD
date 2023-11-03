@@ -2,7 +2,7 @@
 # Contributor: artoo <artoo@garuda.org>
 # Contributor: anex <assassin.anex[@]gmail.com>
 # Contributor: Stefano Capitani <stefano@garuda.org>
-# Contributor: Matti Hyttinen <matti@garuda.org> 
+# Contributor: Matti Hyttinen <matti@garuda.org>
 
 pkgname=('grub-theme-garuda-dr460nized')
 pkgver=r2.49d1e5e
@@ -17,18 +17,15 @@ source=("grub-theme::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-    cd ${srcdir}/grub-theme
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	cd ${srcdir}/grub-theme
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
 	depends=('grub')
 	install=garuda-theme.install
-    provides=('grub-theme-garuda-custom')
-    cd grub-theme/garuda-live
-    sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
-    find . -type f -exec install -D -m644 {} ${pkgdir}/usr/share/grub/themes/garuda-dr460nized/{} \;
+	provides=('grub-theme-garuda-custom')
+	cd grub-theme/garuda-live
+	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
+	find . -type f -exec install -D -m644 {} ${pkgdir}/usr/share/grub/themes/garuda-dr460nized/{} \;
 }
-
-
-

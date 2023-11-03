@@ -13,6 +13,6 @@ depends=('coreutils')
 install=$pkgname.install
 
 package() {
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

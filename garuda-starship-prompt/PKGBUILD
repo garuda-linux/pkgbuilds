@@ -17,4 +17,3 @@ package() {
 	cd $srcdir/$pkgname-$pkgver
 	install -D -m644 starship.toml $pkgdir/etc/skel/.config/starship.toml
 }
-

@@ -15,9 +15,9 @@ depends=('garuda-starship-prompt'
 	'zsh-completions'
 	'zsh-history-substring-search'
 	'zsh-syntax-highlighting'
-    'find-the-command-git'
-    'fzf'
-    'mcfly')
+	'find-the-command-git'
+	'fzf'
+	'mcfly')
 makedepends=('git')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')

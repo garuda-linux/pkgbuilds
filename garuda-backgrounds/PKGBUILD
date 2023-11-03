@@ -18,10 +18,9 @@ pkgver() {
 }
 
 package() {
-    cd ${pkgname}
-    install -d ${pkgdir}/usr/share/backgrounds/$pkgname
-    cp -r src/$pkgname/* ${pkgdir}/usr/share/backgrounds/$pkgname
-    install -d ${pkgdir}/usr/share/gnome-background-properties
-    cp -r src/$pkgname/*.xml ${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml
+	cd ${pkgname}
+	install -d ${pkgdir}/usr/share/backgrounds/$pkgname
+	cp -r src/$pkgname/* ${pkgdir}/usr/share/backgrounds/$pkgname
+	install -d ${pkgdir}/usr/share/gnome-background-properties
+	cp -r src/$pkgname/*.xml ${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml
 }
-

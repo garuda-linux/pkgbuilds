@@ -18,8 +18,7 @@ pkgver() {
 }
 
 package() {
-    cd ${pkgname}
-    install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
-    cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+	cd ${pkgname}
+	install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+	cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
 }
- 

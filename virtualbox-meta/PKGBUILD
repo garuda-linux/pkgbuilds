@@ -14,14 +14,14 @@ source=(virtualbox.conf)
 md5sums=('c58441eae10d0cdfc7b393a7965f0866')
 
 package() {
-    depends=("vde2"
-        "virtualbox-ext-oracle"
-        "virtualbox-ext-vnc"
-        "virtualbox-guest-iso"
-        "virtualbox-host-dkms"
-        "virtualbox-sdk"
-        "virtualbox")
+	depends=("vde2"
+		"virtualbox-ext-oracle"
+		"virtualbox-ext-vnc"
+		"virtualbox-guest-iso"
+		"virtualbox-host-dkms"
+		"virtualbox-sdk"
+		"virtualbox")
 
-    install -d $pkgdir/etc/modules-load.d/
-    install -Dm0644 virtualbox.conf "$pkgdir/usr/lib/modules-load.d/virtualbox.conf"
+	install -d $pkgdir/etc/modules-load.d/
+	install -Dm0644 virtualbox.conf "$pkgdir/usr/lib/modules-load.d/virtualbox.conf"
 }

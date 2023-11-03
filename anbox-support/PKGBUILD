@@ -13,7 +13,7 @@ pkgdesc='Metapkg with for Anbox & needed configs'
 install=$pkgname.install
 
 package() {
-    depends=(anbox-git android-tools)
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	depends=(anbox-git android-tools)
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

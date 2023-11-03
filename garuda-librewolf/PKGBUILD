@@ -9,8 +9,6 @@ license=('GPL3')
 provides=('garuda-firefox')
 depends=("librewolf" "librewolf-extension-dark-reader" "librewolf-extension-localcdn")
 optdepends=("librewolf-extension-plasma-integration"
-"librewolf-extension-gnome-shell-integration"
-"librewolf-extension-xdm-browser-monitor"
-"librewolf-extension-bitwarden")
-
-
+	"librewolf-extension-gnome-shell-integration"
+	"librewolf-extension-xdm-browser-monitor"
+	"librewolf-extension-bitwarden")

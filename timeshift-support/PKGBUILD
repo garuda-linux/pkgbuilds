@@ -15,5 +15,5 @@ sha256sums=('SKIP')
 install=$pkgname.install
 
 package() {
-    cp -a ${srcdir}/${pkgname}/usr ${pkgdir}
+	cp -a ${srcdir}/${pkgname}/usr ${pkgdir}
 }

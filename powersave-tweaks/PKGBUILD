@@ -16,6 +16,6 @@ conflicts=('performanace-tweaks')
 install=$pkgname.install
 
 package() {
-    install -d $pkgdir/usr/lib
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/usr/lib
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

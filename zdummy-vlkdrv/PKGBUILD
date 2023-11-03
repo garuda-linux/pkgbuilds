@@ -8,6 +8,3 @@ arch=('any')
 license=('GPL3')
 provides=('vulkan-driver' 'lib32-vulkan-driver')
 depends=('mhwd-garuda')
-
-
-

@@ -10,17 +10,16 @@ pkgdesc="Meta package containing common asian fonts"
 source=(90-bengali.conf)
 sha256sums=('298b598553e88e1d905748a19ed2ecc00dd6845a8e7213c87d84dcfca57ddee6')
 depends=("fonts-tlwg"
-        "lohit-fonts"
-		"opendesktop-fonts"
-		"otf-ipafont"
-		"ttf-baekmuk"
-		"ttf-hannom"
-		"ttf-indic-otf"
-		"ttf-khmer"
-		"ttf-tibetan-machine")
+	"lohit-fonts"
+	"opendesktop-fonts"
+	"otf-ipafont"
+	"ttf-baekmuk"
+	"ttf-hannom"
+	"ttf-indic-otf"
+	"ttf-khmer"
+	"ttf-tibetan-machine")
 
 package() {
 	mkdir -p $pkgdir/etc/fonts/conf.d
 	install -D -m644 90-bengali.conf $pkgdir/etc/fonts/conf.d/90-bengali.conf
 }
-

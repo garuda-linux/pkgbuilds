@@ -8,12 +8,12 @@ url="https://wiki.archlinux.org/index.php/Bluetooth"
 license=('GPL')
 pkgdesc="Metapkg containing needed packages for using Bluetooth"
 depends=("bluez"
-        "bluez-hid2hci"
-        "bluez-libs"
-        "bluez-plugins"
-        "bluez-tools"
-        "bluez-utils")
+	"bluez-hid2hci"
+	"bluez-libs"
+	"bluez-plugins"
+	"bluez-tools"
+	"bluez-utils")
 optdepends=('blueman: A GTK bluetooth manager'
-            'bluedevil: Qt bluetooth frontend'
-            'blueberry: Bluetooth configuration tool')
+	'bluedevil: Qt bluetooth frontend'
+	'blueberry: Bluetooth configuration tool')
 install=$pkgname.install

@@ -8,15 +8,14 @@ url="https://wiki.archlinux.org/index.php/JACK_Audio_Connection_Kit"
 license=('GPL')
 pkgdesc="Metapkg for JACK support"
 depends=("a2jmidid"
-        "celt"
-        "jack"
-        "jack_capture"
-        "jack_utils"
-        "libffado"
-        "python-dbus"
-        "realtime-privileges"
-        "zita-ajbridge")
+	"celt"
+	"jack"
+	"jack_capture"
+	"jack_utils"
+	"libffado"
+	"python-dbus"
+	"realtime-privileges"
+	"zita-ajbridge")
 optdepends=('qjackctl: A Qt front-end for the JACK low-latency audio server'
-            'cadence: JACK toolbox for audio production')
+	'cadence: JACK toolbox for audio production')
 install=$pkgname.install
-

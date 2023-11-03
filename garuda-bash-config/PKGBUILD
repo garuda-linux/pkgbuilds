@@ -9,9 +9,9 @@ arch=(any)
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 depends=('bash'
-        'bash-completion'
-        'find-the-command-git'
-        'garuda-starship-prompt')
+	'bash-completion'
+	'find-the-command-git'
+	'garuda-starship-prompt')
 makedepends=('git')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 md5sums=('SKIP')

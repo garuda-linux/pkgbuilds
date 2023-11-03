@@ -10,53 +10,53 @@ license=('GPL')
 depends=('pacman' 'pacman-contrib' 'chaotic-mirrorlist' 'nss-mdns' 'kernel-modules-hook' 'grub' 'update-grub' 'awk' 'garuda-libs')
 install=$pkgname.install
 source=(01-snapshot-reject.hook
-        filesystem.hook
-        foreign.hook
-        garuda-hooks-runner
-        garuda-hooks-runner.hook
-        lsb-release.hook
-        update-grub.hook
-        grub-install.hook
-        orphans.hook
-        grub-config.hook
-        pacnew-check.hook
-        90-mkinitcpio-install.hook
-        zzz_post.hook)
+	filesystem.hook
+	foreign.hook
+	garuda-hooks-runner
+	garuda-hooks-runner.hook
+	lsb-release.hook
+	update-grub.hook
+	grub-install.hook
+	orphans.hook
+	grub-config.hook
+	pacnew-check.hook
+	90-mkinitcpio-install.hook
+	zzz_post.hook)
 md5sums=('5a695bfdd2e00c1ba9d09bc29cb40a88'
-         '982b537bbe8baec2ecd62a2f435e3265'
-         'e0f95c27949d32c8e05bc2d5b07605a6'
-         'acfed8df67f5043fc537fe3ff422e0be'
-         '2b0af601ab63733e071ec8121f8455b5'
-         '690f6a036575c21e19dbf9a3abc372dd'
-         '0afcf5dbe780aeafafc1a9611c98ee43'
-         '859dda25a51faf92d607fbb5fafc4446'
-         '8d7ee665c78f08c9b90531757798ecd4'
-         '70b1f8140087cec9bab9aa8f06d36c05'
-         'e5274c70d324eb139960f3a6e8e99a19'
-         'fe9d0c605b029ccbd14fc8d4b51d0b45'
-         '54aac2b772efc97fa9da1ba729655684')
+	'982b537bbe8baec2ecd62a2f435e3265'
+	'e0f95c27949d32c8e05bc2d5b07605a6'
+	'acfed8df67f5043fc537fe3ff422e0be'
+	'2b0af601ab63733e071ec8121f8455b5'
+	'690f6a036575c21e19dbf9a3abc372dd'
+	'0afcf5dbe780aeafafc1a9611c98ee43'
+	'859dda25a51faf92d607fbb5fafc4446'
+	'8d7ee665c78f08c9b90531757798ecd4'
+	'70b1f8140087cec9bab9aa8f06d36c05'
+	'e5274c70d324eb139960f3a6e8e99a19'
+	'fe9d0c605b029ccbd14fc8d4b51d0b45'
+	'54aac2b772efc97fa9da1ba729655684')
 
 package() {
-  cd $srcdir
+	cd $srcdir
 
-  install -d $pkgdir/usr/share/libalpm/hooks
-  install -Dm644 01-snapshot-reject.hook $pkgdir/usr/share/libalpm/hooks/01-snapshot-reject.hook
-  install -Dm644 foreign.hook $pkgdir/usr/share/libalpm/hooks/99-foreign.hook
-  install -Dm644 garuda-hooks-runner.hook $pkgdir/usr/share/libalpm/hooks/garuda-hooks-runner.hook
-  install -Dm644 lsb-release.hook $pkgdir/usr/share/libalpm/hooks/20-lsb-release.hook
-  install -Dm644 update-grub.hook $pkgdir/usr/share/libalpm/hooks/99-update-grub.hook
-  install -Dm644 grub-install.hook $pkgdir/usr/share/libalpm/hooks/99-grub-install.hook
-  install -Dm644 orphans.hook $pkgdir/usr/share/libalpm/hooks/99-orphans.hook
-  install -Dm644 grub-config.hook $pkgdir/usr/share/libalpm/hooks/20-grub-config.hook
-  install -Dm644 filesystem.hook $pkgdir/usr/share/libalpm/hooks/20-os-release.hook
-  install -Dm644 pacnew-check.hook $pkgdir/usr/share/libalpm/hooks/99-pacnew-check.hook
-  install -Dm644 zzz_post.hook $pkgdir/usr/share/libalpm/hooks/zzz_post.hook
-  
-  install -d $pkgdir/etc/pacman.d/hooks
-  install -Dm644 90-mkinitcpio-install.hook $pkgdir/etc/pacman.d/hooks/90-mkinitcpio-install.hook
-  
-  install -d $pkgdir/usr/share/libalpm/scripts
-  install -Dm755 garuda-hooks-runner $pkgdir/usr/share/libalpm/scripts/garuda-hooks-runner
+	install -d $pkgdir/usr/share/libalpm/hooks
+	install -Dm644 01-snapshot-reject.hook $pkgdir/usr/share/libalpm/hooks/01-snapshot-reject.hook
+	install -Dm644 foreign.hook $pkgdir/usr/share/libalpm/hooks/99-foreign.hook
+	install -Dm644 garuda-hooks-runner.hook $pkgdir/usr/share/libalpm/hooks/garuda-hooks-runner.hook
+	install -Dm644 lsb-release.hook $pkgdir/usr/share/libalpm/hooks/20-lsb-release.hook
+	install -Dm644 update-grub.hook $pkgdir/usr/share/libalpm/hooks/99-update-grub.hook
+	install -Dm644 grub-install.hook $pkgdir/usr/share/libalpm/hooks/99-grub-install.hook
+	install -Dm644 orphans.hook $pkgdir/usr/share/libalpm/hooks/99-orphans.hook
+	install -Dm644 grub-config.hook $pkgdir/usr/share/libalpm/hooks/20-grub-config.hook
+	install -Dm644 filesystem.hook $pkgdir/usr/share/libalpm/hooks/20-os-release.hook
+	install -Dm644 pacnew-check.hook $pkgdir/usr/share/libalpm/hooks/99-pacnew-check.hook
+	install -Dm644 zzz_post.hook $pkgdir/usr/share/libalpm/hooks/zzz_post.hook
 
-  install -d $pkgdir/var/lib/garuda
+	install -d $pkgdir/etc/pacman.d/hooks
+	install -Dm644 90-mkinitcpio-install.hook $pkgdir/etc/pacman.d/hooks/90-mkinitcpio-install.hook
+
+	install -d $pkgdir/usr/share/libalpm/scripts
+	install -Dm755 garuda-hooks-runner $pkgdir/usr/share/libalpm/scripts/garuda-hooks-runner
+
+	install -d $pkgdir/var/lib/garuda
 }

@@ -12,19 +12,19 @@ makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 depends=('beautyline'
-        'garuda-fish-config'
-        'ttf-fantasque-nerd'
-        'sweet-theme-full-git'
-        'ttf-fira-sans'
-        'garuda-common-settings')
+	'garuda-fish-config'
+	'ttf-fantasque-nerd'
+	'sweet-theme-full-git'
+	'ttf-fira-sans'
+	'garuda-common-settings')
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 replaces=('wayfire-default-settings')
 install=$pkgname.install
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

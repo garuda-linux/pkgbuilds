@@ -16,23 +16,23 @@ conflicts=('garuda-desktop-settings')
 replaces=('garuda-dr460nized-next')
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
-    depends=('beautyline'
-        'garuda-common-settings'
-        'garuda-icons'
-        'garuda-fish-config'
-        'garuda-wallpapers'
-        'ksysguard'
-        'kvantum'
-        'plasma5-applets-window-appmenu'
-        'plasma5-applets-window-buttons'
-        'plasma5-applets-window-title'
-        'plasma5-applets-betterinlineclock-git'
-        'plasma5-wallpapers-blurredwallpaper'
-        'sweet-theme-full-git'
-        'ttf-fira-sans'
-        'ttf-firacode-nerd')
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	depends=('beautyline'
+		'garuda-common-settings'
+		'garuda-icons'
+		'garuda-fish-config'
+		'garuda-wallpapers'
+		'ksysguard'
+		'kvantum'
+		'plasma5-applets-window-appmenu'
+		'plasma5-applets-window-buttons'
+		'plasma5-applets-window-title'
+		'plasma5-applets-betterinlineclock-git'
+		'plasma5-wallpapers-blurredwallpaper'
+		'sweet-theme-full-git'
+		'ttf-fira-sans'
+		'ttf-firacode-nerd')
 }

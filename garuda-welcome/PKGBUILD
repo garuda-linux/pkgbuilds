@@ -9,7 +9,7 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-welcome"
 license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'garuda-libs>=1.3.0')
-optdepends=( 'xorg-xrandr' 'xorg-xinput' 'garuda-assistant' 'garuda-network-assistant' 'qwikaccess' 'garuda-gamer' 'garuda-boot-options')
+optdepends=('xorg-xrandr' 'xorg-xinput' 'garuda-assistant' 'garuda-network-assistant' 'qwikaccess' 'garuda-gamer' 'garuda-boot-options')
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")

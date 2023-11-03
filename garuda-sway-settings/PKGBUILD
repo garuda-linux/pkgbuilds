@@ -12,23 +12,23 @@ makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 depends=('capitaine-cursors'
-        'gtk-engine-murrine'
-        'kvantum-qt5'
-        'kvantum-theme-nordic-git'
-        'nordic-darker-theme'
-        'qt5ct'
-        'sway'
-        'swayidle'
-        'swaylock'
-        'swaybg'
-        'tela-circle-icon-theme-git')  
+	'gtk-engine-murrine'
+	'kvantum-qt5'
+	'kvantum-theme-nordic-git'
+	'nordic-darker-theme'
+	'qt5ct'
+	'sway'
+	'swayidle'
+	'swaylock'
+	'swaybg'
+	'tela-circle-icon-theme-git')
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }
