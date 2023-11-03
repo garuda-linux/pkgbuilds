@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+
+[Action]
+Description = Adding Garuda specific configurations...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner filesystem

@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = grub
+Target = os-prober-btrfs
+
+[Action]
+Description = Enabling os-prober...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner grub-config

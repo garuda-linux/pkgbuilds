@@ -1,0 +1,17 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Type = Path
+Target = usr/lib/modules/*/vmlinuz
+
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = grub
+
+[Action]
+Description = GRUB update after transactions...
+When = PostTransaction
+Depends = grub
+Exec = /bin/sh -c "/usr/bin/update-grub"

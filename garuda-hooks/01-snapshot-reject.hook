@@ -1,0 +1,14 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Operation = Remove
+Type = Package
+Target = *
+Target = !garuda-hooks
+Target = !garuda-update
+
+[Action]
+Description = Rejecting pacman transaction if running in snapshot...
+When = PreTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner snapshot
+AbortOnFail

@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = lsb-release
+
+[Action]
+Description = Add Garuda specific configuration...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner lsb-release

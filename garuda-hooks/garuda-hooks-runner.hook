@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = garuda-hooks
+
+[Action]
+Description = Updating Garuda specific hooks...
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner

@@ -1,0 +1,9 @@
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = grub
+
+[Action]
+Description = Updating grub binary in EFI
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner grub-update

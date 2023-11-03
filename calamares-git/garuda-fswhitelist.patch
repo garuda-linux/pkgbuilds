@@ -1,0 +1,82 @@
+From 850e5bb16ebba0dd5327af3853706a4d461d4fff Mon Sep 17 00:00:00 2001
+From: TNE <totallynotelite@gmail.com>
+Date: Mon, 22 Nov 2021 15:05:02 +0100
+Subject: [PATCH] Garuda hardcoded FS whitelist
+
+---
+ src/libcalamares/partition/FileSystem.cpp                 | 7 +++++++
+ src/libcalamares/partition/FileSystem.h                   | 2 ++
+ src/modules/partition/gui/CreatePartitionDialog.cpp       | 3 ++-
+ src/modules/partition/gui/EditExistingPartitionDialog.cpp | 3 ++-
+ 4 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/libcalamares/partition/FileSystem.cpp b/src/libcalamares/partition/FileSystem.cpp
+index ad4df31ed..2c91748e2 100644
+--- a/src/libcalamares/partition/FileSystem.cpp
++++ b/src/libcalamares/partition/FileSystem.cpp
+@@ -13,12 +13,19 @@
+ #include "FileSystem.h"
+ 
+ #include <QObject>
++#include <QSet>
+ 
+ namespace CalamaresUtils
+ {
+ namespace Partition
+ {
+ 
++QSet< FileSystem::Type > garuda_allowed_fs( { FileSystem::Btrfs,
++                                              FileSystem::Fat32,
++                                              FileSystem::LinuxSwap,
++                                              FileSystem::Unformatted,
++                                              FileSystem::Zfs } );
++
+ QString
+ prettyNameForFileSystemType( FileSystem::Type t )
+ {
+diff --git a/src/libcalamares/partition/FileSystem.h b/src/libcalamares/partition/FileSystem.h
+index 6696f0df9..e72db07ae 100644
+--- a/src/libcalamares/partition/FileSystem.h
++++ b/src/libcalamares/partition/FileSystem.h
+@@ -26,6 +26,8 @@ namespace CalamaresUtils
+ {
+ namespace Partition
+ {
++extern QSet< FileSystem::Type > garuda_allowed_fs;
++
+ QString DLLEXPORT prettyNameForFileSystemType( FileSystem::Type t );
+ 
+ /** @brief Returns a machine-readable identifier for the filesystem type
+diff --git a/src/modules/partition/gui/CreatePartitionDialog.cpp b/src/modules/partition/gui/CreatePartitionDialog.cpp
+index 6bde9a148..fc8dcfdf6 100644
+--- a/src/modules/partition/gui/CreatePartitionDialog.cpp
++++ b/src/modules/partition/gui/CreatePartitionDialog.cpp
+@@ -103,8 +103,9 @@ CreatePartitionDialog::CreatePartitionDialog( Device* device,
+     int defaultFsIndex = -1;
+     int fsCounter = 0;
+     QStringList fsNames;
+-    for ( auto fs : FileSystemFactory::map() )
++    for ( auto allowed_fs : CalamaresUtils::Partition::garuda_allowed_fs )
+     {
++        auto fs = FileSystemFactory::map()[ allowed_fs ];
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+              || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
+diff --git a/src/modules/partition/gui/EditExistingPartitionDialog.cpp b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+index a3052b3b7..187b6d96f 100644
+--- a/src/modules/partition/gui/EditExistingPartitionDialog.cpp
++++ b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+@@ -88,8 +88,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( Device* device,
+ 
+     // File system
+     QStringList fsNames;
+-    for ( auto fs : FileSystemFactory::map() )
++    for ( auto allowed_fs : CalamaresUtils::Partition::garuda_allowed_fs )
+     {
++        auto fs = FileSystemFactory::map()[ allowed_fs ];
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+              || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
+-- 
+2.34.0
+
