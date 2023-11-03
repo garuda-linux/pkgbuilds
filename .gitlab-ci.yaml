@@ -1,0 +1,22 @@
+---
+stages: [check, deploy]
+variables:
+  GIT_AUTHOR_EMAIL: ci@garudalinux.org
+  GIT_AUTHOR_NAME: Garuda CI
+  GIT_STRATEGY: clone
+check:
+  stage: check
+  image: nixpkgs/nix-flakes:latest
+  script:
+    - nix flake check
+  only:
+    refs: [testing]
+deploy:
+  stage: deploy
+  image: nixpkgs/nix-flakes:latest
+  script:
+    - nix run .#deployer
+  only:
+    refs: [testing]
+    message:
+      - /\[deploy\]/
