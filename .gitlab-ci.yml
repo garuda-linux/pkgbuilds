@@ -9,7 +9,7 @@ check:
   image: nixpkgs/nix-flakes:latest
   script:
     - nix flake update # fix me: source not found if not run
-    - nix flake check -L || true
+    - nix flake check -L || true # this can be removed once issues are fixed
   only:
     refs: [testing]
 deploy:
