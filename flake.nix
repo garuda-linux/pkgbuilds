@@ -41,6 +41,14 @@
             hooks = {
               commitizen.enable = true;
               nixpkgs-fmt.enable = true;
+              pkgbuilds = {
+                enable = true;
+                name = "PKGBUILD checks";
+                entry = "${pkgs.shellcheck}/bin/shellcheck";
+                files = "(PKGBUILD|install$)";
+                types = [ "text" ];
+                language = "system";
+              };
               prettier.enable = true;
               yamllint.enable = true;
             };
@@ -71,6 +79,7 @@
                   garudaEnv.text = ''
                     export LC_ALL="C.UTF-8"
                     export NIX_PATH=nixpkgs=${nixpkgs}
+                    export SHELLCHECK_OPTS="-e SC2034 -e SC2148"
                   '';
                 };
               };
