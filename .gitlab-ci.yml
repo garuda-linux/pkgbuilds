@@ -2,7 +2,6 @@
 stages: [check, deploy]
 variables:
   GIT_STRATEGY: clone
-  REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
   SHELLCHECK_OPTS: "-e SC2034 -e SC2148"
 check:
   stage: check
@@ -20,4 +19,4 @@ deploy:
   only:
     refs: [testing]
     variables:
-      - $CI_COMMIT_MESSAGE =~ /\[deploy\]/
+      - $CI_COMMIT_MESSAGE =~ /\[deploy\/
