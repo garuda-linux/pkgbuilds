@@ -25,10 +25,11 @@ deploy:
       chmod 700 ~/.ssh
       echo "$DEPLOY_KEY" >>~/.ssh/id_ed25519
       chmod 400 ~/.ssh/id_ed25519
-      apk add --no-cache --upgrade openssh bash
+      apk add --no-cache --upgrade bash openssh
     - | # Determine what to deploy
       bash .ci/what-to-deploy.sh
     - | # Trigger deployment
+      TO_DEPLOY=$(cat /tmp/TO_DEPLOY)
       ssh -p "$BUILD_PORT" -o StrictHostKeyChecking=no "$BUILD_USER"@"$BUILD_HOST" "chaotictrigger $TO_DEPLOY"
   rules:
-    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /[deploy*]/
+    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
