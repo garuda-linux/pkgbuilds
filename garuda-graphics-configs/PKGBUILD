@@ -4,6 +4,7 @@ pkgbase=garuda-nvidia-config
 pkgname=('garuda-virtualmachine-guest-config' 'garuda-video-linux-config')
 pkgver=1.1.4
 pkgrel=2
+epoch=2
 pkgdesc=""
 arch=('any')
 license=('GPL')

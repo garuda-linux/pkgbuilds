@@ -19,6 +19,5 @@ deploy:
     - nix flake update # fix me: source not found if not run
     - nix run .#deployer
   rules:
-    - if: $CI_COMMIT_BRANCH != "testing"
-      when: never
-    - if: $CI_COMMIT_MESSAGE =~ /^deploy/
+    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /[deploy *]/
+      when: always
