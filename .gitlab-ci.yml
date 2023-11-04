@@ -9,14 +9,16 @@ check:
   script:
     - nix flake update # fix me: source not found if not run
     - nix flake check -L || true # this can be removed once issues are fixed
-  only:
-    refs: [testing]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "testing"
+      when: always
 deploy:
   stage: deploy
   image: nixpkgs/nix-flakes:latest
   script:
+    - nix flake update # fix me: source not found if not run
     - nix run .#deployer
-  only:
-    refs: [testing]
-    variables:
-      - $CI_COMMIT_MESSAGE =~ /\[deploy\/
+  rules:
+    - if: $CI_COMMIT_BRANCH != "testing"
+      when: never
+    - if: $CI_COMMIT_MESSAGE =~ /^deploy/
