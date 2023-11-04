@@ -1,6 +1,9 @@
 ---
 stages: [check, deploy]
 variables:
+  BUILD_HOST: builds.garudalinux.org
+  BUILD_PORT: 223
+  BUILD_USER: gitlab
   GIT_STRATEGY: clone
   SHELLCHECK_OPTS: "-e SC2034 -e SC2148"
 check:
@@ -14,10 +17,18 @@ check:
       when: always
 deploy:
   stage: deploy
-  image: nixpkgs/nix-flakes:latest
+  image: alpine:latest
   script:
-    - nix flake update # fix me: source not found if not run
-    - nix run .#deployer
+    - | # Initialize deployment
+      [[ -z "${DEPLOY_KEY+x}" ]] && echo "No deploy key available, backing off!" && exit 1
+      mkdir -p ~/.ssh
+      chmod 700 ~/.ssh
+      echo "$DEPLOY_KEY" >>~/.ssh/id_ed25519
+      chmod 400 ~/.ssh/id_ed25519
+      apk add --no-cache --upgrade openssh bash
+    - | # Determine what to deploy
+      bash .ci/what-to-deploy.sh
+    - | # Trigger deployment
+      ssh -p "$BUILD_PORT" -o StrictHostKeyChecking=no "$BUILD_USER"@"$BUILD_HOST" "chaotictrigger $TO_DEPLOY"
   rules:
-    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /[deploy *]/
-      when: always
+    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /[deploy*]/

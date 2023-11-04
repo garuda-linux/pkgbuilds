@@ -90,13 +90,6 @@
             };
 
           formatter = pkgs.nixpkgs-fmt;
-
-          packages = {
-            deployer =
-              pkgs.runCommand "deployer"
-                { nativeBuildInputs = with pkgs; [ bash gnugrep openssh ]; }
-                (builtins.readFile ./.ci/deployer.sh);
-          };
         };
     in
     flake-parts.lib.mkFlake { inherit inputs; } {
