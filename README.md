@@ -14,13 +14,23 @@ If any packaging issues or similar things occur, don't hesitate reporting them v
 
 ## How to contribute?
 
-We highly appreciate contributions of any sort! 😊 In order to do so, please follow these steps: - [Create a fork of this repository](https://gitlab.com/garuda-linux/pkgbuilds/-/forks/new) - Clone your fork locally ([short git tutorial](https://rogerdudler.github.io/git-guide/)) - Add the desired changes to PKGBUILDs or code - Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues (run the `lint.sh` script) - Commit and push any changes back to your fork - [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new)
+We highly appreciate contributions of any sort! 😊 In order to do so, please follow these steps:
+
+- [Create a fork of this repository](https://gitlab.com/garuda-linux/pkgbuilds/-/forks/new)
+- Clone your fork locally ([short git tutorial](https://rogerdudler.github.io/git-guide/))
+- Add the desired changes to PKGBUILDs or code
+- Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files (run the `lint.sh` script)
+- Commit and push any changes back to your fork
+- [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new)
 
 We will then review the changes and eventually merge them.
 
 ## Deployments
 
-Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Supported are: - `[deploy all]`: Deploys a full `garuda` routine, meaning all PKGBUILDs in this repository - `[deploy pkgname]`: Deploys the package `pkgname`, by replacing this with `garuda-bash-settings`, `garuda-bash-settings` would be the deployed package
+Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Supported are:
+
+- `[deploy all]`: Deploys a full `garuda` routine, meaning all PKGBUILDs in this repository
+- `[deploy pkgname]`: Deploys the package `pkgname`, by replacing this with `garuda-bash-settings`, `garuda-bash-settings` would be the deployed package
 
 Once any of those combinations gets detected, the deployment starts after `shfmt` and `shellcheck` checks completed successfully.
 

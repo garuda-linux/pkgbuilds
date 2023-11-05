@@ -3,10 +3,10 @@
 set -e
 
 # Check if the required tools are installed
-! command -v shfmt &&
+! command -v shfmt &>/dev/null &&
     echo "shfmt not found. Please install shfmt!" &&
     exit 1
-! command -v shellcheck &&
+! command -v shellcheck &>/dev/null &&
     echo "shellcheck not found. Please install shellcheck!" &&
     exit 1
 
