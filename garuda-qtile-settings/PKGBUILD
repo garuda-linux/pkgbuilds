@@ -1,5 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
-# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Maintainer: Rohit
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-qtile-settings
 pkgdesc='Garuda Linux Qtile settings'

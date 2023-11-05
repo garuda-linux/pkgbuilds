@@ -16,7 +16,7 @@ source=("git+${url}.git#commit=8ea7f3e06619d06c37b2f80aba3a1712237c2516")
 sha256sums=('SKIP')
 
 build() {
-	cd ${pkgname}
+	cd "${pkgname}"
 	mkdir build && cd build
 	cmake -DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_BUILD_TYPE=Master ..
@@ -24,5 +24,5 @@ build() {
 }
 
 package() {
-	make -C ${pkgname}/build DESTDIR=${pkgdir} install
+	make -C "${pkgname}/build" DESTDIR="${pkgdir}" install
 }

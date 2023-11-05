@@ -20,11 +20,11 @@ depends=('beautyline'
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 replaces=('wayfire-default-settings')
-install=$pkgname.install
+install="$pkgname".install
 
 package() {
-	install -d $pkgdir/etc
-	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-	install -d $pkgdir/usr
-	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir/etc"
+	cp -rf "$srcdir/$pkgname-$pkgver/etc" "$pkgdir"
+	install -d "$pkgdir/usr"
+	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
 }

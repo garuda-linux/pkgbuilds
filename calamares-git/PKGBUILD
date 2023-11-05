@@ -1,8 +1,8 @@
-# Maintainer: TNE <TNE[at]garudalinux[dog]org>
+# Maintainer: TNE <TNE[at]garudalinux[dot]org>
 
 pkgname=calamares-git
 pkgver=.r10513.d8a03bb34
-pkgrel=2
+pkgrel=1
 pkgdesc='Distribution-independent installer framework (development version)'
 arch=('i686' 'x86_64')
 license=(GPL)

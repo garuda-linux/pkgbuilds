@@ -1,8 +1,10 @@
-# Maintainer : Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
+
 pkgname='grub-garuda'
-pkgdesc='meta pkg for grub'
+pkgdesc='Meta-package for using GRUB on Garuda Linux'
 pkgver=2.06
-pkgrel=1
+pkgrel=2
 url='https://www.gnu.org/software/grub/'
 arch=('any')
 license=('GPL3')

@@ -1,4 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=pipewire-support
 pkgver=1
@@ -6,7 +7,7 @@ pkgrel=16
 arch=('any')
 url="https://wiki.archlinux.org/index.php/PipeWire"
 license=('GPL')
-pkgdesc="Meta package for all important packages to use PipeWire"
+pkgdesc="Meta-package for all important packages to use PipeWire"
 depends=("gst-plugin-pipewire"
 	"pipewire"
 	"libpipewire"
@@ -28,4 +29,4 @@ conflicts=("pulseaudio-equalizer"
 	"jack2"
 	"jack2-dbus"
 	"lib32-jack2")
-install=$pkgname.install
+install="$pkgname".install

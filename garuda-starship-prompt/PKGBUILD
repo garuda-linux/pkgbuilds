@@ -1,10 +1,10 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
-# Maintainer: Librewish <librewish@gmail.com>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-starship-prompt
 pkgver=1.0.3
 pkgrel=1
-pkgdesc="Starship prompt preset for Garuda Linux"
+pkgdesc="Starship terminal prompt preset for Garuda Linux"
 arch=(any)
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('MIT')
@@ -14,6 +14,6 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 package() {
-	cd $srcdir/$pkgname-$pkgver
-	install -D -m644 starship.toml $pkgdir/etc/skel/.config/starship.toml
+	cd "$srcdir/$pkgname-$pkgver"
+	install -D -m644 starship.toml "$pkgdir/etc/skel/.config/starship.toml"
 }

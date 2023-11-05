@@ -1,12 +1,13 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=asian-fonts
-pkgver=2
-pkgrel=2
-arch=('any')
+pkgver=3
+pkgrel=1
+arch=("any")
 url="https://wiki.archlinux.org/index.php/Fonts"
-license=('GPL')
-pkgdesc="Meta package containing common asian fonts"
+license=("GPL")
+pkgdesc="Meta-package containing common asian fonts"
 source=(90-bengali.conf)
 sha256sums=('298b598553e88e1d905748a19ed2ecc00dd6845a8e7213c87d84dcfca57ddee6')
 depends=("fonts-tlwg"
@@ -20,6 +21,6 @@ depends=("fonts-tlwg"
 	"ttf-tibetan-machine")
 
 package() {
-	mkdir -p $pkgdir/etc/fonts/conf.d
-	install -D -m644 90-bengali.conf $pkgdir/etc/fonts/conf.d/90-bengali.conf
+	mkdir -p "$pkgdir"/etc/fonts/conf.d
+	install -D -m644 90-bengali.conf "$pkgdir"/etc/fonts/conf.d/90-bengali.conf
 }

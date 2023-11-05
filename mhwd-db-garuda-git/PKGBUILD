@@ -1,7 +1,7 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: TNE <tne@garudalinux.org>
-# Contributer : Philip Müller <philm[at]manjaro[dog]org>
-# Contributer : Roland Singer <roland[at]manjaro[dog]org>
+# Contributor: Librewish <librewish@gmail.com>
+# Contributer: Philip Müller <philm[at]manjaro[dog]org>
+# Contributer: Roland Singer <roland[at]manjaro[dog]org>
 
 pkgname=(mhwd-db-garuda-git garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda

@@ -1,4 +1,5 @@
-# Maintainer : Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com># Maintainer : Librewish <librewish@gmail.com>
 
 pkgname='garuda-firefox'
 pkgdesc='Metapkg for Firefox and extensions'

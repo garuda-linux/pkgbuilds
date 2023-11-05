@@ -1,5 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=printer-support
 pkgver=1
@@ -7,7 +7,7 @@ pkgrel=6
 arch=('any')
 url="https://wiki.archlinux.org/index.php/Category:Printers"
 license=('GPL')
-pkgdesc="Metapkg for packages needed to use printers"
+pkgdesc="Meta-package for packages needed to use printers"
 depends=("a2ps"
 	"bluez-cups"
 	"cups"
@@ -25,7 +25,7 @@ depends=("a2ps"
 	"gutenprint"
 	"noto-color-emoji-fontconfig"
 	"splix")
-optdepends=('system-config-printer: A Gtk gui for printer'
-	'hplip: hp printer driver'
+optdepends=('system-config-printer: A GTK GUI for printer'
+	'hplip: HP printer driver'
 	'print-manager: A KDE tool for managing print jobs and printers')
 install=$pkgname.install

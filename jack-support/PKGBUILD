@@ -1,4 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=jack-support
 pkgver=1
@@ -6,7 +7,7 @@ pkgrel=2
 arch=('any')
 url="https://wiki.archlinux.org/index.php/JACK_Audio_Connection_Kit"
 license=('GPL')
-pkgdesc="Metapkg for JACK support"
+pkgdesc="Meta-package for JACK support"
 depends=("a2jmidid"
 	"celt"
 	"jack"
@@ -18,4 +19,4 @@ depends=("a2jmidid"
 	"zita-ajbridge")
 optdepends=('qjackctl: A Qt front-end for the JACK low-latency audio server'
 	'cadence: JACK toolbox for audio production')
-install=$pkgname.install
+install="$pkgname".install

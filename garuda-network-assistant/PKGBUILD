@@ -1,5 +1,5 @@
-# Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
-# Maintainer: librewish <librewish@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-network-assistant
 pkgver=1.1.3

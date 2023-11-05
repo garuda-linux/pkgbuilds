@@ -1,5 +1,5 @@
-# Maintainer: Librewish <librewish@garudalinux.org>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-bootctl-dracut
 pkgdesc="Systemd-boot, Dracut and Secure Boot support for Garuda Linux"
@@ -10,7 +10,7 @@ license=('GPL')
 depends=('pacman' 'systemd' 'dracut' 'sbsigntools' 'sbctl' 'tpm2-tss' 'tpm2-tools' 'dracut-hook-uefi')
 provides=('mkinitpcio' 'grub' 'grub-btrfs')
 backup=(etc/dracut.conf.d/dracut-garuda.conf)
-install=$pkgname.install
+install="$pkgname".install
 source=(bootctl-update.hook
 	dracut-garuda.conf
 	gen-dracut-cmdline)
@@ -20,12 +20,12 @@ md5sums=('d52c4428f6b99a634c81224cffc76541'
 
 package() {
 	cd $srcdir
-	install -d $pkgdir/usr/share/libalpm/hooks
-	install -Dm644 bootctl-update.hook $pkgdir/usr/share/libalpm/hooks/bootctl-update.hook
+	install -d "$pkgdir/usr/share/libalpm/hooks"
+	install -Dm644 bootctl-update.hook "$pkgdir/usr/share/libalpm/hooks/bootctl-update.hook"
 
-	install -d $pkgdir/etc/dracut.conf.d
-	install -Dm644 dracut-garuda.conf $pkgdir/etc/dracut.conf.d/dracut-garuda.conf
+	install -d "$pkgdir/etc/dracut.conf.d"
+	install -Dm644 dracut-garuda.conf "$pkgdir/etc/dracut.conf.d/dracut-garuda.conf"
 
-	install -d $pkgdir/usr/bin
-	install -Dm755 gen-dracut-cmdline $pkgdir/usr/bin/gen-dracut-cmdline
+	install -d "$pkgdir/usr/bin"
+	install -Dm755 gen-dracut-cmdline "$pkgdir/usr/bin/gen-dracut-cmdline"
 }

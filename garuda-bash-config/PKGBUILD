@@ -1,5 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-bash-config
 pkgver=1.0.6
@@ -18,7 +18,7 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 package() {
-	cd $srcdir/$pkgname-$pkgver
-	install -D -m644 bashrc $pkgdir/etc/skel/.bashrc_garuda
-	install -D -m644 bashrc-setup.desktop $pkgdir/etc/skel/.config/autostart/bashrc-setup.desktop
+	cd "$srcdir/$pkgname-$pkgver"
+	install -D -m644 bashrc "$pkgdir/etc/skel/.bashrc_garuda"
+	install -D -m644 bashrc-setup.desktop "$pkgdir/etc/skel/.config/autostart/bashrc-setup.desktop"
 }

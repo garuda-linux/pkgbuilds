@@ -3,7 +3,7 @@
 pkgname=garuda-wallpapers-2022
 pkgver=r6.c246b87
 pkgrel=1
-pkgdesc="Wallpaper collection, 2022 edition"
+pkgdesc="Garuda's wallpaper collection, 2022 edition"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022"
 license=('GPLv3')
@@ -18,7 +18,7 @@ pkgver() {
 }
 
 package() {
-	cd ${pkgname}
-	install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
-	cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+	cd "${pkgname}"
+	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
+	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }

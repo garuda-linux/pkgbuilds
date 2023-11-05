@@ -1,4 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=scanner-support
 pkgver=1
@@ -6,11 +7,11 @@ pkgrel=4
 arch=('any')
 url="https://wiki.archlinux.org/index.php/SANE"
 license=('GPL')
-pkgdesc="Metapkg for scanner support"
+pkgdesc="Meta-package for scanner support"
 depends=("colord-sane"
 	"ipp-usb"
 	"sane"
 	"sane-airscan")
 optdepends=('simple-scan: GTK3 frontend for scanner'
-	'skanlite: Image Scanning Application for KDE')
-install=$pkgname.install
+	'skanlite: Image scanning application for KDE')
+install="$pkgname".install

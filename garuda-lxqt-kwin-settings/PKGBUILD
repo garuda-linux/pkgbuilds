@@ -2,7 +2,7 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=('garuda-lxqt-kwin-settings')
-pkgdesc='Garuda Linux Lxqt-Kwin settings'
+pkgdesc='Garuda Linux LXQt-Kwin settings'
 pkgver=1.1.6
 pkgrel=5
 arch=('any')

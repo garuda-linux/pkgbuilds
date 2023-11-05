@@ -17,11 +17,11 @@ md5sums=('SKIP')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver"
-	qmake-qt5 $pkgname.pro
+	qmake-qt5 "$pkgname".pro
 	make
 }
 
 package() {
 	cd "$srcdir/$pkgname-$pkgver"
-	make INSTALL_ROOT=$pkgdir install
+	make INSTALL_ROOT="$pkgdir" install
 }

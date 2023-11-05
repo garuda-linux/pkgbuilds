@@ -1,4 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=libretro-meta
 pkgver=1
@@ -6,7 +7,7 @@ pkgrel=7
 arch=('any')
 url="libretro.org"
 license=('GPL')
-pkgdesc="Metapkg for all supported Libretro emulators"
+pkgdesc="Meta-package for all supported Libretro emulators"
 install=libretro.install
 
 package() {

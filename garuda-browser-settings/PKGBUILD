@@ -13,8 +13,8 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 package() {
-	cd $srcdir/$pkgname-$pkgver
-	mkdir -p $pkgdir/usr/lib/{chrome,chromium,brave,{firedragon,firefox,firefox-developer-edition,librewolf,palemoon,thunderbird}/distribution}
+	cd "$srcdir/$pkgname-$pkgver"
+	mkdir -p "$pkgdir"/usr/lib/{chrome,chromium,brave,{firedragon,firefox,firefox-developer-edition,librewolf,palemoon,thunderbird}/distribution}
 
 	for i in chrome chromium brave; do
 		cp chrome/* $pkgdir/usr/lib/$i

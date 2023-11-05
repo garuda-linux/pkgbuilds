@@ -1,6 +1,6 @@
-# Maintainer : dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
-# Contributor : librewish <librewish@garudalinux.org>
-# Contributor : Ramon Buldo <ramon@manjaro.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: librewish <librewish@garudalinux.org>
+# Contributor: Ramon Buldo <ramon@manjaro.org>
 
 pkgbase=garuda-settings-manager
 pkgname=('garuda-settings-manager' 'garuda-settings-manager-kcm'

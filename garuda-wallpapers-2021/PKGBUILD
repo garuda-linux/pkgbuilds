@@ -1,7 +1,9 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
 pkgname=garuda-wallpapers-2021
 pkgver=r1
 pkgrel=1
-pkgdesc="Wallpaper collection, 2021 edition"
+pkgdesc="Garuda's wallpaper collection, 2021 edition"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021"
 license=('GPLv3')
@@ -12,15 +14,11 @@ sha256sums=('SKIP')
 
 pkgver() {
 	cd "$srcdir/garuda-wallpapers-2021"
-
-	# Git, no tags available
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-
 }
 
 package() {
-	cd ${pkgname}
-
-	install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
-	cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+	cd "${pkgname}"
+	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
+	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }

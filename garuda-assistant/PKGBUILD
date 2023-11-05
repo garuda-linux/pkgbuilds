@@ -1,5 +1,5 @@
-# Maintainer: <dr460nf1r3 at garudalinux dot org>
-# Maintainer: <librewish@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-assistant
 pkgver=2.7.6

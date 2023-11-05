@@ -18,6 +18,6 @@ pkgver() {
 
 package() {
 
-	install -d $pkgdir/usr/share/calamares/branding/garuda
-	cp -rf $srcdir/$pkgname/usr $pkgdir
+	install -d "$pkgdir/usr/share/calamares/branding/garuda"
+	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
 }

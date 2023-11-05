@@ -1,8 +1,9 @@
-# Maintainer: Philip Müller <philm[at]garuda[dog]org>
-# Contributor: artoo <artoo@garuda.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Philip Müller <philm[at]manjaro[dot]org>
+# Contributor: artoo <artoo@manjaro.org>
 # Contributor: anex <assassin.anex[@]gmail.com>
-# Contributor: Stefano Capitani <stefano@garuda.org>
-# Contributor: Matti Hyttinen <matti@garuda.org>
+# Contributor: Stefano Capitani <stefano@manjaro.org>
+# Contributor: Matti Hyttinen <matti@manjaro.org>
 
 pkgname=('grub-theme-garuda-dr460nized')
 pkgver=r2.49d1e5e

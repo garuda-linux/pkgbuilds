@@ -1,4 +1,5 @@
-# Maintainer: Philip Müller <philm[at]garuda[dog]org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Philip Müller <philm[at]garuda[dog]org>
 # Contributor: artoo <artoo@garuda.org>
 # Contributor: anex <assassin.anex[@]gmail.com>
 
@@ -6,7 +7,6 @@ _repo=garuda-tools-livecd
 
 pkgbase=garuda-live
 pkgname=('garuda-live-base'
-	#'garuda-live-openrc'
 	'garuda-live-systemd'
 	'garuda-live-skel'
 	'garuda-live-portable-efi')
@@ -31,7 +31,7 @@ build() {
 }
 
 package_garuda-live-base() {
-	pkgdesc='garuda Linux live base scripts'
+	pkgdesc='Garuda Linux live base scripts'
 	depends=('garuda-tools-base>=0.13')
 	conflicts=('garuda-livecd-base')
 	replaces=('garuda-livecd-base')
@@ -40,18 +40,8 @@ package_garuda-live-base() {
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_base
 }
 
-package_garuda-live-openrc() {
-	pkgdesc='garuda Linux live openrc init scripts'
-	depends=('openrc' 'garuda-live-base')
-	conflicts=('garuda-livecd-openrc')
-	# 	replaces=('garuda-livecd-openrc')
-
-	cd ${srcdir}/${_repo} #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_rc
-}
-
 package_garuda-live-systemd() {
-	pkgdesc='garuda Linux live systemd units'
+	pkgdesc='Garuda Linux live Systemd units'
 	depends=('systemd' 'garuda-live-base' 'reflector')
 	conflicts=('garuda-livecd-systemd')
 	# 	replaces=('garuda-livecd-systemd')
@@ -61,14 +51,14 @@ package_garuda-live-systemd() {
 }
 
 package_garuda-live-skel() {
-	pkgdesc='garuda Linux live session autostart items'
+	pkgdesc='Garuda Linux live session autostart items'
 
 	cd ${srcdir}/${_repo} #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_xdg
 }
 
 package_garuda-live-portable-efi() {
-	pkgdesc='garuda Linux live session portable efi settings'
+	pkgdesc='Garuda Linux live session portable EFI settings'
 	depends=('grub')
 
 	cd ${srcdir}/${_repo} #-${pkgver}

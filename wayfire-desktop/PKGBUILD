@@ -6,7 +6,7 @@ pkgver=1.0.0
 pkgrel=2
 arch=(any)
 url='https://wayfire.org/'
-pkgdesc='A meta package to use Wayfire as a desktop'
+pkgdesc='A meta-package to use Wayfire as a desktop'
 
 package() {
 	replaces=(wayfire-desktop-git)
