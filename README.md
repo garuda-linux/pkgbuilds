@@ -19,7 +19,7 @@ We highly appreciate contributions of any sort! 😊 In order to do so, please f
 - [Create a fork of this repository](https://gitlab.com/garuda-linux/pkgbuilds/-/forks/new)
 - Clone your fork locally ([short git tutorial](https://rogerdudler.github.io/git-guide/))
 - Add the desired changes to PKGBUILDs or code
-- Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files (run the `lint.sh` script)
+- Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files (run the `lint.sh` script via `bash ./.ci/lint.sh`)
 - Commit using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) and push any changes back to your fork
 - [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new)
 
