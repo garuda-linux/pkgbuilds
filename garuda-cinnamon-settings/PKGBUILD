@@ -1,11 +1,11 @@
-# Maintainer: Librewish <librewish@gmail.com>
-# Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Maintainer: Naman Garg <naman@garudalinux.org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-cinnamon-settings
 pkgdesc='Garuda Linux Cinnamon settings'
-pkgver=1.0.8
-pkgrel=2
+pkgver=1.0.9
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')

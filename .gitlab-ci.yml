@@ -5,7 +5,6 @@ variables:
   BUILD_PORT: 223
   BUILD_USER: gitlab
   GIT_STRATEGY: clone
-  SHELLCHECK_OPTS: "-e SC2034 -e SC2148"
 check:
   stage: check
   image: nixpkgs/nix-flakes:latest

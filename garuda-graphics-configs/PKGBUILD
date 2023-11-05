@@ -3,7 +3,7 @@
 pkgbase=garuda-nvidia-config
 pkgname=('garuda-virtualmachine-guest-config' 'garuda-video-linux-config')
 pkgver=1.1.4
-pkgrel=2
+pkgrel=4
 epoch=2
 pkgdesc=""
 arch=('any')
@@ -68,7 +68,7 @@ package_garuda-virtualmachine-guest-config() {
 package_garuda-video-linux-config() {
 	pkgdesc="Meta configuration package for common open source drivers on Garuda Linux"
 	arch=('any')
-	depends=(xf86-video-ati xf86-video-amdgpu xf86-video-intel xf86-video-nouveau vulkan-intel vulkan-radeon opencl-mesa intel-compute-runtime intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver libva-vdpau-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-opencl-mesa lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-libva-vdpau-driver lib32-vulkan-mesa-layers)
+	depends=(xf86-video-ati xf86-video-amdgpu xf86-video-intel xf86-video-nouveau vulkan-intel vulkan-radeon intel-compute-runtime intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver libva-vdpau-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-libva-vdpau-driver lib32-vulkan-mesa-layers)
 }
 
 _nvidia_function_factory latest
