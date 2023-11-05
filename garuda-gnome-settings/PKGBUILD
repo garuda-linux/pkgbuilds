@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-gnome-settings
-pkgver=1.5.0
+pkgver=1.5.3
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -15,14 +15,12 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    depends=('garuda-backgrounds'
-        'garuda-common-settings'
-        'gnome-themes-extra'
-        'qgnomeplatform-qt5'
-        'qgnomeplatform-qt6'
-        'volantes-cursors'
-        'ttf-fira-sans'
-        'ttf-firacode-nerd')
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	depends=('garuda-backgrounds'
+		'garuda-common-settings'
+		'gnome-themes-extra'
+		'volantes-cursors'
+		'ttf-fira-sans'
+		'ttf-firacode-nerd')
 }

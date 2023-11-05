@@ -1,11 +1,11 @@
 post_install() {
 
-  sed -i -e 's,.*GRUB_THEME=.*,GRUB_THEME="/usr/share/grub/themes/garuda/theme.txt",' /etc/default/grub
-  sed -i -e 's,.*GRUB_GFXMODE=.*,GRUB_GFXMODE=auto,' /etc/default/grub
-  sed -i -e 's,.*GRUB_DISTRIBUTOR=.*,GRUB_DISTRIBUTOR="Garuda",' /etc/default/grub
-  grub-mkconfig -o /boot/grub/grub.cfg
- 
-cat << _EOF 
+	sed -i -e 's,.*GRUB_THEME=.*,GRUB_THEME="/usr/share/grub/themes/garuda/theme.txt",' /etc/default/grub
+	sed -i -e 's,.*GRUB_GFXMODE=.*,GRUB_GFXMODE=auto,' /etc/default/grub
+	sed -i -e 's,.*GRUB_DISTRIBUTOR=.*,GRUB_DISTRIBUTOR="Garuda",' /etc/default/grub
+	grub-mkconfig -o /boot/grub/grub.cfg
+
+	cat <<_EOF
 
 ==> Installation: Theme is added to your /etc/default/grub: GRUB_THEME="/usr/share/grub/themes/garuda/theme.txt"
 ==> Default resolution "auto"
@@ -14,11 +14,11 @@ _EOF
 }
 
 post_upgrade() {
-        post_install
+	post_install
 }
 
 post_remove() {
-cat << _EOF
+	cat <<_EOF
 
 ==> IMPORTANT: Edit /boot/grub/grub.cfg , remove
 ==> set theme="/boot/grub/themes/garuda/theme.txt"

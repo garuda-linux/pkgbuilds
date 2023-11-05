@@ -1,33 +1,33 @@
 add_users() {
-    _l="/etc/login.defs"
-    _p="/etc/passwd"
- 
-    ## get mini UID limit ##
-    l=$(grep "^UID_MIN" $_l)
- 
-    ## get max UID limit ##
-    l1=$(grep "^UID_MAX" $_l)
- 
-    ## use awk to print if UID >= $MIN and UID <= $MAX and shell is not /sbin/nologin   ##
-    users=$(awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( $3 >= min && $3 <= max  && $7 != "/sbin/nologin" ) print $0 }' "$_p" | cut -d: -f1)
-    for i in $users; do
-        echo "Adding user '$i' to user-group 'libvirt,kvm'"
-        usermod -a -G libvirt $i
-        usermod -a -G kvm $i
-    done
+	_l="/etc/login.defs"
+	_p="/etc/passwd"
+
+	## get mini UID limit ##
+	l=$(grep "^UID_MIN" $_l)
+
+	## get max UID limit ##
+	l1=$(grep "^UID_MAX" $_l)
+
+	## use awk to print if UID >= $MIN and UID <= $MAX and shell is not /sbin/nologin   ##
+	users=$(awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( $3 >= min && $3 <= max  && $7 != "/sbin/nologin" ) print $0 }' "$_p" | cut -d: -f1)
+	for i in $users; do
+		echo "Adding user '$i' to user-group 'libvirt,kvm'"
+		usermod -a -G libvirt $i
+		usermod -a -G kvm $i
+	done
 }
 
 add_group() {
-    getent group "libvirt" &>/dev/null || groupadd -r libvirt
-    getent group "kvm" &>/dev/null || groupadd -r kvm -g 78
-    add_users
+	getent group "libvirt" &>/dev/null || groupadd -r libvirt
+	getent group "kvm" &>/dev/null || groupadd -r kvm -g 78
+	add_users
 }
 
 post_install() {
-    post_upgrade
+	post_upgrade
 }
 
 post_upgrade() {
-    systemctl is-active libvirtd >/dev/null || systemctl enable libvirtd
-    add_group
+	systemctl is-active libvirtd >/dev/null || systemctl enable libvirtd
+	add_group
 }

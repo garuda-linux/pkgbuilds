@@ -9,10 +9,10 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 depends=('ananicy-cpp'
-         'cachyos-ananicy-rules-git'
-         'hdparm'
-         'irqbalance'
-         'preload')
+	'cachyos-ananicy-rules-git'
+	'hdparm'
+	'irqbalance'
+	'preload')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
@@ -20,6 +20,6 @@ conflicts=('powersave-tweaks' 'tlp' 'auto-cpufreq' 'thermald')
 install=$pkgname.install
 
 package() {
-    install -d $pkgdir/usr/lib
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/usr/lib
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 }

@@ -10,15 +10,14 @@ license=("GPL")
 makedepends=("git")
 source=("git+$url.git")
 sha256sums=("SKIP")
-install=$pkgname.install
+install="$pkgname".install
 
 pkgver() {
-  cd "$srcdir/$pkgname"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	cd "$srcdir/$pkgname"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
-  install -d $pkgdir/usr/share/plymouth/themes/garuda-purple
-  cp -rf "$srcdir/$pkgname"/usr $pkgdir
+	install -d "$pkgdir/usr/share/plymouth/themes/garuda-purple"
+	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
 }
- 

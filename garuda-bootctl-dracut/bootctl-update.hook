@@ -1,4 +1,4 @@
- [Trigger]
+[Trigger]
 Operation = Upgrade
 Type = Package
 Target = systemd

@@ -15,25 +15,25 @@ license=('custom')
 options=('!strip')
 
 pkgver() {
-    pacman -Rddp --print-format %v nvidia-dkms linux-zen-headers | head -c -1 | sed -z 's/\n/+/g;s/-/./g'
+	pacman -Rddp --print-format %v nvidia-dkms linux-zen-headers | head -c -1 | sed -z 's/\n/+/g;s/-/./g'
 }
 
 build() {
-    _kernver=$(</usr/src/linux-zen/version)
-    _nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
+	_kernver=$(</usr/src/linux-zen/version)
+	_nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
 
-    fakeroot dkms build --dkmstree "${srcdir}" -m nvidia/${_nvidiaver%-*} -k ${_kernver}
+	fakeroot dkms build --dkmstree "${srcdir}" -m nvidia/${_nvidiaver%-*} -k ${_kernver}
 }
 
 package() {
-    _kernver="$(</usr/src/linux-zen/version)"
-    _nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
-    depends=("linux-zen=$(pacman -Rddp --print-format %v linux-zen-headers)" "nvidia-utils=${_nvidiaver}" 'libglvnd')
+	_kernver="$(</usr/src/linux-zen/version)"
+	_nvidiaver="$(pacman -Rddp --print-format %v nvidia-dkms)"
+	depends=("linux-zen=$(pacman -Rddp --print-format %v linux-zen-headers)" "nvidia-utils=${_nvidiaver}" 'libglvnd')
 
-    install -Dt "${pkgdir}/usr/lib/modules/${_kernver}/extramodules" -m644 nvidia/${_nvidiaver%-*}/${_kernver}/${CARCH}/module/*
+	install -Dt "${pkgdir}/usr/lib/modules/${_kernver}/extramodules" -m644 nvidia/${_nvidiaver%-*}/${_kernver}/${CARCH}/module/*
 
-    # compress each module individually
-    find "$pkgdir" -name '*.ko' -exec xz -T1 {} +
+	# compress each module individually
+	find "$pkgdir" -name '*.ko' -exec xz -T1 {} +
 
-    install -Dm644 /usr/share/licenses/nvidia-dkms/LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+	install -Dm644 /usr/share/licenses/nvidia-dkms/LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

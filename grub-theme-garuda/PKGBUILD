@@ -1,16 +1,15 @@
-# Maintainer: Philip Müller <philm[at]garuda[dog]org>
-# Contributor: artoo <artoo@garuda.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Philip Müller <philm[at]manjaro[dot]org>
+# Contributor: artoo <artoo@manjaro.org>
 # Contributor: anex <assassin.anex[@]gmail.com>
-# Contributor: Stefano Capitani <stefano@garuda.org>
-# Contributor: Matti Hyttinen <matti@garuda.org> 
-
+# Contributor: Stefano Capitani <stefano@manjaro.org>
+# Contributor: Matti Hyttinen <matti@manjaro.org>
 
 pkgbase=grub-theme-garuda-live
 pkgname=('grub-theme-garuda-live-common' 'grub-theme-garuda-live' 'grub-theme-garuda')
 pkgver=r14.1cd9ac3
 pkgrel=1
-
-pkgdesc='garuda Linux grub theme'
+pkgdesc='Garuda Linux GRUB theme'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/grub-theme-garuda"
 license=('GPL')
@@ -19,31 +18,28 @@ source=("grub-theme::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-    cd ${srcdir}/grub-theme
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	cd "${srcdir}/grub-theme"
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package_grub-theme-garuda-live-common() {
-    depends=('grub')
+	depends=('grub')
 
-    cd grub-theme
-    make PREFIX=/usr DESTDIR=${pkgdir} install_common
+	cd grub-theme
+	make PREFIX=/usr DESTDIR="${pkgdir}" install_common
 }
 package_grub-theme-garuda-live() {
-    depends=('grub-theme-garuda-live-common')
+	depends=('grub-theme-garuda-live-common')
 
-    cd grub-theme
-    make PREFIX=/usr DESTDIR=${pkgdir} install_garuda
+	cd grub-theme
+	make PREFIX=/usr DESTDIR="${pkgdir}" install_garuda
 }
 
 package_grub-theme-garuda() {
 	depends=('grub')
 	install=garuda-theme.install
-    
-    cd grub-theme/garuda-live
-    sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
-    find . -type f -exec install -D -m644 {} ${pkgdir}/usr/share/grub/themes/garuda/{} \;
+
+	cd grub-theme/garuda-live
+	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt
+	find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda/{} \;
 }
-
-
-

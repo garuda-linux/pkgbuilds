@@ -4,49 +4,49 @@
 source /usr/lib/garuda/garuda.shlib
 
 if [ ! -e /usr/share/garuda/migrations/current_version ]; then
-  exit 1
+	exit 1
 fi
 
 IS_NEW_INSTALL=false
 pending_version=$(</usr/share/garuda/migrations/current_version)
 
 if [ -e /etc/garuda/migrations/applied_version ]; then
-  applied_version=$(</etc/garuda/migrations/applied_version)
+	applied_version=$(</etc/garuda/migrations/applied_version)
 else
-  IS_NEW_INSTALL=true
-  applied_version=0.0.0
+	IS_NEW_INSTALL=true
+	applied_version=0.0.0
 fi
 
 grub_has_ibt_fix() {
-    grep -qe "^GRUB_CMDLINE_LINUX_DEFAULT=.*ibt=off" /etc/default/grub
+	grep -qe "^GRUB_CMDLINE_LINUX_DEFAULT=.*ibt=off" /etc/default/grub
 }
 
 grub_has_splash() {
-    grep -qe "^GRUB_CMDLINE_LINUX_DEFAULT=.*splash" /etc/default/grub
+	grep -qe "^GRUB_CMDLINE_LINUX_DEFAULT=.*splash" /etc/default/grub
 }
 
 # $1 Previous version
 # $2 Current version
 apply_migrations() {
-  echo "$2" > /etc/garuda/migrations/applied_version
+	echo "$2" >/etc/garuda/migrations/applied_version
 
-  # Uninstall sddm DPI fix
-  if [[ $(vercmp 1.1.0-1 $1) -gt 0 ]]; then
-    rm -f /etc/sddm.conf.d/01-garuda-fix-dpi.conf
-  fi
+	# Uninstall sddm DPI fix
+	if [[ $(vercmp 1.1.0-1 $1) -gt 0 ]]; then
+		rm -f /etc/sddm.conf.d/01-garuda-fix-dpi.conf
+	fi
 
-  # Update updatedb.conf with some sane snapper defaults
-  if [[ $(vercmp 1.2.0-1 $1) -gt 0 ]]; then
-    sed -e 's_^PRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp"_# Modified by Garuda Linux to exclude snapshots\nPRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp /.snapshots"_' -i /etc/updatedb.conf
-  fi
+	# Update updatedb.conf with some sane snapper defaults
+	if [[ $(vercmp 1.2.0-1 $1) -gt 0 ]]; then
+		sed -e 's_^PRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp"_# Modified by Garuda Linux to exclude snapshots\nPRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp /.snapshots"_' -i /etc/updatedb.conf
+	fi
 
-  # Update /etc/mkinitcpio.conf to include grub-btrfs-overlayfs
-  if [[ $(vercmp 1.3.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && ! grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf; then
-    sed -re 's/(^HOOKS=\([^)]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
-  fi
+	# Update /etc/mkinitcpio.conf to include grub-btrfs-overlayfs
+	if [[ $(vercmp 1.3.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && ! grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf; then
+		sed -re 's/(^HOOKS=\([^)]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
+	fi
 
-  if [[ $(vercmp 1.4.0-1 $1) -gt 0 ]]; then
-    gawk -i inplace -v new_install="$IS_NEW_INSTALL" '/^deny/ {
+	if [[ $(vercmp 1.4.0-1 $1) -gt 0 ]]; then
+		gawk -i inplace -v new_install="$IS_NEW_INSTALL" '/^deny/ {
             set=1
           }
           ENDFILE {
@@ -59,12 +59,12 @@ apply_migrations() {
             }
           }
           1' /etc/security/faillock.conf
-    garudalib_add_update_notice "The default faillock limit was automatically changed to 10 (from 3)"
-  fi
+		garudalib_add_update_notice "The default faillock limit was automatically changed to 10 (from 3)"
+	fi
 
-  # Enable grub recovery
-  if [[ $(vercmp 2.1.0-1 $1) -gt 0 ]]; then
-    gawk -i inplace -v new_install="$IS_NEW_INSTALL" -F "=" '/^GRUB_DISABLE_RECOVERY=.*$/ {
+	# Enable grub recovery
+	if [[ $(vercmp 2.1.0-1 $1) -gt 0 ]]; then
+		gawk -i inplace -v new_install="$IS_NEW_INSTALL" -F "=" '/^GRUB_DISABLE_RECOVERY=.*$/ {
             if ($2 == "true") {
               set=1
               if (new_install != "true") {
@@ -81,39 +81,39 @@ apply_migrations() {
               exit 1
             }
           }
-          1' /etc/default/grub && \
-      garudalib_add_update_notice "A recovery mode option was added to your advanced options in the GRUB bootloader." || true
-  fi
+          1' /etc/default/grub &&
+			garudalib_add_update_notice "A recovery mode option was added to your advanced options in the GRUB bootloader." || true
+	fi
 
-  # Disable IBT for now until the issue is fixed on nvidia upstream
-  # Correction: Remove the manual fix here from migrations and instead add it via other configuration files
-  # https://forum.garudalinux.org/t/nvidia-gpu-users-watch-out-for-kernel-5-18-update/19923
-  if [[ $(vercmp 2.2.0-1 $1) -gt 0 ]] && grub_has_ibt_fix; then
-    sed -i '/# Modified by garuda-migrations: ibt=off/ s/# Modified by garuda-migrations: ibt=off//; s/\s*ibt=off//g' /etc/default/grub
-  fi
+	# Disable IBT for now until the issue is fixed on nvidia upstream
+	# Correction: Remove the manual fix here from migrations and instead add it via other configuration files
+	# https://forum.garudalinux.org/t/nvidia-gpu-users-watch-out-for-kernel-5-18-update/19923
+	if [[ $(vercmp 2.2.0-1 $1) -gt 0 ]] && grub_has_ibt_fix; then
+		sed -i '/# Modified by garuda-migrations: ibt=off/ s/# Modified by garuda-migrations: ibt=off//; s/\s*ibt=off//g' /etc/default/grub
+	fi
 
-  # Handle plymouth migration
-  if [[ $(vercmp 2.3.1-1 $1) -gt 0 ]]; then
-    if [ -f /etc/mkinitcpio.conf ] && grep -qe '^HOOKS=.*\(plymouth-encrypt\|sd-plymouth\)' /etc/mkinitcpio.conf; then
-      sed -E '/^HOOKS=\(.*\)$/ s/(plymouth-encrypt)/encrypt/g; /^HOOKS=\(.*\)$/ s/(sd-plymouth)/plymouth/g' -i /etc/mkinitcpio.conf
-      garudalib_add_update_notice "The mkinitcpio configuration for plymouth was updated to a new format automatically." || true
-    fi
-    dm_service="$(basename "$(readlink -sf /etc/systemd/system/display-manager.service || true)")"
-    case "$dm_service" in
-      "lxdm-plymouth.service") ;&
-      "sddm-plymouth.service") ;&
-      "lightdm-plymouth.service")
-        new_dm_service="${dm_service%-plymouth.service}.service"
-        systemctl disable "$dm_service"
-        systemctl enable "$new_dm_service"
-        garudalib_add_update_notice "Your default display manager was changed from \"$dm_service\" to \"$new_dm_service\" automatically, because the former no longer exists." || true
-        ;;
-    esac
-  fi
+	# Handle plymouth migration
+	if [[ $(vercmp 2.3.1-1 $1) -gt 0 ]]; then
+		if [ -f /etc/mkinitcpio.conf ] && grep -qe '^HOOKS=.*\(plymouth-encrypt\|sd-plymouth\)' /etc/mkinitcpio.conf; then
+			sed -E '/^HOOKS=\(.*\)$/ s/(plymouth-encrypt)/encrypt/g; /^HOOKS=\(.*\)$/ s/(sd-plymouth)/plymouth/g' -i /etc/mkinitcpio.conf
+			garudalib_add_update_notice "The mkinitcpio configuration for plymouth was updated to a new format automatically." || true
+		fi
+		dm_service="$(basename "$(readlink -sf /etc/systemd/system/display-manager.service || true)")"
+		case "$dm_service" in
+		"lxdm-plymouth.service") ;&
+		"sddm-plymouth.service") ;&
+		"lightdm-plymouth.service")
+			new_dm_service="${dm_service%-plymouth.service}.service"
+			systemctl disable "$dm_service"
+			systemctl enable "$new_dm_service"
+			garudalib_add_update_notice "Your default display manager was changed from \"$dm_service\" to \"$new_dm_service\" automatically, because the former no longer exists." || true
+			;;
+		esac
+	fi
 
-  # Remove plymouth from grub
-  if [[ $(vercmp 2.4.1-1 $1) -gt 0 ]] && grub_has_splash; then
-    gawk -i inplace '
+	# Remove plymouth from grub
+	if [[ $(vercmp 2.4.1-1 $1) -gt 0 ]] && grub_has_splash; then
+		gawk -i inplace '
       /^GRUB_CMDLINE_LINUX_DEFAULT=.*/ {
         if (gsub(/ ?splash/, "") > 0) {
             print $0" # Modified by garuda-migrations: splash"
@@ -127,7 +127,7 @@ apply_migrations() {
         }
       }
       1' "/etc/default/grub" && garudalib_add_update_notice 'The "splash" (Plymouth) kernel parameter was removed from your GRUB configuration automatically to ensure system stability. Plymouth may be enabled manually again, but it is strongly recommended to keep plymouth disabled.' || true
-  fi
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"

@@ -23,6 +23,7 @@ array set auto_replace_conflicts {
     libretro-mame-git libretro-meta
     jack2 pipewire-jack
     networkmanager-fortisslvpn networkmanager-support
+    ananicy-rules cachyos-ananicy-rules-git
 }
 
 if { $::conflictsfile_set } {

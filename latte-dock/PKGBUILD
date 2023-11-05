@@ -1,0 +1,28 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Jan Neumann <neum dot ja at gmail dot com>
+# Contributor: Michael Straube <straubem@gmx.de>
+
+pkgname=latte-dock
+pkgver=0.10.9
+pkgrel=1
+pkgdesc='Latte is a dock based on plasma frameworks that provides an elegant and intuitive experience for your tasks and plasmoids'
+arch=('x86_64')
+url='https://invent.kde.org/plasma/latte-dock'
+license=('GPL')
+depends=('plasma-framework5' 'kirigami2' 'knewstuff5' 'hicolor-icon-theme' 'plasma-wayland-protocols')
+optdepends=('libunity: quicklists, counters, and progress bars for apps using libunity')
+makedepends=('git' 'cmake' 'extra-cmake-modules' 'python' 'plasma-workspace')
+source=("git+${url}.git#commit=8ea7f3e06619d06c37b2f80aba3a1712237c2516")
+sha256sums=('SKIP')
+
+build() {
+	cd "${pkgname}"
+	mkdir build && cd build
+	cmake -DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_BUILD_TYPE=Master ..
+
+}
+
+package() {
+	make -C "${pkgname}/build" DESTDIR="${pkgdir}" install
+}

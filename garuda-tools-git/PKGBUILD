@@ -1,4 +1,5 @@
-# Maintainer: librewish <librewish@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 # Contributor: Philip Müller <philm@manjaro.org>
 
 _pkgbase=garuda-tools
@@ -7,9 +8,9 @@ _branch=master
 
 pkgbase=garuda-tools-git
 pkgname=('garuda-tools-base-git'
-        'garuda-tools-pkg-git'
-        'garuda-tools-iso-git'
-        'garuda-tools-yaml-git')
+	'garuda-tools-pkg-git'
+	'garuda-tools-iso-git'
+	'garuda-tools-yaml-git')
 pkgver=r189.ccaa8c5
 pkgrel=2
 arch=('x86_64' 'i686')
@@ -22,70 +23,69 @@ source=("garuda-tools::git+$url.git#branch=$_branch")
 sha256sums=('SKIP')
 
 prepare() {
-    cd ${srcdir}/${_pkgbase}
-    sed -e "s/^Version=.*/Version=$_ver/" -i Makefile
+	cd ${srcdir}/${_pkgbase}
+	sed -e "s/^Version=.*/Version=$_ver/" -i Makefile
 
-    #sed -e "s/^Version=.*/Version=$pkgver/" -i Makefile
+	#sed -e "s/^Version=.*/Version=$pkgver/" -i Makefile
 
-    if [ "${CARCH}" = "i686" ]; then
-        patch -p2 -i ${srcdir}/garuda-32.patch
-    fi
+	if [ "${CARCH}" = "i686" ]; then
+		patch -p2 -i ${srcdir}/garuda-32.patch
+	fi
 }
 
 pkgver() {
-    cd ${srcdir}/${_pkgbase}
-    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+	cd ${srcdir}/${_pkgbase}
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
-    cd ${srcdir}/${_pkgbase}
-    make SYSCONFDIR=/etc PREFIX=/usr
+	cd ${srcdir}/${_pkgbase}
+	make SYSCONFDIR=/etc PREFIX=/usr
 }
 
 package_garuda-tools-base-git() {
-    pkgdesc='Development tools for garuda Linux (base tools)'
-    provides=("garuda-tools-base=$_ver")
-    depends=('openssh' 'rsync' 'haveged' 'os-prober' 'gnupg' 'pacman-mirrorlist')
-    optdepends=('garuda-tools-pkg: Garuda Linux package tools'
-                'garuda-tools-iso: Garuda Linux iso tools'
-                'garuda-tools-yaml: Garuda Linux yaml tools')
-    conflicts=('garuda-tools-base')
-    backup=('etc/garuda-tools/garuda-tools.conf')
+	pkgdesc='Development tools for garuda Linux (base tools)'
+	provides=("garuda-tools-base=$_ver")
+	depends=('openssh' 'rsync' 'haveged' 'os-prober' 'gnupg' 'pacman-mirrorlist')
+	optdepends=('garuda-tools-pkg: Garuda Linux package tools'
+		'garuda-tools-iso: Garuda Linux iso tools'
+		'garuda-tools-yaml: Garuda Linux yaml tools')
+	conflicts=('garuda-tools-base')
+	backup=('etc/garuda-tools/garuda-tools.conf')
 
-    cd ${srcdir}/${_pkgbase}
-    make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_base
+	cd ${srcdir}/${_pkgbase}
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_base
 }
 
 package_garuda-tools-pkg-git() {
-    pkgdesc='Development tools for Garuda Linux (packaging tools)'
-    provides=("garuda-tools-pkg=$_ver")
-    depends=('namcap' 'garuda-tools-base-git')
-    conflicts=('garuda-tools-pkg' 'devtools')
+	pkgdesc='Development tools for Garuda Linux (packaging tools)'
+	provides=("garuda-tools-pkg=$_ver")
+	depends=('namcap' 'garuda-tools-base-git')
+	conflicts=('garuda-tools-pkg' 'devtools')
 
-    cd ${srcdir}/${_pkgbase}
-    make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_pkg
+	cd ${srcdir}/${_pkgbase}
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_pkg
 }
 
 package_garuda-tools-yaml-git() {
-    pkgdesc='Development tools for Garuda Linux (yaml tools)'
-    provides=("garuda-tools-yaml=$_ver")
-    conflicts=('garuda-tools-yaml')
-    depends=('garuda-tools-base-git' 'calamares-tools')
+	pkgdesc='Development tools for Garuda Linux (yaml tools)'
+	provides=("garuda-tools-yaml=$_ver")
+	conflicts=('garuda-tools-yaml')
+	depends=('garuda-tools-base-git' 'calamares-tools')
 
-    cd ${srcdir}/${_pkgbase}
-    make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_yaml
+	cd ${srcdir}/${_pkgbase}
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_yaml
 }
 
 package_garuda-tools-iso-git() {
-    pkgdesc='Development tools for Garuda Linux (ISO tools)'
+	pkgdesc='Development tools for Garuda Linux (ISO tools)'
 	provides=("garuda-tools-iso=$_ver")
-    depends=('dosfstools' 'libisoburn' 'squashfs-tools' 'garuda-tools-yaml-git'
-            'mkinitcpio' 'mktorrent' 'grub' 'git' 'zsync' 'rclone')
+	depends=('dosfstools' 'libisoburn' 'squashfs-tools' 'garuda-tools-yaml-git'
+		'mkinitcpio' 'mktorrent' 'grub' 'git' 'zsync' 'rclone')
 	conflicts=('garuda-tools-iso')
-    optdepends=('virtualbox: quickly test isos'
-                'snapd: for snapd support')
+	optdepends=('virtualbox: quickly test isos'
+		'snapd: for snapd support')
 
 	cd ${srcdir}/${_pkgbase}
 	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_iso
 }
-

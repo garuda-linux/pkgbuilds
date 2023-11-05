@@ -1,15 +1,16 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=alsa-support
-pkgdesc="Metapkg containing all needed packages to use ALSA"
+pkgdesc="Meta-package containing all needed packages to use ALSA"
 pkgver=1
-pkgrel=1
-arch=('any')
+pkgrel=2
+arch=("any")
 url="https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture"
-license=('GPL')
+license=("GPL")
 depends=("alsa-firmware"
-        "alsa-lib"
-        "alsa-oss"
-        "alsa-plugins"
-        "alsa-tools"
-        "alsa-utils")
+	"alsa-lib"
+	"alsa-oss"
+	"alsa-plugins"
+	"alsa-tools"
+	"alsa-utils")

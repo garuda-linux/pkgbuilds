@@ -3,7 +3,7 @@
 pkgname=garuda-wallpapers-extra
 pkgver=r3.eb2d0fd
 pkgrel=1
-pkgdesc="Garuda extra wallpaper collection"
+pkgdesc="Garuda's extra wallpaper collection"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=('GPLv3')
@@ -14,12 +14,10 @@ sha256sums=('SKIP')
 pkgver() {
 	cd "$srcdir/$pkgname"
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-
 }
 
 package() {
-    cd ${pkgname}
-    install -d ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
-    cp -r src/garuda-wallpapers/* ${pkgdir}/usr/share/wallpapers/garuda-wallpapers
+	cd "${pkgname}"
+	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
+	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }
- 

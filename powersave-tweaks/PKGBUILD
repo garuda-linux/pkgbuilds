@@ -1,8 +1,8 @@
-# Maintainer: Librewish <librewish@gmail.com>
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=powersave-tweaks
-pkgdesc='Tweaks to preserve power'
+pkgdesc='Tweaks to preserve power on Garuda Linux'
 pkgver=2.0.0
 pkgrel=1
 arch=('any')
@@ -13,9 +13,8 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 sha256sums=('SKIP')
 depends=('hdparm')
 conflicts=('performanace-tweaks')
-install=$pkgname.install
 
 package() {
-    install -d $pkgdir/usr/lib
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir/usr/lib"
+	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
 }

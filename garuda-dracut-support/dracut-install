@@ -16,12 +16,12 @@ while read -r line; do
 	install -Dm644 "/${line}" "/boot/vmlinuz-${pkgbase}"
 done
 
-if (( all )); then
+if ((all)); then
 	lines=(/usr/lib/modules/*)
 fi
 
 for line in "${lines[@]}"; do
-	if ! pacman -Qqo "${line}/pkgbase" &> /dev/null; then
+	if ! pacman -Qqo "${line}/pkgbase" &>/dev/null; then
 		# if pkgbase does not belong to any package then skip this kernel
 		continue
 	fi

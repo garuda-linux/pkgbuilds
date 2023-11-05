@@ -1,8 +1,8 @@
-# Maintainer: TNE <TNE[at]garudalinux[dog]org>
+# Maintainer: TNE <TNE[at]garudalinux[dot]org>
 
 pkgname=calamares-git
 pkgver=.r10513.d8a03bb34
-pkgrel=2
+pkgrel=1
 pkgdesc='Distribution-independent installer framework (development version)'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -12,8 +12,8 @@ conflicts=('calamares' 'calamares-dev')
 provides=('calamares' 'calamares-dev')
 replaces=('calamares-dev')
 depends=('kconfig5' 'kcoreaddons5' 'kiconthemes5' 'ki18n5' 'kio5' 'solid5' 'yaml-cpp' 'kpmcore'
-        'boost-libs' 'ckbcomp' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework5'
-        'qt5-xmlpatterns' 'squashfs-tools' 'libpwquality' 'appstream-qt' 'python')
+	'boost-libs' 'ckbcomp' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework5'
+	'qt5-xmlpatterns' 'squashfs-tools' 'libpwquality' 'appstream-qt' 'python')
 makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost')
 # backup=('usr/share/calamares/modules/bootloader.conf'
 #         'usr/share/calamares/modules/displaymanager.conf'
@@ -21,84 +21,84 @@ makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost')
 #         'usr/share/calamares/modules/unpackfs.conf')
 
 source+=(git+https://github.com/calamares/calamares.git#commit=29ef9e909
-        garuda-fswhitelist.patch
-        0001-Apply-garuda-specific-patches.patch
-        partition.conf
-        mount.conf
-        mhwdcfg.conf
-        chrootcfg.conf)
+	garuda-fswhitelist.patch
+	0001-Apply-garuda-specific-patches.patch
+	partition.conf
+	mount.conf
+	mhwdcfg.conf
+	chrootcfg.conf)
 sha256sums=('SKIP'
-        'da0c4d0fe1b73b6cf7ad78041123c2b6daae54742f518c1b18350a58efed544c'
-        '77ea25512a4fd09e29a69a11c2490bae69e438e16582555cde7f1b832720833c'
-        'dcc0c5593c1e533fa7975429824c694aaa656fed8afb1cd4fdc4862a94ebf1c4'
-        '4c5b4b868aa0e8435f5ab05b66cc0194f92edb79d7cf4cc385c547a024d86735'
-        '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
-        'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
+	'da0c4d0fe1b73b6cf7ad78041123c2b6daae54742f518c1b18350a58efed544c'
+	'77ea25512a4fd09e29a69a11c2490bae69e438e16582555cde7f1b832720833c'
+	'dcc0c5593c1e533fa7975429824c694aaa656fed8afb1cd4fdc4862a94ebf1c4'
+	'4c5b4b868aa0e8435f5ab05b66cc0194f92edb79d7cf4cc385c547a024d86735'
+	'13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
+	'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
-        cd "$srcdir"/calamares
+	cd "$srcdir"/calamares
 
-        _regex='^set\(CALAMARES_VERSION ([0-9]+\.[0-9]+\.[0-9]+([^0-9].*)?)\)\s*$'
-        _file='CMakeLists.txt'
+	_regex='^set\(CALAMARES_VERSION ([0-9]+\.[0-9]+\.[0-9]+([^0-9].*)?)\)\s*$'
+	_file='CMakeLists.txt'
 
-        _line=$(
-                grep -E "$_regex" "$_file" |
-                        head -1
-        )
-        _version=$(
-                printf '%s' "$_line" | sed -E "s@$_regex@\1@;s@alpha@a@;s@beta@b@;s@-@.@"
-        )
-        _line=$(
-                printf '%s' "$_line" |
-                        sed -E 's@\(@\\(@;s@\)@\\)@'
-        )
-        _commit=$(
-                git log -G "$_line" -1 --pretty=oneline --no-color | sed 's@\ .*$@@'
-        )
-        _revision=$(
-                git rev-list --count "$_commit"..HEAD
-        )
-        _hash=$(
-                git rev-parse --short HEAD
-        )
+	_line=$(
+		grep -E "$_regex" "$_file" |
+			head -1
+	)
+	_version=$(
+		printf '%s' "$_line" | sed -E "s@$_regex@\1@;s@alpha@a@;s@beta@b@;s@-@.@"
+	)
+	_line=$(
+		printf '%s' "$_line" |
+			sed -E 's@\(@\\(@;s@\)@\\)@'
+	)
+	_commit=$(
+		git log -G "$_line" -1 --pretty=oneline --no-color | sed 's@\ .*$@@'
+	)
+	_revision=$(
+		git rev-list --count "$_commit"..HEAD
+	)
+	_hash=$(
+		git rev-parse --short HEAD
+	)
 
-        printf '%s.r%s.g%s' \
-                "$_version" \
-                "$_revision" \
-                "$_hash"
+	printf '%s.r%s.g%s' \
+		"$_version" \
+		"$_revision" \
+		"$_hash"
 }
 
 prepare() {
-        cd "${srcdir}"/calamares
+	cd "${srcdir}"/calamares
 
-        # patches here
-        patch -p1 -N -i "$srcdir/garuda-fswhitelist.patch"
-        patch -p1 -N -i "$srcdir/0001-Apply-garuda-specific-patches.patch"
+	# patches here
+	patch -p1 -N -i "$srcdir/garuda-fswhitelist.patch"
+	patch -p1 -N -i "$srcdir/0001-Apply-garuda-specific-patches.patch"
 }
 
 build() {
-        cd "${srcdir}"/calamares
+	cd "${srcdir}"/calamares
 
-        mkdir -p build && cd build
-        cmake .. \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_INSTALL_PREFIX=/usr \
-                -DCMAKE_INSTALL_LIBDIR=lib \
-                -DWITH_PYTHONQT:BOOL=ON \
-                -DBoost_NO_BOOST_CMAKE=ON \
-                -DSKIP_MODULES="webview interactiveterminal initramfs \
+	mkdir -p build && cd build
+	cmake .. \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_INSTALL_LIBDIR=lib \
+		-DWITH_PYTHONQT:BOOL=ON \
+		-DBoost_NO_BOOST_CMAKE=ON \
+		-DSKIP_MODULES="webview interactiveterminal initramfs \
                               initramfscfg \
                               dummyprocess dummypython dummycpp \
                               dummypythonqt services-openrc"
-        make
+	make
 }
 
 package() {
-        cd "${srcdir}"
-        install -Dm755 partition.conf "$pkgdir"/etc/calamares/modules/partition.conf
-        install -Dm755 mount.conf "$pkgdir"/etc/calamares/modules/mount.conf
-        install -Dm755 chrootcfg.conf "$pkgdir"/etc/calamares/modules/chrootcfg.conf
+	cd "${srcdir}"
+	install -Dm755 partition.conf "$pkgdir"/etc/calamares/modules/partition.conf
+	install -Dm755 mount.conf "$pkgdir"/etc/calamares/modules/mount.conf
+	install -Dm755 chrootcfg.conf "$pkgdir"/etc/calamares/modules/chrootcfg.conf
 
-        cd "${srcdir}"/calamares/build
-        make DESTDIR="$pkgdir" install
+	cd "${srcdir}"/calamares/build
+	make DESTDIR="$pkgdir" install
 }

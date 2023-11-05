@@ -4,49 +4,49 @@
 source /usr/lib/garuda/garuda.shlib
 
 Filesystem() {
-    local file=/usr/lib/os-release
-    sed -i $file \
-        -e 's,NAME=.*,NAME=\"Garuda Linux\",' \
-        -e 's,PRETTY_NAME=.*,PRETTY_NAME=\"Garuda Linux\",' \
-        -e 's,ID=.*,ID=garuda,' \
-        -e 's,ID_LIKE=.*,ID_LIKE=arch,' \
-        -e 's,BUILD_ID=.*,BUILD_ID=rolling,' \
-        -e 's,HOME_URL=.*,HOME_URL=\"https://garudalinux.org/\",' \
-        -e 's,DOCUMENTATION_URL=.*,DOCUMENTATION_URL=\"https://wiki.garudalinux.org/\",' \
-        -e 's,SUPPORT_URL=.*,SUPPORT_URL=\"https://forum.garudalinux.org/\",' \
-        -e 's,BUG_REPORT_URL=.*,BUG_REPORT_URL=\"https://gitlab.com/groups/garuda-linux/\",' \
-        -e 's,LOGO=.*,LOGO=garudalinux,'
+	local file=/usr/lib/os-release
+	sed -i $file \
+		-e 's,NAME=.*,NAME=\"Garuda Linux\",' \
+		-e 's,PRETTY_NAME=.*,PRETTY_NAME=\"Garuda Linux\",' \
+		-e 's,ID=.*,ID=garuda,' \
+		-e 's,ID_LIKE=.*,ID_LIKE=arch,' \
+		-e 's,BUILD_ID=.*,BUILD_ID=rolling,' \
+		-e 's,HOME_URL=.*,HOME_URL=\"https://garudalinux.org/\",' \
+		-e 's,DOCUMENTATION_URL=.*,DOCUMENTATION_URL=\"https://wiki.garudalinux.org/\",' \
+		-e 's,SUPPORT_URL=.*,SUPPORT_URL=\"https://forum.garudalinux.org/\",' \
+		-e 's,BUG_REPORT_URL=.*,BUG_REPORT_URL=\"https://gitlab.com/groups/garuda-linux/\",' \
+		-e 's,LOGO=.*,LOGO=garudalinux,'
 
-    if [ -z "$(grep "^ID_LIKE=" $file)" ] && [ -n "$(grep "^ID=" $file)" ] ; then
-        # add missing ID_LIKE=
-        sed -i $file -e '/^ID=/a \ID_LIKE=arch'
-    fi
+	if [ -z "$(grep "^ID_LIKE=" $file)" ] && [ -n "$(grep "^ID=" $file)" ]; then
+		# add missing ID_LIKE=
+		sed -i $file -e '/^ID=/a \ID_LIKE=arch'
+	fi
 
-    sed -i 's|Arch|Garuda|g' /etc/issue /usr/share/factory/etc/issue
+	sed -i 's|Arch|Garuda|g' /etc/issue /usr/share/factory/etc/issue
 }
 
 Lsb_release() {
-    local file=/etc/lsb-release
+	local file=/etc/lsb-release
 
-    if [ -z "$(grep "^DISTRIB_CODENAME=" $file)" ] ; then
-        # add missing DISTRIB_CODENAME=
-        echo "DISTRIB_CODENAME=rolling" >> $file
-    fi
-    sed -i $file \
-        -e 's,DISTRIB_ID=.*,DISTRIB_ID=Garuda,' \
-        -e 's,DISTRIB_RELEASE=.*,DISTRIB_RELEASE=Soaring,' \
-        -e 's,DISTRIB_CODENAME=.*,DISTRIB_CODENAME="Spizaetus",' \
-        -e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux\",'
+	if [ -z "$(grep "^DISTRIB_CODENAME=" $file)" ]; then
+		# add missing DISTRIB_CODENAME=
+		echo "DISTRIB_CODENAME=rolling" >>$file
+	fi
+	sed -i $file \
+		-e 's,DISTRIB_ID=.*,DISTRIB_ID=Garuda,' \
+		-e 's,DISTRIB_RELEASE=.*,DISTRIB_RELEASE=Soaring,' \
+		-e 's,DISTRIB_CODENAME=.*,DISTRIB_CODENAME="Spizaetus",' \
+		-e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux\",'
 }
 
 Post() {
-  /usr/bin/sync
-  nohup /usr/share/libalpm/scripts/garuda-hooks-runner post_back &
+	/usr/bin/sync
+	nohup /usr/share/libalpm/scripts/garuda-hooks-runner post_back &
 }
 
 Post_background() {
-  # Did this transaction install or upgrade a package? Other actions are not considered partial upgrades.
-  if [[ ! -z $(tac /var/log/pacman.log | gawk '/\[ALPM\] transaction completed/ {
+	# Did this transaction install or upgrade a package? Other actions are not considered partial upgrades.
+	if [[ ! -z $(tac /var/log/pacman.log | gawk '/\[ALPM\] transaction completed/ {
   begin = 1
 }
 
@@ -59,110 +59,109 @@ Post_background() {
     print
   }
 }' | grep -vE 'garuda-update|garuda-hotfixes|.*-keyring') ]]; then
-    # Is the system fully up-to-date? If not, this is a partial upgrade.
-    if [ -z "$(pacman -Qu | grep -vE '\[ignored\]$')" ]; then
-      rm -f /var/lib/garuda/partial_upgrade
-      touch /var/lib/garuda/last_update
-    else
-      touch -a /var/lib/garuda/partial_upgrade
-    fi
-  fi
+		# Is the system fully up-to-date? If not, this is a partial upgrade.
+		if [ -z "$(pacman -Qu | grep -vE '\[ignored\]$')" ]; then
+			rm -f /var/lib/garuda/partial_upgrade
+			touch /var/lib/garuda/last_update
+		else
+			touch -a /var/lib/garuda/partial_upgrade
+		fi
+	fi
 }
 
 Snapshot() {
-  if [ -x "/usr/lib/garuda/is-snapshot-boot" ] && /usr/lib/garuda/is-snapshot-boot && [[ ! -v GARUDA_SNAPSHOT_PACMAN ]]; then
-    echo -e "\033[1;31mError: You are currently booted into a snapshot. Please restore the snapshot via btrfs-assistant or snapper-tools before performing pacman transactions.\n\033[1;34mNote: You can ignore this error by setting GARUDA_SNAPSHOT_PACMAN: sudo GARUDA_SNAPSHOT_PACMAN=1 pacman [...]\n\033[1;31mAny modifications made to this snapshot will be lost next reboot.\033[0m";
-    exit 1
-  fi
+	if [ -x "/usr/lib/garuda/is-snapshot-boot" ] && /usr/lib/garuda/is-snapshot-boot && [[ ! -v GARUDA_SNAPSHOT_PACMAN ]]; then
+		echo -e "\033[1;31mError: You are currently booted into a snapshot. Please restore the snapshot via btrfs-assistant or snapper-tools before performing pacman transactions.\n\033[1;34mNote: You can ignore this error by setting GARUDA_SNAPSHOT_PACMAN: sudo GARUDA_SNAPSHOT_PACMAN=1 pacman [...]\n\033[1;31mAny modifications made to this snapshot will be lost next reboot.\033[0m"
+		exit 1
+	fi
 }
 
 Grub-update() {
-  # If we don't pass this, we don't need to do anything anyway
-  if [ -d "/boot/efi/EFI" ] && [ -x "/usr/bin/efibootmgr" ]; then
-    local current_grub_entry="$(efibootmgr | awk 'match($0,/^BootCurrent: ([0-9a-fA-F]{4})$/,out) { current=out[1] } match($0,/^Boot([0-9a-fA-F]{4})\*? ([^:]+)\t/,out) { if (out[1]==current) print out[2] }')"
-    local should_act_safe=true
-    local did_update=false
-    local fallback_is_same=false
+	# If we don't pass this, we don't need to do anything anyway
+	if [ -d "/boot/efi/EFI" ] && [ -x "/usr/bin/efibootmgr" ]; then
+		local current_grub_entry="$(efibootmgr | awk 'match($0,/^BootCurrent: ([0-9a-fA-F]{4})$/,out) { current=out[1] } match($0,/^Boot([0-9a-fA-F]{4})\*? ([^:]+)\t/,out) { if (out[1]==current) print out[2] }')"
+		local should_act_safe=true
+		local did_update=false
+		local fallback_is_same=false
 
-    # We can assume it's safe to update this bootloader if it exists, because this is supposed to be ours. The user will know about it at the end of the update and right here too.
-    if [ -f "/boot/efi/EFI/Garuda/grubx64.efi" ]; then
-      cmp -s "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi" && fallback_is_same=true
-      echo -e "\033[1;34m\n\nThe GRUB bootloader at EFI/Garuda is being updated!\n\n\033[0m"
-      grub-install --no-nvram --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Garuda" && did_update=true
-      if [ "$fallback_is_same" == "true" ] && [ "$did_update" == "true" ]; then
-        cp "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi"
-      fi
-    fi
+		# We can assume it's safe to update this bootloader if it exists, because this is supposed to be ours. The user will know about it at the end of the update and right here too.
+		if [ -f "/boot/efi/EFI/Garuda/grubx64.efi" ]; then
+			cmp -s "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi" && fallback_is_same=true
+			echo -e "\033[1;34m\n\nThe GRUB bootloader at EFI/Garuda is being updated!\n\n\033[0m"
+			grub-install --no-nvram --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Garuda" && did_update=true
+			if [ "$fallback_is_same" == "true" ] && [ "$did_update" == "true" ]; then
+				cp "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi"
+			fi
+		fi
 
-    if [ "${current_grub_entry,,}" == "garuda" ] && [ "$did_update" == "true" ]; then
-      should_act_safe=false
-    fi
+		if [ "${current_grub_entry,,}" == "garuda" ] && [ "$did_update" == "true" ]; then
+			should_act_safe=false
+		fi
 
-    if [ "$should_act_safe" == "true" ]; then
-      rm /etc/grub.d/30_uefi-firmware
-    fi
+		if [ "$should_act_safe" == "true" ]; then
+			rm /etc/grub.d/30_uefi-firmware
+		fi
 
-    if [ "$did_update" == "true" ]; then
-      update-grub
-    fi
+		if [ "$did_update" == "true" ]; then
+			update-grub
+		fi
 
-    if [ "$did_update" != "true" ]; then
-      garudalib_add_update_notice "The GRUB bootloader could not be updated automatically safely. Steps to prevent any major issues caused by this have been taken automatically, but if possible, you should update your bootloader using 'grub-install'."
-    elif [ "$should_act_safe" == "true" ]; then
-      garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda was updated, but it seems like you are not using the Garuda Linux bootloader by default. If you are using 'rEFInd' bootloader, you can safely ignore this. Otherwise, please change your EFI boot priorities to prioritize the \"Garuda\" bootloader. Running 'grub-install' will do this automatically."
-    else
-      garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda has been updated/reinstalled using 'grub-install'. If this looks correct, no further action has to be taken."
-    fi
-  fi
+		if [ "$did_update" != "true" ]; then
+			garudalib_add_update_notice "The GRUB bootloader could not be updated automatically safely. Steps to prevent any major issues caused by this have been taken automatically, but if possible, you should update your bootloader using 'grub-install'."
+		elif [ "$should_act_safe" == "true" ]; then
+			garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda was updated, but it seems like you are not using the Garuda Linux bootloader by default. If you are using 'rEFInd' bootloader, you can safely ignore this. Otherwise, please change your EFI boot priorities to prioritize the \"Garuda\" bootloader. Running 'grub-install' will do this automatically."
+		else
+			garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda has been updated/reinstalled using 'grub-install'. If this looks correct, no further action has to be taken."
+		fi
+	fi
 }
 
 Grub-config() {
-  local filename="/etc/default/grub"
-  grep -q '${garuda_grub_d}' $filename
-  if [ $? == 1 ]; then
-      gawk -i inplace 'ENDFILE {
+	local filename="/etc/default/grub"
+	grep -q '${garuda_grub_d}' $filename
+	if [ $? == 1 ]; then
+		gawk -i inplace 'ENDFILE {
         print "\n# This config file imports drop-in files from /etc/default/grub.d/.\nfor garuda_grub_d in ${sysconfdir}/default/grub.d/*.cfg ; do if [ -e \"${garuda_grub_d}\" ]; then source \"${garuda_grub_d}\"; fi; done"
       }
       1' $filename
-  fi
+	fi
 }
 
 Mkinitcpio-Install() {
-  if [ ! -e /usr/share/libalpm/hooks/90-dracut-install.hook ]; then
-    # Delegate this to the official script
-    # Also run the right once since Arch Linux upstream merged install/remove into one
-    if [ -x /usr/share/libalpm/scripts/mkinitcpio-install ]; then
-      /usr/share/libalpm/scripts/mkinitcpio-install
-    elif [ -x /usr/share/libalpm/scripts/mkinitcpio ]; then
-      /usr/share/libalpm/scripts/mkinitcpio install
-    else
-      # We should let the user know
-      echo -e "\n\033[1;34m\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThe kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nWaiting 10 seconds.\n\033[0m"
-      garudalib_add_update_notice "The kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE."
-      sleep 10
-    fi
-  fi
+	if [ ! -e /usr/share/libalpm/hooks/90-dracut-install.hook ]; then
+		# Delegate this to the official script
+		# Also run the right once since Arch Linux upstream merged install/remove into one
+		if [ -x /usr/share/libalpm/scripts/mkinitcpio-install ]; then
+			/usr/share/libalpm/scripts/mkinitcpio-install
+		elif [ -x /usr/share/libalpm/scripts/mkinitcpio ]; then
+			/usr/share/libalpm/scripts/mkinitcpio install
+		else
+			# We should let the user know
+			echo -e "\n\033[1;34m\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThe kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nWaiting 10 seconds.\n\033[0m"
+			garudalib_add_update_notice "The kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE."
+			sleep 10
+		fi
+	fi
 }
 
-Main()
-{
-    local hookname="$1"
+Main() {
+	local hookname="$1"
 
-    case "$hookname" in
-        snapshot) Snapshot ;;
-        filesystem)  Filesystem ;;
-        lsb-release) Lsb_release ;;
-        grub-config) Grub-config ;;
-        post)        Post ;;
-        post_back)   Post_background ;;
-        grub-update) Grub-update;;
-        kernel)      Mkinitcpio-Install ;;
-        "")          Filesystem
-                     Lsb_release
-                     Grub-config
-                     ;;
-    esac
+	case "$hookname" in
+	snapshot) Snapshot ;;
+	filesystem) Filesystem ;;
+	lsb-release) Lsb_release ;;
+	grub-config) Grub-config ;;
+	post) Post ;;
+	post_back) Post_background ;;
+	grub-update) Grub-update ;;
+	kernel) Mkinitcpio-Install ;;
+	"")
+		Filesystem
+		Lsb_release
+		Grub-config
+		;;
+	esac
 }
 
 Main "$@"
- 

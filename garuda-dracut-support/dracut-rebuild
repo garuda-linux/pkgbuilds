@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [[ $EUID -ne 0 ]]; then
-    echo -e "\033[1;31mThis script needs to be run as root.\033[0m"
-    exit 1
+	echo -e "\033[1;31mThis script needs to be run as root.\033[0m"
+	exit 1
 fi
 
 echo rebuild | /usr/share/libalpm/scripts/dracut-install

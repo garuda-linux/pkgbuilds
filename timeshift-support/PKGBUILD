@@ -1,19 +1,20 @@
-# Maintainer: librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=timeshift-support
 pkgver=0.1
 pkgrel=3
-pkgdesc='Support package for enabling Timeshift with timeshift-autosnap and grub-btrfs support'
+pkgdesc='Support package for enabling Timeshift with timeshift-autosnap and grub-btrfs'
 arch=(any)
 url='https://gitlab.com/garuda-linux/packages/stable-pkgbuilds/timeshift-support'
 license=(GPL3)
 depends=(timeshift timeshift-autosnap grub-btrfs)
 makedepends=(git)
 conflicts=(snapper-support snapper snap-pac)
-source=(git+$url.git)
+source=("git+$url.git")
 sha256sums=('SKIP')
-install=$pkgname.install
+install="$pkgname".install
 
 package() {
-    cp -a ${srcdir}/${pkgname}/usr ${pkgdir}
+	cp -a "${srcdir}/${pkgname}/usr" "${pkgdir}"
 }

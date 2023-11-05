@@ -1,26 +1,26 @@
-# Maintainer: Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=pulseaudio-support
 pkgver=1
-pkgrel=9
+pkgrel=10
 arch=('any')
 url="https://wiki.archlinux.org/index.php/PulseAudio"
 license=('GPL')
-pkgdesc="Meta package for PulseAudio support"
+pkgdesc="Meta-package for PulseAudio support"
 depends=("pulseaudio"
-        "pulseaudio-alsa"
-        "pulseaudio-bluetooth"
-        "pulseaudio-equalizer"
-        "pulseaudio-jack"
-        "pulseaudio-lirc"
-        "pulseaudio-rtp"
-        "pulseaudio-zeroconf"
-        "sof-firmware")
+	"pulseaudio-alsa"
+	"pulseaudio-bluetooth"
+	"pulseaudio-equalizer"
+	"pulseaudio-jack"
+	"pulseaudio-lirc"
+	"pulseaudio-rtp"
+	"pulseaudio-zeroconf"
+	"sof-firmware")
 optdepends=('pavucontrol: A GTK volume control tool for PulseAudio'
-            'pavucontrol-qt: A QT volume control tool for PulseAudio'
-            'pulseaudio-equalizer-ladspa: A GUI equalizer for PulseAudio'
-            'pasystray: PulseAudio system tray'
-            'paprefs: Configuration dialog for PulseAudio'
-            'pulseaudio-ctl: Control PulseAudio volume from the shell or mapped eyboard shortcuts')
+	'pavucontrol-qt: A QT volume control tool for PulseAudio'
+	'pulseaudio-equalizer-ladspa: A GUI equalizer for PulseAudio'
+	'pasystray: PulseAudio system tray'
+	'paprefs: Configuration dialog for PulseAudio'
+	'pulseaudio-ctl: Control PulseAudio volume from the shell or mapped eyboard shortcuts')
 conflicts=("pipewire-support")
-replaces=("garuda-pulse" "manjaro-pulse")

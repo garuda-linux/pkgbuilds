@@ -1,5 +1,5 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
-# Maintainer: Librewish <librewish@gmail.com>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
 pkgver=2.6.16
@@ -11,33 +11,33 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
-    'garuda-bash-config'
-    'garuda-hooks'
-    'garuda-icons'
-    'garuda-migrations'
-    'garuda-update'
-    'garuda-wallpapers'
-    'profile-sync-daemon'
-    'zram-generator'
-    'systemd-oomd-defaults'
-    'noto-color-emoji-fontconfig')
+	'garuda-bash-config'
+	'garuda-hooks'
+	'garuda-icons'
+	'garuda-migrations'
+	'garuda-update'
+	'garuda-wallpapers'
+	'profile-sync-daemon'
+	'zram-generator'
+	'systemd-oomd-defaults'
+	'noto-color-emoji-fontconfig')
 optdepends=('garuda-browser-settings: Garuda Linux Browser settings'
-    'performance-tweaks: Tuning for best performance'
-    'powersave-tweaks: Tuning for lower power usage'
-    'pacutils: Required for garuda-inxi funstuff')
+	'performance-tweaks: Tuning for best performance'
+	'powersave-tweaks: Tuning for lower power usage'
+	'pacutils: Required for garuda-inxi funstuff')
 makedepends=('polkit')
 conflicts=('systemd-swap' 'ipw2100-fw' 'ipw2200-fw')
 backup=(etc/sudoers.d/{editor,insults,pwfeedback})
 install=$pkgname.install
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d $pkgdir/etc
+	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
 
-    # Fix permissions
-    chmod -R 750 $pkgdir/etc/sudoers.d/
-    chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
-    chown -R root:polkitd $pkgdir/usr/share/polkit-1/rules.d
+	# Fix permissions
+	chmod -R 750 $pkgdir/etc/sudoers.d/
+	chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
+	chown -R root:polkitd $pkgdir/usr/share/polkit-1/rules.d
 }

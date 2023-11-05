@@ -1,4 +1,5 @@
-# Maintainer : Librewish <librewish@gmail.com>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com># Maintainer : Librewish <librewish@gmail.com>
 
 pkgname='garuda-firefox'
 pkgdesc='Metapkg for Firefox and extensions'
@@ -7,11 +8,8 @@ pkgrel=1
 url='https://www.garudalinux.org'
 arch=('any')
 license=('GPL3')
-depends=("firefox" "firefox-ublock-origin" "firefox-dark-reader" "firefox-extension-localcdn" )
+depends=("firefox" "firefox-ublock-origin" "firefox-dark-reader" "firefox-extension-localcdn")
 optdepends=("firefox-extension-plasma-integration: Better integration with Plasma"
-"firefox-extension-gnome-shell-integration: Better integration with GNOME"
-"firefox-extension-xdm-browser-monitor: Extension for Xtreme Download Manager"
-"firefox-extension-bitwarden: Easily integrate Firefox with Bitwarden")
-
-
-
+	"firefox-extension-gnome-shell-integration: Better integration with GNOME"
+	"firefox-extension-xdm-browser-monitor: Extension for Xtreme Download Manager"
+	"firefox-extension-bitwarden: Easily integrate Firefox with Bitwarden")

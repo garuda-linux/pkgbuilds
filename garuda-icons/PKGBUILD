@@ -17,6 +17,6 @@ pkgver() {
 }
 
 package() {
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname/usr $pkgdir
+	install -d $pkgdir/usr
+	cp -rf $srcdir/$pkgname/usr $pkgdir
 }

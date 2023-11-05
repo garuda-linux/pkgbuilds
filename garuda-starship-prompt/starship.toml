@@ -39,7 +39,6 @@ disabled = false
 format = "took [$duration]($style)"
 min_time = 1
 
-
 ## SECOND LINE/ROW: Prompt
 # Somethere at the beginning
 [battery]
@@ -48,17 +47,17 @@ disabled = true
 discharging_symbol = ""
 full_symbol = ""
 
-[[battery.display]]  # "bold red" style when capacity is between 0% and 15%
+[[battery.display]] # "bold red" style when capacity is between 0% and 15%
 disabled = false
 style = "bold red"
 threshold = 15
 
-[[battery.display]]  # "bold yellow" style when capacity is between 15% and 50%
+[[battery.display]] # "bold yellow" style when capacity is between 15% and 50%
 disabled = true
 style = "bold yellow"
 threshold = 50
 
-[[battery.display]]  # "bold green" style when capacity is between 50% and 80%
+[[battery.display]] # "bold green" style when capacity is between 50% and 80%
 disabled = true
 style = "bold green"
 threshold = 80

@@ -1,5 +1,5 @@
-# Maintainer: Librewish <librewish@gmail.com>
-# Maintainer: dr460nf1r3 <dr460nf1r3@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-xfce-settings
 pkgdesc='Garuda Linux XFCE settings'
@@ -12,14 +12,14 @@ makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 depends=('noto-fonts'
-        'garuda-common-settings')
+	'garuda-common-settings')
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
-install=$pkgname.install
+install="$pkgname".install
 
 package() {
-    install -d $pkgdir/etc
-    cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-    install -d $pkgdir/usr
-    cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir/etc"
+	cp -rf "$srcdir/$pkgname-$pkgver/etc" "$pkgdir"
+	install -d "$pkgdir/usr"
+	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
 }
