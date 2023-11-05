@@ -10,7 +10,7 @@ license=("GPL")
 makedepends=("git")
 source=("git+$url.git")
 sha256sums=("SKIP")
-install=$pkgname.install
+install="$pkgname".install
 
 pkgver() {
 	cd "$srcdir/$pkgname"
@@ -19,5 +19,5 @@ pkgver() {
 
 package() {
 	install -d "$pkgdir/usr/share/plymouth/themes/garuda-purple"
-	cp -rf "$srcdir/$pkgname/usr" $pkgdir"
+	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
 }
