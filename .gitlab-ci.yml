@@ -7,10 +7,10 @@ variables:
   GIT_STRATEGY: clone
 check:
   stage: check
-  image: nixpkgs/nix-flakes:latest
+  image: alpine:latest
   script:
-    - nix flake update # fix me: source not found if not run
-    - nix flake check -L || true # this can be removed once issues are fixed
+    - apk add --no-cache --upgrade bash shfmt shellcheck
+    - bash lint.sh || true
   rules:
     - if: $CI_COMMIT_BRANCH == "testing"
       when: always
