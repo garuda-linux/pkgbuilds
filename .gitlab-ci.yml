@@ -9,10 +9,10 @@ check:
   stage: check
   image: alpine:latest
   script:
-    - apk add --no-cache --upgrade bash shfmt shellcheck
+    - apk add --no-cache --upgrade bash shellcheck shfmt
     - bash .ci/lint.sh || true
   rules:
-    - if: $CI_COMMIT_BRANCH == "testing"
+    - if: $CI_COMMIT_BRANCH == "main"
       when: always
 deploy:
   stage: deploy
@@ -31,4 +31,4 @@ deploy:
       TO_DEPLOY=$(cat /tmp/TO_DEPLOY)
       ssh -p "$BUILD_PORT" -o StrictHostKeyChecking=no "$BUILD_USER"@"$BUILD_HOST" "chaotictrigger $TO_DEPLOY"
   rules:
-    - if: $CI_COMMIT_BRANCH == "testing" && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
+    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
