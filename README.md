@@ -20,14 +20,14 @@ We highly appreciate contributions of any sort! 😊 In order to do so, please f
 - Clone your fork locally ([short git tutorial](https://rogerdudler.github.io/git-guide/))
 - Add the desired changes to PKGBUILDs or code
 - Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files (run the `lint.sh` script)
-- Commit and push any changes back to your fork
+- Commit using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) and push any changes back to your fork
 - [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new)
 
 We will then review the changes and eventually merge them.
 
 ## Deployments
 
-Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Supported are:
+Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Unlike the PKGBUILD checks, these are only available for commits on the `main` branch. Supported are:
 
 - `[deploy all]`: Deploys a full `garuda` routine, meaning all PKGBUILDs in this repository
 - `[deploy pkgname]`: Deploys the package `pkgname`, by replacing this with `garuda-bash-settings`, `garuda-bash-settings` would be the deployed package
@@ -35,3 +35,7 @@ Deployments may automatically be triggered by appending `[deploy *]` to the comm
 Once any of those combinations gets detected, the deployment starts after `shfmt` and `shellcheck` checks completed successfully.
 
 Logs of past deployments may be inspected via the [Pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section.
+
+## Development setup
+
+This repository features a NixOS flake, which may be used to set up the needed things like pre-commit hooks and checks automatically via [direnv](https://direnv.net/). Needed are `nix` (the package manager) and [direnv](https://direnv.net/), after that the environment may be entered by running `direnv allow`.
