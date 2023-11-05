@@ -40,7 +40,7 @@
               pkgbuilds-shellcheck = {
                 enable = true;
                 name = "PKGBUILD shellcheck";
-                entry = "${pkgs.shellcheck}/bin/shellcheck -e SC2034 -e SC2148 -e 2154";
+                entry = "${pkgs.shellcheck}/bin/shellcheck";
                 files = "(PKGBUILD|install$)";
                 types = [ "text" ];
                 language = "system";
@@ -83,7 +83,6 @@
                   garudaEnv.text = ''
                     export LC_ALL="C.UTF-8"
                     export NIX_PATH=nixpkgs=${nixpkgs}
-                    export SHELLCHECK_OPTS="-e SC2034 -e SC2148"
                   '';
                 };
               };
