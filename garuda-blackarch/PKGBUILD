@@ -9,7 +9,6 @@ license=('GPL')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Garuda BlackArch settings'
-install="$pkgname".install
 
 package() {
 	install -d "$pkgdir/usr"

@@ -1,34 +1,18 @@
-#Set theme name
-
 name="garuda"
 
 post_install() {
-	echo
 	echo "Set plymouth theme $name"
-	echo
-
-	#Change theme name into plymouthd.conf
 	sed -i -e "s,.*Theme=.*,Theme=$name," /etc/plymouth/plymouthd.conf
-
 	plymouth-set-default-theme -R $name
-
-	echo
 	echo "Done"
-	echo
 }
 
 post_upgrade() {
-
-	grep "Theme=$name" /etc/plymouth/plymouthd.conf
-	if [ $? -eq 0 ]; then
-		plymouth-set-default-theme -R $name
-	fi
+	grep "Theme=$name" /etc/plymouth/plymouthd.conf && plymouth-set-default-theme -R "$name"
 }
 
 pre_remove() {
-	grep "Theme=$name" /etc/plymouth/plymouthd.conf
-	if [ $? -eq 0 ]; then
-		cat <<_EOF
+	grep "Theme=$name" /etc/plymouth/plymouthd.conf && cat <<_EOF
   
 ==> WARNING: You have removed your current plymouth-theme.
 ==> Set a different theme with:
@@ -36,5 +20,4 @@ pre_remove() {
 ==> or remove Plymouth properly!
 
 _EOF
-	fi
 }

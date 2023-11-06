@@ -37,6 +37,7 @@
             hooks = {
               commitizen.enable = true;
               nixpkgs-fmt.enable = true;
+              markdownlint.enable = true;
               pkgbuilds-shellcheck = {
                 enable = true;
                 name = "PKGBUILD shellcheck";
@@ -76,7 +77,12 @@
                 devshell.name = "garuda-shell";
                 commands = [
                   { package = "commitizen"; }
+                  { package = "markdownlint-cli"; }
                   { package = "pre-commit"; }
+                  { package = "nodePackages.prettier"; }
+                  { package = "shellcheck"; }
+                  { package = "shfmt"; }
+                  { package = "yamllint"; }
                 ];
                 devshell.startup = {
                   preCommitHooks.text = self.checks.${system}.pre-commit-check.shellHook;

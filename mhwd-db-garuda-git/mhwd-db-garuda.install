@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # arg 1:  the new package version
 # arg 2:  the old package version
 
@@ -11,6 +11,7 @@ err() {
 	RED="${BOLD}\e[1;31m"
 	local mesg="$1"
 	shift
+	# shellcheck disable=SC2059
 	printf "${RED}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
@@ -20,6 +21,7 @@ msg() {
 	GREEN="${BOLD}\e[1;32m"
 	local mesg="$1"
 	shift
+	# shellcheck disable=SC2059
 	printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
@@ -31,7 +33,7 @@ rename_config() {
 		msg "Renaming config: '${local_config_dir}/${1}'"
 		mkdir -p ${local_config_dir}/"${2}"
 		cp -f ${db_config_dir}/graphic_drivers/"${3}"/MHWDCONFIG ${local_config_dir}/"${2}"/MHWDCONFIG
-		rm -Rf ${local_config_dir}/"${1}"
+		rm -Rf ${local_config_dir:?}/"${1}"
 	fi
 }
 

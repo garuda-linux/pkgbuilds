@@ -1,5 +1,6 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Contributor: Librewish <librewish@gmail.com>
+# shellcheck disable=SC2128
 
 pkgname=('garuda-lxqt-kwin-settings')
 pkgdesc='Garuda Linux LXQt-Kwin settings'
