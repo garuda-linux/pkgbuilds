@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-! command -v {jq,git,curl,updpksums} &>/dev/null &&
-    echo "At least one dependency hasn't been found! Make sure to prepare the environment and try again." &&
-    exit 1
+for dep in curl git jq updpksums; do
+    command -v "$dep" &>/dev/null || echo "$dep is not installed!"
+done
 
 readarray -t _SOURCES < <(awk -F ' ' '{ print $1 }' ./SOURCES)
 readarray -t _PKGNAME < <(awk -F ' ' '{ print $2 }' ./SOURCES)
@@ -25,10 +25,12 @@ for package in "${_SOURCES[@]}"; do
 
         # Then update the source's checksum
         echo "Updating checksum for ${_PKGNAME[$i]}"
-        updpkgsums &>/dev/null &&
-            git add PKGBUILD &&
-            git commit -m "bump: ${_PKGNAME[$i]} to $_LATEST [deploy ${_PKGNAME[$i]}]"
-            git push "$REPO_URL" HEAD:main
+        updpkgsums &>/dev/null
+
+        # Push changes back to main, triggering an instant deployment
+        git add PKGBUILD
+        git commit -m "bump: ${_PKGNAME[$i]} to $_LATEST [deploy ${_PKGNAME[$i]}]"
+        git push "$REPO_URL" HEAD:main
     else
         echo "${_PKGNAME[$i]} is up to date"
     fi
