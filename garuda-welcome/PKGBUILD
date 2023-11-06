@@ -2,7 +2,7 @@
 # Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-welcome
-pkgver=1.2.4
+pkgver=1.2.5
 pkgrel=1
 pkgdesc="A Welcome app for Garuda Linux"
 arch=('any')
