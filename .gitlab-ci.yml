@@ -18,13 +18,16 @@ check:
   image: alpine:latest
   script:
     - apk add --no-cache --upgrade bash shellcheck shfmt
-    - bash .ci/lint.sh || true
+    - bash .ci/lint.sh || true # to be replaced with a warning/failure once issues are fixed
 
 check-pr:
   stage: check-pr
-  image: commitizen/commitizen:3
+  image: alpine:latest
   script:
-    - cz check -m "$CI_COMMIT_MESSAGE"
+    - apk add --no-cache --upgrade py3-pip
+    - pip install -U commitizen
+    - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
+    - grep "successful" /tmp/cz_check && echo "Commitizen check successful!"
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
