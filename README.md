@@ -6,7 +6,10 @@ This repository contains PKGBUILDs for all packages that currently reside in its
 
 ## Scope of this repo
 
-All of our own PKGBUILDs are contained here. Historically, these were split into their own repositories. To make finding the correct PKGBUILD easier, as well as to allow faster contributing, we recently consolidated them into this new repository. Included are all packages' PKGBUILDs including their configuration files (this applies to smaller files like the `garuda-fish-config`). For some of them, like the `garuda-*-settings` packages, the content may still be found in their respective repositories.
+All of our own PKGBUILDs are contained here. Historically, these were split into their own repositories.
+To make finding the correct PKGBUILD easier, as well as to allow faster contributing, we recently consolidated them into this new repository.
+Included are all packages' PKGBUILDs including their configuration files (this applies to smaller files like the `garuda-fish-config`).
+For some of them, like the `garuda-*-settings` packages, the content may still be found in their respective repositories.
 
 ## Found any issue?
 
@@ -24,7 +27,9 @@ We highly appreciate contributions of any sort! 😊 To do so, please follow the
   - Run the `lint.sh` script via `bash ./.ci/lint.sh` check the code
   - Automatically apply certain suggestions via `bash ./ci/lint.sh apply`
 - Commit using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) and push any changes back to your fork.
-  - The [commitizen](https://github.com/commitizen-tools/commitizen) application helps with creating a fitting commit message, you can install it via [pip](https://pip.pypa.io/) as there is currently no package in Arch repos: `pip install --user -U Commitizen`. Then proceed by running `cz commit` in the cloned folder.
+  - The [commitizen](https://github.com/commitizen-tools/commitizen) application helps with creating a fitting commit message.
+    You can install it via [pip](https://pip.pypa.io/) as there is currently no package in Arch repos: `pip install --user -U Commitizen`.
+    Then proceed by running `cz commit` in the cloned folder.
 - [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new).
 - Check if any of the pipeline runs fail and apply eventual suggestions.
 
@@ -44,13 +49,17 @@ Logs of past deployments may be inspected via the [Pipelines](https://gitlab.com
 
 ### Automated bumps
 
-This repository provides a half-hourly pipeline that updates all PKGBUILDs to their latest versions if _their source resides in another repository_, based on the latest available tag. It then proceeds to update the checksums and pushes the changes back to the main branch. A new deployment is automatically triggered by appending `[deploy *]` to the commit message. That means it is sufficient to push a new tag in order to trigger the deployment of a new package version for these packages. Important notice:
+This repository provides a half-hourly pipeline that updates all PKGBUILDs to their latest versions if _their source resides in another repository_, based on the latest available tag.
+It then proceeds to update the checksums and pushes the changes back to the main branch. A new deployment is automatically triggered by appending `[deploy *]` to the commit message.
+That means it is sufficient to push a new tag in order to trigger the deployment of a new package version for these packages. Important notice:
 
 - This does not apply to packages which have all their files in this repository
 - Tags must not be prefixed with a _v_
 
-The latest runs of this job may be inspected by browsing the [pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section, every pipeline with the _scheduled_ badge was executed by the timer. Additionally, the pipeline can be triggered manually by browsing the [pipeline schedules](https://gitlab.com/garuda-linux/pkgbuilds/-/pipeline_schedules) section and hitting _run pipeline schedule_.
+The latest runs of this job may be inspected by browsing the [pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section, every pipeline with the _scheduled_ badge was executed by the timer.
+Additionally, the pipeline can be triggered manually by browsing the [pipeline schedules](https://gitlab.com/garuda-linux/pkgbuilds/-/pipeline_schedules) section and hitting _run pipeline schedule_.
 
 ## Development setup
 
-This repository features a NixOS flake, which may be used to set up the needed things like pre-commit hooks and checks, as well as needed utilities, automatically via [direnv](https://direnv.net/). Needed are `nix` (the package manager) and [direnv](https://direnv.net/), after that, the environment may be entered by running `direnv allow`.
+This repository features a NixOS flake, which may be used to set up the needed things like pre-commit hooks and checks, as well as needed utilities, automatically via [direnv](https://direnv.net/).
+Needed are `nix` (the package manager) and [direnv](https://direnv.net/), after that, the environment may be entered by running `direnv allow`.

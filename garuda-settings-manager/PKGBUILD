@@ -1,6 +1,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Contributor: librewish <librewish@garudalinux.org>
 # Contributor: Ramon Buldo <ramon@manjaro.org>
+# shellcheck disable=2115
 
 pkgbase=garuda-settings-manager
 pkgname=('garuda-settings-manager' 'garuda-settings-manager-kcm'
@@ -35,8 +36,8 @@ build() {
 }
 
 package_garuda-settings-manager() {
-	provides=($pkgbase)
-	conflicts=($pkgbase)
+	provides=("$pkgbase")
+	conflicts=("$pkgbase")
 	cd "$srcdir/$pkgbase-$pkgver/build" || exit
 	make DESTDIR="${pkgdir}" install
 	rm -rf "$pkgdir"/usr/bin/msm_notifier
