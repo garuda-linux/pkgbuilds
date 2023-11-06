@@ -36,7 +36,7 @@ sha256sums=('SKIP'
 	'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
-	cd "$srcdir"/calamares
+	cd "$srcdir/calamares" || exit
 
 	_regex='^set\(CALAMARES_VERSION ([0-9]+\.[0-9]+\.[0-9]+([^0-9].*)?)\)\s*$'
 	_file='CMakeLists.txt'
@@ -69,7 +69,7 @@ pkgver() {
 }
 
 prepare() {
-	cd "${srcdir}"/calamares
+	cd "${srcdir}/calamares" || exit
 
 	# patches here
 	patch -p1 -N -i "$srcdir/garuda-fswhitelist.patch"
@@ -77,9 +77,9 @@ prepare() {
 }
 
 build() {
-	cd "${srcdir}"/calamares
+	cd "${srcdir}/calamares" || exit
 
-	mkdir -p build && cd build
+	mkdir -p build && cd build || exit
 	cmake .. \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
@@ -94,11 +94,11 @@ build() {
 }
 
 package() {
-	cd "${srcdir}"
+	cd "${srcdir}" || exit
 	install -Dm755 partition.conf "$pkgdir"/etc/calamares/modules/partition.conf
 	install -Dm755 mount.conf "$pkgdir"/etc/calamares/modules/mount.conf
 	install -Dm755 chrootcfg.conf "$pkgdir"/etc/calamares/modules/chrootcfg.conf
 
-	cd "${srcdir}"/calamares/build
+	cd "${srcdir}/calamares/build" || exit
 	make DESTDIR="$pkgdir" install
 }

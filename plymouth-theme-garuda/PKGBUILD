@@ -13,7 +13,7 @@ sha256sums=("SKIP")
 install=$pkgname.install
 
 pkgver() {
-	cd "$srcdir/$pkgname"
+	cd "$srcdir/$pkgname" || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 

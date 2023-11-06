@@ -17,12 +17,12 @@ md5sums=('SKIP')
 conflicts=('grub-customizer')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver"
+	cd "$srcdir/$pkgname-$pkgver" || exit
 	qmake-qt5 "$pkgname".pro
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
+	cd "$srcdir/$pkgname-$pkgver" || exit
 	make INSTALL_ROOT="$pkgdir" install
 }

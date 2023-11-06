@@ -17,12 +17,12 @@ sha512sums=('7e1d34b3f921721c7886a72d5395f1d9148e9dcea02b2a268c69bfd96169a5cf594
 	'd2916803054d35694b5f96f2957a57036fa7b3cf41bacfaade754109a042eea546dbf33b1d8ff59734d5c032c43e74db5b1ccabfc7a9ff48733827f510a330db')
 
 package() {
-	install -Dm755 launch-terminal $pkgdir/usr/lib/garuda/launch-terminal
-	install -Dm755 install-software $pkgdir/usr/lib/garuda/install-software
-	install -Dm755 is-snapshot-boot $pkgdir/usr/lib/garuda/is-snapshot-boot
-	install -Dm755 pkexec-gui $pkgdir/usr/lib/garuda/pkexec-gui
-	install -Dm644 garuda.shlib $pkgdir/usr/lib/garuda/garuda.shlib
-	install -d $pkgdir/var/lib/garuda/tmp
+	install -Dm755 launch-terminal "$pkgdir"/usr/lib/garuda/launch-terminal
+	install -Dm755 install-software "$pkgdir"/usr/lib/garuda/install-software
+	install -Dm755 is-snapshot-boot "$pkgdir"/usr/lib/garuda/is-snapshot-boot
+	install -Dm755 pkexec-gui "$pkgdir"/usr/lib/garuda/pkexec-gui
+	install -Dm644 garuda.shlib "$pkgdir"/usr/lib/garuda/garuda.shlib
+	install -d "$pkgdir"/var/lib/garuda/tmp
 
 	install -Dm0644 org.garuda.libs.pkexec.policy "$pkgdir/usr/share/polkit-1/actions/org.garuda.libs.pkexec.policy"
 }

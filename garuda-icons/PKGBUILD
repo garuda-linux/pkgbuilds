@@ -12,11 +12,11 @@ source=("git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-	cd "$srcdir/$pkgname"
+	cd "$srcdir/$pkgname" || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package() {
-	install -d $pkgdir/usr
-	cp -rf $srcdir/$pkgname/usr $pkgdir
+	install -d "$pkgdir"/usr
+	cp -rf "$srcdir"/$pkgname/usr "$pkgdir"
 }

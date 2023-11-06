@@ -21,12 +21,12 @@ source=("git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-	cd ${srcdir}/garuda-tools-livecd
+	cd "${srcdir}"/garuda-tools-livecd || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
-	cd ${srcdir}/${_repo} #-${pkgver}
+	cd "${srcdir}"/${_repo} || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc
 }
 
@@ -36,8 +36,8 @@ package_garuda-live-base() {
 	conflicts=('garuda-livecd-base')
 	replaces=('garuda-livecd-base')
 
-	cd ${srcdir}/${_repo} #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_base
+	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_base
 }
 
 package_garuda-live-systemd() {
@@ -46,21 +46,21 @@ package_garuda-live-systemd() {
 	conflicts=('garuda-livecd-systemd')
 	# 	replaces=('garuda-livecd-systemd')
 
-	cd ${srcdir}/${_repo} #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_sd
+	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_sd
 }
 
 package_garuda-live-skel() {
 	pkgdesc='Garuda Linux live session autostart items'
 
-	cd ${srcdir}/${_repo} #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_xdg
+	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_xdg
 }
 
 package_garuda-live-portable-efi() {
 	pkgdesc='Garuda Linux live session portable EFI settings'
 	depends=('grub')
 
-	cd ${srcdir}/${_repo} #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR=${pkgdir} install_portable_efi
+	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_portable_efi
 }

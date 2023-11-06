@@ -31,13 +31,13 @@ backup=(etc/sudoers.d/{editor,insults,pwfeedback})
 install=$pkgname.install
 
 package() {
-	install -d $pkgdir/etc
-	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-	install -d $pkgdir/usr
-	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir"/etc
+	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	install -d "$pkgdir"/usr
+	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
 
 	# Fix permissions
-	chmod -R 750 $pkgdir/etc/sudoers.d/
-	chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
-	chown -R root:polkitd $pkgdir/usr/share/polkit-1/rules.d
+	chmod -R 750 "$pkgdir"/etc/sudoers.d/
+	chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+	chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d
 }

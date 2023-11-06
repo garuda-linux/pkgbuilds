@@ -23,23 +23,23 @@ source=("garuda-tools::git+$url.git#branch=$_branch")
 sha256sums=('SKIP')
 
 prepare() {
-	cd ${srcdir}/${_pkgbase}
+	cd "${srcdir}"/${_pkgbase} || exit
 	sed -e "s/^Version=.*/Version=$_ver/" -i Makefile
 
 	#sed -e "s/^Version=.*/Version=$pkgver/" -i Makefile
 
 	if [ "${CARCH}" = "i686" ]; then
-		patch -p2 -i ${srcdir}/garuda-32.patch
+		patch -p2 -i "${srcdir}"/garuda-32.patch
 	fi
 }
 
 pkgver() {
-	cd ${srcdir}/${_pkgbase}
+	cd "${srcdir}"/${_pkgbase} || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 build() {
-	cd ${srcdir}/${_pkgbase}
+	cd "${srcdir}"/${_pkgbase} || exit
 	make SYSCONFDIR=/etc PREFIX=/usr
 }
 
@@ -53,8 +53,8 @@ package_garuda-tools-base-git() {
 	conflicts=('garuda-tools-base')
 	backup=('etc/garuda-tools/garuda-tools.conf')
 
-	cd ${srcdir}/${_pkgbase}
-	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_base
+	cd "${srcdir}"/${_pkgbase} || exit
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR="${pkgdir}" install_base
 }
 
 package_garuda-tools-pkg-git() {
@@ -63,8 +63,8 @@ package_garuda-tools-pkg-git() {
 	depends=('namcap' 'garuda-tools-base-git')
 	conflicts=('garuda-tools-pkg' 'devtools')
 
-	cd ${srcdir}/${_pkgbase}
-	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_pkg
+	cd "${srcdir}"/${_pkgbase} || exit
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR="${pkgdir}" install_pkg
 }
 
 package_garuda-tools-yaml-git() {
@@ -73,8 +73,8 @@ package_garuda-tools-yaml-git() {
 	conflicts=('garuda-tools-yaml')
 	depends=('garuda-tools-base-git' 'calamares-tools')
 
-	cd ${srcdir}/${_pkgbase}
-	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_yaml
+	cd "${srcdir}"/${_pkgbase} || exit
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR="${pkgdir}" install_yaml
 }
 
 package_garuda-tools-iso-git() {
@@ -86,6 +86,6 @@ package_garuda-tools-iso-git() {
 	optdepends=('virtualbox: quickly test isos'
 		'snapd: for snapd support')
 
-	cd ${srcdir}/${_pkgbase}
-	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR=${pkgdir} install_iso
+	cd "${srcdir}"/${_pkgbase} || exit
+	make SYSCONFDIR=/etc PREFIX=/usr DESTDIR="${pkgdir}" install_iso
 }

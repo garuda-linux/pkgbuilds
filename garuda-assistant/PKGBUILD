@@ -16,7 +16,7 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 build() {
-	cd "$srcdir"
+	cd "$srcdir" || exit
 	cmake -B build -S "$pkgname-$pkgver" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
 	make -C build
 }

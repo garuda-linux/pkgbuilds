@@ -30,13 +30,13 @@ md5sums=('6ca19deceb370d45d506f9cbf3ddfe19'
 	'152e8c8feb30fc7594b8397d3430d073')
 
 package() {
-	cd $srcdir
-	install -D -m644 config.fish $pkgdir/etc/skel/.config/fish/config.fish
+	cd "$srcdir" || exit
+	install -D -m644 config.fish "$pkgdir"/etc/skel/.config/fish/config.fish
 	install -Dm0644 garuda-update.fish "$pkgdir/usr/share/fish/vendor_conf.d/garuda-update.fish"
 	install -Dm0644 garuda-fish-completions-update.service "$pkgdir/usr/lib/systemd/user/garuda-fish-completions-update.service"
-	install -D -m644 done.fish $pkgdir/etc/skel/.config/fish/conf.d/done.fish
+	install -D -m644 done.fish "$pkgdir"/etc/skel/.config/fish/conf.d/done.fish
 
 	# Workaround for mcfly complaining about missing history
-	mkdir -p $pkgdir/etc/skel/.local/share/fish
-	touch $pkgdir/etc/skel/.local/share/fish/fish_history
+	mkdir -p "$pkgdir"/etc/skel/.local/share/fish
+	touch "$pkgdir"/etc/skel/.local/share/fish/fish_history
 }

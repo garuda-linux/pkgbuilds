@@ -19,7 +19,7 @@ md5sums=('d52c4428f6b99a634c81224cffc76541'
 	'e77df34568e2adc1ea8f083162dc1821')
 
 package() {
-	cd $srcdir
+	cd "$srcdir" || exit
 	install -d "$pkgdir/usr/share/libalpm/hooks"
 	install -Dm644 bootctl-update.hook "$pkgdir/usr/share/libalpm/hooks/bootctl-update.hook"
 

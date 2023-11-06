@@ -18,20 +18,20 @@ source=("grub-theme::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-	cd "${srcdir}/grub-theme"
+	cd "${srcdir}/grub-theme" || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 package_grub-theme-garuda-live-common() {
 	depends=('grub')
 
-	cd grub-theme
+	cd grub-theme || exit
 	make PREFIX=/usr DESTDIR="${pkgdir}" install_common
 }
 package_grub-theme-garuda-live() {
 	depends=('grub-theme-garuda-live-common')
 
-	cd grub-theme
+	cd grub-theme || exit
 	make PREFIX=/usr DESTDIR="${pkgdir}" install_garuda
 }
 
@@ -39,7 +39,7 @@ package_grub-theme-garuda() {
 	depends=('grub')
 	install=garuda-theme.install
 
-	cd grub-theme/garuda-live
+	cd grub-theme/garuda-live || exit
 	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt
 	find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda/{} \;
 }

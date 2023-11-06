@@ -16,10 +16,10 @@ conflicts=('garuda-desktop-settings')
 replaces=('garuda-dr460nized-next')
 
 package() {
-	install -d $pkgdir/etc
-	cp -rf $srcdir/$pkgname-$pkgver/etc $pkgdir
-	install -d $pkgdir/usr
-	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir"/etc
+	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	install -d "$pkgdir"/usr
+	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
 	depends=('beautyline'
 		'garuda-common-settings'
 		'garuda-icons'

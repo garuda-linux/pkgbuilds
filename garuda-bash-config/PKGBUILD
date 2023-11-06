@@ -18,7 +18,7 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
+	cd "$srcdir/$pkgname-$pkgver" || exit
 	install -D -m644 bashrc "$pkgdir/etc/skel/.bashrc_garuda"
 	install -D -m644 bashrc-setup.desktop "$pkgdir/etc/skel/.config/autostart/bashrc-setup.desktop"
 }

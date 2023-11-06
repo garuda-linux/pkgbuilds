@@ -12,8 +12,8 @@ add_users() {
 	users=$(awk -F':' -v "min=${l##UID_MIN}" -v "max=${l1##UID_MAX}" '{ if ( $3 >= min && $3 <= max  && $7 != "/sbin/nologin" ) print $0 }' "$_p" | cut -d: -f1)
 	for i in $users; do
 		echo "Adding user '$i' to user-group 'libvirt,kvm'"
-		usermod -a -G libvirt $i
-		usermod -a -G kvm $i
+		usermod -a -G libvirt "$i"
+		usermod -a -G kvm "$i"
 	done
 }
 

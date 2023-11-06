@@ -24,6 +24,6 @@ source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz
 md5sums=('SKIP')
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver"
+	cd "$srcdir/$pkgname-$pkgver" || exit
 	install -D -m644 zshrc "$pkgdir/etc/skel/.zshrc"
 }

@@ -26,6 +26,6 @@ build() {
 package() {
 	make -C build DESTDIR="$pkgdir" install
 
-	install -d $pkgdir/usr
-	cp -rf $srcdir/$pkgname-$pkgver/usr $pkgdir
+	install -d "$pkgdir"/usr
+	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
 }

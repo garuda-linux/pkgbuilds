@@ -13,12 +13,12 @@ source=("git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-	cd ${srcdir}/${pkgname}
+	cd "${srcdir}/${pkgname}" || exit
 	git describe --tags | sed 's/^v//;s/-/+/g'
 }
 
 package() {
-	cd ${srcdir}/${pkgname}
-	install -d ${pkgdir}/usr/share/calamares/
-	cp -rv schemas/ ${pkgdir}/usr/share/calamares/
+	cd "${srcdir}/${pkgname}" || exit
+	install -d "${pkgdir}/usr/share/calamares/"
+	cp -rv schemas/ "${pkgdir}/usr/share/calamares/"
 }

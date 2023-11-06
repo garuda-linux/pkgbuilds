@@ -28,7 +28,7 @@ install=$_pkgname.install
 _VERSIONLIST=("470" "latest")
 
 pkgver() {
-	cd "$srcdir/$_pkgname"
+	cd "$srcdir/$_pkgname" || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
@@ -48,7 +48,7 @@ _generateConfigForVersion() {
 }
 
 build() {
-	cd ${srcdir}/$_pkgname
+	cd "${srcdir}"/$_pkgname || exit
 	_generateConfigForVersion templates/optimus-manager ./pci/graphic_drivers/optimus-manager latest 0
 	_generateConfigForVersion templates/nvidia-prime-render-offload ./pci/graphic_drivers/nvidia-prime-render-offload latest 31
 	_generateConfigForVersion templates/nvidia-dkms ./pci/graphic_drivers/nvidia-dkms latest 30
@@ -63,11 +63,11 @@ package_mhwd-db-garuda-git() {
 	provides=("mhwd-db" "mhwd-db-garuda")
 	conflicts=("mhwd-db" "mhwd-db-garuda")
 
-	cd ${srcdir}/$_pkgname
+	cd "${srcdir}"/$_pkgname || exit
 
-	mkdir -p ${pkgdir}/var/lib/mhwd/db
-	mkdir -p ${pkgdir}/etc/X11/mhwd.d
-	cp -r pci ${pkgdir}/var/lib/mhwd/db/
+	mkdir -p "${pkgdir}"/var/lib/mhwd/db
+	mkdir -p "${pkgdir}"/etc/X11/mhwd.d
+	cp -r pci "${pkgdir}"/var/lib/mhwd/db/
 }
 
 _generate_settings() {
@@ -101,7 +101,7 @@ _nvidia_factory() {
 		_VERSTR="-$1xx"
 	fi
 
-	_generate_settings $1
+	_generate_settings "$1"
 	local text
 	printf -v text 'package_garuda-nvidia%s-config() { pkgdesc="Meta configuration package for nvidia systems on Garuda Linux"; arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 modules-load $pkgdir/etc/modules-load.d/garuda-nvidia.conf; }; package_garuda-nvidia%s-prime-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 nvidia-prime-powersaving.conf $pkgdir/etc/modprobe.d/nvidia-prime-powersaving.conf; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/etc/udev/rules.d/90-nvidia-prime-powermanagement.rules; }; package_garuda-optimus-manager%s-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); install="garuda-optimus-manager-config.install"; cd $srcdir; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/etc/udev/rules.d/90-nvidia-prime-powermanagement.rules; install -Dm644 garuda-optimus-manager-config.hook $pkgdir/usr/share/libalpm/hooks/garuda-optimus-manager-config.hook; install -dm755 $pkgdir/etc/xdg/autostart/; ln -s /usr/share/applications/io.optimus_manager.OptimusManagerQt.desktop $pkgdir/etc/xdg/autostart/io.optimus_manager.OptimusManagerQt.desktop; }' "$_VERSTR" "${_depends[*]}" "${_conflicts[*]}" "$_VERSTR" "${_depends_prime[*]}" "${_conflicts_prime[*]}" "$_VERSTR" "${_depends_manager[*]}" "${_conflicts_manager[*]}"
 	eval "$text"
@@ -113,10 +113,10 @@ package_garuda-virtualmachine-guest-config() {
 	depends=('virtualbox-guest-utils' 'xf86-video-vmware' 'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
 	install="garuda-virtualmachine-guest-config.install"
 
-	cd $srcdir
-	install -Dm644 garuda-virtualmachine-guest-config.target $pkgdir/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
-	install -d $pkgdir/usr/lib/systemd/user/graphical-session.target.wants/
-	ln -s /usr/lib/systemd/user/spice-vdagent.service $pkgdir/usr/lib/systemd/user/graphical-session.target.wants/spice-vdagent.service
+	cd "$srcdir" || exit
+	install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
+	install -d "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/
+	ln -s /usr/lib/systemd/user/spice-vdagent.service "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/spice-vdagent.service
 }
 
 package_garuda-video-linux-config() {

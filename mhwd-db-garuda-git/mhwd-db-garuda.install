@@ -9,7 +9,7 @@ err() {
 	ALL_OFF="\e[1;0m"
 	BOLD="\e[1;1m"
 	RED="${BOLD}\e[1;31m"
-	local mesg=$1
+	local mesg="$1"
 	shift
 	printf "${RED}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
@@ -18,7 +18,7 @@ msg() {
 	ALL_OFF="\e[1;0m"
 	BOLD="\e[1;1m"
 	GREEN="${BOLD}\e[1;32m"
-	local mesg=$1
+	local mesg="$1"
 	shift
 	printf "${GREEN}==>${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
@@ -29,9 +29,9 @@ msg() {
 rename_config() {
 	if [ -e "${local_config_dir}/${1}/MHWDCONFIG" ]; then
 		msg "Renaming config: '${local_config_dir}/${1}'"
-		mkdir -p ${local_config_dir}/${2}
-		cp -f ${db_config_dir}/graphic_drivers/${3}/MHWDCONFIG ${local_config_dir}/${2}/MHWDCONFIG
-		rm -Rf ${local_config_dir}/${1}
+		mkdir -p ${local_config_dir}/"${2}"
+		cp -f ${db_config_dir}/graphic_drivers/"${3}"/MHWDCONFIG ${local_config_dir}/"${2}"/MHWDCONFIG
+		rm -Rf ${local_config_dir}/"${1}"
 	fi
 }
 

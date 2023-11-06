@@ -18,7 +18,7 @@ source=("grub-theme::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {
-	cd ${srcdir}/grub-theme
+	cd "${srcdir}"/grub-theme || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
@@ -26,7 +26,7 @@ package() {
 	depends=('grub')
 	install=garuda-theme.install
 	provides=('grub-theme-garuda-custom')
-	cd grub-theme/garuda-live
+	cd grub-theme/garuda-live || exit
 	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
-	find . -type f -exec install -D -m644 {} ${pkgdir}/usr/share/grub/themes/garuda-dr460nized/{} \;
+	find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda-dr460nized/{} \;
 }

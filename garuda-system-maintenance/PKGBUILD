@@ -24,7 +24,7 @@ build() {
 package() {
 	make -C build DESTDIR="$pkgdir" install
 
-	cd "$pkgname-$pkgver"
+	cd "$pkgname-$pkgver" || exit
 	install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
 	install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
 	install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
@@ -36,6 +36,6 @@ package() {
 	install -Dm0644 $pkgname-alert.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname-alert.svg"
 
 	# Fix permissions
-	chmod -R 750 $pkgdir/usr/share/polkit-1/rules.d/
-	chown -R root:polkitd $pkgdir/usr/share/polkit-1/rules.d/
+	chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+	chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d/
 }

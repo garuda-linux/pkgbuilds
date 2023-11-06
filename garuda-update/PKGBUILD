@@ -17,11 +17,11 @@ sha512sums=('a9cea1d896fd8003c285a2f8e70d1a40f832920e6fd85b05cece04277f296f979c0
 	'd5dbe3e4a47e9b5301d1e849c54f2632540f14878e6af4f11979d74fc0be1c36321229cf5128924251431087aa42c497c0ab57e0743973c9baaeccc24114e2e1')
 
 package() {
-	install -Dm755 garuda-update $pkgdir/usr/bin/garuda-update
-	ln -s /usr/bin/garuda-update $pkgdir/usr/bin/update
-	install -Dm755 update-helper-scripts $pkgdir/usr/lib/garuda/garuda-update/update-helper-scripts
-	install -Dm755 main-update $pkgdir/usr/lib/garuda/garuda-update/main-update
-	install -Dm755 auto-pacman $pkgdir/usr/lib/garuda/garuda-update/auto-pacman
-	install -Dm644 logrotate $pkgdir/etc/logrotate.d/garuda-update
-	install -Dm644 config $pkgdir/etc/garuda/garuda-update/config
+	install -Dm755 garuda-update "$pkgdir"/usr/bin/garuda-update
+	ln -s /usr/bin/garuda-update "$pkgdir"/usr/bin/update
+	install -Dm755 update-helper-scripts "$pkgdir"/usr/lib/garuda/garuda-update/update-helper-scripts
+	install -Dm755 main-update "$pkgdir"/usr/lib/garuda/garuda-update/main-update
+	install -Dm755 auto-pacman "$pkgdir"/usr/lib/garuda/garuda-update/auto-pacman
+	install -Dm644 logrotate "$pkgdir"/etc/logrotate.d/garuda-update
+	install -Dm644 config "$pkgdir"/etc/garuda/garuda-update/config
 }
