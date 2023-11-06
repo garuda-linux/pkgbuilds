@@ -4,18 +4,9 @@
 set -e
 
 # Check if the required tools are installed
-! command -v markdownlint &>/dev/null &&
-    echo "markdownlint not found. Please install markdownlint!" &&
-    exit 1
-! command -v shfmt &>/dev/null &&
-    echo "shfmt not found. Please install shfmt!" &&
-    exit 1
-! command -v shellcheck &>/dev/null &&
-    echo "shellcheck not found. Please install shellcheck!" &&
-    exit 1
-! command -v yamllint &>/dev/null &&
-    echo "yamllint not found. Please install yamllint!" &&
-    exit 1
+for dep in markdownlint shfmt shellcheck yamllint; do
+    command -v "$dep" &>/dev/null || echo "$dep is not installed!"
+done
 
 # Check the code style against the following patterns
 _PATTERNS_SH=("*/PKGBUILD" "*/*.install" "*/*.sh")

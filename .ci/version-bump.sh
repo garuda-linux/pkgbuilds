@@ -27,15 +27,24 @@ for package in "${_SOURCES[@]}"; do
         echo "Updating checksum for ${_PKGNAME[$i]}"
         updpkgsums &>/dev/null
 
+        # Generate a changelog between both versions to append to this commit
+        echo "Generating changelog for ${_PKGNAME[$i]}"
+        _TMPDIR=$(mktemp -d)
+        git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}" &>/dev/null 
+        cd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
+        _CHANGELOG=$(commitizen changelog "$pkgver".."$_LATEST" --dry-run)
+        cd ., || echo "Failed to change back to the previous directory!"
+        rm -rf "${_TMPDIR}"
+
         # Push changes back to main, triggering an instant deployment
         git add PKGBUILD
-        git commit -m "bump: ${_PKGNAME[$i]} to $_LATEST [deploy ${_PKGNAME[$i]}]"
-        git push "$REPO_URL" HEAD:main
+        git commit -m "bump: ${_PKGNAME[$i]} to $_LATEST [deploy ${_PKGNAME[$i]}]" -m "$_CHANGELOG"
+        git push "$REPO_URL" HEAD:main # Env provided via GitLab CI
     else
         echo "${_PKGNAME[$i]} is up to date"
     fi
 
-    cd ..
+    cd .. || echo "Failed to change back to the previous directory!"
     i=$((i+1))
 done
 
