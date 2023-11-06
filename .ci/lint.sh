@@ -10,13 +10,17 @@ set -e
     echo "shellcheck not found. Please install shellcheck!" &&
     exit 1
 
-# Check the code style
-_PATTERNS=(
-    "PKGBUILD"
-    "*.install"
-)
+# Check the code style against the following patterns
+_PATTERNS=("*/PKGBUILD" "*/*.install")
 
-for _PATTERN in "${_PATTERNS[@]}"; do
-    find . -type f -name "$_PATTERN" -exec shfmt -d -w {} \;
-    find . -type f -name "$_PATTERN" -exec shellcheck {} \;
+# Determine what to do
+[[ $1 == "apply" ]] && _SHELLCHECK="shellcheck -f diff" || _SHELLCHECK="shellcheck"
+[[ $1 == "apply" ]] && _SHFMT="shfmt -d -w" || _SHFMT="shfmt -d"
+
+# Run the actions
+for pattern in "${_PATTERNS[@]}"; do
+    # shellcheck disable=SC2086
+    $_SHELLCHECK $pattern
+    # shellcheck disable=SC2086
+    $_SHFMT $pattern
 done

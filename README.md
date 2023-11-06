@@ -19,8 +19,10 @@ We highly appreciate contributions of any sort! 😊 To do so, please follow the
 - [Create a fork of this repository](https://gitlab.com/garuda-linux/pkgbuilds/-/forks/new).
 - Clone your fork locally ([short git tutorial](https://rogerdudler.github.io/git-guide/)).
 - Add the desired changes to PKGBUILDs or source code.
-- Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files (run the `lint.sh` script via `bash ./.ci/lint.sh`).
+- Ensure [shellcheck](https://www.shellcheck.net) and [shfmt](https://github.com/patrickvane/shfmt) report no issues with the changed files
   - The needed dependencies need to be installed before, eg. via `sudo pacman -S shfmt shellcheck`
+  - Run the `lint.sh` script via `bash ./.ci/lint.sh` check the code
+  - Automatically apply certain suggestions via `bash ./ci/lint.sh apply`
 - Commit using a [conventional commit message](https://www.conventionalcommits.org/en/v1.0.0/#summary) and push any changes back to your fork.
   - The [commitizen](https://github.com/commitizen-tools/commitizen) application helps with creating a fitting commit message, you can install it via [pip](https://pip.pypa.io/) as there is currently no package in Arch repos: `pip install --user -U Commitizen`. Then proceed by running `cz commit` in the cloned folder.
 - [Create a new merge request at our main repository](https://gitlab.com/garuda-linux/pkgbuilds/-/merge_requests/new).
