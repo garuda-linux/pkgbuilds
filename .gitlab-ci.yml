@@ -27,7 +27,7 @@ check-pr:
     - apk add --no-cache --upgrade py3-pip
     - pip install -U commitizen
     - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
-    - grep "successful" /tmp/cz_check && echo "Commitizen check successful!"
+    - grep "successful" /tmp/cz_check # ugly hack to workaround the above issue
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
