@@ -33,8 +33,7 @@ for package in "${_SOURCES[@]}"; do
         git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}" &>/dev/null 
         cd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
         _CHANGELOG=$(commitizen changelog "$pkgver".."$_LATEST" --dry-run)
-        cd ., || echo "Failed to change back to the previous directory!"
-        rm -rf "${_TMPDIR}"
+        cd .. || echo "Failed to change back to the previous directory!"
 
         # Push changes back to main, triggering an instant deployment
         git add PKGBUILD
