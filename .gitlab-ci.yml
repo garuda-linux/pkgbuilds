@@ -44,8 +44,8 @@ bumpver:
   stage: bumpver
   image: archlinux:latest
   script:
-    - pacman -Syu --noconfirm curl git jq pacman-contrib python-pip
-    - pip install -U commitizen
+    - pacman -Syu --noconfirm curl git jq pacman-contrib python-pipx
+    - pipx install commitizen
     - git config --global user.name "$GIT_AUTHOR_NAME"
     - git config --global user.email "$GIT_AUTHOR_EMAIL"
     - bash .ci/version-bump.sh

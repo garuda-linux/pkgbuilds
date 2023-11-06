@@ -30,9 +30,11 @@ for package in "${_SOURCES[@]}"; do
         # Generate a changelog between both versions to append to this commit
         echo "Generating changelog for ${_PKGNAME[$i]}"
         _TMPDIR=$(mktemp -d)
+        _COMMITIZEN="pipx run --spec commitizen cz"
         git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}" &>/dev/null 
+
         cd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
-        _CHANGELOG=$(commitizen changelog "$pkgver".."$_LATEST" --dry-run)
+        _CHANGELOG=$("$_COMMITIZEN" changelog "$pkgver".."$_LATEST" --dry-run) 
         cd .. || echo "Failed to change back to the previous directory!"
 
         # Push changes back to main, triggering an instant deployment
