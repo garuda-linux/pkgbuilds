@@ -1,16 +1,36 @@
 ---
-stages: [check, deploy]
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+stages: [check, check-pr, deploy]
+
 variables:
   BUILD_HOST: builds.garudalinux.org
   BUILD_PORT: 223
   BUILD_USER: gitlab
   GIT_STRATEGY: clone
+
 check:
   stage: check
   image: alpine:latest
   script:
     - apk add --no-cache --upgrade bash shellcheck shfmt
-    - bash .ci/lint.sh || true
+    - bash .ci/lint.sh || true # to be replaced with a warning/failure once issues are fixed
+
+check-pr:
+  stage: check-pr
+  image: alpine:latest
+  script:
+    - apk add --no-cache --upgrade py3-pip
+    - pip install -U commitizen
+    - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
+    - grep "successful" /tmp/cz_check # ugly hack to workaround the above issue
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
 deploy:
   stage: deploy
   image: alpine:latest
@@ -28,4 +48,4 @@ deploy:
       TO_DEPLOY=$(cat /tmp/TO_DEPLOY)
       ssh -p "$BUILD_PORT" -o StrictHostKeyChecking=no "$BUILD_USER"@"$BUILD_HOST" "chaotictrigger $TO_DEPLOY"
   rules:
-    - if: $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
