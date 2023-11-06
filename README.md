@@ -4,7 +4,7 @@
 
 This repository contains PKGBUILDs for all packages that currently reside in its `garuda` repository. It is operated on GitLab due to making extensive use of its CI and has a read-only GitHub mirror.
 
-## Scope
+## Scope of this repo
 
 All of our own PKGBUILDs are contained here. Historically, these were split into their own repositories. To make finding the correct PKGBUILD easier, as well as to allow faster contributing, we recently consolidated them into this new repository. Included are all packages' PKGBUILDs including their configuration files (this applies to smaller files like the `garuda-fish-config`). For some of them, like the `garuda-*-settings` packages, the content may still be found in their respective repositories.
 
@@ -32,14 +32,24 @@ We will then review the changes and eventually merge them.
 
 ## Deployments
 
+### General
+
 Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Unlike the PKGBUILD checks, these are only available for commits on the `main` branch. Supported are:
 
 - `[deploy all]`: Deploys a full `garuda` routine, meaning all PKGBUILDs in this repository.
-- `[deploy pkgname]`: Deploys the package `pkgname`, by replacing this with `garuda-bash-settings`, `garuda-bash-settings` would be the deployed package.
+- `[deploy pkgname]`: Deploys the package `pkgname`, which means that by replacing this with `garuda-bash-settings`, one would deploy `garuda-bash-settings`.
 
 Once any of those combinations gets detected, the deployment starts after `shfmt` and `shellcheck` checks are completed successfully.
-
 Logs of past deployments may be inspected via the [Pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section.
+
+### Automated bumps
+
+This repository provides a half-hourly pipeline that updates all PKGBUILDs to their latest versions if _their source resides in another repository_, based on the latest available tag. It then proceeds to update the checksums and pushes the changes back to the main branch. A new deployment is automatically triggered by appending `[deploy *]` to the commit message. That means it is sufficient to push a new tag in order to trigger the deployment of a new package version for these packages. Important notice:
+
+- This does not apply to packages which have all their files in this repository
+- Tags must not be prefixed with a _v_
+
+The latest runs of this job may be inspected by browsing the [pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section, every pipeline with the _scheduled_ badge was executed by the timer. Additionally, the pipeline can be triggered manually by browsing the [pipeline schedules](https://gitlab.com/garuda-linux/pkgbuilds/-/pipeline_schedules) section and hitting _run pipeline schedule_.
 
 ## Development setup
 
