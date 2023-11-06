@@ -1,0 +1,16 @@
+---
+name: PR closer
+on:
+  pull_request:
+    types: [opened, reopened]
+jobs:
+  close-pull-request:
+    runs-on: ubuntu-latest
+    name: Close pull request 🚫
+    steps:
+      - uses: codelytv/no-pull-requests@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message:
+            This is a read only mirror of the Garuda PKGBUILDs. Thank you! 😊
+            Please submit pull requests at https://gitlab.com/garuda-linux/pkgbuilds.
