@@ -5,7 +5,7 @@ set -e
 
 # Check if the required tools are installed
 for dep in markdownlint shfmt shellcheck yamllint; do
-    command -v "$dep" &>/dev/null || echo "$dep is not installed!"
+	command -v "$dep" &>/dev/null || echo "$dep is not installed!"
 done
 
 # Check the code style against the following patterns
@@ -21,13 +21,13 @@ _PATTERNS_YML=(".*.yml" ".*.yaml")
 
 # Run the actions
 for pattern in "${_PATTERNS_SH[@]}"; do
-    [[ "$_SHELLCHECK" != "shellcheck" ]] && $_SHELLCHECK $pattern | git apply
-    [[ "$_SHELLCHECK" == "shellcheck" ]] && $_SHELLCHECK $pattern
-    $_SHFMT $pattern
+	[[ "$_SHELLCHECK" != "shellcheck" ]] && $_SHELLCHECK $pattern | git apply
+	[[ "$_SHELLCHECK" == "shellcheck" ]] && $_SHELLCHECK $pattern
+	$_SHFMT $pattern
 done
 for pattern in "${_PATTERNS_MD[@]}"; do
-    $_MDLINT $pattern
+	$_MDLINT $pattern
 done
 for pattern in "${_PATTERNS_YML[@]}"; do
-    $_YAMLLINT $pattern
+	$_YAMLLINT $pattern
 done
