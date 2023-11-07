@@ -1,0 +1,19 @@
+# Maintainer: TNE <tne @t garudalinux d0t org>
+
+pkgname=garuda-nix-subsystem
+pkgdesc="Creates and manages the Garuda Nix Subsystem"
+pkgver=0.1.1
+pkgrel=1
+arch=('any')
+license=('GPL')
+depends=('coreutils' 'curl' 'wget')
+source=("garuda-nix-subsystem" "updater" "installer")
+sha512sums=('69f9d1cb2abf9d64a37c942cfd00c881bdd3c9f3ec63430ea8cf2376ba42dbda4f33c4df3dd10ee39cc4c53109f9009efc642388551825e40440e6e9d2d934b1'
+	'3c1c5f4633454f50466d4d292646c5f17d7b13217bf8b48eab598fb017f212ea6371b221219f655009b87ac39b282215253cfd89a93e28bf50a9f6e6184eebc9'
+	'bfed524e0b923e7365c71c3de41d8143bb2707d63ebf1e02be33c5c014679f7df8e93dbcdf0c07507e1da080e6d1fdf9f475b85bcd7893d5dc53b1bfe6cf5f59')
+
+package() {
+	install -Dm755 updater "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/updater
+	install -Dm755 installer "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/installer
+	install -Dm755 garuda-nix-subsystem "$pkgdir"/usr/bin/garuda-nix-subsystem
+}

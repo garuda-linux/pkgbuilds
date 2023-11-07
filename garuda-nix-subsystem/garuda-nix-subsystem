@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+# Elevate once and stop asking for the password constantly
+if [[ $EUID -ne 0 ]]; then
+    exec sudo /usr/bin/garuda-nix-subsystem "$@"
+    exit 1
+fi
+
+# Switch case $1
+case $1 in
+    "install")
+        exec /usr/lib/garuda/garuda-nix-subsystem/installer
+        ;;
+    "" | "update")
+        exec /usr/lib/garuda/garuda-nix-subsystem/updater
+        ;;
+    *)
+        echo "Unknown command: $1"
+        exit 1
+        ;;
+esac

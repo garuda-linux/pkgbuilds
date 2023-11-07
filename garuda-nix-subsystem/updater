@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+
+echo -e "\033[1;33m-->\033[1;34m Launching updater 🍵\033[0m"
+GNS_FROM_HOST=true /nix/var/nix/profiles/default/bin/nix develop --refresh --accept-flake-config gitlab:garuda-linux/garuda-nix-subsystem/v1#gns-update -c "gns-update"
