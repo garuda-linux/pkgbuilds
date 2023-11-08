@@ -1,5 +1,5 @@
 ---
-stages: [check, check-pr, bumpver, deploy]
+stages: [check-all, check-pr, bump-version, deploy]
 
 variables:
   BUILD_HOST: builds.garudalinux.org
@@ -10,9 +10,9 @@ variables:
   GIT_STRATEGY: clone
   REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-check:
+check-all:
   # Check the PKGBUILD and install files for common bash anti-patterns and issues
-  stage: check
+  stage: check-all
   image: alpine:latest
   inherit:
     variables: false
@@ -38,10 +38,10 @@ check-pr:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $BUMPVER != "1"
 
-bumpver:
+bump-version:
   # This basically updates the version in the PKGBUILD and commits it,
   # triggering an instant build of the package via commit message.
-  stage: bumpver
+  stage: bump-version
   image: archlinux:latest
   script:
     - pacman -Syu --noconfirm curl git jq pacman-contrib python-pipx
