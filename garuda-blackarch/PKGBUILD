@@ -7,7 +7,7 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('fea63c1a23d2497cabe0deb9d1ae385e02cce2d6166ea4201b2519981e07286c')
 pkgdesc='Garuda BlackArch settings'
 
 package() {

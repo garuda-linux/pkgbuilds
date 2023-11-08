@@ -13,7 +13,7 @@ optdepends=('pamac')
 makedepends=('git' 'cmake')
 groups=('garuda')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('d4f65907929ee13868db4030241fe859f1afa988879d2d60d00a4dabc7f75152')
 
 build() {
 	cmake -B build -S "$pkgname-$pkgver" \

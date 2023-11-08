@@ -11,7 +11,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('6a9e0c06523e59d98caee0c92673eb9ea0b43ec54520512a3106f3fca3890060')
 depends=('kvantum-qt5'
 	'noto-fonts'
 	'garuda-common-settings')

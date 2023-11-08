@@ -35,4 +35,4 @@ package() {
 	install -d "$pkgdir/etc/xdg/autostart"
 	cp -rf "$srcdir/libinput-gestures.desktop" "$pkgdir/etc/xdg/autostart"
 }
-sha256sums=('f3004dad807dda03d153828f2dfff7c65f69b308af26f2febac50a388d445def')
+sha256sums=('8ef41d26ce64c631b6e54ff99f345d7c803859b72faa523f7b388dcac70460f6')

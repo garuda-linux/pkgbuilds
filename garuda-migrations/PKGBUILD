@@ -9,8 +9,8 @@ license=('GPL')
 depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
 source=(garuda-migrations-runner
 	garuda-migrations.hook)
-md5sums=('4afce41b272e40d84f988821a0b6fcef'
-	'22713cfde6e1e366dffcc56cb8af28bd')
+sha256sums=('fdba9fb33b6c02e6b329883594f857f58a8e34ec1888ccf64b79355766faa650'
+	'6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65')
 
 package() {
 	install -d "$pkgdir"/usr/share/garuda/migrations

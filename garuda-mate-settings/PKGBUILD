@@ -11,7 +11,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('fcdaaaa8f9c3aff4d6b67bf9be2d956a1c65b0d0c0bb168842e5371c9a63300e')
 depends=(
 	'adapta-gtk-theme'
 	'beautyline'

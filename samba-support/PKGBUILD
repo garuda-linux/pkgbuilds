@@ -15,7 +15,7 @@ depends=("avahi"
 optdepends=('system-config-samba: The Samba configuration tool by Red Hat')
 source=('smb.conf')
 backup=('etc/samba/smb.conf')
-sha256sums=('b63df445136b07a48fec4b363e1c3dca5894cf60162af8c0c1305656cd69dcfd')
+sha256sums=('71650cd3f99b655cbebb7fc064ee7b112c556d3964da3cd4f02ecf2f6f1b3aef')
 install="$pkgname".install
 
 package() {

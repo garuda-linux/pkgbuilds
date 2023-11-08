@@ -8,7 +8,7 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('e44a544796a366d6a04abb71890765624a5a731ea9790f032d0f232d6f4697e0')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
 	'garuda-bash-config'

@@ -10,7 +10,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('309596061e1ea992c9239710a477a2c67f0b5a1819ae4af470af28da01106920')
 pkgdesc='Garuda Linux Hyprland settings'
 depends=('beautyline'
 	'garuda-common-settings'

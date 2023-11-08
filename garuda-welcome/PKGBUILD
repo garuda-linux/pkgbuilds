@@ -13,7 +13,7 @@ optdepends=('xorg-xrandr' 'xorg-xinput' 'garuda-assistant' 'garuda-network-assis
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('8d3f601642fed07e2faa3b21b4c1e5affb7a91f180adf6b977f079b4836b9e8d')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver" || exit

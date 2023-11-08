@@ -10,7 +10,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('f3f4d7093eca9a38fe87bdea9d11dfe6df131ff7d86b82b0411419238ac77844')
 
 package() {
 	cd "$srcdir/$pkgname-$pkgver" || exit

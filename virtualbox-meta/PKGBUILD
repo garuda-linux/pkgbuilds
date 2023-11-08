@@ -11,7 +11,7 @@ pkgdesc="Meta-package for Virtualbox"
 optdepends=('tigervnc: Watch VNC sessions')
 install=$pkgname.install
 source=(virtualbox.conf)
-md5sums=('c58441eae10d0cdfc7b393a7965f0866')
+sha256sums=('2c762a20c5eb5b3d723149d9b8e55249ef9a099f6ce4c454fd5bc2eac58d943d')
 
 package() {
 	depends=("vde2"

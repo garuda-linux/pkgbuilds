@@ -11,7 +11,7 @@ depends=('qt5-base' 'garuda-hotfixes' 'knotifications' 'garuda-libs' 'snapper-to
 makedepends=('qt5-tools' 'cmake' 'git' 'polkit')
 replaces=(garuda-settings-manager-knotifier-git garuda-settings-manager-notifier-git)
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('db327e3ec8343355ef0b4477b075eea9d9815b03fede859adafbcf1da118d3c0')
 
 build() {
 	cmake -B build -S "$pkgname-$pkgver" \

@@ -10,7 +10,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('20be374aa7bcb4b0f227e257c12d0622b535e077c242ad9423d05047ea851fda')
 depends=('beautyline'
 	'garuda-fish-config'
 	'ttf-fantasque-nerd'

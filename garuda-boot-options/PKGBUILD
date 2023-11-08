@@ -13,7 +13,7 @@ optdepends=('plymouth')
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('e9ae1291fe666cd4b45b226153faeaa756f36697110f91faa2768932c4a3658f')
 conflicts=('grub-customizer')
 
 build() {

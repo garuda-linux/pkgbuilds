@@ -20,7 +20,7 @@ makedepends=('git' 'extra-cmake-modules' 'kdoctools' 'qt5-tools' 'knotifications
 	'kconfigwidgets' 'kcmutils')
 conflicts=('kcm-msm')
 source=("https://gitlab.com/garuda-linux/applications/$pkgbase/-/archive/$pkgver/garuda-settings-manager-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('26022315e9b66c119892afcaa3b133764f1791fe7d5d7cbd28255783a8be6c62')
 
 build() {
 	cd "$srcdir/$pkgbase-$pkgver" || exit

@@ -20,10 +20,9 @@ depends=('find-the-command-git'
 	'zsh-history-substring-search'
 	'zsh-syntax-highlighting')
 makedepends=('git')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+source=('zshrc')
+sha256sums=('c0fa3e027fe752b55052909c2bf929094c1dc81854521abe5f69104a0370cd8e')
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
 	install -D -m644 zshrc "$pkgdir/etc/skel/.zshrc"
 }

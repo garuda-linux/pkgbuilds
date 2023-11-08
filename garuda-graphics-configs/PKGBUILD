@@ -9,7 +9,7 @@ pkgdesc=""
 arch=('any')
 license=('GPL')
 source=('90-nvidia-prime-powermanagement.rules' 'nvidia-prime-powersaving.conf' 'modules-load' 'garuda-virtualmachine-guest-config.target' 'garuda-optimus-manager-config.hook' 'optimus-manager-qt.desktop')
-sha256sums=('b7f7f63a21e540142f1d1154b8cacaa9a6246fdcca265993a13a45e6bc99a60a'
+sha256sums=('9cb7ffd400be6ff285a6befb05ba27d1bbe377f0aa4b349505252d67bdc9dc86'
 	'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
 	'34dc136c9e7c06af2a59ff94263397a707323d0aa523f8b988ec6077448e7716'
 	'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'

@@ -18,7 +18,7 @@ depends=('beautyline'
 	'ttf-fira-sans')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('670fef0fe36e943622006fc44a779329d156258b1b12319986e3894f5e57fa79')
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')

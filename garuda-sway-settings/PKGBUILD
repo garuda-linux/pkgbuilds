@@ -10,7 +10,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('8d8947fa6d70b113c787d2007fa8078b1b68f5020ddd43bea72dace90fa5aedc')
 depends=('capitaine-cursors'
 	'gtk-engine-murrine'
 	'kvantum'

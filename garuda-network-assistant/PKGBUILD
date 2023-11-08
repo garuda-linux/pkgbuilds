@@ -12,7 +12,7 @@ depends=('qt5-base' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot'
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('bd62f929c197021171247122d3acbec3f50f87eac4bbd9696935e936b4c2dd26')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver" || exit

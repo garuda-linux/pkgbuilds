@@ -15,7 +15,7 @@ depends=('ananicy-cpp'
 	'preload')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('bb08f0188c4eb8ae18f2555fd3141b09be8ea93d80ce6609d121e70054d1c338')
 conflicts=('powersave-tweaks' 'tlp' 'auto-cpufreq' 'thermald')
 install=$pkgname.install
 

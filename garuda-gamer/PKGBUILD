@@ -12,7 +12,7 @@ depends=('qt5-base' 'xdg-utils' 'garuda-libs')
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-md5sums=('SKIP')
+sha256sums=('e94ac68a4792696be5c7af909dae5d8209db7c4f86be6c5c9c1082ec6c004c04')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver" || exit
