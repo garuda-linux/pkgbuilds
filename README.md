@@ -55,11 +55,16 @@ That means it is sufficient to push a new tag in order to trigger the deployment
 
 - This does not apply to packages which have all their files in this repository
 - Tags must not be prefixed with a _v_
-- Needed information about a package's source are provided via the `SOURCES` file. Each line follows the scheme `$url $pkgname $project_id`.
+- Needed information about a package's source are provided via the [SOURCES](./SOURCES) file. Each line follows the scheme `$url $pkgname $project_id`.
   The latter is used to retrieve the latest tag via GitLab API and can be found at the general settings page of the repository.
 
 The latest runs of this job may be inspected by browsing the [pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section, every pipeline with the _scheduled_ badge was executed by the timer.
 Additionally, the pipeline can be triggered manually by browsing the [pipeline schedules](https://gitlab.com/garuda-linux/pkgbuilds/-/pipeline_schedules) section and hitting _run pipeline schedule_.
+
+## The VERSIONS file
+
+In this file, all current packages and their corresponding versions are listed. The file is maintained by GitLab CI, so it will be automatically updated.
+To-do: report proper versions for `-git` packages.
 
 ## Development setup
 
