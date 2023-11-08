@@ -21,7 +21,8 @@ _PATTERNS_YML=(".*.yml" ".*.yaml")
 
 # Run the actions
 for pattern in "${_PATTERNS_SH[@]}"; do
-	[[ "$_SHELLCHECK" != "shellcheck" ]] && $_SHELLCHECK $pattern | git apply
+	# shellcheck disable=SC2015
+	[[ "$_SHELLCHECK" != "shellcheck" ]] && $_SHELLCHECK $pattern | git apply &>/dev/null || true
 	[[ "$_SHELLCHECK" == "shellcheck" ]] && $_SHELLCHECK $pattern
 	$_SHFMT $pattern
 done
