@@ -25,7 +25,7 @@ for package in "${_SOURCES[@]}"; do
 
 		# Then update the source's checksum
 		echo "Updating checksum for ${_PKGNAME[$i]}"
-		updpkgsums &>/dev/null
+		updpkgsums
 
 		# Generate a changelog between both versions to append to this commit
 		echo "Generating changelog for ${_PKGNAME[$i]}"
@@ -33,9 +33,9 @@ for package in "${_SOURCES[@]}"; do
 		_CURDIR=$(pwd)
 		git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}" &>/dev/null
 
-		cd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
+		pushd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
 		_CHANGELOG=$(pipx run --spec commitizen cz changelog "$pkgver".."$_LATEST" --dry-run)
-		cd "$_CURDIR" || echo "Failed to change back to the previous directory!"
+		popd || echo "Failed to return to the previous directory!"
 
 		# Push changes back to main, triggering an instant deployment
 		git add PKGBUILD
