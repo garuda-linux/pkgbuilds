@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 mapfile -t _PACKAGES < <(find . -mindepth 1 -type d -prune | sed 's|^./||')
 
-[[ "$CI_COMMIT_MESSAGE" == *"[deploy all]" ]] &&
+[[ "$CI_COMMIT_MESSAGE" == *"[deploy all]"* ]] &&
 	echo "routine" >>/tmp/TO_DEPLOY &&
 	echo "Requested a full routine run." &&
 	exit 0
