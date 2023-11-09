@@ -8,6 +8,10 @@ readarray -t _SOURCES < <(awk -F ' ' '{ print $1 }' ./SOURCES)
 readarray -t _PKGNAME < <(awk -F ' ' '{ print $2 }' ./SOURCES)
 readarray -t _API < <(awk -F ' ' '{ print $3 }' ./SOURCES)
 
+# Allow makepkg to work in a non-root environment & unbreak git
+chown -R nobody:root "$CI_BUILDS_DIR"
+git config --global --add safe.directory "*"
+
 i=0
 for package in "${_SOURCES[@]}"; do
 	# Get the latest tag from the GitLab API
@@ -19,19 +23,21 @@ for package in "${_SOURCES[@]}"; do
 	source PKGBUILD || echo "Failed to source PKGBUILD for ${_PKGNAME[$i]}!"
 
 	if [[ "$pkgver" != "$_LATEST" ]]; then
+		# Create a temporary directory to work with
+		_TMPDIR=$(mktemp -d)
+
 		# First update pkgver
 		echo "Updating ${_PKGNAME[$i]} from $pkgver to $_LATEST"
 		sed -i "s/pkgver=.*/pkgver=$_LATEST/g" PKGBUILD
 
 		# Then update the source's checksum
 		echo "Updating checksum for ${_PKGNAME[$i]}"
-		updpkgsums
+		sudo -Eu nobody updpkgsums
 
 		# Generate a changelog between both versions to append to this commit
 		echo "Generating changelog for ${_PKGNAME[$i]}"
-		_TMPDIR=$(mktemp -d)
-		_CURDIR=$(pwd)
-		git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}" &>/dev/null
+
+		git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}"
 
 		pushd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
 		_CHANGELOG=$(pipx run --spec commitizen cz changelog "$pkgver".."$_LATEST" --dry-run)
