@@ -1,5 +1,5 @@
 ---
-stages: [check-all, check-pr, update-pkgbuilds, bump-version, deploy]
+stages: [checks, update-pkgbuilds, bump-version, deploy]
 
 variables:
   BUILD_HOST: builds.garudalinux.org
@@ -10,9 +10,9 @@ variables:
   GIT_STRATEGY: clone
   REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
 
-check-all:
+check-lint:
   # Check the PKGBUILD and install files for common bash anti-patterns and issues
-  stage: check-all
+  stage: checks
   image: alpine:latest
   inherit:
     variables: false
@@ -24,9 +24,9 @@ check-all:
   rules:
     - if: $BUMPVER != "1"
 
-check-pr:
+check-pr-commitizen:
   # Check the current commit message for compliance with commitizen
-  stage: check-pr
+  stage: checks
   image: alpine:latest
   inherit:
     variables: false
@@ -36,7 +36,33 @@ check-pr:
     - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
     - grep "successful" /tmp/cz_check # ugly hack to workaround the above issue
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $BUMPVER != "1"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+check-pr-makepkg:
+  # Check the current commit for whether it builds
+  stage: checks
+  image: archlinux:latest
+  inherit:
+    variables: false
+  script:
+    - pacman -Syu --noconfirm base-devel git sudo
+    - pacman-key --init && pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+    - pacman-key --lsign-key 3056513887B78AEB
+    - pacman --noconfirm -U 'https://geo-mirror.chaotic.cx/chaotic-aur/chaotic-'{keyring,mirrorlist}'.pkg.tar.zst'
+    - echo "[multilib]" >>/etc/pacman.conf
+    - echo "Include = /etc/pacman.d/mirrorlist" >>/etc/pacman.conf
+    - echo -e "[garuda]\\nInclude = /etc/pacman.d/chaotic-mirrorlist\\n[chaotic-aur]\\nInclude = /etc/pacman.d/chaotic-mirrorlist" >>/etc/pacman.conf
+    - pacman -Syy
+    - bash ./.ci/what-to-deploy.sh
+    - bash ./.ci/test-build.sh
+  artifacts:
+    name: $CI_JOB_NAME-$CI_COMMIT_REF_NAME
+    when: on_failure
+    paths:
+      - "*/*.log"
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event' && $CI_COMMIT_MESSAGE =~ /\[deploy.*\]/
 
 update-pkgbuilds:
   # This basically updates the version in the PKGBUILD and commits it,
