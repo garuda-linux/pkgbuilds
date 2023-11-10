@@ -64,6 +64,7 @@ update-versions:
   rules:
     - changes:
         - "*/PKGBUILD"
+      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 deploy:
   # This only runs on the default branch and when the commit message contains [deploy *]
