@@ -10,7 +10,7 @@ for i in "${_PACKAGES[@]}"; do
 	# shellcheck disable=SC2076
 	[[ "$CI_COMMIT_MESSAGE" == *"[deploy $i]"* ]] &&
 		echo "$i" >>/tmp/TO_DEPLOY &&
-		echo "Requested package build for $TO_DEPLOY." &&
+		echo "Requested package build for $i." &&
 		exit 0
 done
 
