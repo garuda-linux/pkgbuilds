@@ -26,9 +26,10 @@ for package in "${_SOURCES[@]}"; do
 		# Create a temporary directory to work with
 		_TMPDIR=$(mktemp -d)
 
-		# First update pkgver
+		# First update pkgver, resetting pkgrel
 		echo "Updating ${_PKGNAME[$i]} from $pkgver to $_LATEST"
 		sed -i "s/pkgver=.*/pkgver=$_LATEST/g" PKGBUILD
+		sed -i "s/pkgrel=.*/pkgrel=1/g" PKGBUILD
 
 		# Then update the source's checksum
 		echo "Updating checksum for ${_PKGNAME[$i]}"
