@@ -1,36 +1,35 @@
 # Maintainer: TNE <tne@garudalinux.org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Contributor: Librewish <librewish@gmail.com>
 # Contributer: Philip Müller <philm[at]manjaro[dog]org>
 # Contributer: Roland Singer <roland[at]manjaro[dog]org>
 
-pkgname=(mhwd-db-garuda-git garuda-virtualmachine-guest-config garuda-video-linux-config)
+pkgname=(mhwd-db-garuda garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda
-pkgver=r63.2f652e8
-pkgrel=3
-epoch=1
-pkgdesc="MHWD-db for Garuda Linux (Manjaro's mhwd-db backported to Archlinux with additional features and limited to DKMS drivers)"
+pkgver=1.1.4
+pkgrel=5
+epoch=2
+pkgdesc="MHWD-db backported to Archlinux with additional features and limited to DKMS drivers"
 arch=('any')
 license=('GPL')
 url="https://gitlab.com/garuda-linux/applications/$_pkgname"
-_branch='garuda-configs'
-_git=yes
 arch=('any')
 depends=('hwinfo' 'gcc-libs' 'mhwd-nvidia' 'mhwd-ati' 'mhwd-amdgpu' 'mhwd-nvidia-470xx' 'mhwd-nvidia-390xx')
 makedepends=('git' 'cmake')
-source=("git+$url.git#branch=${_branch}" '90-nvidia-prime-powermanagement.rules' 'nvidia-prime-powersaving.conf' 'modules-load' 'garuda-virtualmachine-guest-config.target' 'garuda-optimus-manager-config.hook')
-sha256sums=('SKIP'
+source=("$_pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$_pkgname-$pkgver.tar.gz"
+	'90-nvidia-prime-powermanagement.rules'
+	'garuda-optimus-manager-config.hook'
+	'garuda-virtualmachine-guest-config.target'
+	'modules-load'
+	'nvidia-prime-powersaving.conf')
+sha256sums=('5a517fbb73252d71aba16b054cd4c54962649a3422158921c39bdc2725ee25c4'
 	'2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
-	'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
-	'34dc136c9e7c06af2a59ff94263397a707323d0aa523f8b988ec6077448e7716'
+	'387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55'
 	'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
-	'387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55')
+	'34dc136c9e7c06af2a59ff94263397a707323d0aa523f8b988ec6077448e7716'
+	'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844')
 install=$_pkgname.install
 _VERSIONLIST=("470" "latest")
-
-pkgver() {
-	cd "$srcdir/$_pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 # $1 template path
 # $2 output path
@@ -49,7 +48,7 @@ _generateConfigForVersion() {
 }
 
 build() {
-	cd "${srcdir}"/$_pkgname || exit
+	cd "$_pkgname-$pkgver" || exit
 	_generateConfigForVersion templates/optimus-manager ./pci/graphic_drivers/optimus-manager latest 0
 	_generateConfigForVersion templates/nvidia-prime-render-offload ./pci/graphic_drivers/nvidia-prime-render-offload latest 31
 	_generateConfigForVersion templates/nvidia-dkms ./pci/graphic_drivers/nvidia-dkms latest 30
@@ -59,12 +58,12 @@ build() {
 	_generateConfigForVersion templates/nvidia-dkms ./pci/graphic_drivers/nvidia-470xx-dkms 470 20
 }
 
-package_mhwd-db-garuda-git() {
-	replaces=("mhwd-db-garuda")
-	provides=("mhwd-db" "mhwd-db-garuda")
-	conflicts=("mhwd-db" "mhwd-db-garuda")
+package_mhwd-db-garuda() {
+	replaces=("mhwd-db-garuda-git")
+	provides=("mhwd-db")
+	conflicts=("mhwd-db" "mhwd-db-garuda-git")
 
-	cd "${srcdir}"/$_pkgname || exit
+	cd "$_pkgname-$pkgver" || exit
 
 	mkdir -p "${pkgdir}"/var/lib/mhwd/db
 	mkdir -p "${pkgdir}"/etc/X11/mhwd.d
