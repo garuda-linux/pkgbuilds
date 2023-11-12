@@ -6,8 +6,8 @@
 
 pkgname=(mhwd-db-garuda garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda
-pkgver=1.1.4
-pkgrel=5
+pkgver=1.1.5
+pkgrel=1
 epoch=2
 pkgdesc="MHWD-db backported to Archlinux with additional features and limited to DKMS drivers"
 arch=('any')
@@ -22,12 +22,12 @@ source=("$_pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$_pkgname-$pkgver.tar.
 	'garuda-virtualmachine-guest-config.target'
 	'modules-load'
 	'nvidia-prime-powersaving.conf')
-sha256sums=('5a517fbb73252d71aba16b054cd4c54962649a3422158921c39bdc2725ee25c4'
-	'2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
-	'387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55'
-	'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
-	'34dc136c9e7c06af2a59ff94263397a707323d0aa523f8b988ec6077448e7716'
-	'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844')
+sha256sums=('c61bc261e94e2ddaf4883097a604c665dc0376bac295f0d77cbc7789c4184dd8'
+            '2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
+            '387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55'
+            'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
+            '34dc136c9e7c06af2a59ff94263397a707323d0aa523f8b988ec6077448e7716'
+            'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844')
 install=$_pkgname.install
 _VERSIONLIST=("470" "latest")
 
