@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2015
 set -e
 
 minimal_pacman_conf() {
@@ -15,6 +16,7 @@ self_update() {
 	$INT
 	[ "$DATABASE_UPDATED" != "true" ] && local MIN_PACMAN_CONF && MIN_PACMAN_CONF="$(minimal_pacman_conf)" && $PACMAN --config "$MIN_PACMAN_CONF" -Syy && EXTRA_PARAMS=("--config" "$MIN_PACMAN_CONF") || true
 	$INT
+	# shellcheck disable=SC1007
 	$PACMAN -Qu garuda-update &>/dev/null && SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN "${EXTRA_PARAMS[@]}" -Sdd garuda-update --needed --noconfirm && GARUDA_UPDATE_SELFUPDATE=1 exec /usr/bin/garuda-update "$@" || true # whatever, it is how it is
 	# Check if we have received sigint and should exit
 	$INT
@@ -35,7 +37,7 @@ if [ "$1" == "remote" ]; then
 	exec bash -c "VERSION=6 . <(wget -qO- https://garudalinux.org/os/garuda-update/remote-update) \"\$@\"" remote-update "${@:2}"
 fi
 
-if [ ! -z "$PACMAN_EXE" ]; then
+if [ -n "$PACMAN_EXE" ]; then
 	PACMAN="$PACMAN_EXE"
 else
 	PACMAN="pacman"
@@ -44,10 +46,11 @@ fi
 export PACMAN
 
 DATABASE_UPDATED=false
-if [ ! -z "$GARUDA_UPDATE_SELFUPDATE" ]; then
+if [ -n "$GARUDA_UPDATE_SELFUPDATE" ]; then
 	DATABASE_UPDATED=true
 fi
 
 self_update "$@"
 
+# shellcheck disable=1091
 source /usr/lib/garuda/garuda-update/main-update
