@@ -1,8 +1,10 @@
 #!/bin/bash
+# shellcheck disable=SC2015
 set -e
 
 init_logging() {
 	if [ ! -d /var/log/garuda/ ]; then
+		# shellcheck disable=SC2174
 		mkdir -p -m 755 /var/log/garuda/
 	fi
 	echo -e "\n>-<->-< garuda-update at $(date +"%Y-%m-%d %R %Z(%:::z)")\n" >>/var/log/garuda/garuda-update
@@ -11,13 +13,15 @@ init_logging() {
 
 parse_pacman_log() {
 	sed -i -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" "$AUTOPACMAN_LOG"
-	local reason="$(tac "$AUTOPACMAN_LOG" | grep -oP -m 1 '(?<=error: failed to commit transaction \().*(?=\))')"
+	local reason
+	reason="$(tac "$AUTOPACMAN_LOG" | grep -oP -m 1 '(?<=error: failed to commit transaction \().*(?=\))')"
 	case "$reason" in
 	# Failed because of a corrupt package? Let's retry!
 	"invalid or corrupted package"*)
 		RETRY="Some corrupt downloads were detected. Retrying..."
 		# Let's retry it with packages directly from the source. Maybe the mirror is misconfigured?
 		CUSTOM_PACMAN_CONFIG="$(mktemp)"
+		# shellcheck disable=2016
 		sed 's|Include = /etc/pacman.d/chaotic-mirrorlist|Server = https://secret-mirror.chaotic.cx/$repo/$arch|g' /etc/pacman.conf >"$CUSTOM_PACMAN_CONFIG"
 		pacman_args+=("--config" "$CUSTOM_PACMAN_CONFIG")
 		;;
@@ -47,10 +51,10 @@ do_update() {
 		AUTOPACMAN_LOG="$(mktemp)"
 
 		# Try to run the update
-		LANG=C LANGUAGE=C LC_ALL=C AUTOPACMAN_LOG="$AUTOPACMAN_LOG" AUTOPACMAN_PACMAN_NOCONFIRM="$PACMAN_NOCONFIRM" AUTOPACMAN_CONFLICTSFILE="$AUTOPACMAN_CONFLICTSFILE" /usr/lib/garuda/garuda-update/auto-pacman $PACMAN "${pacman_args[@]}" || { EXIT=$?; }
+		LANG=C LANGUAGE=C LC_ALL=C AUTOPACMAN_LOG="$AUTOPACMAN_LOG" AUTOPACMAN_PACMAN_NOCONFIRM="$PACMAN_NOCONFIRM" AUTOPACMAN_CONFLICTSFILE="$AUTOPACMAN_CONFLICTSFILE" /usr/lib/garuda/garuda-update/auto-pacman "$PACMAN" "${pacman_args[@]}" || { EXIT=$?; }
 
 		# We have no reason not to get rid of the custom pacman config right away
-		if [ ! -z "$CUSTOM_PACMAN_CONFIG" ]; then rm "$CUSTOM_PACMAN_CONFIG"; fi
+		if [ -n "$CUSTOM_PACMAN_CONFIG" ]; then rm "$CUSTOM_PACMAN_CONFIG"; fi
 
 		if [ "$EXIT" == "134" ] || [ "$EXIT" == "0" ]; then
 			SUCCESS=true
@@ -89,11 +93,13 @@ show_changelog() {
 }
 
 if [ -f /etc/garuda/garuda-update/config ]; then
+	# shellcheck disable=SC1091
 	source /etc/garuda/garuda-update/config
 fi
 
 # Parse CLI options
 PARSED_OPTIONS=$(getopt --options="a" --longoptions="aur,skip-mirrorlist,noconfirm" --name "$0" -- "$@")
+# shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
 	echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
 fi
@@ -142,9 +148,9 @@ if [[ ! -v SKIP_MIRRORLIST ]]; then
 		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using rate-mirrors, please be patient..🍵\033[0m\n"
 		# Refresh mirrorlist and make sure it actually contains content. There is a bug in rate-mirrors that creates empty files sometimes.
 		MIRRORLIST_TEMP="$(mktemp)"
-		rate-mirrors --allow-root --save=$MIRRORLIST_TEMP arch --max-delay=21600 >/dev/null &&
-			grep -qe "^Server = http" "$MIRRORLIST_TEMP" && install -m644 $MIRRORLIST_TEMP /etc/pacman.d/mirrorlist && $PACMAN -Syy && DATABASE_UPDATED=true || { echo -e "\033[1;31m\nFailed to update mirrorlist\033[0m"; }
-		rm -f $MIRRORLIST_TEMP
+		rate-mirrors --allow-root --save="$MIRRORLIST_TEMP" arch --max-delay=21600 >/dev/null &&
+			grep -qe "^Server = http" "$MIRRORLIST_TEMP" && install -m644 "$MIRRORLIST_TEMP" /etc/pacman.d/mirrorlist && $PACMAN -Syy && DATABASE_UPDATED=true || { echo -e "\033[1;31m\nFailed to update mirrorlist\033[0m"; }
+		rm -f "$MIRRORLIST_TEMP"
 		$INT
 	elif [ -x /usr/bin/reflector ]; then
 		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using reflector, please be patient..🍵\033[0m\n"
@@ -167,17 +173,17 @@ while IFS= read -r line; do
 done < <(/usr/lib/garuda/garuda-update/update-helper-scripts package-replaces)
 
 if [ -v PACMAN_EXTRA_OPTS ]; then
-	pacman_args+=(${PACMAN_EXTRA_OPTS[@]})
+	pacman_args+=("${PACMAN_EXTRA_OPTS[@]}")
 fi
 
 do_update
 
 if [[ -v UPDATE_AUR ]]; then
 	# Check for AUR helper
-	if [ -x /usr/bin/paru ] && [[ ! -z "$SUDO_UID" ]]; then
+	if [ -x /usr/bin/paru ] && [[ -n "$SUDO_UID" ]]; then
 		echo -e "\n\033[1;33m-->\033[1;34m Updating AUR packages with paru..\033[0m"
 		sudo -u "#$SUDO_UID" paru -Sua || { echo -e "\033[1;31m\nParu exited with error code $?\n\033[0m"; }
-	elif [ -x /usr/bin/yay ] && [[ ! -z "$SUDO_UID" ]]; then
+	elif [ -x /usr/bin/yay ] && [[ -n "$SUDO_UID" ]]; then
 		echo -e "\n\033[1;33m-->\033[1;34m Updating AUR packages with yay..\033[0m"
 		sudo -u "#$SUDO_UID" yay -Sua || { echo -e "\033[1;31m\nYay exited with error code $?\n\033[0m"; }
 	else
@@ -192,12 +198,12 @@ if [ -x /usr/bin/locate ]; then
 fi
 
 # Update fish completions
-if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ ! -z "$SUDO_USER" ]; then
+if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ -n "$SUDO_USER" ]; then
 	systemctl --user -M "$SUDO_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
 fi
 
 # Update micro plugins
-if [ -x /usr/bin/micro ] && [ ! -z "$SUDO_USER" ]; then
+if [ -x /usr/bin/micro ] && [ -n "$SUDO_USER" ]; then
 	systemd-run --user -M "$SUDO_USER@.host" --no-block -G -q micro -plugin update
 fi
 
