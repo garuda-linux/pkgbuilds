@@ -7,7 +7,7 @@
 pkgname=(mhwd-db-garuda garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda
 pkgver=1.1.5
-pkgrel=1
+pkgrel=2
 epoch=2
 pkgdesc="MHWD-db backported to Archlinux with additional features and limited to DKMS drivers"
 arch=('any')
@@ -60,7 +60,7 @@ build() {
 
 package_mhwd-db-garuda() {
 	replaces=("mhwd-db-garuda-git")
-	provides=("mhwd-db")
+	provides=("mhwd-db" "mhwd-db-garuda-git")
 	conflicts=("mhwd-db" "mhwd-db-garuda-git")
 
 	cd "$_pkgname-$pkgver" || exit
