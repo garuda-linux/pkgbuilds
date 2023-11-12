@@ -35,6 +35,14 @@ We highly appreciate contributions of any sort! 😊 To do so, please follow the
 
 We will then review the changes and eventually merge them.
 
+## Handling certain packaging issues
+
+### Deprecated and broken packages
+
+There are cases of deprecated packages, which serve no purpose anymore and also cause systems to not be able to update.
+These can be handled by adding the package to `conflicts()` of `garuda-common-settings` and [auto-pacman](https://gitlab.com/garuda-linux/pkgbuilds/-/blob/main/garuda-update/auto-pacman?ref_type=heads#L10)
+of `garuda-update`. The result is that the offending package gets removed automatically due to the conflict.
+
 ## Deployments
 
 ### General
