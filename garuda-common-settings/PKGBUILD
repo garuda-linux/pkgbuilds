@@ -3,7 +3,7 @@
 
 pkgname=garuda-common-settings
 pkgver=2.6.19
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -26,7 +26,7 @@ optdepends=('garuda-browser-settings: Garuda Linux Browser settings'
 	'powersave-tweaks: Tuning for lower power usage'
 	'pacutils: Required for garuda-inxi funstuff')
 makedepends=('polkit')
-conflicts=('systemd-swap' 'ipw2100-fw' 'ipw2200-fw')
+conflicts=('systemd-swap' 'ipw2100-fw' 'ipw2200-fw' 'firedragon-extension-xdm-browser-monitor')
 backup=(etc/sudoers.d/{editor,insults,pwfeedback})
 install=$pkgname.install
 

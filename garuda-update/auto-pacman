@@ -19,6 +19,7 @@ array set auto_replace_conflicts {
     pipewire-media-session wireplumber
     ipw2100-fw garuda-common-settings
     ipw2200-fw garuda-common-settings
+    firedragon-extension-xdm-browser-monitor garuda-common-settings
     qemu-base qemu-desktop
     libretro-mame-git libretro-meta
     jack2 pipewire-jack
