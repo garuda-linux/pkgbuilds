@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for dep in curl git jq updpkgsums; do
+for dep in curl git jq shfmt updpkgsums; do
 	command -v "$dep" &>/dev/null || echo "$dep is not installed!"
 done
 
@@ -34,6 +34,10 @@ for package in "${_SOURCES[@]}"; do
 		# Then update the source's checksum
 		echo "Updating checksum for ${_PKGNAME[$i]}"
 		sudo -Eu nobody updpkgsums
+
+		# Apply shfmt, which is needed because of updpkgsums changing intends
+		# and potentially failing pipelines due this
+		shfmt -d -w PKGBUILD
 
 		# Generate a changelog between both versions to append to this commit
 		echo "Generating changelog for ${_PKGNAME[$i]}"
