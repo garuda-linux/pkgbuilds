@@ -13,9 +13,10 @@ if [ "$_PREV_VERSIONS" != "$_NEW_VERSIONS" ]; then
 
     # Ensure we always have the latest version since the update job might
     # have pushed an updated version after the git repo state of this pipeline
-    git pull 
+    git switch main # we are in detached HEAD state by default
+    git pull --rebase
     git add VERSIONS
-    git commit -m "chore(VERSIONS): update with new PKGBUILD versions [skip ci]"
+    git commit -m "chore(versions): update with new PKGBUILD versions [skip ci]"
     git push "$REPO_URL" HEAD:main # provided via GitLab CI
 else
     echo "No changes in versions 🎉"
