@@ -12,27 +12,26 @@ readarray -t _API < <(awk -F ' ' '{ print $3 }' ./SOURCES)
 chown -R nobody:root "$CI_BUILDS_DIR"
 git config --global --add safe.directory "*"
 
-i=0
+_COUNTER=0
 for package in "${_SOURCES[@]}"; do
 	# Get the latest tag from the GitLab API
-	_LATEST=$(curl -s "https://gitlab.com/api/v4/projects/${_API[$i]}/repository/tags" | jq -r '.[0].name' | sed 's/v//g')
-
-	cd "${_PKGNAME[$i]}" || echo "Failed to cd into ${_PKGNAME[$i]}!"
+	_LATEST=$(curl -s "https://gitlab.com/api/v4/projects/${_API[$_COUNTER]}/repository/tags" | jq -r '.[0].name' | sed 's/v//g')
 
 	# shellcheck disable=SC1091
-	source PKGBUILD || echo "Failed to source PKGBUILD for ${_PKGNAME[$i]}!"
+	source "${_PKGNAME[$_COUNTER]}/PKGBUILD" || echo "Failed to source PKGBUILD for ${_PKGNAME[$_COUNTER]}!"
 
 	if [[ "$pkgver" != "$_LATEST" ]]; then
 		# Create a temporary directory to work with
 		_TMPDIR=$(mktemp -d)
+		cd "${_PKGNAME[$_COUNTER]}" || echo "Failed to cd into ${_PKGNAME[$_COUNTER]}!"
 
 		# First update pkgver, resetting pkgrel
-		echo "Updating ${_PKGNAME[$i]} from $pkgver to $_LATEST"
+		echo "Updating ${_PKGNAME[$_COUNTER]} from $pkgver to $_LATEST"
 		sed -i "s/pkgver=.*/pkgver=$_LATEST/g" PKGBUILD
 		sed -i "s/pkgrel=.*/pkgrel=1/g" PKGBUILD
 
 		# Then update the source's checksum
-		echo "Updating checksum for ${_PKGNAME[$i]}"
+		echo "Updating checksum for ${_PKGNAME[$_COUNTER]}"
 		sudo -Eu nobody updpkgsums
 
 		# Apply shfmt, which is needed because of updpkgsums changing intends
@@ -40,9 +39,9 @@ for package in "${_SOURCES[@]}"; do
 		shfmt -d -w PKGBUILD
 
 		# Generate a changelog between both versions to append to this commit
-		echo "Generating changelog for ${_PKGNAME[$i]}"
+		echo "Generating changelog for ${_PKGNAME[$_COUNTER]}"
 
-		git clone --depth 1 "${_SOURCES[$i]}" "${_TMPDIR}"
+		git clone --depth 1 "${_SOURCES[$_COUNTER]}" "${_TMPDIR}"
 
 		pushd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
 		_CHANGELOG=$(pipx run --spec commitizen cz changelog "$pkgver".."$_LATEST" --dry-run)
@@ -50,12 +49,13 @@ for package in "${_SOURCES[@]}"; do
 
 		# Push changes back to main, triggering an instant deployment
 		git add PKGBUILD
-		git commit -m "bump: ${_PKGNAME[$i]} to $_LATEST [deploy ${_PKGNAME[$i]}]" -m "$_CHANGELOG"
+		git commit -m "bump: ${_PKGNAME[$_COUNTER]} to $_LATEST [deploy ${_PKGNAME[$_COUNTER]}]" -m "$_CHANGELOG"
 		git push "$REPO_URL" HEAD:main # Env provided via GitLab CI
+
+		cd .. || echo "Failed to change back to the previous directory!"
 	else
-		echo "${_PKGNAME[$i]} is up to date"
+		echo "${_PKGNAME[$_COUNTER]} is up to date"
 	fi
 
-	cd .. || echo "Failed to change back to the previous directory!"
-	i=$((i + 1))
+	((_COUNTER++))
 done
