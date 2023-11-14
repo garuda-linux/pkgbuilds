@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-mapfile -t _PACKAGES < <(find . -mindepth 1 -type d -prune | sed '/\./d')
+mapfile -t _PACKAGES < <(find . -mindepth 1 -type d -prune | sed -e '/.\./d' -e 's/.\///g')
 
 [[ "$CI_COMMIT_MESSAGE" == *"[deploy all]"* ]] &&
 	echo "routine" >>/tmp/TO_DEPLOY &&
