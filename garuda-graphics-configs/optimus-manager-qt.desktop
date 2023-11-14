@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Optimus Manager Qt
-Type=Application
-Exec=/usr/bin/optimus-manager-qt
-X-GNOME-Autostart-enabled=true
-X-KDE-autostart-after=panel
-X-LXQt-Need-Tray=true
