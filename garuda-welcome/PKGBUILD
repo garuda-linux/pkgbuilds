@@ -2,7 +2,7 @@
 # Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-welcome
-pkgver=1.2.7
+pkgver=1.2.8
 pkgrel=1
 pkgdesc="A Welcome app for Garuda Linux"
 arch=('any')
@@ -13,7 +13,7 @@ optdepends=('xorg-xrandr' 'xorg-xinput' 'garuda-assistant' 'garuda-network-assis
 makedepends=('git')
 groups=('garuda')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('7cd3c093b955e3d3c643f79b2dfeb58aa426ac1cf4e424e61421c6df2c1977c7')
+sha256sums=('ed4c3ec09405c9f36bfd57ad68e6f5c5495145e1a5311922e50eb6af62207339')
 
 build() {
 	cd "$srcdir/$pkgname-$pkgver" || exit
