@@ -3,14 +3,14 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver=0.4.85
+pkgver=0.4.86
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('e86e02668ee94ead3fbbeb99fbbff06004b368a81e15a90b308ba676b5201066')
+sha256sums=('44c8d81a258c1fd0d32a66fd2fdea8f1417574a6c80b682e8e5c2a0ae75879aa')
 pkgdesc='Garuda Linux Hyprland settings'
 depends=('beautyline'
 	'garuda-common-settings'
