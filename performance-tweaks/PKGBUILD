@@ -3,8 +3,8 @@
 
 pkgname=performance-tweaks
 pkgdesc='Tweaks to improve performance'
-pkgver=2.1.2
-pkgrel=3
+pkgver=
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
