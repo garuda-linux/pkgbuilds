@@ -3,7 +3,7 @@
 
 pkgname=performance-tweaks
 pkgdesc='Tweaks to improve performance'
-pkgver=
+pkgver=2.1.2
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -15,7 +15,7 @@ depends=('ananicy-cpp'
 	'preload')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('bb08f0188c4eb8ae18f2555fd3141b09be8ea93d80ce6609d121e70054d1c338')
+sha256sums=('2453da2dd2ea4b921f4d8ebe692ca2d098b67a575aa2ef08480d55d3c184bb75')
 conflicts=('powersave-tweaks' 'tlp' 'auto-cpufreq' 'thermald')
 install=$pkgname.install
 
