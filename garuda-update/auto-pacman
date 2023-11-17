@@ -25,6 +25,10 @@ array set auto_replace_conflicts {
     jack2 pipewire-jack
     networkmanager-fortisslvpn networkmanager-support
     ananicy-rules cachyos-ananicy-rules-git
+    # jre/jdk conflict fixes https://archlinux.org/news/incoming-changes-in-jdk-jre-21-packages-may-require-manual-intervention/
+    jre-openjdk jdk-openjdk
+    jre-openjdk-headless jdk-openjdk
+    jre-openjdk-headless jre-openjdk
 }
 
 if { $::conflictsfile_set } {
