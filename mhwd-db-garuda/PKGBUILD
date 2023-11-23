@@ -7,7 +7,7 @@
 pkgname=(mhwd-db-garuda garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda
 pkgver=1.1.5
-pkgrel=2
+pkgrel=1
 epoch=2
 pkgdesc="MHWD-db backported to Archlinux with additional features and limited to DKMS drivers"
 arch=('any')
@@ -21,7 +21,8 @@ source=("$_pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$_pkgname-$pkgver.tar.
 	'garuda-optimus-manager-config.hook'
 	'garuda-virtualmachine-guest-config.target'
 	'modules-load'
-	'nvidia-prime-powersaving.conf')
+	'garuda-nvidia-prime-powersaving.conf'
+	'nvidia-modprobe.conf')
 sha256sums=('c61bc261e94e2ddaf4883097a604c665dc0376bac295f0d77cbc7789c4184dd8'
 	'2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
 	'387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55'
@@ -104,7 +105,7 @@ _nvidia_factory() {
 	_generate_settings "$1"
 	local text
 	# shellcheck disable=SC2016
-	printf -v text 'package_garuda-nvidia%s-config() { pkgdesc="Meta configuration package for nvidia systems on Garuda Linux"; arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 modules-load $pkgdir/etc/modules-load.d/garuda-nvidia.conf; }; package_garuda-nvidia%s-prime-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 nvidia-prime-powersaving.conf $pkgdir/etc/modprobe.d/nvidia-prime-powersaving.conf; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/etc/udev/rules.d/90-nvidia-prime-powermanagement.rules; }; package_garuda-optimus-manager%s-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); install="garuda-optimus-manager-config.install"; cd $srcdir; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/etc/udev/rules.d/90-nvidia-prime-powermanagement.rules; install -Dm644 garuda-optimus-manager-config.hook $pkgdir/usr/share/libalpm/hooks/garuda-optimus-manager-config.hook; install -dm755 $pkgdir/etc/xdg/autostart/; ln -s /usr/share/applications/io.optimus_manager.OptimusManagerQt.desktop $pkgdir/etc/xdg/autostart/io.optimus_manager.OptimusManagerQt.desktop; }' "$_VERSTR" "${_depends[*]}" "${_conflicts[*]}" "$_VERSTR" "${_depends_prime[*]}" "${_conflicts_prime[*]}" "$_VERSTR" "${_depends_manager[*]}" "${_conflicts_manager[*]}"
+	printf -v text 'package_garuda-nvidia%s-config() { pkgdesc="Meta configuration package for nvidia systems on Garuda Linux"; arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 modules-load $pkgdir/usr/lib/modules-load.d/garuda-nvidia.conf; install -Dm644 nvidia-modprobe.conf $pkgdir/usr/lib/modprobe.d/garuda-nvidia.conf; }; package_garuda-nvidia%s-prime-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); cd $srcdir; install -Dm644 garuda-nvidia-prime-powersaving.conf $pkgdir/usr/lib/modprobe.d/garuda-nvidia-prime-powersaving.conf; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/usr/lib/udev/rules.d/90-nvidia-prime-powermanagement.rules; }; package_garuda-optimus-manager%s-config() { pkgdesc="Meta configuration package for nvidia prime systems on Garuda Linux": arch=("any"); depends=(%s); conflicts=(%s); install="garuda-optimus-manager-config.install"; cd $srcdir; install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/usr/lib/udev/rules.d/90-nvidia-prime-powermanagement.rules; install -Dm644 garuda-optimus-manager-config.hook $pkgdir/usr/share/libalpm/hooks/garuda-optimus-manager-config.hook; install -dm755 $pkgdir/etc/xdg/autostart/; ln -s /usr/share/applications/io.optimus_manager.OptimusManagerQt.desktop $pkgdir/etc/xdg/autostart/io.optimus_manager.OptimusManagerQt.desktop; }' "$_VERSTR" "${_depends[*]}" "${_conflicts[*]}" "$_VERSTR" "${_depends_prime[*]}" "${_conflicts_prime[*]}" "$_VERSTR" "${_depends_manager[*]}" "${_conflicts_manager[*]}"
 	eval "$text"
 }
 
