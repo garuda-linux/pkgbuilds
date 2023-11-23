@@ -60,7 +60,7 @@ input-devices-support 1.0.2
 jack-support 1
 latte-dock 0.10.9
 libretro-meta 1
-mhwd-db-garuda 1.1.5
+mhwd-db-garuda 1.1.6
 networkmanager-support 1
 nvidia-zen 515.43.04.1+5.17.8.zen1.1
 performance-tweaks 2.1.2
