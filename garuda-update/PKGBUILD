@@ -3,11 +3,12 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=4.3.2
+pkgver=4.3.3
 pkgrel=1
 arch=('any')
 license=('GPL')
 depends=('coreutils' 'sed' 'gawk' 'pacman' 'wget')
+backup=(etc/garuda/garuda-update/config)
 source=("auto-pacman"
 	"config"
 	"garuda-update"
