@@ -3,14 +3,14 @@
 
 pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
-pkgver=1.1.24
+pkgver=1.1.25
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('bf04a03b1aebc82471fff30cc3f14468128d485dadc3d71ef3441827f2a6dc3c')
+sha256sums=('f2b814d6fb6e0790ee69936e9b3fba9aa143426f05af6c99427b849d818d8068')
 depends=('capitaine-cursors'
 	'gtk-engine-murrine'
 	'kvantum'
