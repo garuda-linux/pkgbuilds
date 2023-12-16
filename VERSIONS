@@ -15,7 +15,7 @@ garuda-boot-repair 1.0.2
 garuda-bootctl-dracut 0.0.5
 garuda-browser-settings 1.2.3
 garuda-cinnamon-settings 1.0.9
-garuda-common-settings 2.6.19
+garuda-common-settings 2.6.20
 garuda-dr460nized 3.0.8
 garuda-dracut-support 1.0.1
 garuda-firefox 20210707
@@ -39,7 +39,7 @@ garuda-reduce-verbosity 1.0.1
 garuda-settings-manager 1.0.2
 garuda-setup-assistant 3.1.11
 garuda-starship-prompt 1.0.3
-garuda-sway-settings 1.1.29
+garuda-sway-settings 1.1.30
 garuda-system-maintenance 2.0.5
 garuda-tools-base-git r189.ccaa8c5
 garuda-update 4.4.0
