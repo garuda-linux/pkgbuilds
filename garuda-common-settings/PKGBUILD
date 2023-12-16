@@ -2,13 +2,13 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver=2.6.20
+pkgver=2.6.21
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('90e9a7e068d4c5735a485479f8dd3293130daac270b002b9fcaddd4ba481f787')
+sha256sums=('5d047fcd2b96842ec8ccae3b83f339cf1046dfb7c59007f1dee6c11ee99db74a')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
 	'garuda-bash-config'
