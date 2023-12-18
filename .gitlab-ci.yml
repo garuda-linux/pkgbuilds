@@ -18,7 +18,9 @@ check-lint:
     variables: false
   script:
     - apk add --no-cache --upgrade bash npm py3-pip shellcheck shfmt
-    - pip install yamllint
+    # Pass --break-system-packages since since this containers sole purpose is
+    # running 2 applications. If we get to advance this, implement a proper venv
+    - pip install --break-system-packages yamllint
     - npm install -g markdownlint-cli
     - bash .ci/lint.sh
   rules:
@@ -32,7 +34,9 @@ check-pr-commitizen:
     variables: false
   script:
     - apk add --no-cache --upgrade py3-pip
-    - pip install -U commitizen
+    # Pass --break-system-packages since since this containers sole purpose is
+    # running 2 applications. If we get to advance this, implement a proper venv
+    - pip install --break-system-packages commitizen
     - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
     - grep "successful" /tmp/cz_check # ugly hack to workaround the above issue
   rules:
