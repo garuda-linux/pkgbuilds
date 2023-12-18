@@ -2,7 +2,7 @@
 # Contributor: Librewish librewish@gmail.com
 
 pkgname=garuda-fish-config
-pkgver=1.5.20
+pkgver=1.5.21
 pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
