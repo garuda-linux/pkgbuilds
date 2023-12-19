@@ -6,7 +6,7 @@ pkgver=1.5.21
 pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
-url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+url="https://garudalinux.org"
 license=('MIT')
 depends=('bat'
 	'eza'
