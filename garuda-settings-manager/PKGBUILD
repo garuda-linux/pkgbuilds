@@ -12,12 +12,12 @@ pkgdesc="Garuda Linux system settings (Manjaro settings manager ported to work w
 arch=('i686' 'x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgbase"
 license=("GPL")
-depends=('icu' 'qt5-base>=5.12.3' 'hwinfo' 'kitemmodels' 'kauth'
-	'kcoreaddons' 'ckbcomp' 'xdg-utils' 'mhwd-garuda-git')
-optdepends=('garuda-settings-manager-notifier-git: qt-based'
-	'garuda-settings-manager-knotifier-git: knotifications-based')
-makedepends=('git' 'extra-cmake-modules' 'kdoctools' 'qt5-tools' 'knotifications'
-	'kconfigwidgets' 'kcmutils')
+depends=('icu' 'qt5-base>=5.12.3' 'hwinfo' 'kitemmodels5' 'kauth5'
+	'kcoreaddons5' 'ckbcomp' 'xdg-utils' 'mhwd-garuda-git')
+optdepends=('garuda-settings-manager-notifier: qt-based'
+	'garuda-settings-manager-knotifier: knotifications-based')
+makedepends=('git' 'extra-cmake-modules' 'kdoctools5' 'qt5-tools' 'knotifications5'
+	'kconfigwidgets5' 'kcmutils5')
 conflicts=('kcm-msm')
 source=("https://gitlab.com/garuda-linux/applications/$pkgbase/-/archive/$pkgver/garuda-settings-manager-$pkgver.tar.gz")
 sha256sums=('26022315e9b66c119892afcaa3b133764f1791fe7d5d7cbd28255783a8be6c62')
