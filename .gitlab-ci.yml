@@ -74,7 +74,7 @@ update-pkgbuilds:
   stage: update-pkgbuilds
   image: archlinux:latest
   script:
-    - pacman -Syu --noconfirm git jq pacman-contrib python-pipx shfmt sudo
+    - pacman -Syu --noconfirm git jq pacman-contrib python-pipx python-platformdirs shfmt sudo
     - pipx install commitizen
     - git config --global user.name "$GIT_AUTHOR_NAME"
     - git config --global user.email "$GIT_AUTHOR_EMAIL"
