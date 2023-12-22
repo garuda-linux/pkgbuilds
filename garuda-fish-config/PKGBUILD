@@ -2,7 +2,7 @@
 # Contributor: Librewish librewish@gmail.com
 
 pkgname=garuda-fish-config
-pkgver=1.5.21
+pkgver=1.5.22
 pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
@@ -25,7 +25,7 @@ source=("garuda-fish-completions-update.service"
 	"garuda-update.fish"
 	"https://raw.githubusercontent.com/franciscolourenco/done/master/conf.d/done.fish")
 sha256sums=('6f7ffc81204fa908a324d0030d211e522ee0b0eee5be34b67ae885de4c02ffe7'
-	'2c1089656152c602888d8a19b0e6d9f712ea410e46f473270cefd58de4eb3504'
+	'12704a968d3a337825aaffee38df1d31b6eacf429be790197a3280eab77f9724'
 	'054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462'
 	'8d84c235a359b3153a55e1cac29ebfb7b8eb9eebb25a2eac44861f8e4881d41b')
 
