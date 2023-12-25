@@ -14,7 +14,7 @@ chown -R nobody:root "$CI_PROJECT_DIR"
 
 # Get a list of all packages containing "-git"
 IFS=$'\n'
-_VCS_PKG=($(printf '%s\n' "${_PACKAGES[@]}" | sed '/-git/!d'))
+mapfile -t _VCS_PKG < <(printf '%s\n' "${_PACKAGES[@]}" | sed '/-git/!d')
 
 for package in "${_VCS_PKG[@]}"; do
     printf "\nChecking %s...\n" "$package"
