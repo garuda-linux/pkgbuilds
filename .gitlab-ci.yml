@@ -9,9 +9,6 @@ variables:
   REDIS_SSH_HOST: builds.garudalinux.org
   REDIS_SSH_PORT: 400
   REDIS_SSH_USER: package-deployer
-  PACKAGE_REPOS: >-
-    {"garuda":{"url":"https://gitlab.com/garuda-linux/pkgbuilds"},
-    "chaotic-aur":{"url":"https://gitlab.com/garuda-linux/pkgbuilds-aur"}}
   REPO_NAME: garuda
   REPO_PATH: /home/package-deployer/repo/x86_64
   REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
