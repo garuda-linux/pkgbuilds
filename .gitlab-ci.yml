@@ -9,6 +9,7 @@ variables:
   REDIS_SSH_HOST: builds.garudalinux.org
   REDIS_SSH_PORT: 400
   REDIS_SSH_USER: package-deployer
+  PACKAGE_REPOS: '{"garuda":{"url":"https://gitlab.com/garuda-linux/pkgbuilds"}}'
   REPO_NAME: garuda
   REPO_PATH: /home/package-deployer/repo/x86_64
   REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
@@ -146,7 +147,6 @@ schedule-package:
     # This script determines whether a relevant change occurred and if so, builds the package
     # this can be triggered by either a [deploy *] commit message or changes of PKGBUILD folders
     - bash .ci/schedule-package.sh
-    - bash .ci/update-versions.sh
   rules:
     - changes:
         - "*/PKGBUILD"
