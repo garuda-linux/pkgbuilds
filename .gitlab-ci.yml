@@ -151,7 +151,7 @@ schedule-package:
         - "*/PKGBUILD"
         - "*/.CI_CONFIG"
       if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /\[deploy .*\]/
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /\[deploy .*\]/ && $BUMPVER != "1"
 
 push-pkgbuild:
   stage: deploy
@@ -171,4 +171,4 @@ push-pkgbuild:
     - changes:
         - "*/.SRCINFO"
         - "*/PKGBUILD"
-      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER != "1"
