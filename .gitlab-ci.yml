@@ -150,7 +150,7 @@ schedule-package:
     - changes:
         - "*/PKGBUILD"
         - "*/.CI_CONFIG"
-      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER != "1"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /\[deploy .*\]/ && $BUMPVER != "1"
 
 push-pkgbuild:
