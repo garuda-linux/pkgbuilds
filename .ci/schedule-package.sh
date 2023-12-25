@@ -14,12 +14,14 @@ function prepare-env() {
 function parse-commit() {
     if [[ "$_FROM_COMMIT_MSG" == 1 ]]; then
         if [[ "$CI_COMMIT_MESSAGE" == *"[deploy all]"* ]]; then
-            _PKG="full_run"
+            for package in "${_PACKAGES[@]}"; do
+                _PKG+=("garuda:$package")
+            done
             echo "Requested a full routine run."
         elif [[ "$CI_COMMIT_MESSAGE" == *"[deploy"*"]"* ]]; then
             for package in "${_PACKAGES[@]}"; do
                 if [[ "$CI_COMMIT_MESSAGE" == *"[deploy $package]"* ]]; then
-                    _PKG="$package"
+                    _PKG=(garuda:"$package")
                     echo "Requested package build for $package."
                     return 0
                 fi
@@ -41,7 +43,7 @@ parse-gitdiff() {
         # Check whether relevant folders got changed
         for package in "${_PACKAGES[@]}"; do
             if [[ "$_CURRENT_DIFF" =~ "$package"/ ]]; then
-                _PKG+=("$package")
+                _PKG+=("garuda:$package")
                 echo "Detected changes in $package, scheduling build..."
             fi
         done
@@ -57,13 +59,7 @@ parse-gitdiff() {
 schedule-package() {
     # Schedule either a full run or a single package using chaotic-manager
     # the entry_point script also establishes a connection to our Redis server
-    if [[ "$_PKG" == "full_run" ]]; then
-        /entry_point.sh schedule --commit "${CI_COMMIT_SHA}:${CI_PIPELINE_ID}" --repo "$BUILD_REPO" "${_PACKAGES[@]}"
-    elif [[ "${#_PKG[@]}" == 1 ]]; then
-        /entry_point.sh schedule --commit "${CI_COMMIT_SHA}:${CI_PIPELINE_ID}" --repo "$BUILD_REPO" "$_PKG"
-    else
-        /entry_point.sh schedule --commit "${CI_COMMIT_SHA}:${CI_PIPELINE_ID}" --repo "$BUILD_REPO" "${_PKG[@]}"
-    fi
+    /entry_point.sh schedule --commit "${CI_COMMIT_SHA}:${CI_PIPELINE_ID}" --repo "$BUILD_REPO" "${_PKG[@]}"
 }
 
 prepare-env
