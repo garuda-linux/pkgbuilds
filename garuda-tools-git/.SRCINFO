@@ -1,0 +1,60 @@
+pkgbase = garuda-tools-git
+	pkgdesc = Development tools for Garuda Linux
+	pkgver = r202.da426ca
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/tools/garuda-tools
+	arch = x86_64
+	arch = i686
+	groups = garuda-tools
+	license = GPL
+	makedepends = git
+	makedepends = docbook2x
+	source = garuda-tools::git+https://gitlab.com/garuda-linux/tools/garuda-tools.git#branch=master
+	sha256sums = SKIP
+
+pkgname = garuda-tools-base-git
+	pkgdesc = Development tools for garuda Linux (base tools)
+	depends = openssh
+	depends = rsync
+	depends = haveged
+	depends = os-prober
+	depends = gnupg
+	depends = pacman-mirrorlist
+	optdepends = garuda-tools-pkg: Garuda Linux package tools
+	optdepends = garuda-tools-iso: Garuda Linux iso tools
+	optdepends = garuda-tools-yaml: Garuda Linux yaml tools
+	provides = garuda-tools-base=0.15.6
+	conflicts = garuda-tools-base
+	backup = etc/garuda-tools/garuda-tools.conf
+
+pkgname = garuda-tools-pkg-git
+	pkgdesc = Development tools for Garuda Linux (packaging tools)
+	depends = namcap
+	depends = garuda-tools-base-git
+	provides = garuda-tools-pkg=0.15.6
+	conflicts = garuda-tools-pkg
+	conflicts = devtools
+
+pkgname = garuda-tools-iso-git
+	pkgdesc = Development tools for Garuda Linux (ISO tools)
+	depends = dosfstools
+	depends = libisoburn
+	depends = squashfs-tools
+	depends = garuda-tools-yaml-git
+	depends = mkinitcpio
+	depends = mktorrent
+	depends = grub
+	depends = git
+	depends = zsync
+	depends = rclone
+	optdepends = virtualbox: quickly test isos
+	optdepends = snapd: for snapd support
+	provides = garuda-tools-iso=0.15.6
+	conflicts = garuda-tools-iso
+
+pkgname = garuda-tools-yaml-git
+	pkgdesc = Development tools for Garuda Linux (yaml tools)
+	depends = garuda-tools-base-git
+	depends = calamares-tools
+	provides = garuda-tools-yaml=0.15.6
+	conflicts = garuda-tools-yaml
