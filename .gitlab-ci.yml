@@ -145,7 +145,7 @@ schedule-package:
   script:
     # This script determines whether a relevant change occurred and if so, builds the package
     # this can be triggered by either a [deploy *] commit message or changes of PKGBUILD folders
-    - bash -x .ci/schedule-package.sh
+    - bash .ci/schedule-package.sh
   rules:
     - changes:
         - "*/PKGBUILD"
