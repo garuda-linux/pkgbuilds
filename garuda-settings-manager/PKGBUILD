@@ -13,7 +13,7 @@ arch=('i686' 'x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgbase"
 license=("GPL")
 depends=('icu' 'qt5-base>=5.12.3' 'hwinfo' 'kitemmodels5' 'kauth5'
-	'kcoreaddons5' 'ckbcomp' 'xdg-utils' 'mhwd-garuda-git')
+	'kcoreaddons5' 'ckbcomp' 'xdg-utils' 'mhwd-garuda')
 optdepends=('garuda-settings-manager-notifier: qt-based'
 	'garuda-settings-manager-knotifier: knotifications-based')
 makedepends=('git' 'extra-cmake-modules' 'kdoctools5' 'qt5-tools' 'knotifications5'
