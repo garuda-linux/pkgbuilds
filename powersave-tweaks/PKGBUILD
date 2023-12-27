@@ -10,7 +10,7 @@ url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('eef635f503d3430d92554dc51e3ecee7aa3613798c30ef5db91d09676d90abf7')
+sha256sums=('b5d252f4b291effc89e5c06f161c8183a8ddbb57d2f6892314bdc0a85dd59c55')
 depends=('hdparm')
 conflicts=('performanace-tweaks')
 
