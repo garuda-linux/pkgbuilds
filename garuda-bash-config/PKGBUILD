@@ -15,8 +15,8 @@ depends=('bash'
 	'ugrep')
 makedepends=('git')
 source=('bashrc' 'bashrc-setup.desktop')
-sha256sums=('b587e6d0f383147880457f7bbf330f73f202fc01ce82c44090734fc72057a02e'
-	'8eed6302b7a8674b3a1784c599a7d7ae73e76ea8992ec324f62ec6b45f469cd5')
+sha256sums=('8ef4770ea10f22755fb288edeea06f311596517ed8178c185ed332f0e46144a5'
+            '8eed6302b7a8674b3a1784c599a7d7ae73e76ea8992ec324f62ec6b45f469cd5')
 
 package() {
 	install -D -m644 bashrc "$pkgdir/etc/skel/.bashrc_garuda"
