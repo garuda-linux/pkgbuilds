@@ -3,7 +3,7 @@
 
 pkgname=snapper-support
 pkgver=1.1.2
-pkgrel=2
+pkgrel=3
 pkgdesc='Support package for enabling Snapper with snap-pac and grub-btrfs'
 arch=(any)
 url='https://gitlab.com/garuda-linux/packages/stable-pkgbuilds/snapper-support'

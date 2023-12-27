@@ -19,5 +19,5 @@ pkgver() {
 package() {
 	cd "${pkgname}" || exit
 	install -d "${pkgdir}/usr/share/wallpapers/${pkgname}"
-	cp "${srcdir}/${pkgname}"/src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/${pkgname}"
+	cp "${srcdir}/${pkgname}/src/${pkgname}"/* "${pkgdir}/usr/share/wallpapers/${pkgname}"
 }
