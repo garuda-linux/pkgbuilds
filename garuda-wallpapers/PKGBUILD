@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-wallpapers
-pkgver=r3.eb2d0fd
+pkgver=r89.931d2e5
 pkgrel=1
 pkgdesc="Garuda's default wallpaper collection"
 arch=('any')
@@ -18,6 +18,6 @@ pkgver() {
 
 package() {
 	cd "${pkgname}" || exit
-	install -d "${pkgdir}/usr/share/wallpapers/$pkgname"
-	cp -r "src/$pkgname/*" "${pkgdir}/usr/share/wallpapers/$pkgname"
+	install -d "${pkgdir}/usr/share/wallpapers/${pkgname}"
+	cp "${srcdir}/${pkgname}"/src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/${pkgname}"
 }
