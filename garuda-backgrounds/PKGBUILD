@@ -2,9 +2,9 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-backgrounds
-pkgver=r4.4e04501
+pkgver=r16.72b2e5a
 pkgrel=1
-pkgdesc="Garuda's default wallpaper collection"
+pkgdesc="Garuda's default wallpaper collection for GNOME"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=('GPLv3')
@@ -15,13 +15,13 @@ sha256sums=('SKIP')
 pkgver() {
 	cd "$srcdir/$pkgname" || exit
 	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-
 }
 
 package() {
 	cd "${pkgname}" || exit
-	install -d "${pkgdir}/usr/share/backgrounds/$pkgname"
-	cp -r src/$pkgname/* "${pkgdir}/usr/share/backgrounds/$pkgname"
+	install -d "${pkgdir}/usr/share/backgrounds/${pkgname}"
+	cp "${srcdir}/${pkgname}/src/${pkgname}"/*.{png,jpg} "${pkgdir}/usr/share/backgrounds/${pkgname}"
+
 	install -d "${pkgdir}/usr/share/gnome-background-properties"
-	cp -r "src/$pkgname/*.xml" "${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml"
+	cp "${srcdir}/${pkgname}/src/${pkgname}/${pkgname}.xml" "${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml"
 }
