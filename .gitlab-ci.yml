@@ -85,6 +85,7 @@ fetch-gitsrc:
   image: archlinux:latest
   script:
     - pacman -Syu --noconfirm base-devel bash curl git
+    - useradd -m ci-user
     - git clone https://gitlab.com/garuda-linux/pkgbuilds.git
     - cd pkgbuilds
     - git config --global user.name "$GIT_AUTHOR_NAME"
