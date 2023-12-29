@@ -16,35 +16,35 @@ _COUNTER=0
 for package in "${_SOURCES[@]}"; do
 	# Get the latest tag from the GitLab API
 	_LATEST=$(curl -s "https://gitlab.com/api/v4/projects/${_API[$_COUNTER]}/repository/tags" | jq -r '.[0].name' | sed 's/v//g')
+	_CURRENTVER=$(grep -oP '\spkgver\s=\s\K.*' "${_PKGNAME[$_COUNTER]}/.SRCINFO")
 
-	# shellcheck disable=SC1091
-	source "${_PKGNAME[$_COUNTER]}/PKGBUILD" || echo "Failed to source PKGBUILD for ${_PKGNAME[$_COUNTER]}!"
-
-	if [[ "$pkgver" != "$_LATEST" ]]; then
+	if [[ "$_CURRENTVER" != "$_LATEST" ]]; then
 		# Create a temporary directory to work with
 		_TMPDIR=$(mktemp -d)
 		cd "${_PKGNAME[$_COUNTER]}" || echo "Failed to cd into ${_PKGNAME[$_COUNTER]}!"
 
 		# First update pkgver, resetting pkgrel
-		echo "Updating ${_PKGNAME[$_COUNTER]} from $pkgver to $_LATEST"
+		echo "Updating ${_PKGNAME[$_COUNTER]} from $_CURRENTVER to $_LATEST"
 		sed -i "s/pkgver=.*/pkgver=$_LATEST/g" PKGBUILD
 		sed -i "s/pkgrel=.*/pkgrel=1/g" PKGBUILD
 
 		# Then update the source's checksum
-		echo "Updating checksum for ${_PKGNAME[$_COUNTER]}"
-		sudo -Eu nobody updpkgsums
+		echo "Updating checksum for ${_PKGNAME[$_COUNTER]}..."
+		sudo -u nobody updpkgsums
+		echo "Generating .SRCINFO for ${_PKGNAME[$_COUNTER]}..."
+		sudo -u nobody makepkg --printsrcinfo | tee .SRCINFO &>/dev/null
 
 		# Apply shfmt, which is needed because of updpkgsums changing intends
 		# and potentially failing pipelines due this
 		shfmt -d -w PKGBUILD
 
 		# Generate a changelog between both versions to append to this commit
-		echo "Generating changelog for ${_PKGNAME[$_COUNTER]}"
+		echo "Generating changelog for ${_PKGNAME[$_COUNTER]}..."
 
 		git clone --depth 1 "${_SOURCES[$_COUNTER]}" "${_TMPDIR}"
 
 		pushd "${_TMPDIR}" || echo "Failed to cd into ${_TMPDIR}!"
-		_CHANGELOG=$(pipx run --spec commitizen cz changelog "$pkgver".."$_LATEST" --dry-run)
+		_CHANGELOG=$(pipx run --spec commitizen cz changelog "$_CURRENTVER".."$_LATEST" --dry-run)
 		popd || echo "Failed to return to the previous directory!"
 
 		# Push changes back to main, triggering an instant deployment
@@ -54,7 +54,7 @@ for package in "${_SOURCES[@]}"; do
 
 		cd .. || echo "Failed to change back to the previous directory!"
 	else
-		echo "${_PKGNAME[$_COUNTER]} is up to date"
+		echo "${_PKGNAME[$_COUNTER]} is up to date."
 	fi
 
 	((_COUNTER++))
