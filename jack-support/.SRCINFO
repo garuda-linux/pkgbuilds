@@ -1,0 +1,21 @@
+pkgbase = jack-support
+	pkgdesc = Meta-package for JACK support
+	pkgver = 1
+	pkgrel = 2
+	url = https://wiki.archlinux.org/index.php/JACK_Audio_Connection_Kit
+	install = jack-support.install
+	arch = any
+	license = GPL
+	depends = a2jmidid
+	depends = celt
+	depends = jack
+	depends = jack_capture
+	depends = jack_utils
+	depends = libffado
+	depends = python-dbus
+	depends = realtime-privileges
+	depends = zita-ajbridge
+	optdepends = qjackctl: A Qt front-end for the JACK low-latency audio server
+	optdepends = cadence: JACK toolbox for audio production
+
+pkgname = jack-support

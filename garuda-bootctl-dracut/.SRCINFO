@@ -1,0 +1,27 @@
+pkgbase = garuda-bootctl-dracut
+	pkgdesc = Systemd-boot, Dracut and Secure Boot support for Garuda Linux
+	pkgver = 0.0.5
+	pkgrel = 1
+	install = garuda-bootctl-dracut.install
+	arch = any
+	license = GPL
+	depends = pacman
+	depends = systemd
+	depends = dracut
+	depends = sbsigntools
+	depends = sbctl
+	depends = tpm2-tss
+	depends = tpm2-tools
+	depends = dracut-hook-uefi
+	provides = mkinitpcio
+	provides = grub
+	provides = grub-btrfs
+	backup = etc/dracut.conf.d/dracut-garuda.conf
+	source = bootctl-update.hook
+	source = dracut-garuda.conf
+	source = gen-dracut-cmdline
+	sha256sums = a16de3b405780f5e63818597b73d93095f6ddd89f162b8750fe4438c1d0d4461
+	sha256sums = 2603c1e33ccb9455228909e9838ce69ec46955801b548e3cc4922102498b8266
+	sha256sums = 911c45c0e3fb5fc8e6afe2cdfd489750e26f310e80337de8216bd64d44f81118
+
+pkgname = garuda-bootctl-dracut

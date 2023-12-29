@@ -1,0 +1,15 @@
+pkgbase = grub-theme-garuda-dr460nized
+	pkgdesc = Garuda Dr460nized grub theme
+	pkgver = r2.49d1e5e
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda-dr460nized
+	arch = any
+	license = GPL
+	makedepends = git
+	source = grub-theme::git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda-dr460nized.git
+	sha256sums = SKIP
+
+pkgname = grub-theme-garuda-dr460nized
+	install = garuda-theme.install
+	depends = grub
+	provides = grub-theme-garuda-custom

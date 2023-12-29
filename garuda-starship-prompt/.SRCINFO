@@ -1,0 +1,13 @@
+pkgbase = garuda-starship-prompt
+	pkgdesc = Starship terminal prompt preset for Garuda Linux
+	pkgver = 1.0.3
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-starship-prompt
+	arch = any
+	license = MIT
+	makedepends = git
+	depends = starship
+	source = starship.toml
+	sha256sums = 8ca9603c6a4f73a54eb431edb609ce9634cc7f949da5efa63ab75472cf45e74b
+
+pkgname = garuda-starship-prompt

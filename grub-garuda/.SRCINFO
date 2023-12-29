@@ -1,0 +1,18 @@
+pkgbase = grub-garuda
+	pkgdesc = Meta-package for using GRUB on Garuda Linux
+	pkgver = 2.06
+	pkgrel = 2
+	url = https://www.gnu.org/software/grub/
+	arch = any
+	license = GPL3
+	makedepends = git
+	depends = grub
+	depends = update-grub
+	depends = os-prober-btrfs
+	depends = efibootmgr
+	depends = memtest86+
+	provides = grub-garuda
+	conflicts = grub-garuda
+	conflicts = grub-customizer
+
+pkgname = grub-garuda

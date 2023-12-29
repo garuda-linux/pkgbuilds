@@ -1,0 +1,12 @@
+pkgbase = garuda-icons
+	pkgdesc = Base icons for Garuda Linux
+	pkgver = r29.5730a02
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-icons
+	arch = any
+	license = GPL
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-icons.git
+	sha256sums = SKIP
+
+pkgname = garuda-icons

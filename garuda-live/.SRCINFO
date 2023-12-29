@@ -1,0 +1,30 @@
+pkgbase = garuda-live
+	pkgdesc = garuda Linux live session
+	pkgver = r3.19f1cf0
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/tools/garuda-tools-livecd
+	arch = any
+	license = GPL
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/tools/garuda-tools-livecd.git
+	sha256sums = SKIP
+
+pkgname = garuda-live-base
+	pkgdesc = Garuda Linux live base scripts
+	depends = garuda-tools-base>=0.13
+	conflicts = garuda-livecd-base
+	replaces = garuda-livecd-base
+
+pkgname = garuda-live-systemd
+	pkgdesc = Garuda Linux live Systemd units
+	depends = systemd
+	depends = garuda-live-base
+	depends = reflector
+	conflicts = garuda-livecd-systemd
+
+pkgname = garuda-live-skel
+	pkgdesc = Garuda Linux live session autostart items
+
+pkgname = garuda-live-portable-efi
+	pkgdesc = Garuda Linux live session portable EFI settings
+	depends = grub

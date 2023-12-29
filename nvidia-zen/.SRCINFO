@@ -1,0 +1,16 @@
+pkgbase = nvidia-zen
+	pkgdesc = NVIDIA drivers for linux
+	pkgver = 515.43.04.1+5.17.8.zen1.1
+	pkgrel = 1
+	url = https://www.nvidia.com/
+	arch = x86_64
+	license = custom
+	makedepends = linux-zen-headers
+	makedepends = nvidia-dkms
+	provides = NVIDIA-MODULE
+	options = !strip
+
+pkgname = nvidia-zen
+	depends = linux-zen=
+	depends = nvidia-utils=
+	depends = libglvnd

@@ -1,0 +1,11 @@
+pkgbase = garuda-blackarch
+	pkgdesc = Garuda BlackArch settings
+	pkgver = 1.1.0
+	pkgrel = 2
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-blackarch
+	arch = any
+	license = GPL
+	source = garuda-blackarch-1.1.0.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-blackarch/-/archive/1.1.0/garuda-blackarch-1.1.0.tar.gz
+	sha256sums = fea63c1a23d2497cabe0deb9d1ae385e02cce2d6166ea4201b2519981e07286c
+
+pkgname = garuda-blackarch

@@ -1,0 +1,12 @@
+pkgbase = calamares-branding-garuda
+	pkgdesc = Garuda branding for the Calamares installer
+	pkgver = r49.ddc718d
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/calamares-branding-garuda
+	arch = any
+	license = GPL
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/calamares-branding-garuda.git
+	sha256sums = SKIP
+
+pkgname = calamares-branding-garuda

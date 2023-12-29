@@ -1,0 +1,13 @@
+pkgbase = plymouth-theme-dr460nized
+	pkgdesc = Plymouth theme for Garuda dr460nized
+	pkgver = r2.f5e7e0f
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-dr460nized
+	install = plymouth-theme-dr460nized.install
+	arch = any
+	license = GPL
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-dr460nized.git
+	sha256sums = SKIP
+
+pkgname = plymouth-theme-dr460nized

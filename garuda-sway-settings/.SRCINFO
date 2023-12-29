@@ -1,0 +1,26 @@
+pkgbase = garuda-sway-settings
+	pkgdesc = Garuda Linux Sway settings
+	pkgver = 1.1.32
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings
+	install = garuda-sway-settings.install
+	arch = any
+	license = GPL
+	makedepends = coreutils
+	depends = capitaine-cursors
+	depends = gtk-engine-murrine
+	depends = kvantum
+	depends = kvantum-theme-nordic-git
+	depends = nordic-darker-theme
+	depends = qt5ct
+	depends = sway
+	depends = swayidle
+	depends = swaylock
+	depends = swaybg
+	depends = tela-circle-icon-theme-git
+	provides = garuda-desktop-settings
+	conflicts = garuda-desktop-settings
+	source = garuda-sway-settings-1.1.32.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/1.1.32/garuda-sway-settings-1.1.32.tar.gz
+	sha256sums = 88b414ffe342b2de61cb6f3f7b1337e93d1fb22c4e49c97f926fb0dc9ca986a5
+
+pkgname = garuda-sway-settings

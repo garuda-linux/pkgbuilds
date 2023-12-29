@@ -1,0 +1,12 @@
+pkgbase = garuda-hotfixes
+	pkgdesc = Emergency hotfixes for Garuda Linux
+	pkgver = 1.1.2
+	pkgrel = 1
+	install = garuda-hotfixes
+	arch = any
+	license = GPL
+	depends = coreutils
+	depends = sed
+	depends = awk
+
+pkgname = garuda-hotfixes

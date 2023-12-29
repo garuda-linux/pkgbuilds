@@ -1,0 +1,17 @@
+pkgbase = garuda-firefox
+	pkgdesc = Metapkg for Firefox and extensions
+	pkgver = 20210707
+	pkgrel = 1
+	url = https://www.garudalinux.org
+	arch = any
+	license = GPL3
+	depends = firefox
+	depends = firefox-ublock-origin
+	depends = firefox-dark-reader
+	depends = firefox-extension-localcdn
+	optdepends = firefox-extension-plasma-integration: Better integration with Plasma
+	optdepends = firefox-extension-gnome-shell-integration: Better integration with GNOME
+	optdepends = firefox-extension-xdm-browser-monitor: Extension for Xtreme Download Manager
+	optdepends = firefox-extension-bitwarden: Easily integrate Firefox with Bitwarden
+
+pkgname = garuda-firefox

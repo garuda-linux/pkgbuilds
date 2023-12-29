@@ -1,0 +1,12 @@
+pkgbase = garuda-wallpapers-extra
+	pkgdesc = Garuda's extra wallpaper collection
+	pkgver = r3.eb2d0fd
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-extra
+	arch = any
+	license = GPLv3
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-extra.git
+	sha256sums = SKIP
+
+pkgname = garuda-wallpapers-extra

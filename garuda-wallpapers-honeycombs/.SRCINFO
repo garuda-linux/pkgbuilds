@@ -1,0 +1,12 @@
+pkgbase = garuda-wallpapers-honeycombs
+	pkgdesc = Garuda's wallpaper collection, honeycombs edition
+	pkgver = r10.32a06c5
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-honeycombs
+	arch = any
+	license = GPLv3
+	makedepends = git
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-honeycombs.git
+	sha256sums = SKIP
+
+pkgname = garuda-wallpapers-honeycombs

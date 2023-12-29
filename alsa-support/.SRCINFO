@@ -1,0 +1,15 @@
+pkgbase = alsa-support
+	pkgdesc = Meta-package containing all needed packages to use ALSA
+	pkgver = 1
+	pkgrel = 2
+	url = https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture
+	arch = any
+	license = GPL
+	depends = alsa-firmware
+	depends = alsa-lib
+	depends = alsa-oss
+	depends = alsa-plugins
+	depends = alsa-tools
+	depends = alsa-utils
+
+pkgname = alsa-support

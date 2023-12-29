@@ -1,0 +1,20 @@
+pkgbase = virtualbox-meta
+	pkgdesc = Meta-package for Virtualbox
+	pkgver = 2
+	pkgrel = 3
+	url = https://wiki.archlinux.org/index.php/VirtualBox
+	install = virtualbox-meta.install
+	arch = any
+	license = GPL
+	optdepends = tigervnc: Watch VNC sessions
+	source = virtualbox.conf
+	sha256sums = 2c762a20c5eb5b3d723149d9b8e55249ef9a099f6ce4c454fd5bc2eac58d943d
+
+pkgname = virtualbox-meta
+	depends = vde2
+	depends = virtualbox-ext-oracle
+	depends = virtualbox-ext-vnc
+	depends = virtualbox-guest-iso
+	depends = virtualbox-host-dkms
+	depends = virtualbox-sdk
+	depends = virtualbox

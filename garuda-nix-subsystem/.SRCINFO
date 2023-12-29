@@ -1,0 +1,17 @@
+pkgbase = garuda-nix-subsystem
+	pkgdesc = Creates and manages the Garuda Nix Subsystem
+	pkgver = 0.2.0
+	pkgrel = 1
+	arch = any
+	license = GPL
+	depends = coreutils
+	depends = curl
+	depends = wget
+	source = garuda-nix-subsystem
+	source = updater
+	source = installer
+	sha512sums = 69f9d1cb2abf9d64a37c942cfd00c881bdd3c9f3ec63430ea8cf2376ba42dbda4f33c4df3dd10ee39cc4c53109f9009efc642388551825e40440e6e9d2d934b1
+	sha512sums = fe56eabebfbb120811483c84a9d88c29a34eea364f8b0f6f897933df0596f781672c51fe1e4e905f5c61ea9f170d66324ca7ffbe9a454bc8dbf796a67322a39d
+	sha512sums = 5c7d721459bfc57daeeeddb77ad639cfeff3a21e8c45a5e7efa4d1372aea0fcdd0c31dc7f4c9ea963785029c41dbb130f338de9b24451fc1ada628429116e99f
+
+pkgname = garuda-nix-subsystem

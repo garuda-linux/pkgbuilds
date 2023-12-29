@@ -1,0 +1,16 @@
+pkgbase = garuda-gamer
+	pkgdesc = An application which provides makes installing gaming related utilities easy
+	pkgver = 1.1.9
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/applications/garuda-gamer
+	arch = any
+	groups = garuda
+	license = GPL3
+	makedepends = git
+	depends = qt5-base
+	depends = xdg-utils
+	depends = garuda-libs
+	source = garuda-gamer-1.1.9.tar.gz::https://gitlab.com/garuda-linux/applications/garuda-gamer/-/archive/1.1.9/garuda-gamer-1.1.9.tar.gz
+	sha256sums = e94ac68a4792696be5c7af909dae5d8209db7c4f86be6c5c9c1082ec6c004c04
+
+pkgname = garuda-gamer

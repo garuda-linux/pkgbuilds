@@ -1,0 +1,20 @@
+pkgbase = asian-fonts
+	pkgdesc = Meta-package containing common asian fonts
+	pkgver = 3
+	pkgrel = 1
+	url = https://wiki.archlinux.org/index.php/Fonts
+	arch = any
+	license = GPL
+	depends = fonts-tlwg
+	depends = lohit-fonts
+	depends = opendesktop-fonts
+	depends = otf-ipafont
+	depends = ttf-baekmuk
+	depends = ttf-hannom
+	depends = ttf-indic-otf
+	depends = ttf-khmer
+	depends = ttf-tibetan-machine
+	source = 90-bengali.conf
+	sha256sums = 298b598553e88e1d905748a19ed2ecc00dd6845a8e7213c87d84dcfca57ddee6
+
+pkgname = asian-fonts

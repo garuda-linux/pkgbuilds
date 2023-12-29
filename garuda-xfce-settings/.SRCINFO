@@ -1,0 +1,17 @@
+pkgbase = garuda-xfce-settings
+	pkgdesc = Garuda Linux XFCE settings
+	pkgver = 1.0.3
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings
+	install = garuda-xfce-settings.install
+	arch = any
+	license = GPL
+	makedepends = coreutils
+	depends = noto-fonts
+	depends = garuda-common-settings
+	provides = garuda-desktop-settings
+	conflicts = garuda-desktop-settings
+	source = garuda-xfce-settings-1.0.3.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/1.0.3/garuda-xfce-settings-1.0.3.tar.gz
+	sha256sums = c0901926e04aa2cbdbefa205312b3276253734b614d811427a4ae1d0cecc44c6
+
+pkgname = garuda-xfce-settings

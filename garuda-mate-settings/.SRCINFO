@@ -1,0 +1,25 @@
+pkgbase = garuda-mate-settings
+	pkgdesc = Garuda Linux Mate settings
+	pkgver = 1.5.2
+	pkgrel = 3
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings
+	install = garuda-mate-settings.install
+	arch = any
+	license = GPL
+	makedepends = coreutils
+	depends = adapta-gtk-theme
+	depends = beautyline
+	depends = boston-icon-theme
+	depends = garuda-backgrounds
+	depends = garuda-common-settings
+	depends = garuda-fish-config
+	depends = kvantum
+	depends = plasma5-themes-sweet-full-git
+	depends = ttf-firacode-nerd
+	depends = yaru-icon-theme
+	provides = garuda-desktop-settings
+	conflicts = garuda-desktop-settings
+	source = garuda-mate-settings-1.5.2.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/1.5.2/garuda-mate-settings-1.5.2.tar.gz
+	sha256sums = fcdaaaa8f9c3aff4d6b67bf9be2d956a1c65b0d0c0bb168842e5371c9a63300e
+
+pkgname = garuda-mate-settings

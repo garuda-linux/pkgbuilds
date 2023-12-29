@@ -1,0 +1,22 @@
+pkgbase = virt-manager-meta
+	pkgdesc = Meta-package for libvirt/QEMU/KVM support using virt-manager
+	pkgver = 5
+	pkgrel = 4
+	url = https://wiki.archlinux.org/index.php/Libvirt
+	install = virt-manager-meta.install
+	arch = any
+	license = GPL
+	source = firewall.conf
+	sha256sums = 82aa0099d874a5581dd6c05c268c6ab34dc64525cbf7df341a587099abde26a9
+
+pkgname = virt-manager-meta
+	depends = bridge-utils
+	depends = dnsmasq
+	depends = iptables-nft
+	depends = edk2-ovmf
+	depends = libvirt
+	depends = netcat
+	depends = qemu-desktop
+	depends = radvd
+	depends = virt-viewer
+	depends = virt-manager

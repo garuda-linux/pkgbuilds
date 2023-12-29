@@ -1,0 +1,12 @@
+pkgbase = zdummy-vlkdrv
+	pkgdesc = Dummy package
+	pkgver = 0.1
+	pkgrel = 1
+	url = https://www.garudalinux.org/
+	arch = any
+	license = GPL3
+	depends = mhwd-garuda
+	provides = vulkan-driver
+	provides = lib32-vulkan-driver
+
+pkgname = zdummy-vlkdrv

@@ -1,0 +1,12 @@
+pkgbase = calamares-tools
+	pkgdesc = Development tools for Calamares
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://gitlab.manjaro.org/applications/calamares-tools
+	arch = any
+	license = GPL
+	makedepends = git
+	source = git+https://gitlab.manjaro.org/applications/calamares-tools.git
+	sha256sums = SKIP
+
+pkgname = calamares-tools

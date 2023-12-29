@@ -1,0 +1,25 @@
+pkgbase = garuda-hyprland-settings
+	pkgdesc = Garuda Linux Hyprland settings
+	pkgver = 0.4.100
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings
+	install = garuda-hyprland-settings.install
+	arch = any
+	license = GPL
+	makedepends = coreutils
+	depends = beautyline
+	depends = garuda-common-settings
+	depends = gtk-engine-murrine
+	depends = plasma5-themes-sweet-full-git
+	depends = waybar
+	depends = hyprland-git
+	depends = kvantum
+	depends = ttf-fira-code
+	depends = ttf-firacode-nerd
+	depends = qt5ct
+	provides = garuda-desktop-settings
+	conflicts = garuda-desktop-settings
+	source = garuda-hyprland-settings-0.4.100.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/0.4.100/garuda-hyprland-settings-0.4.100.tar.gz
+	sha256sums = 1473c23a8badc175dc84e12044019e3584b766ad2e0ae39768c25b6eab44405b
+
+pkgname = garuda-hyprland-settings
