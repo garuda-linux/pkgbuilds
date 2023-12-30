@@ -1,0 +1,3 @@
+# Not an actual git source, but sets pkgver 
+# dynamically based on the latest linux-zen version
+CI_IS_GIT_SOURCE=1
