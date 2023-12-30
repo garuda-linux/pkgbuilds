@@ -43,7 +43,7 @@ There are cases of deprecated packages, which serve no purpose anymore and also 
 These can be handled by adding the package to `conflicts()` of `garuda-common-settings` and [auto-pacman](https://gitlab.com/garuda-linux/pkgbuilds/-/blob/main/garuda-update/auto-pacman?ref_type=heads#L10)
 of `garuda-update`. The result is that the offending package gets removed automatically due to the conflict.
 
-## CI
+## GitLab CI
 
 ### General
 
@@ -85,7 +85,7 @@ The `.CI_CONFIG` file inside each package directory contains additional flags to
   This is useful for packages which use `pkgver()` to set their version without being having `-git` or another VCS package suffix.
 - `CI_MANAGE_AUR`: By setting this variable to `1`, the CI will update the corresponding AUR repository at the end of a pipeline run if changes occurred (omitting CI-related files)
 - `CI_PKGREL`: Controls package bumps for all packages which don't have `CI_MANAGE_AUR` set to `1`. It increases `pkgrel` by `0.1` for every `+1` increase of this variable.
-- `CI_PKGBUILD_SOURCE`: _Not yet implemented_ - once implemented, this is meant to replace the place to set PKGBUILD sources, currently happening via the `SOURCES` file.
+- `CI_PKGBUILD_SOURCE`: Sets the source for all PKGBUILD related files, used for pulling updated files from remote repositories
 
 ### Managing AUR packages
 

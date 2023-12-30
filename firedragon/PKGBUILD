@@ -294,12 +294,12 @@ END
     ln -s "/usr/lib/mozilla/native-messaging-hosts" "${pkgdir}/usr/lib/${pkgname}/native-messaging-hosts"
 
     # GNOME search provider
-    local sprovider="$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini"
+    local sprovider="$pkgdir/usr/share/gnome-shell/search-providers/$pkgname.search-provider.ini"
     install -Dvm644 /dev/stdin "$sprovider" <<END
 [Shell Search Provider]
-DesktopId=$_pkgname.desktop
-BusName=org.mozilla.${_pkgname//-/}.SearchProvider
-ObjectPath=/org/mozilla/${_pkgname//-/}/SearchProvider
+DesktopId=$pkgname.desktop
+BusName=org.mozilla.${pkgname//-/}.SearchProvider
+ObjectPath=/org/mozilla/${pkgname//-/}/SearchProvider
 Version=2
 END
 
@@ -313,7 +313,7 @@ END
 
     # Replace duplicate binary with wrapper
     # https://bugzilla.mozilla.org/show_bug.cgi?id=658850
-    ln -srfv "$pkgdir/usr/bin/$_pkgname" "$pkgdir/usr/lib/$_pkgname/${_pkgname%-*}-bin"
+    ln -srfv "$pkgdir/usr/bin/$pkgname" "$pkgdir/usr/lib/$pkgname/${pkgname%-*}-bin"
 
     # All the needed configuration files
     install -Dvm644 "../${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
