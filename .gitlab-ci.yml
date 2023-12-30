@@ -79,21 +79,15 @@ check-pr-commitizen:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 fetch-gitsrc:
-  # This basically updates the version in the PKGBUILD based on fetched git repos
-  # it then requests a new package build in case a new git revision got detected
+  # Checks whether a newer commit but the one in .CI_CONFIG exists
+  # if yes, it updates the value and triggers a new build for all affected packages
   stage: update-pkgbuilds
-  image: archlinux:latest
+  image: alpine:latest
   script:
-    - pacman -Syu --noconfirm base-devel bash curl git
-    - useradd -m ci-user
-    - git clone https://gitlab.com/garuda-linux/pkgbuilds.git
-    - cd pkgbuilds
+    - apk add --no-cache --upgrade bash git grep
     - git config --global user.name "$GIT_AUTHOR_NAME"
     - git config --global user.email "$GIT_AUTHOR_EMAIL"
-    - git config --global --add safe.directory '*'
     - bash .ci/fetch-gitsrc.sh
-  variables:
-    GIT_STRATEGY: none
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER == "1"
 

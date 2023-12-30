@@ -1,60 +1,51 @@
 #!/usr/bin/env bash
 
-for dep in curl git; do
-    command -v "$dep" &>/dev/null || echo "$dep is not installed!"
-done
+command -v git &>/dev/null || echo "Git is not installed!"
 
-# Parse our commit message for which packages to build based on folder names
+# Build a list of valid VCS packages
 mapfile -t _PACKAGES < <(find . -mindepth 1 -type d -prune | sed -e '/.\./d' -e 's/.\///g')
-
-# This is required for makepkg
-# shellcheck source=/dev/null
-source /etc/makepkg.conf
-chown -R ci-user:root "$CI_PROJECT_DIR"
-
-# Get a list of all packages containing "-git"
 mapfile -t _VCS_PKG < <(printf '%s\n' "${_PACKAGES[@]}" | sed '/-git/!d')
 
 for package in "${_VCS_PKG[@]}"; do
     printf "\nChecking %s...\n" "$package"
-    pushd "$package" || echo "Failed to change into $package!"
 
-    # Parse PKGBUILD's variables
-    _OLD_PKGVER=$(grep -oP '\spkgver\s=\s\K.*' .SRCINFO)
-    mapfile -t _SOURCES < <(grep -oP '\ssource\s=\s\K.*' .SRCINFO)
-    mapfile -t _MAKEDEPENDS <  <(grep -oP '\smakedepends\s=\s\K.*' .SRCINFO)
+    # Get current commit via .CI_CONFIG and the first occurrence of a git source
+    _CURRENT_COMMIT=$(grep "CI_GIT_COMMIT=" "$package/.CI_CONFIG" | cut -f1)
+    _SOURCE=$(grep -oP '\ssource\s=\s\Kgit.*$\n?' "$package/.SRCINFO")
 
-    # Abort mission if sources() contains a fixed commit
+    # Abort mission if source contains a fixed commit
     for fragment in branch commit tag revision; do
-        if [[ "${_SOURCES[*]}" == *"#$fragment="* ]]; then
+        if [[ "$_SOURCE" == *"#$fragment="* ]]; then
             echo "Can't update pkgver due to fixed $fragment, skipping."
             continue
         fi
     done
 
-    # Account for packages that use makedeps in prepare() or pkgver()
-    if [[ "${#_MAKEDEPENDS[@]}" -gt 0 ]]; then
-        pacman -Syu --noconfirm --needed --asdeps "${_MAKEDEPENDS[@]}"
-    fi
+    # Strip git+ as ls-remote doesn't accept this kind of URL, then
+    # retrieve latest commit based on current HEAD. This makes the operation
+    # independant from any API and works with any git remote repository
+    _SRC="${_SOURCE//git+/}"
+    _NEWEST_COMMIT=$(git ls-remote "$_SRC" | grep HEAD | cut -f1)
 
-    # Download and extract sources, skipping deps
-    sudo -u ci-user -H makepkg -do
-
-    # Run pkgver function of the sourced PKGBUILD
-    sudo -u ci-user -H makepkg --printsrcinfo | tee .SRCINFO &>/dev/null
-
-    _NEW_PKGVER=$(grep -oP '\spkgver\s=\s\K.*' .SRCINFO)
-
-    if ! git diff --exit-code --quiet; then
-        git add PKGBUILD .SRCINFO
-        git commit -m "chore($package): git-version $_NEW_PKGVER [deploy $package]"
-        git push "$REPO_URL" HEAD:main || git pull --rebase && git push "$REPO_URL" HEAD:main # Env provided via GitLab CI
+    # Finally update CI_GIT_COMMIT
+    if [[ "$_NEWEST_COMMIT" != "$_CURRENT_COMMIT" ]]; then
+        if ! grep -q "CI_GIT_COMMIT=" "$package/.CI_CONFIG"; then
+            printf "\nCI_GIT_COMMIT=%s" "$_NEWEST_COMMIT" >>"$package/.CI_CONFIG"
+        else
+            sed -i "s/CI_GIT_COMMIT=.*/CI_GIT_COMMIT=$_NEWEST_COMMIT/g" "$package/.CI_CONFIG"
+        fi
     else
         echo "Package already up-to-date."
+        continue
     fi
-
-    # Cleanup stuff left behind, like sources or makedepends
-    git reset --hard HEAD
-    git clean -fd
-    pacman -Qtdq | pacman -Rns --noconfirm - || echo "No orphans left behind."
 done
+
+# Push back any changes in case of updates, triggering a rebuild for any package which had its
+# .CI_CONFIG updated
+if ! git diff --exit-code --quiet; then
+    git add .
+    git commit -m "chore(git-versions): update current git commits"
+    git push "$REPO_URL" HEAD:main || git pull --rebase && git push "$REPO_URL" HEAD:main # Env provided via GitLab CI
+else
+    echo "No changes to commit."
+fi
