@@ -43,16 +43,17 @@ There are cases of deprecated packages, which serve no purpose anymore and also 
 These can be handled by adding the package to `conflicts()` of `garuda-common-settings` and [auto-pacman](https://gitlab.com/garuda-linux/pkgbuilds/-/blob/main/garuda-update/auto-pacman?ref_type=heads#L10)
 of `garuda-update`. The result is that the offending package gets removed automatically due to the conflict.
 
-## Deployments
+## CI
 
 ### General
 
-Deployments may automatically be triggered by appending `[deploy *]` to the commit message. Unlike the PKGBUILD checks, these are only available for commits on the `main` branch. Supported are:
+Deployments may automatically be triggered by either changing content inside a PKGBUILD directory or appending `[deploy *]` to the commit message.
+Unlike the PKGBUILD checks, these are only available for commits on the `main` branch. Supported are:
 
 - `[deploy all]`: Deploys a full `garuda` routine, meaning all PKGBUILDs in this repository.
-- `[deploy pkgname]`: Deploys the package `pkgname`, which means that by replacing this with `garuda-bash-settings`, one would deploy `garuda-bash-settings`.
+- `[deploy $pkgname]`: Deploys the package `pkgname`, which means that by replacing this with `garuda-bash-settings`, one would deploy `garuda-bash-settings`.
 
-Once any of those combinations gets detected, the deployment starts after `shfmt` and `shellcheck` checks are completed successfully.
+Once any of those combinations gets detected, the deployment starts after a few checks are completed successfully.
 Logs of past deployments may be inspected via the [Pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section.
 
 ### Automated bumps
@@ -69,10 +70,64 @@ That means it is sufficient to push a new tag in order to trigger the deployment
 The latest runs of this job may be inspected by browsing the [pipelines](https://gitlab.com/garuda-linux/pkgbuilds/-/pipelines) section, every pipeline with the _scheduled_ badge was executed by the timer.
 Additionally, the pipeline can be triggered manually by browsing the [pipeline schedules](https://gitlab.com/garuda-linux/pkgbuilds/-/pipeline_schedules) section and hitting _run pipeline schedule_.
 
-## The VERSIONS file
+### Manually updating versions
 
-In this file, all current packages and their corresponding versions are listed. The file is maintained by GitLab CI, so it will be automatically updated.
-To-do: report proper versions for `-git` packages.
+For some PKGBUILDs, like `garuda-fish-config`, all files reside in this repository.
+**When updating PKGBUILDs, please ensure to also update the corresponding `.SRCINFO` file as this one is used to parse all package related information!**
+
+### .CI_CONFIG
+
+The `.CI_CONFIG` file inside each package directory contains additional flags to control the pipelines and build processes with.
+
+- `CI_GIT_COMMIT`: Used by CI to determine whether the latest commit changed. Used by `fetch-gitsrc` to schedule new builds.
+- `CI_IS_GIT_SOURCE`: By setting this to `1`, the `fetch-gitsrc` job will check out the latest git commit of the source and compare it with the value recorded in `CI_GIT_COMMIT`.
+  If it differs, schedules a build.
+  This is useful for packages which use `pkgver()` to set their version without being having `-git` or another VCS package suffix.
+- `CI_MANAGE_AUR`: By setting this variable to `1`, the CI will update the corresponding AUR repository at the end of a pipeline run if changes occurred (omitting CI-related files)
+- `CI_PKGREL`: Controls package bumps for all packages which don't have `CI_MANAGE_AUR` set to `1`. It increases `pkgrel` by `0.1` for every `+1` increase of this variable.
+- `CI_PKGBUILD_SOURCE`: _Not yet implemented_ - once implemented, this is meant to replace the place to set PKGBUILD sources, currently happening via the `SOURCES` file.
+
+### Managing AUR packages
+
+AUR packages can also be managed via this repository in an automated way using `.CI_CONFIG`. See the above section for details.
+
+### Jobs
+
+These generally execute scripts found in the `.ci` folder.
+
+- Check PKGBUILD:
+  - Checks PKGBUILD for superficial issues via `namcap` and `aura`
+- Check rebuild:
+  - Checks whether packages known to be causing rebuilds have been updated
+  - Updates `pkgrel` for affected packages and pushes changes back to this repo
+  - This triggers another pipeline run which schedules the corresponding builds
+- Fetch Git sources:
+  - Checks whether the latest git commit differs from the one found in `.CI_CONFIG`, updating it in case it changed.
+    Changes are then pushed back to this repo
+  - This also triggers another pipeline run
+- Lint:
+  - Lints scripts, configs and PKGBUILDs via a set of linters
+- Manage AUR:
+  - Checks `.CI_CONFIG` in each PKGBUILDs folder for whether a package is meant to be managed on the AUR side
+  - Clones the AUR repo and updates files with current versions of this repo
+  - Pushes changes back
+- Schedule package:
+  - Checks for a list of changes between the last two commits
+  - Checks whether a `[deploy]` string exists in the commit message or PKGBUILD directories changed
+  - In either case a list of packages to be scheduled for a build gets created
+  - Schedules all changed packages for a build via Chaotic Manager
+
+### Chaotic Manager
+
+This tool is distributed as Docker containers and consists of a pair of manager and builder instances.
+
+- Manager: `registry.gitlab.com/garuda-linux/tools/chaotic-manager/manager`
+- Builder: `registry.gitlab.com/garuda-linux/tools/chaotic-manager/builder`
+  - This one contains the actual logic behind package builds (seen [here](https://gitlab.com/garuda-linux/tools/chaotic-manager/-/tree/main/builder-container?ref_type=heads)) known from infra 3.0 like `interfere.sh`, `database.sh` etc.
+  - Picks packages to build from the Redis instance managed by the manager instance
+
+The manager is used by GitLab CI in the `schedule-package` job, scheduling packages by adding it to the build queue.
+The builder can be used by any machine capable of running the container. It will pick available jobs from our central Redis instance.
 
 ## Development setup
 
