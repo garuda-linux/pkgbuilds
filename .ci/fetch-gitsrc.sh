@@ -6,30 +6,42 @@ command -v git &>/dev/null || echo "Git is not installed!"
 mapfile -t _PACKAGES < <(find . -mindepth 1 -type d -prune | sed -e '/.\./d' -e 's/.\///g')
 mapfile -t _VCS_PKG < <(printf '%s\n' "${_PACKAGES[@]}" | sed '/-git/!d')
 
+# Also add those to the list, which don't have -git in the pkgname but should be 
+# treated as such nevertheless according to .CI_CONFIG 
+for package in "${_PACKAGES[@]}"; do
+    if (grep -q "CI_IS_GIT_SOURCE=" "$package/.CI_CONFIG" &>/dev/null); then
+        _VCS_PKG+=("$package")
+    fi
+done
+
 for package in "${_VCS_PKG[@]}"; do
     printf "\nChecking %s...\n" "$package"
 
-    # Get current commit via .CI_CONFIG and the first occurrence of a git source
-    _CURRENT_COMMIT=$(grep "CI_GIT_COMMIT=" "$package/.CI_CONFIG" | cut -f1)
-    _SOURCE=$(grep -oP '\ssource\s=\s\Kgit.*$\n?' "$package/.SRCINFO")
+    # Get git source of the package
+    _SOURCE=$(grep -oP '\ssource\s=\s.*git\+\K.*$' "$package/.SRCINFO")
 
     # Abort mission if source contains a fixed commit
     for fragment in branch commit tag revision; do
         if [[ "$_SOURCE" == *"#$fragment="* ]]; then
             echo "Can't update pkgver due to fixed $fragment, skipping."
-            continue
+            _ABORT_MISSION=1
+            break
         fi
     done
 
-    # Strip git+ as ls-remote doesn't accept this kind of URL, then
-    # retrieve latest commit based on current HEAD. This makes the operation
+    # Skip this package if the previous for loop determined its necessary
+    [[ "$_ABORT_MISSION" == 1 ]] && _ABORT_MISSION=0 && continue
+
+    # Get current commit via .CI_CONFIG
+    [[ -f "$package/.CI_CONFIG" ]] && _CURRENT_COMMIT=$(grep "CI_GIT_COMMIT=" "$package/.CI_CONFIG" | cut -f1)
+
+    # Retrieve latest commit based on current HEAD. This makes the operation
     # independant from any API and works with any git remote repository
-    _SRC="${_SOURCE//git+/}"
-    _NEWEST_COMMIT=$(git ls-remote "$_SRC" | grep HEAD | cut -f1)
+    _NEWEST_COMMIT=$(git ls-remote "$_SOURCE" | grep HEAD | cut -f1)
 
     # Finally update CI_GIT_COMMIT
     if [[ "$_NEWEST_COMMIT" != "$_CURRENT_COMMIT" ]]; then
-        if ! grep -q "CI_GIT_COMMIT=" "$package/.CI_CONFIG"; then
+        if ! (grep -q "CI_GIT_COMMIT=" "$package/.CI_CONFIG" &>/dev/null); then
             printf "\nCI_GIT_COMMIT=%s" "$_NEWEST_COMMIT" >>"$package/.CI_CONFIG"
         else
             sed -i "s/CI_GIT_COMMIT=.*/CI_GIT_COMMIT=$_NEWEST_COMMIT/g" "$package/.CI_CONFIG"
