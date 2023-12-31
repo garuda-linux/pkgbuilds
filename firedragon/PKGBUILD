@@ -4,7 +4,7 @@
 pkgname=firedragon
 _pkgname=FireDragon
 pkgver=11.7.1
-pkgrel=9
+pkgrel=10
 pkgdesc="Floorp fork build using custom branding & settings"
 url='http://dr460nf1r3.org'
 arch=('x86_64')
@@ -182,8 +182,8 @@ END
     # Allows hiding the password manager (from the lw pref pane) / via a pref
     _patch "${_floorp_patches_dir}"/hide-passwordmgr.patch
 
-    # Update privacy preferences
-    _patch "${_patches_dir}"/custom/privacy-preferences.patch
+    # Update privacy preferences -- DISABLED to test UI changes and allow user to easily change the setting
+    # _patch "${_patches_dir}"/custom/privacy-preferences.patch
 
     rm -f "${srcdir}"/common/source_files/mozconfig
     cp -r "${srcdir}"/common/source_files/* ./
