@@ -4,7 +4,7 @@
 pkgname=firedragon
 _pkgname=FireDragon
 pkgver=11.7.1
-pkgrel=10
+pkgrel=11
 pkgdesc="Floorp fork build using custom branding & settings"
 url='http://dr460nf1r3.org'
 arch=('x86_64')
