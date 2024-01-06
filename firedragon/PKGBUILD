@@ -320,7 +320,7 @@ END
     # All the needed configuration files
     install -Dvm644 "../${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
     install -Dvm644 "${srcdir}/settings/${pkgname}.cfg" "${pkgdir}/usr/lib/${pkgname}/${pkgname}.cfg"
-    install -Dvm644 "${srcdir}/settings/${pkgname}.psd" "${pkgdir}/usr/share/psd/browsers/${pkgname}."
+    install -Dvm644 "${srcdir}/settings/${pkgname}.psd" "${pkgdir}/usr/share/psd/browsers/${pkgname}"
     install -Dvm644 "${srcdir}/settings/defaults/pref/local-settings.js" "${pkgdir}/usr/lib/${pkgname}/defaults/pref/local-settings.js"
     install -Dvm644 "${srcdir}/settings/distribution/policies.json" "${pkgdir}/usr/lib/${pkgname}/distribution/policies.json"
 }
