@@ -139,7 +139,11 @@ ac_add_options --with-system-webp
 ac_add_options --with-system-zlib
 
 # Features
-ac_add_options --disable-crashreporter
+ac_add_options --disable-crashreporter # (Minimize telemetry)
+ac_add_options --disable-parental-controls # (Disable local/OS MTIM)
+ac_add_options --disable-system-policies # (Make sure Firedragon does not obey policies system administrators set for Firefox, or, in other words, give users complete control of their browser)
+ac_add_options --enable-bundled-fonts # (CSS system fonts are normalized, to hide any customization at the OS level, or the defaults that different locales might have)
+ac_add_options --disable-update-agent
 ac_add_options --disable-debug
 ac_add_options --disable-tests
 ac_add_options --disable-updater
