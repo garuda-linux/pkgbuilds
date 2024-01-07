@@ -92,15 +92,12 @@ prepare() {
     cat >../mozconfig <<END
 ac_add_options --with-app-basename=${_pkgname}
 ac_add_options --with-app-name=${pkgname}
-
-ac_add_options --disable-crashreporter
-ac_add_options --enable-proxy-bypass-protection
 ac_add_options --with-branding=browser/branding/${pkgname}
 ac_add_options --with-l10n-base=${PWD@Q}/floorp/browser/locales/l10n-central
-
 ac_add_options --enable-application=browser
 mk_add_options MOZ_OBJDIR=${PWD@Q}/obj
 
+# Build options
 ac_add_options --disable-bootstrap
 ac_add_options --disable-elf-hack
 ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
@@ -125,8 +122,10 @@ ac_add_options --with-distribution-id=org.garudalinux
 ac_add_options --with-unsigned-addon-scopes=app,system
 export MOZILLA_OFFICIAL=1
 export MOZ_APP_REMOTINGNAME=${pkgname}
+export MOZ_CRASHREPORTER=
 export MOZ_DATA_REPORTING=
 export MOZ_REQUIRE_SIGNING=
+export MOZ_SERVICES_HEALTHREPORT=
 export MOZ_TELEMETRY_REPORTING=
 
 # System libraries
@@ -140,21 +139,32 @@ ac_add_options --with-system-zlib
 
 # Features
 ac_add_options --disable-crashreporter # (Minimize telemetry)
-## ac_add_options --disable-parental-controls # (Disable local/OS MTIM)
-## ac_add_options --disable-system-policies # (Make sure Firedragon does not obey policies system administrators set for Firefox, or, in other words, give users complete control of their browser)
-## ac_add_options --enable-bundled-fonts # (CSS system fonts are normalized, to hide any customization at the OS level, or the defaults that different locales might have)
-# ac_add_options --disable-update-agent # (Might have to wait for a more recent version of Firefox. The setting is not availabe on v115)
 ac_add_options --disable-debug
+ac_add_options --disable-debug-js-modules
+ac_add_options --disable-debug-symbols
+ac_add_options --disable-default-browser-agent
+ac_add_options --disable-gpsd
+ac_add_options --disable-necko-wifi
+ac_add_options --disable-parental-controls # (Disable local/OS MTIM)
+ac_add_options --disable-rust-tests
+ac_add_options --disable-synth-speechd
 ac_add_options --disable-tests
+# ac_add_options --disable-update-agent # (Might have to wait for a more recent version of Firefox. The setting is not availabe on v115)
 ac_add_options --disable-updater
+ac_add_options --disable-warnings-as-errors
+ac_add_options --disable-webspeech
+ac_add_options --disable-webspeechtestbackend
 ac_add_options --enable-alsa
+ac_add_options --enable-bundled-fonts # (CSS system fonts are normalized, to hide any customization at the OS level, or the defaults that different locales might have)
 ac_add_options --enable-jack
 ac_add_options --enable-jxl
+ac_add_options --enable-proxy-bypass-protection
+ac_add_options --enable-strip
 
 # Other
 export AR=llvm-ar
-export CC='clang'
-export CXX='clang++'
+export CC=clang
+export CXX=clang++
 export NM=llvm-nm
 export RANLIB=llvm-ranlib
 END
