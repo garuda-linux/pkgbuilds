@@ -1,131 +1,54 @@
 ---
-stages: [checks, update-pkgbuilds, bump-version, schedule, deploy]
+stages: [process, schedule]
 
 variables:
   BUILD_REPO: garuda
   GIT_AUTHOR_EMAIL: ci@garudalinux.org
   GIT_AUTHOR_NAME: GitLab CI
-  GIT_STRATEGY: clone
   REDIS_SSH_HOST: builds.garudalinux.org
   REDIS_SSH_PORT: 400
   REDIS_SSH_USER: package-deployer
   REPO_NAME: garuda
-  REPO_PATH: /home/package-deployer/repo/x86_64
-  REPO_URL: $CI_SERVER_PROTOCOL://gitlab-ci-token:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH.git
+  CI_HUMAN_REVIEW: "false"
+  REPO_URL: https://oauth2:$ACCESS_TOKEN@gitlab.com/garuda-linux/pkgbuilds
 
-check-lint:
-  # Check the PKGBUILD and install files for common bash anti-patterns and issues
-  stage: checks
-  image: alpine:latest
-  inherit:
-    variables: false
-  script:
-    - apk add --no-cache --upgrade bash npm py3-pip shellcheck shfmt
-    # Pass --break-system-packages since since this containers sole purpose is
-    # running 2 applications. If we get to advance this, implement a proper venv
-    - pip install --break-system-packages yamllint
-    - npm install -g markdownlint-cli
-    - bash .ci/lint.sh || true # this will likely always fail at the beginning
-  rules:
-    - changes:
-        - "*.md"
-        - "*.yaml"
-        - "*.yml"
-        - "*/*.install"
-        - "*/PKGBUILD"
-        - ".ci/*"
-      if: $BUMPVER != "1"
-
-check-pkgbuild:
-  # Check the source PKGBUILDs for common packaging mistakes
-  stage: checks
-  image: archlinux:latest
-  inherit:
-    variables: false
+default:
   before_script:
-    - pacman -Syu --noconfirm namcap
-    - pacman-key --init
-    - pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-    - pacman-key --lsign-key 3056513887B78AEB
-    - pacman -U --noconfirm https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst
-    - pacman -U --noconfirm https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst
-    - |
-      echo -e "[multilib]\\nInclude = /etc/pacman.d/mirrorlist" >>/etc/pacman.conf &&
-      echo "" >>/etc/pacman.conf &&
-      echo -e "[chaotic-aur]\\nInclude = /etc/pacman.d/chaotic-mirrorlist" >>/etc/pacman.conf &&
-      echo "" >>/etc/pacman.conf
-    - pacman -Syu --noconfirm aura
-  script:
-    - bash .ci/check-pkgbuild.sh
-  rules:
-    - changes:
-        - "*/PKGBUILD"
-      if: $BUMPVER != "1"
+    - apk add --no-cache --upgrade git bash findutils grep curl jq shfmt rsync diffutils gawk
+    - git config --global --add safe.directory "*"
+    - git remote set-url origin $REPO_URL
+    - git fetch --tags --all --depth 20
 
-check-pr-commitizen:
-  # Check the current commit message for compliance with commitizen
-  stage: checks
-  image: alpine:latest
-  inherit:
-    variables: false
-  script:
-    - apk add --no-cache --upgrade py3-pip
-    # Pass --break-system-packages since since this containers sole purpose is
-    # running 2 applications. If we get to advance this, implement a proper venv
-    - pip install --break-system-packages commitizen
-    - cz check --message "$CI_COMMIT_MESSAGE" >/tmp/cz_check || true # why does it return 1 if its actually 0?
-    - grep "successful" /tmp/cz_check # ugly hack to workaround the above issue
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
-fetch-gitsrc:
-  # Checks whether a newer commit but the one in .CI_CONFIG exists
-  # if yes, it updates the value and triggers a new build for all affected packages
-  stage: update-pkgbuilds
+on-commit:
+  stage: process
   image: alpine:latest
   script:
-    - apk add --no-cache --upgrade bash git grep
-    - git config --global user.name "$GIT_AUTHOR_NAME"
-    - git config --global user.email "$GIT_AUTHOR_EMAIL"
-    - bash .ci/fetch-gitsrc.sh
+    - .ci/on-commit.sh
+  artifacts:
+    paths:
+     - .ci/schedule-params.txt
+    expire_in: 1 hour
+  resource_group: chaotic
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER == "1"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $SCHEDULED != "1"
 
-update-pkgbuilds:
-  # This basically updates the version in the PKGBUILD and commits it,
-  # triggering an instant build of the package via commit message.
-  stage: update-pkgbuilds
+on-schedule:
+  stage: process
   image: archlinux:latest
-  script:
-    - pacman -Syu --noconfirm git jq pacman-contrib python-pipx python-platformdirs shfmt sudo
+  before_script:
+    - pacman -Syu --noconfirm --needed base-devel git jq pacman-contrib python-pipx python-platformdirs shfmt sudo
     - pipx install commitizen
-    - git config --global user.name "$GIT_AUTHOR_NAME"
-    - git config --global user.email "$GIT_AUTHOR_EMAIL"
-    - bash .ci/version-bump.sh
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER == "1"
-
-check-rebuilds:
-  # This basically updates the version in the PKGBUILD and commits it
-  # in case no major updates were detected
-  stage: update-pkgbuilds
-  image: archlinux:latest
   script:
-    - pacman -Syu --noconfirm git
-    - git clone https://gitlab.com/garuda-linux/pkgbuilds.git
-    - cd pkgbuilds
-    - git config --global user.name "$GIT_AUTHOR_NAME"
-    - git config --global user.email "$GIT_AUTHOR_EMAIL"
-    - bash .ci/check-rebuild.sh
-  variables:
-    GIT_STRATEGY: none
+    - .ci/on-schedule.sh
+  artifacts:
+    paths:
+     - .ci/schedule-params.txt
+    expire_in: 1 hour
+  resource_group: chaotic
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER == "1"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $SCHEDULED == "1"
 
-schedule-package:
-  # This script determines whether a relevant change occurred and if so, schedules a package build
-  # via the chaotic-manager container. The relevant jobs will occur as "external" jobs in the pipeline
-  # logs and will link to the build logs of the chaotic-manager container
+do-schedule:
   stage: schedule
   image:
     name: registry.gitlab.com/garuda-linux/tools/chaotic-manager/manager
@@ -134,36 +57,7 @@ schedule-package:
     - '[[ -z ${DEPLOY_KEY+x} ]] && echo "No deploy key available, backing off!" && exit 1'
     - echo "$DEPLOY_KEY" >/app/sshkey
     - chmod 400 /app/sshkey
-    - apk add --no-cache --upgrade bash git
-    - git config --global user.name "$GIT_AUTHOR_NAME"
-    - git config --global user.email "$GIT_AUTHOR_EMAIL"
   script:
-    # This script determines whether a relevant change occurred and if so, builds the package
-    # this can be triggered by either a [deploy *] commit message or changes of PKGBUILD folders
-    - bash .ci/schedule-package.sh
+    - if [ -f .ci/schedule-params.txt ]; then read -ra arr < ".ci/schedule-params.txt"; /entry_point.sh "${arr[@]}"; fi
   rules:
-    - changes:
-        - "*/PKGBUILD"
-        - "*/.CI_CONFIG"
-      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER != "1"
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_COMMIT_MESSAGE =~ /\[deploy .*\]/ && $BUMPVER != "1"
-
-push-pkgbuild:
-  stage: deploy
-  image: alpine:latest
-  before_script:
-    - '[[ -z ${AUR_KEY+x} ]] && echo "No AUR SSH key available, backing off!" && exit 1'
-    - mkdir /root/.ssh
-    - echo "$AUR_KEY" >/root/.ssh/id_rsa
-    - chmod 600 /root/.ssh/id_rsa
-    - apk add --no-cache --upgrade bash git openssh rsync
-  script:
-    - git config --global user.name "Chaotic-AUR CI"
-    - git config --global user.email "$GIT_AUTHOR_EMAIL"
-    # This script determines whether a relevant change occurred and if so, pushes the package to AUR
-    - bash .ci/manage-aur.sh
-  rules:
-    - changes:
-        - "*/.SRCINFO"
-        - "*/PKGBUILD"
-      if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $BUMPVER != "1"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
