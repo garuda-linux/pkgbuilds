@@ -15,9 +15,9 @@ variables:
 default:
   before_script:
     - apk add --no-cache --upgrade git bash findutils grep curl jq shfmt rsync diffutils gawk
-    - git config --global --add safe.directory "*"
+    - git config --global --add safe.directory "*" # fixme
     - git remote set-url origin $REPO_URL
-    - git fetch --tags --all --depth 20
+    - git fetch --tags --force --all --depth 20 # fixme
 
 on-commit:
   stage: process
