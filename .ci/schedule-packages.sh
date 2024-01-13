@@ -35,4 +35,4 @@ elif [ -v GITHUB_ACTIONS ]; then
     echo "Warning: Pipeline updates are not supported on GitHub Actions yet."
 fi
 
-echo "schedule ${EXTRA_PARAMS[*]} --repo=$REPO_NAME ${PACKAGES[@]}" >.ci/schedule-params.txt
+echo "schedule ${EXTRA_PARAMS[*]} --repo=$REPO_NAME ${PACKAGES[*]}" >.ci/schedule-params.txt
