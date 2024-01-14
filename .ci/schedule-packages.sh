@@ -21,19 +21,21 @@ if [ ${#PACKAGES[@]} -eq 0 ]; then
     exit 0
 fi
 
-# Prepend the source repo name to each package name
-for i in "${!PACKAGES[@]}"; do
-    PACKAGES[i]="${BUILD_REPO}:${PACKAGES[$i]}"
-done
-
-EXTRA_PARAMS=()
+declare -a PARAMS
+PARAMS+=("schedule" "--repo=$REPO_NAME")
 
 # Check if running on gitlab
 if [ -v GITLAB_CI ]; then
-    EXTRA_PARAMS+=("--commit")
-    EXTRA_PARAMS+=("${CI_COMMIT_SHA}:${CI_PIPELINE_ID}")
+    PARAMS+=("--commit")
+    PARAMS+=("${CI_COMMIT_SHA}:${CI_PIPELINE_ID}")
 elif [ -v GITHUB_ACTIONS ]; then
     echo "Warning: Pipeline updates are not supported on GitHub Actions yet."
 fi
 
-echo "schedule ${EXTRA_PARAMS[*]} --repo=$REPO_NAME ${PACKAGES[*]}" >.ci/schedule-params.txt
+# Prepend the source repo name to each package name and push to PARAMS
+for i in "${!PACKAGES[@]}"; do
+    PARAMS+=("${BUILD_REPO}:${PACKAGES[$i]}")
+done
+
+# Write the parameters to a file .ci/schedule-params.txt
+declare -p PARAMS >.ci/schedule-params.txt

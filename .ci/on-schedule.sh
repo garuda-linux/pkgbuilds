@@ -239,6 +239,11 @@ function update_vcs() {
     fi
 }
 
+# Collect last modified timestamps from AUR in an efficient way
+collect_aur_timestamps AUR_TIMESTAMPS
+
+mkdir "$TMPDIR/aur-pulls"
+
 # Loop through all packages to check if they need to be updated
 for package in "${PACKAGES[@]}"; do
     unset VARIABLES

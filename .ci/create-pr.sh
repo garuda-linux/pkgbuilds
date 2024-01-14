@@ -95,7 +95,7 @@ function create_github_pr() {
 	\"base\": \"${target_branch}\",
 	\"maintainer_can_modify\": true,
 	\"title\": \"chore($pkgbase): PKGBUILD modified [deploy $pkgbase]\",
-	\"body\": \"The recent update of this package requires human review!\"
+	\"body\": \"A recent update of this package requires human review! Please check whether any potentially dangerous changes were made.\"
 	}"
 
 	# No MR found, let's create a new one
@@ -130,12 +130,14 @@ function manage_branch() {
 			git reset --hard "origin/$target_branch"
 			git checkout stash -- "$pkgbase"
 			git commit -m "chore($1): PKGBUILD modified [deploy $pkgbase]"
+			git push --force-with-lease origin "$CHANGE_BRANCH"
 		fi
 	else
 		# Branch does not exist, let's create it
 		git switch -C "$branch" "origin/$target_branch"
 		git checkout stash -- "$pkgbase"
 		git commit -m "chore($1): PKGBUILD modified [deploy $pkgbase]"
+		git push --force-with-lease origin "$CHANGE_BRANCH"
 	fi
 	git stash drop
 }
@@ -164,8 +166,6 @@ else
 	echo "WARNING: Pull request creation is only supported on GitLab CI/GitHub Actions. Please disable CI_HUMAN_REVIEW." >&2
 	exit 0
 fi
-
-git push --force-with-lease origin "$CHANGE_BRANCH"
 
 # Switch back to the original branch
 git -c advice.detachedHead=false checkout "$ORIGINAL_REF"

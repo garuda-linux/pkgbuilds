@@ -26,7 +26,7 @@ on-commit:
     - .ci/on-commit.sh
   artifacts:
     paths:
-     - .ci/schedule-params.txt
+      - .ci/schedule-params.txt
     expire_in: 1 hour
   resource_group: chaotic
   rules:
@@ -42,7 +42,7 @@ on-schedule:
     - .ci/on-schedule.sh
   artifacts:
     paths:
-     - .ci/schedule-params.txt
+      - .ci/schedule-params.txt
     expire_in: 1 hour
   resource_group: chaotic
   rules:
@@ -58,6 +58,6 @@ do-schedule:
     - echo "$DEPLOY_KEY" >/app/sshkey
     - chmod 400 /app/sshkey
   script:
-    - if [ -f .ci/schedule-params.txt ]; then read -ra arr < ".ci/schedule-params.txt"; /entry_point.sh "${arr[@]}"; fi
+    - if [ -f .ci/schedule-params.txt ]; then source ".ci/schedule-params.txt"; /entry_point.sh "${PARAMS[@]}"; fi
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
