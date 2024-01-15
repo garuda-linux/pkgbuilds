@@ -1,4 +1,4 @@
-From 850e5bb16ebba0dd5327af3853706a4d461d4fff Mon Sep 17 00:00:00 2001
+From 4da9c837bd5ba2b64e77dee13b949aa1c4eebad0 Mon Sep 17 00:00:00 2001
 From: TNE <totallynotelite@gmail.com>
 Date: Mon, 22 Nov 2021 15:05:02 +0100
 Subject: [PATCH] Garuda hardcoded FS whitelist
@@ -11,7 +11,7 @@ Subject: [PATCH] Garuda hardcoded FS whitelist
  4 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/src/libcalamares/partition/FileSystem.cpp b/src/libcalamares/partition/FileSystem.cpp
-index ad4df31ed..2c91748e2 100644
+index c2aedc079..d3bd63077 100644
 --- a/src/libcalamares/partition/FileSystem.cpp
 +++ b/src/libcalamares/partition/FileSystem.cpp
 @@ -13,12 +13,19 @@
@@ -20,7 +20,7 @@ index ad4df31ed..2c91748e2 100644
  #include <QObject>
 +#include <QSet>
  
- namespace CalamaresUtils
+ namespace Calamares
  {
  namespace Partition
  {
@@ -35,10 +35,10 @@ index ad4df31ed..2c91748e2 100644
  prettyNameForFileSystemType( FileSystem::Type t )
  {
 diff --git a/src/libcalamares/partition/FileSystem.h b/src/libcalamares/partition/FileSystem.h
-index 6696f0df9..e72db07ae 100644
+index 36291e7af..9d0a882ed 100644
 --- a/src/libcalamares/partition/FileSystem.h
 +++ b/src/libcalamares/partition/FileSystem.h
-@@ -26,6 +26,8 @@ namespace CalamaresUtils
+@@ -27,6 +27,8 @@ namespace Calamares
  {
  namespace Partition
  {
@@ -48,10 +48,10 @@ index 6696f0df9..e72db07ae 100644
  
  /** @brief Returns a machine-readable identifier for the filesystem type
 diff --git a/src/modules/partition/gui/CreatePartitionDialog.cpp b/src/modules/partition/gui/CreatePartitionDialog.cpp
-index 6bde9a148..fc8dcfdf6 100644
+index d18676138..3fc7f86a2 100644
 --- a/src/modules/partition/gui/CreatePartitionDialog.cpp
 +++ b/src/modules/partition/gui/CreatePartitionDialog.cpp
-@@ -103,8 +103,9 @@ CreatePartitionDialog::CreatePartitionDialog( Device* device,
+@@ -104,8 +104,9 @@ CreatePartitionDialog::CreatePartitionDialog( Device* device,
      int defaultFsIndex = -1;
      int fsCounter = 0;
      QStringList fsNames;
@@ -63,10 +63,10 @@ index 6bde9a148..fc8dcfdf6 100644
          if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
               || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
 diff --git a/src/modules/partition/gui/EditExistingPartitionDialog.cpp b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
-index a3052b3b7..187b6d96f 100644
+index 55303d06d..6d3aadf26 100644
 --- a/src/modules/partition/gui/EditExistingPartitionDialog.cpp
 +++ b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
-@@ -88,8 +88,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( Device* device,
+@@ -97,8 +97,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( Device* device,
  
      // File system
      QStringList fsNames;
@@ -78,5 +78,5 @@ index a3052b3b7..187b6d96f 100644
          if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
               || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
 -- 
-2.34.0
+2.43.0
 
