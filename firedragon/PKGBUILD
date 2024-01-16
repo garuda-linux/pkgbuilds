@@ -3,10 +3,10 @@
 
 pkgname=firedragon
 _pkgname=FireDragon
-pkgver=11.7.1
+pkgver=11.8.0
 _floorp_core_commit="3f798e184ac18e1dfcd9939493ace09dc195fd1f"
 _floorp_l10n_commit="d9d74ed3d4a5a5d23b0a0c9ab72c04752a7d256c"
-pkgrel=20
+pkgrel=1
 pkgdesc="Floorp fork build using custom branding & settings"
 url='http://dr460nf1r3.org'
 arch=('x86_64')
@@ -72,12 +72,12 @@ source=(https://github.com/Floorp-Projects/Floorp/archive/refs/tags/v"${pkgver}"
     "common::git+https://gitlab.com/garuda-linux/firedragon/common.git"
     "settings::git+https://gitlab.com/garuda-linux/firedragon/settings.git"
     "${pkgname}.desktop")
-sha256sums=('f267ea51dbbe869f3674da1985611bc34a712a8c8c9d677feeb796fc9335d47d'
-    'SKIP'
-    'SKIP'
-    'SKIP'
-    'SKIP'
-    '53d3e743f3750522318a786befa196237892c93f20571443fdf82a480e7f0560')
+sha256sums=('d0c42d1237f185ccd217189cc09deb3bcafe9dcba1226da58dbe12340ac9b73d'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            'SKIP'
+            '53d3e743f3750522318a786befa196237892c93f20571443fdf82a480e7f0560')
 
 prepare() {
     # Floorp's shenanigan to make the build work without cloning the whole
