@@ -3,7 +3,7 @@
 
 pkgname=firedragon
 _pkgname=FireDragon
-pkgver=11.8.0
+pkgver=11.8.1
 _floorp_core_commit="3f798e184ac18e1dfcd9939493ace09dc195fd1f"
 _floorp_l10n_commit="d9d74ed3d4a5a5d23b0a0c9ab72c04752a7d256c"
 pkgrel=1
