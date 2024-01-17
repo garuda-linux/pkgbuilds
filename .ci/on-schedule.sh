@@ -4,9 +4,19 @@ set -x
 
 # This script is triggered by a scheduled pipeline
 
-# Allow makepkg to work in a non-root environment & unbreak git
-chown -R nobody:root "$CI_BUILDS_DIR"
-git config --global --add safe.directory "*"
+source .ci/util.shlib
+
+# Read config file into global variables
+UTIL_READ_CONFIG_FILE
+
+export TMPDIR="${TMPDIR:-/tmp}"
+
+git config --global user.name "$GIT_AUTHOR_NAME"
+git config --global user.email "$GIT_AUTHOR_EMAIL"
+
+if [ -v TEMPLATE_ENABLE_UPDATES ] && [ "$TEMPLATE_ENABLE_UPDATES" == "true" ]; then
+    .ci/update-template.sh && echo "Info: Updated CI template." && exit 0 || true 
+fi
 
 # Check if the scheduled tag does not exist or scheduled does not point to HEAD
 if ! [ "$(git tag -l "scheduled")" ] || [ "$(git rev-parse HEAD)" != "$(git rev-parse scheduled)" ]; then
@@ -14,20 +24,12 @@ if ! [ "$(git tag -l "scheduled")" ] || [ "$(git rev-parse HEAD)" != "$(git rev-
     exit 1
 fi
 
-# shellcheck source=/dev/null
-source .ci/util.shlib
-
-TMPDIR="${TMPDIR:-/tmp}"
-
 PACKAGES=()
 declare -A AUR_TIMESTAMPS
 MODIFIED_PACKAGES=()
 DELETE_BRANCHES=()
 UTIL_GET_PACKAGES PACKAGES
-COMMIT=false
-
-git config --global user.name "$GIT_AUTHOR_NAME"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
+COMMIT="${COMMIT:-false}"
 
 # Loop through all packages to do optimized aur RPC calls
 # $1 = Output associative array
@@ -86,7 +88,7 @@ function package_major_change() {
         return 2
     fi
 
-    if gawk -f .ci/awk/check-diff.awk <<<"$sdiff_output"; then
+    if gawk -f .ci/awk/check-diff.awk <<< "$sdiff_output"; then
         # Check the rest of the files in the folder for changes
         # Excluding PKGBUILD .SRCINFO, .gitignore, .git .CI
         # shellcheck disable=SC2046
@@ -107,7 +109,7 @@ function update_via_git() {
 
     # We always run shfmt on the PKGBUILD. Two runs of shfmt on the same file should not change anything
     shfmt -w "$TMPDIR/aur-pulls/$pkgbase/PKGBUILD"
-
+    
     if package_changed "$TMPDIR/aur-pulls/$pkgbase" "$pkgbase"; then
         if [ -v CI_HUMAN_REVIEW ] && [ "$CI_HUMAN_REVIEW" == "true" ] && package_major_change "$TMPDIR/aur-pulls/$pkgbase" "$pkgbase"; then
             echo "Warning: Major change detected in $pkgbase."
@@ -116,57 +118,6 @@ function update_via_git() {
         # Rsync: delete files in the destination that are not in the source. Exclude deleting .CI, exclude copying .git
         # shellcheck disable=SC2046
         rsync -a --delete $(UTIL_GET_EXCLUDE_LIST "--exclude") "$TMPDIR/aur-pulls/$pkgbase/" "$pkgbase/"
-    fi
-}
-
-# $1: VARIABLES
-function update_via_gitlab_api() {
-    local -n VARIABLES_VIA_GITLAB_API=${1:-VARIABLES}
-    local pkgbase="${VARIABLES_VIA_GITLAB_API[PKGBASE]}"
-
-    if ! [ -v "VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_SOURCE]" ]; then
-        return 0
-    fi
-
-    local _CI_PROJECT_PATH _CI_PROJECT_ID _LATEST _CURRENTVER
-    _CI_PROJECT_PATH="$(echo "${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_SOURCE]}" | cut -d ':' -f2)"
-    _CI_PROJECT_ID="$(echo "${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_SOURCE]}" | cut -d ':' -f3)"
-
-    _LATEST=$(curl -s "https://gitlab.com/api/v4/projects/$_CI_PROJECT_ID/repository/tags" | jq -r '.[0].name' | sed 's/v//g')
-    _CURRENTVER=$(grep -oP '\spkgver\s=\s\K.*' "$pkgbase/.SRCINFO")
-
-    if [[ "$_CURRENTVER" != "$_LATEST" ]]; then
-        # Create a temporary directory to work with
-        cd "$pkgbase" || echo "Failed to cd into $pkgbase!"
-
-        # First update pkgver, resetting pkgrel
-        echo "Updating $$pkgbase from $_CURRENTVER to $_LATEST"
-        sed -i -e "s/pkgver=.*/pkgver=$_LATEST/g" -e "s/pkgrel=.*/pkgrel=1/g" PKGBUILD
-
-        # Then update the source's checksum
-        echo "Updating checksum for $pkgbase..."
-        sudo -u nobody updpkgsums
-        echo "Generating .SRCINFO for $pkgbase..."
-        sudo -u nobody makepkg --printsrcinfo | tee .SRCINFO &>/dev/null
-
-        # Apply shfmt, which is needed because of updpkgsums changing intends
-        # and potentially failing pipelines due this
-        shfmt -d -w PKGBUILD
-
-        # Clean any source archives and similar things
-        git clean --force
-
-        # Generate a changelog between both versions to append to this commit
-        echo "Generating changelog for $pkgbase..."
-
-        git clone --depth 1 "https://gitlab.com/$_CI_PROJECT_PATH" "${TMPDIR}/gitlab-pulls/$pkgbase"
-
-        pushd "${TMPDIR}/gitlab-pulls/$pkgbase" || echo "Failed to cd into ${TMPDIR}!"
-        local CHANGELOG
-        _CHANGELOG=$(pipx run --spec commitizen cz changelog "$_CURRENTVER".."$_LATEST" --dry-run)
-        popd || echo "Failed to return to the previous directory!"
-
-        cd .. || echo "Failed to change back to the previous directory!"
     fi
 }
 
@@ -180,9 +131,7 @@ function update_pkgbuild() {
     local PKGBUILD_SOURCE="${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_SOURCE]}"
 
     # Check if the package is from the AUR
-    if [[ "$PKGBUILD_SOURCE" =~ ^gitlab:.*$ ]]; then
-        update_via_gitlab_api VARIABLES_UPDATE_PKGBUILD
-    elif [[ "$PKGBUILD_SOURCE" != aur ]]; then
+    if [[ "$PKGBUILD_SOURCE" != aur ]]; then
         update_via_git VARIABLES_UPDATE_PKGBUILD "$PKGBUILD_SOURCE"
     else
         local git_url="https://aur.archlinux.org/${pkgbase}.git"
@@ -255,7 +204,7 @@ for package in "${PACKAGES[@]}"; do
 
         if ! git diff --exit-code --quiet; then
             if [[ -v VARIABLES[CI_REQUIRES_REVIEW] ]] && [ "${VARIABLES[CI_REQUIRES_REVIEW]}" == "true" ]; then
-                "$(dirname "$(realpath "$0")")"/create-pr.sh "$package"
+                .ci/create-pr.sh "$package"
             else
                 git add .
                 if [ "$COMMIT" == "false" ]; then
@@ -274,7 +223,7 @@ for package in "${PACKAGES[@]}"; do
 done
 
 if [ ${#MODIFIED_PACKAGES[@]} -ne 0 ]; then
-    "$(dirname "$(realpath "$0")")"/schedule-packages.sh "${MODIFIED_PACKAGES[*]}"
+    .ci/schedule-packages.sh "${MODIFIED_PACKAGES[@]}"
 fi
 
 if [ "$COMMIT" = true ]; then
@@ -283,5 +232,5 @@ if [ "$COMMIT" = true ]; then
     for branch in "${DELETE_BRANCHES[@]}"; do
         git_push_args+=(":$branch")
     done
-    git push --atomic "$REPO_URL" HEAD:main +refs/tags/scheduled "${git_push_args[@]}"
+    git push --atomic origin HEAD:main +refs/tags/scheduled "${git_push_args[@]}"
 fi

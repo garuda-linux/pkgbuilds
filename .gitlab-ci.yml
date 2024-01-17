@@ -2,22 +2,13 @@
 stages: [process, schedule]
 
 variables:
-  BUILD_REPO: garuda
-  GIT_AUTHOR_EMAIL: ci@garudalinux.org
-  GIT_AUTHOR_NAME: GitLab CI
-  REDIS_SSH_HOST: builds.garudalinux.org
-  REDIS_SSH_PORT: 400
-  REDIS_SSH_USER: package-deployer
-  REPO_NAME: garuda
-  CI_HUMAN_REVIEW: "false"
-  REPO_URL: https://oauth2:$ACCESS_TOKEN@gitlab.com/garuda-linux/pkgbuilds
+  REPO_URL: https://oauth2:$ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
 
 default:
   before_script:
     - apk add --no-cache --upgrade git bash findutils grep curl jq shfmt rsync diffutils gawk
-    - git config --global --add safe.directory "*" # fixme
     - git remote set-url origin $REPO_URL
-    - git fetch --tags --force --all --depth 20 # fixme
+    - git fetch --tags --all --depth 20
 
 on-commit:
   stage: process
@@ -26,7 +17,7 @@ on-commit:
     - .ci/on-commit.sh
   artifacts:
     paths:
-      - .ci/schedule-params.txt
+     - .ci/schedule-params.txt
     expire_in: 1 hour
   resource_group: chaotic
   rules:
@@ -34,15 +25,12 @@ on-commit:
 
 on-schedule:
   stage: process
-  image: archlinux:latest
-  before_script:
-    - pacman -Syu --noconfirm --needed base-devel git jq pacman-contrib python-pipx python-platformdirs shfmt sudo
-    - pipx install commitizen
+  image: alpine:latest
   script:
     - .ci/on-schedule.sh
   artifacts:
     paths:
-      - .ci/schedule-params.txt
+     - .ci/schedule-params.txt
     expire_in: 1 hour
   resource_group: chaotic
   rules:
