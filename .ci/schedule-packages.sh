@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 set -x
 
 # This script parses the parameters passed to this script and outputs a list of package names to a file
-# since the argument is one string, we need to split the string into multiple strings
-declare -a PACKAGES
-read -ra PACKAGES <<<"$@"
 
-# shellcheck source=/dev/null
+declare -a PACKAGES
+PACKAGES=("$@")
+
 source .ci/util.shlib
 
 if [ -v "PACKAGES[0]" ] && [ "${PACKAGES[0]}" == "all" ]; then
@@ -39,3 +39,8 @@ done
 
 # Write the parameters to a file .ci/schedule-params.txt
 declare -p PARAMS >.ci/schedule-params.txt
+
+# Write necessary redis variables to file .ci/schedule-redis.txt
+for key in "REDIS_SSH_HOST" "REDIS_SSH_PORT" "REDIS_SSH_USER" "REDIS_PORT"; do
+    declare -p "$key" >>.ci/schedule-params.txt
+done

@@ -1,0 +1,63 @@
+name: On Schedule
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN || secrets.GITHUB_TOKEN }}
+
+# Controls when the workflow will run
+on:
+  schedule:
+    # Hourly
+    - cron: '0 * * * *'
+  # Manually
+  workflow_dispatch:
+
+concurrency:
+  group: chaotic
+  cancel-in-progress: false
+
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ env.ACCESS_TOKEN}}
+      - uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: shfmt jq rsync
+          version: 1.0
+      - name: Execute on-schedule tasks...
+        id: process
+        run: |
+          .ci/on-schedule.sh
+          if [ -f .ci/schedule-params.txt ]; then
+              params="$(cat .ci/schedule-params.txt)"
+              echo "SCHEDULE_PARAMS<<SCHEDULE_PARAMS_EOF" >> "$GITHUB_OUTPUT"
+              echo "$params" >> "$GITHUB_OUTPUT"
+              echo "SCHEDULE_PARAMS_EOF" >> "$GITHUB_OUTPUT"
+          fi
+    outputs:
+      SCHEDULE_PARAMS: ${{ steps.process.outputs.SCHEDULE_PARAMS }}
+  schedule:
+    runs-on: ubuntu-latest
+    needs: process
+    container:
+      image: registry.gitlab.com/garuda-linux/tools/chaotic-manager/manager
+    steps:
+      - name: Schedule jobs
+        run: |
+          [[ -z ${DEPLOY_KEY+x} ]] && echo "No deploy key available, backing off!" && exit 1
+          echo "$DEPLOY_KEY" >/app/sshkey
+          chmod 400 /app/sshkey
+          bash -c 'set -x; eval "$1";  /entry_point.sh "${PARAMS[@]}"' -- "${SCHEDULE_PARAMS}"
+        env:
+          SCHEDULE_PARAMS: ${{ needs.process.outputs.SCHEDULE_PARAMS }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+    if: ${{ needs.process.outputs.SCHEDULE_PARAMS != '' }}
+    timeout-minutes: 5

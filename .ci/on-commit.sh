@@ -2,6 +2,11 @@
 set -euo pipefail
 set -x
 
+source .ci/util.shlib
+
+# Read config file into global variables
+UTIL_READ_CONFIG_FILE
+
 # This script is used to determine which packages to build based on the recent commits and run necessary checks
 declare -A PACKAGES=()
 
@@ -102,9 +107,9 @@ if [ ${#PACKAGES[@]} -eq 0 ]; then
 else
     # Check if we have to build all packages
     if [[ -v "PACKAGES[all]" ]]; then
-        "$(dirname "$(realpath "$0")")"/schedule-packages.sh all
+        .ci/schedule-packages.sh all
     else
-        "$(dirname "$(realpath "$0")")"/schedule-packages.sh "${!PACKAGES[@]}"
+        .ci/schedule-packages.sh "${!PACKAGES[@]}"
     fi
 fi
 

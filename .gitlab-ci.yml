@@ -46,6 +46,6 @@ do-schedule:
     - echo "$DEPLOY_KEY" >/app/sshkey
     - chmod 400 /app/sshkey
   script:
-    - if [ -f .ci/schedule-params.txt ]; then source ".ci/schedule-params.txt"; /entry_point.sh "${PARAMS[@]}"; fi
+    - if [ -f .ci/schedule-params.txt ]; then set -x; source ".ci/schedule-params.txt"; /entry_point.sh "${PARAMS[@]}"; fi
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
