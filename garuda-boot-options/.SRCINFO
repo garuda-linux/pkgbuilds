@@ -1,6 +1,6 @@
 pkgbase = garuda-boot-options
 	pkgdesc = A Boot options utility for Garuda Linux
-	pkgver = 1.0.0
+	pkgver = 1.0.4
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-boot-options
 	arch = any
@@ -13,7 +13,7 @@ pkgbase = garuda-boot-options
 	depends = polkit
 	optdepends = plymouth
 	conflicts = grub-customizer
-	source = https://gitlab.com/garuda-linux/applications/garuda-boot-options/-/archive/1.0.4/garuda-boot-options-1.0.4.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/garuda-boot-options/-/archive/de641cab41d6b6a6117c6d772673fe49055b1fa2/garuda-boot-options-de641cab41d6b6a6117c6d772673fe49055b1fa2.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-boot-options

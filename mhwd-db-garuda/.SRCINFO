@@ -1,6 +1,6 @@
 pkgbase = mhwd-db-garuda
 	pkgdesc = MHWD-db backported to Archlinux with additional features and limited to DKMS drivers
-	pkgver = 1.1.0
+	pkgver = 1.1.6
 	pkgrel = 1
 	epoch = 2
 	url = https://gitlab.com/garuda-linux/applications/mhwd-db-garuda
@@ -16,7 +16,7 @@ pkgbase = mhwd-db-garuda
 	depends = mhwd-amdgpu
 	depends = mhwd-nvidia-470xx
 	depends = mhwd-nvidia-390xx
-	source = https://gitlab.com/garuda-linux/applications/mhwd-db-garuda/-/archive/1.1.6/mhwd-db-garuda-1.1.6.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/mhwd-db-garuda/-/archive/0d8a137f19e3bb0888194ea93b291b1f0847fc85/mhwd-db-garuda-0d8a137f19e3bb0888194ea93b291b1f0847fc85.tar.gz
 	source = 90-nvidia-prime-powermanagement.rules
 	source = garuda-optimus-manager-config.hook
 	source = garuda-virtualmachine-guest-config.target

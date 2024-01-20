@@ -2,12 +2,13 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver=2.6.22
+pkgver="2.6.22"
+_commit='ee4ce025de0a4e53cd53ad06c8bfaf10e2dd99b2'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/${_commit}/garuda-common-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'

@@ -3,7 +3,8 @@
 
 pkgname=performance-tweaks
 pkgdesc='Tweaks to improve performance'
-pkgver=2.1.2
+pkgver="2.1.2"
+_commit='adef2942d2254527d6124e99f57e9f612b5598b7'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -14,7 +15,7 @@ depends=('ananicy-cpp'
 	'irqbalance'
 	'preload')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks/-/archive/${_commit}/performance-tweaks-${_commit}.tar.gz")
 sha256sums=('SKIP')
 conflicts=('powersave-tweaks' 'tlp' 'auto-cpufreq' 'thermald')
 install=$pkgname.install

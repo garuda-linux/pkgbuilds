@@ -2,14 +2,15 @@
 # Contributor: Ramon Buldó <rbuldo@gmail.com>
 
 pkgname=garuda-browser-settings
-pkgver=1.2.3
+pkgver="1.2.3"
+_commit='949865a94ed0d7ce65f98825587289f6e104c461'
 pkgrel=1
 pkgdesc="Garuda Linux settings browser defaults"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings/-/archive/${_commit}/garuda-browser-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 package() {

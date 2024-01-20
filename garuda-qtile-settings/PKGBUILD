@@ -3,13 +3,14 @@
 
 pkgname=garuda-qtile-settings
 pkgdesc='Garuda Linux Qtile settings'
-pkgver=3.2.4
+pkgver="3.2.4"
+_commit='30c7f6ca8677041180ddc77f293fa6dbadc7b4b6'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings/-/archive/${_commit}/garuda-qtile-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')

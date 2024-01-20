@@ -2,7 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-boot-repair
-pkgver=1.0.2
+pkgver="1.0.2"
+_commit='d5eba1928bb0290b62ba4c5740be2cd551ced01c'
 pkgrel=1
 pkgdesc="A Grub repair utility for Garuda Linux"
 arch=('any')
@@ -11,7 +12,7 @@ license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
 makedepends=('git')
 groups=('garuda')
-source=("https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/${_commit}/garuda-boot-repair-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {

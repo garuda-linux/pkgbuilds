@@ -4,7 +4,8 @@
 
 pkgname='garuda-lxqt-kwin-settings'
 pkgdesc='Garuda Linux LXQt-Kwin settings'
-pkgver=1.1.6
+pkgver="1.1.6"
+_commit='8ff7a92260d57c7b1c47945f3405db4b7d175ff3'
 pkgrel=5
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -17,7 +18,7 @@ depends=('beautyline'
 	'plasma5-themes-sweet-full-git'
 	'ttf-fira-sans')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/${_commit}/garuda-lxqt-kwin-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 install=$pkgname.install
 provides=('garuda-desktop-settings')

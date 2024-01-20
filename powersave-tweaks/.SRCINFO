@@ -1,6 +1,6 @@
 pkgbase = powersave-tweaks
 	pkgdesc = Tweaks to preserve power on Garuda Linux
-	pkgver = 2.0.5
+	pkgver = 2.0.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/powersave-tweaks
 	arch = any
@@ -8,7 +8,7 @@ pkgbase = powersave-tweaks
 	makedepends = coreutils
 	depends = hdparm
 	conflicts = performanace-tweaks
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/powersave-tweaks/-/archive/2.0.0/powersave-tweaks-2.0.0.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/powersave-tweaks/-/archive/e5a89655bf064f34222e75cbd200d295a9cdb142/powersave-tweaks-e5a89655bf064f34222e75cbd200d295a9cdb142.tar.gz
 	sha256sums = SKIP
 
 pkgname = powersave-tweaks

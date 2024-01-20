@@ -2,7 +2,8 @@
 # Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-gamer
-pkgver=1.1.9
+pkgver="1.1.9"
+_commit='a798afe2058087ae197bb082edf84cec80f00e35'
 pkgrel=1
 pkgdesc="An application which provides makes installing gaming related utilities easy"
 arch=('any')
@@ -11,7 +12,7 @@ license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'garuda-libs')
 makedepends=('git')
 groups=('garuda')
-source=("https://gitlab.com/garuda-linux/applications/garuda-gamer/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/applications/garuda-gamer/-/archive/${_commit}/garuda-gamer-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {

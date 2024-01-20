@@ -1,12 +1,13 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-blackarch
-pkgver=1.1.0
+pkgver="1.1.0"
+_commit='311708aea580e9e140f51aa4aa56656d74d82488'
 pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-blackarch/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-blackarch/-/archive/${_commit}/garuda-blackarch-${_commit}.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Garuda BlackArch settings'
 

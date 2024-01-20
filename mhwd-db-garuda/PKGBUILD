@@ -6,7 +6,8 @@
 
 pkgname=(mhwd-db-garuda garuda-virtualmachine-guest-config garuda-video-linux-config)
 _pkgname=mhwd-db-garuda
-pkgver=1.1.6
+pkgver="1.1.6"
+_commit='0d8a137f19e3bb0888194ea93b291b1f0847fc85'
 pkgrel=1
 epoch=2
 pkgdesc="MHWD-db backported to Archlinux with additional features and limited to DKMS drivers"
@@ -16,7 +17,7 @@ url="https://gitlab.com/garuda-linux/applications/$_pkgname"
 arch=('any')
 depends=('hwinfo' 'gcc-libs' 'mhwd-nvidia' 'mhwd-ati' 'mhwd-amdgpu' 'mhwd-nvidia-470xx' 'mhwd-nvidia-390xx')
 makedepends=('git' 'cmake')
-source=("https://gitlab.com/garuda-linux/applications/mhwd-db-garuda/-/archive/$pkgver/$_pkgname-$pkgver.tar.gz"
+source=("https://gitlab.com/garuda-linux/applications/mhwd-db-garuda/-/archive/${_commit}/mhwd-db-garuda-${_commit}.tar.gz"
 	'90-nvidia-prime-powermanagement.rules'
 	'garuda-optimus-manager-config.hook'
 	'garuda-virtualmachine-guest-config.target'

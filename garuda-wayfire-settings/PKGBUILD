@@ -3,13 +3,14 @@
 
 pkgname=garuda-wayfire-settings
 pkgdesc='Garuda Linux Wayfire settings'
-pkgver=1.0.31
+pkgver="1.0.31"
+_commit='c85a4fe6c7bda2667cf94606112a5f8d06125471'
 pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings/-/archive/${_commit}/garuda-wayfire-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 depends=('beautyline'
 	'garuda-fish-config'

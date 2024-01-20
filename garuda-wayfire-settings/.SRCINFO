@@ -1,6 +1,6 @@
 pkgbase = garuda-wayfire-settings
 	pkgdesc = Garuda Linux Wayfire settings
-	pkgver = 1.0.30
+	pkgver = 1.0.31
 	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings
 	install = garuda-wayfire-settings.install
@@ -16,7 +16,7 @@ pkgbase = garuda-wayfire-settings
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
 	replaces = wayfire-default-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings/-/archive/1.0.31/garuda-wayfire-settings-1.0.31.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings/-/archive/c85a4fe6c7bda2667cf94606112a5f8d06125471/garuda-wayfire-settings-c85a4fe6c7bda2667cf94606112a5f8d06125471.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-wayfire-settings

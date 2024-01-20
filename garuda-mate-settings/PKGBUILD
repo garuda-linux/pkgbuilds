@@ -4,13 +4,14 @@
 
 pkgname=garuda-mate-settings
 pkgdesc='Garuda Linux Mate settings'
-pkgver=1.5.2
+pkgver="1.5.2"
+_commit='69625b309633cbd730dbfe33a06946f689cfae23'
 pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/${_commit}/garuda-mate-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 depends=(
 	'adapta-gtk-theme'

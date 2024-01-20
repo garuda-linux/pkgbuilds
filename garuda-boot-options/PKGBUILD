@@ -2,7 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-boot-options
-pkgver=1.0.4
+pkgver="1.0.4"
+_commit='de641cab41d6b6a6117c6d772673fe49055b1fa2'
 pkgrel=1
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
@@ -12,7 +13,7 @@ depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
 optdepends=('plymouth')
 makedepends=('git')
 groups=('garuda')
-source=("https://gitlab.com/garuda-linux/applications/garuda-boot-options/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/applications/garuda-boot-options/-/archive/${_commit}/garuda-boot-options-${_commit}.tar.gz")
 sha256sums=('SKIP')
 conflicts=('grub-customizer')
 

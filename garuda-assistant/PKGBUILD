@@ -2,7 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-assistant
-pkgver=2.7.6
+pkgver="2.7.6"
+_commit='35436ed61d8148fb18f02d0ca642c5caf8124331'
 pkgrel=1
 pkgdesc="An app which helps with all kind of system maintenance related tasks on Garuda Linux"
 arch=('x86_64')
@@ -12,7 +13,7 @@ depends=('qt5-base' 'qt5-svg' 'noto-fonts' 'xdg-utils' 'polkit' 'reflector-simpl
 optdepends=('snapper-tools')
 makedepends=('git' 'cmake' 'qt5-tools')
 groups=('garuda')
-source=("https://gitlab.com/garuda-linux/applications/garuda-assistant/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/applications/garuda-assistant/-/archive/${_commit}/garuda-assistant-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {

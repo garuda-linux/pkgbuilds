@@ -3,13 +3,14 @@
 
 pkgname=garuda-xfce-settings
 pkgdesc='Garuda Linux XFCE settings'
-pkgver=1.0.3
+pkgver="1.0.3"
+_commit='0a65ca5f6724f3503ca04585a4722e04b296c6e9'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/${_commit}/garuda-xfce-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 depends=('noto-fonts'
 	'garuda-common-settings')

@@ -2,12 +2,13 @@
 # Co-Maintainer: FGD
 
 pkgname=garuda-dr460nized
-pkgver=3.0.12
+pkgver="v3.0.12"
+_commit='d7446c08f838d1de496c94d1fdc1333c3f23c67b'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
-source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/${_commit}/garuda-dr460nized-${_commit}.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Dr460nized settings'
 install=$pkgname.install
