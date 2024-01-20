@@ -1,6 +1,6 @@
 pkgbase = garuda-setup-assistant
 	pkgdesc = A setup utility for Garuda Linux which helps setting up & installing applications
-	pkgver = 3.1.11
+	pkgver = 3.1.10
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-setup-assistant
 	arch = any
@@ -13,7 +13,7 @@ pkgbase = garuda-setup-assistant
 	depends = garuda-libs
 	depends = qt5-base
 	optdepends = pamac
-	source = garuda-setup-assistant-3.1.11.tar.gz::https://gitlab.com/garuda-linux/applications/garuda-setup-assistant/-/archive/3.1.11/garuda-setup-assistant-3.1.11.tar.gz
-	sha256sums = d4f65907929ee13868db4030241fe859f1afa988879d2d60d00a4dabc7f75152
+	source = https://gitlab.com/garuda-linux/applications/garuda-setup-assistant/-/archive/3.1.11/garuda-setup-assistant-3.1.11.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-setup-assistant

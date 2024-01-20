@@ -1,6 +1,6 @@
 pkgbase = performance-tweaks
 	pkgdesc = Tweaks to improve performance
-	pkgver = 2.1.2
+	pkgver = 2.1.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks
 	install = performance-tweaks.install
@@ -16,7 +16,7 @@ pkgbase = performance-tweaks
 	conflicts = tlp
 	conflicts = auto-cpufreq
 	conflicts = thermald
-	source = performance-tweaks-2.1.2.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks/-/archive/2.1.2/performance-tweaks-2.1.2.tar.gz
-	sha256sums = 2453da2dd2ea4b921f4d8ebe692ca2d098b67a575aa2ef08480d55d3c184bb75
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks/-/archive/2.1.2/performance-tweaks-2.1.2.tar.gz
+	sha256sums = SKIP
 
 pkgname = performance-tweaks

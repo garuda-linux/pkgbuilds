@@ -16,14 +16,14 @@ url="https://gitlab.com/garuda-linux/applications/$_pkgname"
 arch=('any')
 depends=('hwinfo' 'gcc-libs' 'mhwd-nvidia' 'mhwd-ati' 'mhwd-amdgpu' 'mhwd-nvidia-470xx' 'mhwd-nvidia-390xx')
 makedepends=('git' 'cmake')
-source=("$_pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$_pkgname-$pkgver.tar.gz"
+source=("https://gitlab.com/garuda-linux/applications/mhwd-db-garuda/-/archive/$pkgver/$_pkgname-$pkgver.tar.gz"
 	'90-nvidia-prime-powermanagement.rules'
 	'garuda-optimus-manager-config.hook'
 	'garuda-virtualmachine-guest-config.target'
 	'modules-load'
 	'garuda-nvidia-prime-powersaving.conf'
 	'nvidia-modprobe.conf')
-sha256sums=('514b014af7d675e5f19c44802a1d5f75556d0004047d313e285d2e723a9c5eaa'
+sha256sums=('SKIP'
 	'2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
 	'387a98be7c12a0edd95bd8122145e27e612fe098d349e43e5084a8f7e9134b55'
 	'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
@@ -50,7 +50,7 @@ _generateConfigForVersion() {
 }
 
 build() {
-	cd "$_pkgname-$pkgver" || exit
+	cd "$_pkgname-$_commit" || exit
 	_generateConfigForVersion templates/optimus-manager ./pci/graphic_drivers/optimus-manager latest 0
 	_generateConfigForVersion templates/nvidia-prime-render-offload ./pci/graphic_drivers/nvidia-prime-render-offload latest 31
 	_generateConfigForVersion templates/nvidia-dkms ./pci/graphic_drivers/nvidia-dkms latest 30
@@ -65,7 +65,7 @@ package_mhwd-db-garuda() {
 	provides=("mhwd-db" "mhwd-db-garuda-git")
 	conflicts=("mhwd-db" "mhwd-db-garuda-git")
 
-	cd "$_pkgname-$pkgver" || exit
+	cd "$_pkgname-$_commit" || exit
 
 	mkdir -p "${pkgdir}"/var/lib/mhwd/db
 	mkdir -p "${pkgdir}"/etc/X11/mhwd.d

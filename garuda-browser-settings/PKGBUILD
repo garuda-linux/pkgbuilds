@@ -9,11 +9,11 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('f3f4d7093eca9a38fe87bdea9d11dfe6df131ff7d86b82b0411419238ac77844')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	mkdir -p "$pkgdir"/usr/lib/{chrome,chromium,brave,{firedragon,firefox,firefox-developer-edition,librewolf,palemoon,thunderbird}/distribution}
 
 	for i in chrome chromium brave; do

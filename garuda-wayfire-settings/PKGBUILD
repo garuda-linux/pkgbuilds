@@ -9,8 +9,8 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('20be374aa7bcb4b0f227e257c12d0622b535e077c242ad9423d05047ea851fda')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-wayfire-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 depends=('beautyline'
 	'garuda-fish-config'
 	'ttf-fantasque-nerd'
@@ -24,7 +24,7 @@ install="$pkgname".install
 
 package() {
 	install -d "$pkgdir/etc"
-	cp -rf "$srcdir/$pkgname-$pkgver/etc" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
 	install -d "$pkgdir/usr"
-	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

@@ -7,8 +7,8 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('70b581d44bd495b2014f35e44109e4b191488ea73e821091e7a727b04f944076')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 pkgdesc='Garuda Linux GNOME settings'
 install=$pkgname.install
 provides=('garuda-desktop-settings')
@@ -16,7 +16,7 @@ conflicts=('garuda-desktop-settings')
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 	depends=('garuda-backgrounds'
 		'garuda-common-settings'
 		'gnome-themes-extra'

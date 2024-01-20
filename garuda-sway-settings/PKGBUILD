@@ -9,8 +9,8 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('6f0194024b6dd82cdf4ffa73f154fcaa37577464dc5b36ebf951c23b31244d42')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 depends=('capitaine-cursors'
 	'gtk-engine-murrine'
 	'kvantum'
@@ -27,7 +27,7 @@ conflicts=('garuda-desktop-settings')
 
 package() {
 	install -d "$pkgdir/etc"
-	cp -rf "$srcdir/$pkgname-$pkgver/etc" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
 	install -d "$pkgdir/usr"
-	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

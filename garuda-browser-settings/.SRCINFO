@@ -1,12 +1,12 @@
 pkgbase = garuda-browser-settings
 	pkgdesc = Garuda Linux settings browser defaults
-	pkgver = 1.2.3
+	pkgver = 1.2.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings
 	arch = any
 	license = GPL
 	makedepends = coreutils
-	source = garuda-browser-settings-1.2.3.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings/-/archive/1.2.3/garuda-browser-settings-1.2.3.tar.gz
-	sha256sums = f3f4d7093eca9a38fe87bdea9d11dfe6df131ff7d86b82b0411419238ac77844
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-browser-settings/-/archive/1.2.3/garuda-browser-settings-1.2.3.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-browser-settings

@@ -2,7 +2,7 @@
 # Contributor: Librewish <librewish@gmail.com>
 # shellcheck disable=SC2128
 
-pkgname=('garuda-lxqt-kwin-settings')
+pkgname='garuda-lxqt-kwin-settings'
 pkgdesc='Garuda Linux LXQt-Kwin settings'
 pkgver=1.1.6
 pkgrel=5
@@ -17,15 +17,15 @@ depends=('beautyline'
 	'plasma5-themes-sweet-full-git'
 	'ttf-fira-sans')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('670fef0fe36e943622006fc44a779329d156258b1b12319986e3894f5e57fa79')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/"$pkgname"-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/"$pkgname"-$_commit/etc "$pkgdir"
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/"$pkgname"-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/"$pkgname"-$_commit/usr "$pkgdir"
 }

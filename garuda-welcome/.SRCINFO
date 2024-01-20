@@ -1,6 +1,6 @@
 pkgbase = garuda-welcome
 	pkgdesc = A Welcome app for Garuda Linux
-	pkgver = 1.2.10
+	pkgver = 1.2.5
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-welcome
 	arch = any
@@ -17,7 +17,7 @@ pkgbase = garuda-welcome
 	optdepends = qwikaccess
 	optdepends = garuda-gamer
 	optdepends = garuda-boot-options
-	source = garuda-welcome-1.2.10.tar.gz::https://gitlab.com/garuda-linux/applications/garuda-welcome/-/archive/1.2.10/garuda-welcome-1.2.10.tar.gz
-	sha256sums = deea7c299c6e8861d0c72ecb0e0f5e9b92d2314002ccbc51903848049f0f0e29
+	source = https://gitlab.com/garuda-linux/applications/garuda-welcome/-/archive/1.2.10/garuda-welcome-1.2.10.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-welcome

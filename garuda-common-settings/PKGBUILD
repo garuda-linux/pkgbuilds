@@ -7,8 +7,8 @@ pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('1af0024fdb53a3e6560a5d78ee7db9c07670589c42530c40e23ac0f1ab2dbeef')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
 	'garuda-bash-config'
@@ -32,9 +32,9 @@ install=$pkgname.install
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 
 	# Fix permissions
 	chmod -R 750 "$pkgdir"/etc/sudoers.d/

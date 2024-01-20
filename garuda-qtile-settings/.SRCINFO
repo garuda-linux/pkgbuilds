@@ -1,6 +1,6 @@
 pkgbase = garuda-qtile-settings
 	pkgdesc = Garuda Linux Qtile settings
-	pkgver = 3.2.4
+	pkgver = 3.2.3
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings
 	install = garuda-qtile-settings.install
@@ -9,7 +9,7 @@ pkgbase = garuda-qtile-settings
 	makedepends = coreutils
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = garuda-qtile-settings-3.2.4.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings/-/archive/3.2.4/garuda-qtile-settings-3.2.4.tar.gz
-	sha256sums = 9f8eb462cd1649d9a95b8233854caae202fa6a51ff3d0279f5c67ed2e370fa05
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings/-/archive/3.2.4/garuda-qtile-settings-3.2.4.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-qtile-settings

@@ -10,11 +10,11 @@ license=('GPL')
 depends=('qt5-base' 'garuda-hotfixes' 'knotifications5' 'garuda-libs' 'snapper-tools')
 makedepends=('qt5-tools' 'cmake' 'git' 'polkit')
 replaces=(garuda-settings-manager-knotifier-git garuda-settings-manager-notifier-git)
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('db327e3ec8343355ef0b4477b075eea9d9815b03fede859adafbcf1da118d3c0')
+source=("https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 build() {
-	cmake -B build -S "$pkgname-$pkgver" \
+	cmake -B build -S "$pkgname-$_commit" \
 		-DCMAKE_BUILD_TYPE='Release' \
 		-DCMAKE_INSTALL_PREFIX='/usr' \
 		-Wno-dev
@@ -24,7 +24,7 @@ build() {
 package() {
 	make -C build DESTDIR="$pkgdir" install
 
-	cd "$pkgname-$pkgver" || exit
+	cd "$pkgname-$_commit" || exit
 	install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
 	install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
 	install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"

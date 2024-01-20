@@ -14,12 +14,12 @@ depends=('ananicy-cpp'
 	'irqbalance'
 	'preload')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('2453da2dd2ea4b921f4d8ebe692ca2d098b67a575aa2ef08480d55d3c184bb75')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/performance-tweaks/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 conflicts=('powersave-tweaks' 'tlp' 'auto-cpufreq' 'thermald')
 install=$pkgname.install
 
 package() {
 	install -d "$pkgdir"/usr/lib
-	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }

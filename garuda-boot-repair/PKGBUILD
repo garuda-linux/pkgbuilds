@@ -11,16 +11,16 @@ license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
 makedepends=('git')
 groups=('garuda')
-source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('b17208bc113c805634bf63ff9a33afbbb1a5387f568c3935669d90e8edbd5c11')
+source=("https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	qmake-qt5 "$pkgname".pro
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	make INSTALL_ROOT="$pkgdir" install
 }

@@ -10,8 +10,8 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('fcdaaaa8f9c3aff4d6b67bf9be2d956a1c65b0d0c0bb168842e5371c9a63300e')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 depends=(
 	'adapta-gtk-theme'
 	'beautyline'
@@ -30,7 +30,7 @@ install=$pkgname.install
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }

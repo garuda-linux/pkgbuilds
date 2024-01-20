@@ -7,8 +7,8 @@ pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('2f447caeaa6ffb0e1e9df8198184227f00ce072641a2360666c194e68118bce8')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 pkgdesc='Dr460nized settings'
 install=$pkgname.install
 provides=('garuda-desktop-settings')
@@ -17,9 +17,9 @@ replaces=('garuda-dr460nized-next')
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 	depends=('beautyline'
 		'garuda-common-settings'
 		'garuda-icons'

@@ -9,8 +9,8 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('c0901926e04aa2cbdbefa205312b3276253734b614d811427a4ae1d0cecc44c6')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 depends=('noto-fonts'
 	'garuda-common-settings')
 provides=('garuda-desktop-settings')

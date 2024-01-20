@@ -11,16 +11,16 @@ license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot' 'traceroute' 'wireless_tools')
 makedepends=('git')
 groups=('garuda')
-source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('bd62f929c197021171247122d3acbec3f50f87eac4bbd9696935e936b4c2dd26')
+source=("https://gitlab.com/garuda-linux/applications/garuda-network-assistant/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	qmake-qt5 $pkgname.pro
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	make INSTALL_ROOT="$pkgdir" install
 }

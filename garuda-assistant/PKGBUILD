@@ -12,12 +12,12 @@ depends=('qt5-base' 'qt5-svg' 'noto-fonts' 'xdg-utils' 'polkit' 'reflector-simpl
 optdepends=('snapper-tools')
 makedepends=('git' 'cmake' 'qt5-tools')
 groups=('garuda')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('b58ba6078c10ec4de6f76e573b7eb6ac35836e3cb8f6fd38956b3dd516509e9e')
+source=("https://gitlab.com/garuda-linux/applications/garuda-assistant/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 build() {
 	cd "$srcdir" || exit
-	cmake -B build -S "$pkgname-$pkgver" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
+	cmake -B build -S "$pkgname-$_commit" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
 	make -C build
 }
 

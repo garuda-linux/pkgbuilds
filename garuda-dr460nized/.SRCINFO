@@ -1,6 +1,6 @@
 pkgbase = garuda-dr460nized
 	pkgdesc = Dr460nized settings
-	pkgver = 3.0.11
+	pkgver = 3.0.10
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
 	install = garuda-dr460nized.install
@@ -9,8 +9,8 @@ pkgbase = garuda-dr460nized
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
 	replaces = garuda-dr460nized-next
-	source = garuda-dr460nized-3.0.11.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/3.0.11/garuda-dr460nized-3.0.11.tar.gz
-	sha256sums = 2f447caeaa6ffb0e1e9df8198184227f00ce072641a2360666c194e68118bce8
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/3.0.11/garuda-dr460nized-3.0.11.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-dr460nized
 	depends = beautyline

@@ -11,15 +11,15 @@ depends=('garuda-common-settings')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('git')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('686ebaa58909ce4207b1a1b28863f69e0aa545a7dd419be69a648c14e0cb6971')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-i3-settings/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 install=garuda-i3-settings.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
 	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$pkgver/etc "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$pkgver/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }

@@ -12,17 +12,17 @@ depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
 optdepends=('plymouth')
 makedepends=('git')
 groups=('garuda')
-source=("$pkgname.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('e9ae1291fe666cd4b45b226153faeaa756f36697110f91faa2768932c4a3658f')
+source=("https://gitlab.com/garuda-linux/applications/garuda-boot-options/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 conflicts=('grub-customizer')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	qmake-qt5 "$pkgname".pro
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	make INSTALL_ROOT="$pkgdir" install
 }

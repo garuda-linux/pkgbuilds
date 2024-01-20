@@ -11,17 +11,17 @@ license=('GPL3')
 depends=('qt5-base' 'xdg-utils' 'garuda-libs')
 makedepends=('git')
 groups=('garuda')
-source=("$pkgname-$pkgver.tar.gz::$url/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
-sha256sums=('e94ac68a4792696be5c7af909dae5d8209db7c4f86be6c5c9c1082ec6c004c04')
+source=("https://gitlab.com/garuda-linux/applications/garuda-gamer/-/archive/$pkgver/$pkgname-$pkgver.tar.gz")
+sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	qmake-qt5 $pkgname.pro
 	make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$pkgver" || exit
+	cd "$srcdir/$pkgname-$_commit" || exit
 	make INSTALL_ROOT="$pkgdir" install
 
 	install -Dm0644 org.garuda.garuda-gamer.pkexec.policy "$pkgdir"/usr/share/polkit-1/actions/org.garuda.garuda-gamer.pkexec.policy

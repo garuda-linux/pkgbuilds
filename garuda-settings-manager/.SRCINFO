@@ -26,7 +26,7 @@ pkgbase = garuda-settings-manager
 	optdepends = garuda-settings-manager-knotifier: knotifications-based
 	conflicts = kcm-msm
 	source = https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/1.0.4/garuda-settings-manager-1.0.4.tar.gz
-	sha256sums = b91a779580ecbde00e70b004ede52c7cbf798e59097297abdf87140520ccd083
+	sha256sums = SKIP
 
 pkgname = garuda-settings-manager
 	provides = garuda-settings-manager

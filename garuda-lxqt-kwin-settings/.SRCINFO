@@ -1,6 +1,6 @@
 pkgbase = garuda-lxqt-kwin-settings
 	pkgdesc = Garuda Linux LXQt-Kwin settings
-	pkgver = 1.1.6
+	pkgver = 1.1.0
 	pkgrel = 5
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings
 	install = garuda-lxqt-kwin-settings.install
@@ -16,7 +16,7 @@ pkgbase = garuda-lxqt-kwin-settings
 	depends = ttf-fira-sans
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = garuda-lxqt-kwin-settings-1.1.6.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/1.1.6/garuda-lxqt-kwin-settings-1.1.6.tar.gz
-	sha256sums = 670fef0fe36e943622006fc44a779329d156258b1b12319986e3894f5e57fa79
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/1.1.6/garuda-lxqt-kwin-settings-1.1.6.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-lxqt-kwin-settings

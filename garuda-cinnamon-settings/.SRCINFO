@@ -1,6 +1,6 @@
 pkgbase = garuda-cinnamon-settings
 	pkgdesc = Garuda Linux Cinnamon settings
-	pkgver = 1.0.9
+	pkgver = 1.0.5
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cinnamon-settings
 	install = garuda-cinnamon-settings.install
@@ -12,7 +12,7 @@ pkgbase = garuda-cinnamon-settings
 	depends = garuda-common-settings
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = garuda-cinnamon-settings-1.0.9.tar.gz::https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cinnamon-settings/-/archive/1.0.9/garuda-cinnamon-settings-1.0.9.tar.gz
-	sha256sums = 6a9e0c06523e59d98caee0c92673eb9ea0b43ec54520512a3106f3fca3890060
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cinnamon-settings/-/archive/1.0.9/garuda-cinnamon-settings-1.0.9.tar.gz
+	sha256sums = SKIP
 
 pkgname = garuda-cinnamon-settings
