@@ -1,7 +1,6 @@
 BEGIN {
     had_pkgver = 0
     had_pkgrel = 0
-    is_sum = 0
 }
 # Check if line begins with pkgver
 /^pkgver/ {

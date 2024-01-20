@@ -121,6 +121,62 @@ function update_via_git() {
     fi
 }
 
+# $1: VARIABLES
+# $2: source
+function update_from_gitlab_tag() {
+    local -n VARIABLES_UPDATE_FROM_GITLAB_TAG=${1:-VARIABLES}
+    local pkgbase="${VARIABLES_UPDATE_FROM_GITLAB_TAG[PKGBASE]}"
+    local project_id="${2:-}"
+
+    if [ ! -f "$pkgbase/.SRCINFO" ]; then
+        echo "ERROR: $pkgbase: .SRCINFO does not exist." >&2
+        return
+    fi
+
+    local TAG_OUTPUT
+    if ! TAG_OUTPUT="$(curl --fail-with-body --silent "https://gitlab.com/api/v4/projects/${project_id}/repository/tags?order_by=version&per_page=1")" || [ -z "$TAG_OUTPUT" ]; then
+        echo "ERROR: $pkgbase: Failed to get list of tags." >&2
+        return
+    fi
+
+    local COMMIT_URL VERSION
+    COMMIT_URL="$(jq -r '.[0].commit.web_url' <<<"$TAG_OUTPUT")"
+    VERSION="$(jq -r '.[0].name' <<<"$TAG_OUTPUT")"
+    
+    if [ -z "$COMMIT_URL" ] || [ -z "$VERSION" ]; then
+        echo "ERROR: $pkgbase: Failed to get latest tag." >&2
+        return
+    fi
+
+    # Parse .SRCINFO file for PKGVER
+    local SRCINFO_PKGVER
+    if ! SRCINFO_PKGVER="$(grep -m 1 -oP '\tpkgver\s=\s\K.*$' "$pkgbase/.SRCINFO")"; then
+        echo "ERROR: $pkgbase: Failed to parse PKGVER from .SRCINFO." >&2
+        return
+    fi
+
+    # Check if the tag is different from the PKGVER
+    if [ "$VERSION" == "$SRCINFO_PKGVER" ]; then
+        return
+    fi
+
+    # Extract project URL and commit hash from commit URL
+    local DOWNLOAD_URL BASE_URL COMMIT PROJECT_NAME
+    if [[ "$COMMIT_URL" =~ ^(.*)/([^/]+)/-/commit/([^/]+)$ ]]; then
+        PROJECT_NAME="${BASH_REMATCH[2]}"
+        COMMIT="${BASH_REMATCH[3]}"
+        BASE_URL="${BASH_REMATCH[1]}/${PROJECT_NAME}/-/archive"
+    else
+        echo "ERROR: $pkgbase: Failed to parse commit URL." >&2
+        return
+    fi
+
+    shfmt -w "$pkgbase/PKGBUILD"
+
+    gawk -i inplace -f .ci/awk/update-pkgbuild.awk -v TARGET_VERSION="$VERSION" -v BASE_URL="$BASE_URL" -v TARGET_URL="${BASE_URL}/\${_commit}/${PROJECT_NAME}-\${_commit}.tar.gz" -v COMMIT="$COMMIT" "$pkgbase/PKGBUILD"
+    gawk -i inplace -f .ci/awk/update-srcinfo.awk -v TARGET_VERSION="$VERSION" -v BASE_URL="$BASE_URL" -v TARGET_URL="${BASE_URL}/${COMMIT}/${PROJECT_NAME}-${COMMIT}.tar.gz" "$pkgbase/.SRCINFO"
+}
+
 function update_pkgbuild() {
     local -n VARIABLES_UPDATE_PKGBUILD=${1:-VARIABLES}
     local pkgbase="${VARIABLES_UPDATE_PKGBUILD[PKGBASE]}"
@@ -131,8 +187,8 @@ function update_pkgbuild() {
     local PKGBUILD_SOURCE="${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_SOURCE]}"
 
     # Check if the source starts with gitlab:
-    if [[ "$PKGBUILD_SOURCE" == gitlab:* ]]; then
-        echo "Warning: $pkgbase: Automatic management via gitlab tags is not supported yet." >&2
+    if [[ "$PKGBUILD_SOURCE" =~ ^gitlab:(.*) ]]; then
+        update_from_gitlab_tag VARIABLES_UPDATE_PKGBUILD "${BASH_REMATCH[1]}"
     # Check if the package is from the AUR
     elif [[ "$PKGBUILD_SOURCE" != aur ]]; then
         update_via_git VARIABLES_UPDATE_PKGBUILD "$PKGBUILD_SOURCE"

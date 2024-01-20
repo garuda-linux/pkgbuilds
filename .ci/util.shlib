@@ -78,7 +78,7 @@ function UTIL_READ_MANAGED_PACAKGE() {
 }
 
 # Extract both the normal url and the fragment
-UTIL_GET_URI_PARTS() {
+function UTIL_GET_URI_PARTS() {
 	local netfile=$1
 
 	local fragment=${netfile#*#}
