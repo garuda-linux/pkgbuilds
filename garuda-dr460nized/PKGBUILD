@@ -2,7 +2,7 @@
 # Co-Maintainer: FGD
 
 pkgname=garuda-dr460nized
-pkgver="v3.0.12"
+pkgver="3.0.12"
 _commit='d7446c08f838d1de496c94d1fdc1333c3f23c67b'
 pkgrel=1
 arch=('any')

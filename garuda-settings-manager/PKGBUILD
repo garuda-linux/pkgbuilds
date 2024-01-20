@@ -6,7 +6,8 @@
 pkgbase=garuda-settings-manager
 pkgname=('garuda-settings-manager' 'garuda-settings-manager-kcm'
 	'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier')
-pkgver=1.0.4
+pkgver="1.0.4"
+_commit='659a606f9b576775988e3c671eb7db8d41a2fa5e'
 pkgrel=1
 pkgdesc="Garuda Linux system settings (Manjaro settings manager ported to work with Arch standards and limited to only DKMS drivers)"
 arch=('i686' 'x86_64')
@@ -19,7 +20,7 @@ optdepends=('garuda-settings-manager-notifier: qt-based'
 makedepends=('git' 'extra-cmake-modules' 'kdoctools5' 'qt5-tools' 'knotifications5'
 	'kconfigwidgets5' 'kcmutils5')
 conflicts=('kcm-msm')
-source=("https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/$pkgver/garuda-settings-manager-$pkgver.tar.gz")
+source=("https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/${_commit}/garuda-settings-manager-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
