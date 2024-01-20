@@ -3,10 +3,10 @@
 
 pkgname=firedragon
 _pkgname=FireDragon
-pkgver=11.7.1
-_floorp_core_commit="3f798e184ac18e1dfcd9939493ace09dc195fd1f"
-_floorp_l10n_commit="d9d74ed3d4a5a5d23b0a0c9ab72c04752a7d256c"
-pkgrel=20
+pkgver=11.8.1
+_floorp_core_commit=0316c35f53f80c4f417d480a404a6dda1e03fda2
+_floorp_l10n_commit=ba163047cef93ba6f96577b3c4eae42b15a7e052
+pkgrel=1
 pkgdesc="Floorp fork build using custom branding & settings"
 url='http://dr460nf1r3.org'
 arch=('x86_64')
@@ -72,7 +72,7 @@ source=(https://github.com/Floorp-Projects/Floorp/archive/refs/tags/v"${pkgver}"
     "common::git+https://gitlab.com/garuda-linux/firedragon/common.git"
     "settings::git+https://gitlab.com/garuda-linux/firedragon/settings.git"
     "${pkgname}.desktop")
-sha256sums=('f267ea51dbbe869f3674da1985611bc34a712a8c8c9d677feeb796fc9335d47d'
+sha256sums=('3c5678f0cf82aebd146c49fd73cfaf449a76da62cb5a4767bca331492f4073ed'
             'SKIP'
             'SKIP'
             'SKIP'
@@ -110,7 +110,6 @@ ac_add_options --enable-rust-simd
 ac_add_options --enable-wasm-simd
 ac_add_options --prefix=/usr
 ac_add_options --with-wasi-sysroot=/usr/share/wasi-sysroot
-export MOZ_ENABLE_WAYLAND=1
 export MOZ_INCLUDE_SOURCE_INFO=1
 export RUSTC_OPT_LEVEL=2
 
