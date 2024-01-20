@@ -20,7 +20,7 @@ install="$pkgname".install
 
 package() {
 	install -d "$pkgdir/etc"
-	cp -rf "$srcdir/$pkgname-$pkgver/etc" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
 	install -d "$pkgdir/usr"
-	cp -rf "$srcdir/$pkgname-$pkgver/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

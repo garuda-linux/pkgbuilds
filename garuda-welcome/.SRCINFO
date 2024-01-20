@@ -1,6 +1,6 @@
 pkgbase = garuda-welcome
 	pkgdesc = A Welcome app for Garuda Linux
-	pkgver = v1.2.5
+	pkgver = v1.2.4
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-welcome
 	arch = any
