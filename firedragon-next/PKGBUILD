@@ -6,7 +6,7 @@ _pkgname=FireDragon
 pkgver=11.8.1
 _floorp_core_commit=0316c35f53f80c4f417d480a404a6dda1e03fda2
 _floorp_l10n_commit=ba163047cef93ba6f96577b3c4eae42b15a7e052
-pkgrel=3
+pkgrel=5
 pkgdesc="Floorp fork build using custom branding & settings"
 url='http://dr460nf1r3.org'
 arch=('x86_64')
@@ -198,7 +198,12 @@ END
     _patch "${_floorp_patches_dir}"/hide-passwordmgr.patch
 
     # Add Firedragon Preferences Pane
-    # _patch "${_patches_dir}"/pref-pane/pref-pane-small.patch
+    _patch "${_patches_dir}"/pref-pane/pref-pane-small.patch
+    cp "${_patches_dir}/pref-pane/category-firedragon.svg" browser/themes/shared/preferences/category-firedragon.svg
+    cp "${_patches_dir}/pref-pane/firedragon.css" browser/themes/shared/preferences/firedragon.css
+    cp "${_patches_dir}/pref-pane/firedragon.inc.xhtml" browser/components/preferences/firedragon.inc.xhtml
+    cp "${_patches_dir}/pref-pane/firedragon.js" browser/components/preferences/firedragon.js
+    cat < "${_patches_dir}/pref-pane/preferences.ftl" >> browser/locales/en-US/browser/preferences/preferences.ftl
 
     # Update privacy preferences -- DISABLED to test UI changes and allow user to easily change the setting
     # _patch "${_patches_dir}"/custom/privacy-preferences.patch
@@ -336,7 +341,7 @@ END
     # All the needed configuration files
     install -Dvm644 "../${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
     install -Dvm644 "${srcdir}/settings/firedragon.cfg" "${pkgdir}/usr/lib/${pkgname}/firedragon.cfg"
-    install -Dvm644 "${srcdir}/settings/firedragon.psd" "${pkgdir}/usr/share/psd/browsers/firedragon"
+    #install -Dvm644 "${srcdir}/settings/firedragon.psd" "${pkgdir}/usr/share/psd/browsers/firedragon"
     install -Dvm644 "${srcdir}/settings/defaults/pref/local-settings.js" "${pkgdir}/usr/lib/${pkgname}/defaults/pref/local-settings.js"
     install -Dvm644 "${srcdir}/settings/distribution/policies.json" "${pkgdir}/usr/lib/${pkgname}/distribution/policies.json"
 }
