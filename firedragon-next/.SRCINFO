@@ -1,7 +1,7 @@
-pkgbase = firedragon
+pkgbase = firedragon-next
 	pkgdesc = Floorp fork build using custom branding & settings
 	pkgver = 11.8.1
-	pkgrel = 1
+	pkgrel = 3
 	url = http://dr460nf1r3.org
 	arch = x86_64
 	license = MPL2
@@ -58,19 +58,19 @@ pkgbase = firedragon
 	options = !lto
 	options = !makeflags
 	options = !strip
-	backup = usr/lib/firedragon/firedragon.cfg
-	backup = usr/lib/firedragon/distribution/policies.json
+	backup = usr/lib/firedragon-next/firedragon-next.cfg
+	backup = usr/lib/firedragon-next/distribution/policies.json
 	source = https://github.com/Floorp-Projects/Floorp/archive/refs/tags/v11.8.1.tar.gz
-	source = floorp-core::git+https://github.com/Floorp-Projects/Floorp-core
-	source = floorp-l10n-central::git+https://github.com/Floorp-Projects/Unified-l10n-central
+	source = floorp-core::git+https://github.com/Floorp-Projects/Floorp-core#commit=0316c35f53f80c4f417d480a404a6dda1e03fda2
+	source = floorp-l10n-central::git+https://github.com/Floorp-Projects/Unified-l10n-central#commit=ba163047cef93ba6f96577b3c4eae42b15a7e052
 	source = common::git+https://gitlab.com/garuda-linux/firedragon/common.git
 	source = settings::git+https://gitlab.com/garuda-linux/firedragon/settings.git
-	source = firedragon.desktop
+	source = firedragon-next.desktop
 	sha256sums = 3c5678f0cf82aebd146c49fd73cfaf449a76da62cb5a4767bca331492f4073ed
 	sha256sums = SKIP
 	sha256sums = SKIP
 	sha256sums = SKIP
 	sha256sums = SKIP
-	sha256sums = 53d3e743f3750522318a786befa196237892c93f20571443fdf82a480e7f0560
+	sha256sums = 4814fc70f49e64acfcba0a174e06dbbf58809230f03d5aedee5d8ea3ce63a170
 
-pkgname = firedragon
+pkgname = firedragon-next

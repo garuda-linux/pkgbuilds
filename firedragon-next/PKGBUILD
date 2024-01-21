@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Co-Maintainer: FGD
 
-pkgname=firedragon
+pkgname=firedragon-next
 _pkgname=FireDragon
 pkgver=11.8.1
 _floorp_core_commit=0316c35f53f80c4f417d480a404a6dda1e03fda2
@@ -77,7 +77,7 @@ sha256sums=('3c5678f0cf82aebd146c49fd73cfaf449a76da62cb5a4767bca331492f4073ed'
             'SKIP'
             'SKIP'
             'SKIP'
-            '53d3e743f3750522318a786befa196237892c93f20571443fdf82a480e7f0560')
+            '4814fc70f49e64acfcba0a174e06dbbf58809230f03d5aedee5d8ea3ce63a170')
 
 prepare() {
     # Floorp's shenanigan to make the build work without cloning the whole
@@ -92,7 +92,7 @@ prepare() {
     cat >../mozconfig <<END
 ac_add_options --with-app-basename=${_pkgname}
 ac_add_options --with-app-name=${pkgname}
-ac_add_options --with-branding=browser/branding/${pkgname}
+ac_add_options --with-branding=browser/branding/firedragon
 ac_add_options --with-l10n-base=${PWD@Q}/floorp/browser/locales/l10n-central
 ac_add_options --enable-application=browser
 mk_add_options MOZ_OBJDIR=${PWD@Q}/obj
@@ -198,7 +198,7 @@ END
     _patch "${_floorp_patches_dir}"/hide-passwordmgr.patch
 
     # Add Firedragon Preferences Pane
-    _patch "${_patches_dir}"/pref-pane/pref-pane-small.patch
+    # _patch "${_patches_dir}"/pref-pane/pref-pane-small.patch
 
     # Update privacy preferences -- DISABLED to test UI changes and allow user to easily change the setting
     # _patch "${_patches_dir}"/custom/privacy-preferences.patch
