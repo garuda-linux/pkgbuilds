@@ -3,8 +3,8 @@
 
 pkgname=garuda-xfce-settings
 pkgdesc='Garuda Linux XFCE settings'
-pkgver="1.0.3"
-_commit='0a65ca5f6724f3503ca04585a4722e04b296c6e9'
+pkgver="1.0.4"
+_commit='bc3719832e1b01a1c798913ae9332cb8fe9469c1'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"

@@ -3,8 +3,8 @@
 
 pkgname=garuda-wayfire-settings
 pkgdesc='Garuda Linux Wayfire settings'
-pkgver="1.0.31"
-_commit='c85a4fe6c7bda2667cf94606112a5f8d06125471'
+pkgver="1.0.32"
+_commit='1efb4d7507fd9c48870b098361ad1ba7f3d23d13'
 pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"

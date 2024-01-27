@@ -2,8 +2,8 @@
 # Contributor: Ramon Buldó <rbuldo@gmail.com>
 
 pkgname=garuda-browser-settings
-pkgver="1.2.3"
-_commit='949865a94ed0d7ce65f98825587289f6e104c461'
+pkgver="1.2.4"
+_commit='ef128dceff40ab8a9fc67e0a7880158634177365'
 pkgrel=1
 pkgdesc="Garuda Linux settings browser defaults"
 arch=('any')

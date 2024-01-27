@@ -1,6 +1,6 @@
 pkgbase = garuda-mate-settings
 	pkgdesc = Garuda Linux Mate settings
-	pkgver = 1.5.2
+	pkgver = 1.5.3
 	pkgrel = 3
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings
 	install = garuda-mate-settings.install
@@ -19,7 +19,7 @@ pkgbase = garuda-mate-settings
 	depends = yaru-icon-theme
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/69625b309633cbd730dbfe33a06946f689cfae23/garuda-mate-settings-69625b309633cbd730dbfe33a06946f689cfae23.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings/-/archive/559dffa41962f58e6ad13e431eb4817df71d3476/garuda-mate-settings-559dffa41962f58e6ad13e431eb4817df71d3476.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-mate-settings

@@ -4,8 +4,8 @@
 
 pkgname=garuda-cinnamon-settings
 pkgdesc='Garuda Linux Cinnamon settings'
-pkgver="1.0.9"
-_commit='be36cb8c04a98b9c75d32aa1614101c0d023d552'
+pkgver="1.0.10"
+_commit='2cfee74c984a89a22935d577644b0567a265f9d3'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"

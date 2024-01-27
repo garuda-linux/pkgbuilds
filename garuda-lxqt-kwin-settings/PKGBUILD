@@ -4,8 +4,8 @@
 
 pkgname='garuda-lxqt-kwin-settings'
 pkgdesc='Garuda Linux LXQt-Kwin settings'
-pkgver="1.1.6"
-_commit='8ff7a92260d57c7b1c47945f3405db4b7d175ff3'
+pkgver="1.1.7"
+_commit='0e146de439edaa0f15e28c997b5cc867610d78be'
 pkgrel=5
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"

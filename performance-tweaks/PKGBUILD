@@ -3,8 +3,8 @@
 
 pkgname=performance-tweaks
 pkgdesc='Tweaks to improve performance'
-pkgver="2.1.2"
-_commit='adef2942d2254527d6124e99f57e9f612b5598b7'
+pkgver="2.2.0"
+_commit='ea00da107c497bd5b87f66422c86e2386f0bbccf'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"

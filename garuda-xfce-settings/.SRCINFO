@@ -1,6 +1,6 @@
 pkgbase = garuda-xfce-settings
 	pkgdesc = Garuda Linux XFCE settings
-	pkgver = 1.0.3
+	pkgver = 1.0.4
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings
 	install = garuda-xfce-settings.install
@@ -11,7 +11,7 @@ pkgbase = garuda-xfce-settings
 	depends = garuda-common-settings
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/0a65ca5f6724f3503ca04585a4722e04b296c6e9/garuda-xfce-settings-0a65ca5f6724f3503ca04585a4722e04b296c6e9.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-xfce-settings/-/archive/bc3719832e1b01a1c798913ae9332cb8fe9469c1/garuda-xfce-settings-bc3719832e1b01a1c798913ae9332cb8fe9469c1.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-xfce-settings
