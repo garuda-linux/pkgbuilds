@@ -282,7 +282,7 @@ for package in "${PACKAGES[@]}"; do
 done
 
 if [ ${#MODIFIED_PACKAGES[@]} -ne 0 ]; then
-    .ci/schedule-packages.sh "${MODIFIED_PACKAGES[@]}"
+    .ci/schedule-packages.sh schedule "${MODIFIED_PACKAGES[@]}"
 fi
 
 if [ "$COMMIT" = true ]; then

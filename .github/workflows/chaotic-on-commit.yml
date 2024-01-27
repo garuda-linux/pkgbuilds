@@ -47,7 +47,7 @@ jobs:
           [[ -z ${DEPLOY_KEY+x} ]] && echo "No deploy key available, backing off!" && exit 1
           echo "$DEPLOY_KEY" >/app/sshkey
           chmod 400 /app/sshkey
-          bash -c 'set -x; eval "$1";  /entry_point.sh "${PARAMS[@]}"' -- "${SCHEDULE_PARAMS}"
+          bash -c 'set -x; eval "$1"; if [[ -v PARAMS_SCHEDULE ]]; then /entry_point.sh "${PARAMS_SCHEDULE[@]}"; fi; if [[ -v PARAMS_AUTOREPOREMOVE ]]; then /entry_point.sh "${PARAMS_AUTOREPOREMOVE[@]}"; fi' -- "${SCHEDULE_PARAMS}"
         env:
           SCHEDULE_PARAMS: ${{ needs.process.outputs.SCHEDULE_PARAMS }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}

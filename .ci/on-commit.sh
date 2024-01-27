@@ -82,6 +82,8 @@ function parse_changed_files() {
             local folder="${BASH_REMATCH[1]}"
             if [ -d "$folder" ]; then
                 CHANGED_ROOT_FOLDERS["$folder"]=1
+            else
+                PACKAGE_REMOVED=true
             fi
         fi
     done
@@ -91,6 +93,8 @@ function parse_changed_files() {
         echo "Executing rebuild of $folder due to changes in the folder."
     done
 }
+
+PACKAGE_REMOVED=false
 
 # Populate the array with commit info we need here
 populate_commit_info
@@ -102,14 +106,19 @@ parse_commit_messages
 parse_changed_files
 
 # Check if we have any packages to build
-if [ ${#PACKAGES[@]} -eq 0 ]; then
+if [ ${#PACKAGES[@]} -eq 0 ] && [ "$PACKAGE_REMOVED" = false ]; then
     echo "No packages to build, exiting gracefully."
 else
-    # Check if we have to build all packages
-    if [[ -v "PACKAGES[all]" ]]; then
-        .ci/schedule-packages.sh all
-    else
-        .ci/schedule-packages.sh "${!PACKAGES[@]}"
+    if [ ${#PACKAGES[@]} -ne 0 ]; then
+        # Check if we have to build all packages
+        if [[ -v "PACKAGES[all]" ]]; then
+            .ci/schedule-packages.sh schedule all
+        else
+            .ci/schedule-packages.sh schedule "${!PACKAGES[@]}"
+        fi
+    fi
+    if [ "$PACKAGE_REMOVED" = true ]; then
+        .ci/schedule-packages.sh auto-repo-remove
     fi
 fi
 
