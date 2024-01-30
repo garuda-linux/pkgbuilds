@@ -56,7 +56,7 @@ index d18676138..3fc7f86a2 100644
      int fsCounter = 0;
      QStringList fsNames;
 -    for ( auto fs : FileSystemFactory::map() )
-+    for ( auto allowed_fs : CalamaresUtils::Partition::garuda_allowed_fs )
++    for ( auto allowed_fs : Calamares::Partition::garuda_allowed_fs )
      {
 +        auto fs = FileSystemFactory::map()[ allowed_fs ];
          // We need to ensure zfs is added to the list if the zfs module is enabled
@@ -71,7 +71,7 @@ index 55303d06d..6d3aadf26 100644
      // File system
      QStringList fsNames;
 -    for ( auto fs : FileSystemFactory::map() )
-+    for ( auto allowed_fs : CalamaresUtils::Partition::garuda_allowed_fs )
++    for ( auto allowed_fs : Calamares::Partition::garuda_allowed_fs )
      {
 +        auto fs = FileSystemFactory::map()[ allowed_fs ];
          // We need to ensure zfs is added to the list if the zfs module is enabled

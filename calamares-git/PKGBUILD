@@ -28,7 +28,7 @@ source+=(git+https://github.com/calamares/calamares.git#commit=1d8a1972422d83c36
 	mhwdcfg.conf
 	chrootcfg.conf)
 sha256sums=('SKIP'
-            '961dd7a2c763496dea1c9f142d23bc1895542dc4cb7fe430097874b59b28d3b3'
+            'ac4c7e5e7a3d2aeb62462bbee17f3abeaf4d25560285da4b1b1804562f1d159f'
             'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
             'd0f3cd62124b72752cba288a6aff6730a4b476bfdc02a258479f17af7c43a9d6'

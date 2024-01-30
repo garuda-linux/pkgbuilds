@@ -1,6 +1,6 @@
 pkgbase = calamares-git
 	pkgdesc = Distribution-independent installer framework (development version)
-	pkgver = .r10513.d8a03bb34
+	pkgver = 3.3.0.r38.g1d8a19724
 	pkgrel = 1
 	url = https://github.com/calamares/calamares
 	arch = i686
@@ -29,14 +29,14 @@ pkgbase = calamares-git
 	depends = qt5-xmlpatterns
 	depends = squashfs-tools
 	depends = libpwquality
-	depends = appstream-qt
+	depends = appstream-qt5
 	depends = python
 	provides = calamares
 	provides = calamares-dev
 	conflicts = calamares
 	conflicts = calamares-dev
 	replaces = calamares-dev
-	source = git+https://github.com/calamares/calamares.git#commit=29ef9e909
+	source = git+https://github.com/calamares/calamares.git#commit=1d8a1972422d83c36f2b934c2629ae1f564c0428
 	source = garuda-fswhitelist.patch
 	source = 0001-Apply-garuda-specific-patches.patch
 	source = partition.conf
@@ -44,8 +44,8 @@ pkgbase = calamares-git
 	source = mhwdcfg.conf
 	source = chrootcfg.conf
 	sha256sums = SKIP
-	sha256sums = da0c4d0fe1b73b6cf7ad78041123c2b6daae54742f518c1b18350a58efed544c
-	sha256sums = 77ea25512a4fd09e29a69a11c2490bae69e438e16582555cde7f1b832720833c
+	sha256sums = ac4c7e5e7a3d2aeb62462bbee17f3abeaf4d25560285da4b1b1804562f1d159f
+	sha256sums = d681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c
 	sha256sums = 13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244
 	sha256sums = d0f3cd62124b72752cba288a6aff6730a4b476bfdc02a258479f17af7c43a9d6
 	sha256sums = d3d0952c6cd7684da42328fb0a4c1315d0419ea7c335988757731da8d4227e9a
