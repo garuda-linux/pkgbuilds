@@ -31,9 +31,9 @@ sha256sums=('SKIP'
             'ac4c7e5e7a3d2aeb62462bbee17f3abeaf4d25560285da4b1b1804562f1d159f'
             'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
-            'd0f3cd62124b72752cba288a6aff6730a4b476bfdc02a258479f17af7c43a9d6'
-            'd3d0952c6cd7684da42328fb0a4c1315d0419ea7c335988757731da8d4227e9a'
-            'f2d2796ca54f2c10cff7622804d9f59a2c3c2a66b23633505a5977d60d25be81')
+            '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
+            '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
+            'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
 	cd "$srcdir/calamares" || exit
