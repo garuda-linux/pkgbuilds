@@ -26,6 +26,7 @@ array set auto_replace_conflicts {
     networkmanager-fortisslvpn networkmanager-support
     ananicy-rules cachyos-ananicy-rules-git
     sweet-theme-full-git plasma5-themes-sweet-full-git
+    sweet-theme-kde-git plasma5-themes-sweet-kde-git
     jre-openjdk jdk-openjdk
     jre-openjdk-headless {jdk-openjdk jre-openjdk}
 }

@@ -12,8 +12,11 @@ minimal_pacman_conf() {
 self_update() {
 	# Let the update script self update
 	local EXTRA_PARAMS=()
-	[ "$DATABASE_UPDATED" != "true" ] && $PACMAN -Sy && DATABASE_UPDATED=true || true
-	$INT
+	if [ "$DATABASE_UPDATED" == "force" ]; then
+		$PACMAN -Syy && DATABASE_UPDATED=true || true
+	elif [ "$DATABASE_UPDATED" != "true" ]; then
+		$PACMAN -Sy && DATABASE_UPDATED=true || true
+	fi
 	[ "$DATABASE_UPDATED" != "true" ] && local MIN_PACMAN_CONF && MIN_PACMAN_CONF="$(minimal_pacman_conf)" && $PACMAN --config "$MIN_PACMAN_CONF" -Syy && EXTRA_PARAMS=("--config" "$MIN_PACMAN_CONF") || true
 	$INT
 	if $PACMAN "${EXTRA_PARAMS[@]}" -Qu garuda-update &>/dev/null; then
