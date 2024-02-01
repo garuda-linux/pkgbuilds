@@ -26,7 +26,7 @@ array set auto_replace_conflicts {
     networkmanager-fortisslvpn networkmanager-support
     ananicy-rules cachyos-ananicy-rules-git
     sweet-theme-full-git plasma5-themes-sweet-full-git
-    sweet-theme-kde-git plasma5-themes-sweet-kde-git
+    sweet-kde-theme-git plasma5-themes-sweet-kde-git
     jre-openjdk jdk-openjdk
     jre-openjdk-headless {jdk-openjdk jre-openjdk}
 }
@@ -94,7 +94,7 @@ expect {
 
 expect {
     "looking for conflicting packages" { exp_continue }
-    "Enter a number (default=1):" { if { $noconfirm } { send "1\r"; }; exp_continue }
+    "Enter a number (default=1):" { if { $noconfirm } { send "1\r"; exp_continue; } { interact -o "\r" exp_continue; } }
     -re {(\S+) and (\S+) are in conflict( \(\S+\))?\.} { parseConflicts $expect_out(1,string) $expect_out(2,string); exp_continue }
     -re {Proceed with installation.*} { if { [info exist ::env(AUTOPACMAN_LOG)] } { log_file $::env(AUTOPACMAN_LOG) }; if { $::noconfirm || $::conflictsfile_set } { send "y\r"; set noconfirm_downloading true } }
     timeout { }

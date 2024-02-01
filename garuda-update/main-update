@@ -50,13 +50,13 @@ update_mirrorlist() {
 	MIRRORLIST_TEMP="$(mktemp)"
 	if command -v rate-mirrors >/dev/null; then
 		MINLINES=10
-		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using rate-mirrors, please be patient..🍵\033[0m\n"
+		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using rate-mirrors, please be patient..🍵\033[0m"
 		# Refresh mirrorlist and make sure it actually contains content. There is a bug in rate-mirrors that creates empty files sometimes.
 		rate-mirrors --allow-root --save="$MIRRORLIST_TEMP" arch --max-delay=21600 >/dev/null || { rm "$MIRRORLIST_TEMP"; }
 		$INT
 	elif command -v reflector >/dev/null; then
 		MINLINES=5
-		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using reflector, please be patient..🍵\033[0m\n"
+		echo -e "\n\033[1;33m-->\033[1;34m Refreshing mirrorlists using reflector, please be patient..🍵\033[0m"
 		reflector --latest 10 --age 2 --fastest 10 --protocol https --sort rate --save "$MIRRORLIST_TEMP" || { rm "$MIRRORLIST_TEMP"; }
 		$INT
 	else
@@ -64,7 +64,7 @@ update_mirrorlist() {
 	fi
 
 	if [ ! -f "$MIRRORLIST_TEMP" ]; then
-		echo -e "\033[1;31m\nFailed to update mirrorlist\n\033[0m";
+		echo -e "\033[1;31mFailed to update mirrorlist\n\033[0m";
 		return
 	fi
 
@@ -72,9 +72,11 @@ update_mirrorlist() {
 		install -m644 "$MIRRORLIST_TEMP" /etc/pacman.d/mirrorlist
 		DATABASE_UPDATED="force"
 	else
-		echo -e "\033[1;31m\nNew mirrorlist does not contain enough mirrors. Skipping mirrorlist update.\n\033[0m"
-		return
+		echo -e "\033[1;31mNew mirrorlist does not contain enough mirrors. Skipping mirrorlist update.\033[0m"
 	fi
+
+	# Newline to separate the context
+	echo
 
 	rm "$MIRRORLIST_TEMP"
 }
