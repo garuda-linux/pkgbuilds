@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 # Co-Maintainer: FGD
 
-pkgname=firedragon-next
+pkgname=firedragon
 _pkgname=FireDragon
 pkgver=11.9.0
 _floorp_core_commit=cefaa9a0352456c45be6a917e6664f8ef054a68f
@@ -59,6 +59,7 @@ optdepends=('hunspell-dictionary: Spell checking'
     'speech-dispatcher: Text-to-Speech'
     'whoogle: Searching the web using a locally running Whoogle instance'
     'xdg-desktop-portal: Screensharing with Wayland')
+replaces=(firedragon-next)
 options=(!debug
     !emptydirs
     !lto
@@ -68,9 +69,7 @@ backup=("usr/lib/${pkgname}/${pkgname}.cfg"
     "usr/lib/${pkgname}/distribution/policies.json")
 source=(https://github.com/Floorp-Projects/Floorp/archive/refs/tags/v"${pkgver}".tar.gz
     "floorp-core::git+https://github.com/Floorp-Projects/Floorp-core#commit=$_floorp_core_commit"
-#    "floorp-core::git+https://github.com/Floorp-Projects/Floorp-core"
     "floorp-l10n-central::git+https://github.com/Floorp-Projects/Unified-l10n-central#commit=$_floorp_l10n_commit"
-#    "floorp-l10n-central::git+https://github.com/Floorp-Projects/Unified-l10n-central"
     "common::git+https://gitlab.com/garuda-linux/firedragon/common.git"
     "settings::git+https://gitlab.com/garuda-linux/firedragon/settings.git"
     "${pkgname}.desktop")
@@ -79,7 +78,8 @@ sha256sums=('11a7b2bfc2582220e0e0f0be90b9575249f52856fe21b55cbce9b72c516d654e'
             'SKIP'
             'SKIP'
             'SKIP'
-            '4814fc70f49e64acfcba0a174e06dbbf58809230f03d5aedee5d8ea3ce63a170')
+            '53d3e743f3750522318a786befa196237892c93f20571443fdf82a480e7f0560')
+install="${pkgname}.install"
 
 prepare() {
     # Floorp's shenanigan to make the build work without cloning the whole
@@ -343,7 +343,7 @@ END
     # All the needed configuration files
     install -Dvm644 "../${pkgname}.desktop" "${pkgdir}/usr/share/applications/${pkgname}.desktop"
     install -Dvm644 "${srcdir}/settings/firedragon.cfg" "${pkgdir}/usr/lib/${pkgname}/firedragon.cfg"
-    #install -Dvm644 "${srcdir}/settings/firedragon.psd" "${pkgdir}/usr/share/psd/browsers/firedragon"
+    install -Dvm644 "${srcdir}/settings/firedragon.psd" "${pkgdir}/usr/share/psd/browsers/firedragon"
     install -Dvm644 "${srcdir}/settings/defaults/pref/local-settings.js" "${pkgdir}/usr/lib/${pkgname}/defaults/pref/local-settings.js"
     install -Dvm644 "${srcdir}/settings/distribution/policies.json" "${pkgdir}/usr/lib/${pkgname}/distribution/policies.json"
 }
