@@ -7,6 +7,8 @@ This means we no longer use Librewolf as base, though settings and
 privacy aware feature set were kept as close to our previous setup 
 as possible.
 ${RED}To prevent potential issues, we strongly recommend to create a
-fresh browser profile. This can be done by running \"firedragon -P\" 
-in the terminal.${NC}"
+fresh browser profile: https://forum.garudalinux.org/t/34593 ${NC}"
+    if [ -f "/usr/lib/garuda/garuda.shlib" ]; then
+        garudalib_add_update_notice "Due to a rebase and major changes related to the firedragon browser, manual intervention may be required to continue using firedragon as intended. Click this link to learn more: https://forum.garudalinux.org/t/34593"
+    fi
 }
