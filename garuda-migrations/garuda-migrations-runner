@@ -128,6 +128,12 @@ apply_migrations() {
       }
       1' "/etc/default/grub" && garudalib_add_update_notice 'The "splash" (Plymouth) kernel parameter was removed from your GRUB configuration automatically to ensure system stability. Plymouth may be enabled manually again, but it is strongly recommended to keep plymouth disabled.' || true
 	fi
+
+	# Migrate FireDragon profiles
+	if [[ $(vercmp 2.5.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		/usr/share/libalpm/scripts/garuda-migrations-firedragon &&
+			garudalib_add_update_notice "Due to a rebase and major changes related to the FireDragon browser, a new browser profile has been created. Certain settings, cookies and localstorage could not be migrated automatically. More information on this topic can be found here: https://forum.garudalinux.org/t/34585."
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"

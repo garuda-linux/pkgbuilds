@@ -2,14 +2,16 @@
 
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
-pkgver=2.4.2
+pkgver=2.5.0
 pkgrel=1
 arch=('any')
 license=('GPL')
 depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
 source=(garuda-migrations-runner
+	garuda-migrations-firedragon
 	garuda-migrations.hook)
-sha256sums=('fdba9fb33b6c02e6b329883594f857f58a8e34ec1888ccf64b79355766faa650'
+sha256sums=('1a8a709c88b15b4e6a303b85fa2dc367026933fc1d7aea614ffa451546835653'
+	'babddccec733acb3e06e440d959da59d1c9c2e6be14bfe999d30646bcad2ac9e'
 	'6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65')
 
 package() {
@@ -22,4 +24,5 @@ package() {
 	install -Dm644 garuda-migrations.hook "$pkgdir"/usr/share/libalpm/hooks/00-garuda-migrations.hook
 	install -d "$pkgdir"/usr/share/libalpm/scripts
 	install -Dm755 garuda-migrations-runner "$pkgdir"/usr/share/libalpm/scripts/garuda-migrations-runner
+	install -Dm755 garuda-migrations-firedragon "$pkgdir"/usr/share/libalpm/scripts/garuda-migrations-firedragon
 }
