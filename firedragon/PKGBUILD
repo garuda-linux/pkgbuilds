@@ -35,10 +35,12 @@ makedepends=(cbindgen
     imagemagick
     imake
     inetutils
+    git
     jack
     lld
     llvm
     mesa
+    mold
     nasm
     nodejs
     python
@@ -105,7 +107,7 @@ ac_add_options --disable-bootstrap
 ac_add_options --disable-elf-hack
 ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
 ac_add_options --enable-hardening
-ac_add_options --enable-linker=lld
+ac_add_options --enable-linker=mold
 ac_add_options --enable-lto=cross,full
 ac_add_options --enable-optimize="-O3"
 ac_add_options --enable-release
