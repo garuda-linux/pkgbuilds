@@ -44,6 +44,11 @@ while IFS=: read -r name password uid gid gecos home shell; do
         continue
     fi
 
+    # We need to stop psd as it will interfere by symlinking the profile folder, resetting
+    # its creation date. This makes our script think the profile has already been migrated.
+    echo "Ensuring profile-sync-daemon for $user is stopped"
+    systemctl --user -M "$name@.host" stop psd || true
+
     # Check whether the profile has been migrated already
     if [ "$(stat -c %W "$home/.firedragon/$current_profile")" -gt "1707050168" ]; then
         echo "Browser profile creation time indicates we already migrated the profile for $name, skipping."
@@ -68,17 +73,17 @@ for home_folder in "${!HOME_FOLDERS[@]}"; do
     mkdir "$current_profile"
 
     # Move all important data between profiles
-    to_move=(places.sqlite 
-            favicons.sqlite 
-            key4.db 
-            permissions.sqlite 
-            search.json.mozlz4 
-            formhistory.sqlite
-            cookies.sqlite
-            cert9.db
-            signons.sqlite
-            content-prefs.sqlite
-            handlers.json)
+    to_move=(places.sqlite
+        favicons.sqlite
+        key4.db
+        permissions.sqlite
+        search.json.mozlz4
+        formhistory.sqlite
+        cookies.sqlite
+        cert9.db
+        signons.sqlite
+        content-prefs.sqlite
+        handlers.json)
 
     for file in "${to_move[@]}"; do
         if [ -f "$current_profile-pre-floorp-backup/$file" ]; then
