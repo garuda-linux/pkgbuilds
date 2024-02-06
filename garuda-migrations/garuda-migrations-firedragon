@@ -46,7 +46,7 @@ while IFS=: read -r name password uid gid gecos home shell; do
 
     # We need to stop psd as it will interfere by symlinking the profile folder, resetting
     # its creation date. This makes our script think the profile has already been migrated.
-    echo "Ensuring profile-sync-daemon for $user is stopped"
+    echo "Ensuring profile-sync-daemon for $name is stopped"
     systemctl --user -M "$name@.host" stop psd || true
 
     # Check whether the profile has been migrated already
