@@ -165,7 +165,7 @@ function UTIL_FETCH_AUR_TIMESTAMPS() {
     if [ ${#pkgbases[@]} -eq 0 ]; then
         return 0
     fi
-    
+
     local API_URL="https://aur.archlinux.org/rpc/v5/info"
     local first=1
 

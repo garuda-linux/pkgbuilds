@@ -11,7 +11,7 @@ env:
 on:
   schedule:
     # Hourly
-    - cron: '0 * * * *'
+    - cron: "0 * * * *"
   # Manually
   workflow_dispatch:
 
@@ -35,6 +35,7 @@ jobs:
         id: process
         run: |
           .ci/on-schedule.sh
+          # shellcheck disable=SC2129
           if [ -f .ci/schedule-params.txt ]; then
               params="$(cat .ci/schedule-params.txt)"
               echo "SCHEDULE_PARAMS<<SCHEDULE_PARAMS_EOF" >> "$GITHUB_OUTPUT"

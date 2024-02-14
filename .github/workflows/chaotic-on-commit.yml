@@ -10,7 +10,7 @@ env:
 # Controls when the workflow will run
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 concurrency:
   group: chaotic
@@ -28,6 +28,7 @@ jobs:
         id: process
         run: |
           .ci/on-commit.sh
+          # shellcheck disable=SC2129
           if [ -f .ci/schedule-params.txt ]; then
               params="$(cat .ci/schedule-params.txt)"
               echo "SCHEDULE_PARAMS<<SCHEDULE_PARAMS_EOF" >> "$GITHUB_OUTPUT"
