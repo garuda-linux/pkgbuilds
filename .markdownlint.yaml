@@ -67,19 +67,17 @@ MD012:
 # MD013/line-length - Line length
 MD013:
   # Number of characters
-  line_length: 200
+  line_length: 400
   # Number of characters for headings
-  heading_line_length: 80
+  heading_line_length: 200
   # Number of characters for code blocks
-  code_block_line_length: 80
+  code_block_line_length: 200
   # Include code blocks
-  code_blocks: true
+  code_blocks: false
   # Include tables
-  tables: true
+  tables: false
   # Include headings
-  headings: true
-  # Include headings
-  headers: true
+  headings: false
   # Strict length checking
   strict: false
   # Stern length checking

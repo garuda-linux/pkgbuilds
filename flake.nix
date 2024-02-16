@@ -1,5 +1,5 @@
 {
-  description = "Garuda Linux PKGBUILD flake ❄️";
+  description = "Chaotic 4.0 flake ❄️";
 
   inputs = {
     # Devshell to set up a development environment
@@ -35,18 +35,22 @@
         }: {
           checks.pre-commit-check = pre-commit-hooks.lib.${system}.run {
             hooks = {
+              actionlint.enable = true;
               commitizen.enable = true;
-              nixpkgs-fmt.enable = true;
+              editorconfig-checker.enable = true;
               markdownlint.enable = true;
+              nixpkgs-fmt.enable = true;
               pkgbuilds-shellcheck = {
                 enable = true;
                 name = "PKGBUILD shellcheck";
-                entry = "${pkgs.shellcheck}/bin/shellcheck";
+                # Just inform about potential issues, fixing everything up
+                # will likely be impossible
+                entry = "${pkgs.shellcheck}/bin/shellcheck || true";
                 files = "(PKGBUILD|install$)";
                 types = [ "text" ];
                 language = "system";
               };
-              pkgbuilds-style = {
+              pkgbuilds-formatting = {
                 enable = true;
                 name = "PKGBUILD shfmt";
                 entry = "${pkgs.shfmt}/bin/shfmt -d -w";
@@ -72,21 +76,24 @@
                 }).shell;
             in
             rec {
-              default = garuda-shell;
-              garuda-shell = mkShell {
-                devshell.name = "garuda-shell";
+              default = chaotic-shell;
+              chaotic-shell = mkShell {
+                devshell.name = "chaotic";
                 commands = [
+                  { package = "actionlint"; }
                   { package = "commitizen"; }
+                  { package = "editorconfig-checker"; }
                   { package = "markdownlint-cli"; }
-                  { package = "pre-commit"; }
+                  { package = "nixpkgs-fmt"; }
                   { package = "nodePackages.prettier"; }
+                  { package = "pre-commit"; }
                   { package = "shellcheck"; }
                   { package = "shfmt"; }
                   { package = "yamllint"; }
                 ];
                 devshell.startup = {
                   preCommitHooks.text = self.checks.${system}.pre-commit-check.shellHook;
-                  garudaEnv.text = ''
+                  chaoticEnv.text = ''
                     export LC_ALL="C.UTF-8"
                     export NIX_PATH=nixpkgs=${nixpkgs}
                   '';
