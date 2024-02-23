@@ -1,0 +1,31 @@
+pkgbase = garuda-dr460nized-git
+	pkgdesc = Dr460nized settings
+	pkgver = 2.0.12.r49.g1853ac8
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
+	install = garuda-dr460nized.install
+	arch = any
+	license = GPL
+	provides = garuda-desktop-settings
+	conflicts = garuda-desktop-settings
+	conflicts = plasma5-applets-window-appmenu
+	conflicts = plasma5-applets-window-buttons
+	conflicts = plasma5-applets-window-title
+	conflicts = plasma5-applets-betterinlineclock-git
+	conflicts = plasma5-wallpapers-blurredwallpaper
+	replaces = garuda-dr460nized-next
+	source = git+https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized.git#branch=plasma6
+	sha256sums = SKIP
+
+pkgname = garuda-dr460nized-git
+	depends = beautyline
+	depends = garuda-common-settings
+	depends = garuda-icons
+	depends = garuda-fish-config
+	depends = garuda-wallpapers
+	depends = ksysguard
+	depends = kvantum
+	depends = plasma6-applets-window-title
+	depends = plasma5-themes-sweet-full-git
+	depends = ttf-fira-sans
+	depends = ttf-firacode-nerd
