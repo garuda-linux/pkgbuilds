@@ -26,5 +26,4 @@ post_install() {
 post_upgrade() {
     update_fonts
     update_gtk
-    sudo -H -u $USER lookandfeeltool -a Dr460nized
 }
