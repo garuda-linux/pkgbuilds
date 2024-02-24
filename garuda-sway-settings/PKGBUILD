@@ -3,8 +3,8 @@
 
 pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
-pkgver="1.1.36"
-_commit='59590e19e16e96a87760630003b4decf5ed17de7'
+pkgver="1.1.37"
+_commit='812461c6b02b88982c22d199b172774d74816f1e'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -13,22 +13,22 @@ makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/${_commit}/garuda-sway-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 depends=('capitaine-cursors'
-	'gtk-engine-murrine'
-	'kvantum'
-	'kvantum-theme-nordic-git'
-	'nordic-darker-theme'
-	'sway'
-	'swayidle'
-	'swaylock'
-	'swaybg'
-	'tela-circle-icon-theme-git')
+    'gtk-engine-murrine'
+    'kvantum'
+    'kvantum-theme-nordic-git'
+    'nordic-darker-theme'
+    'sway'
+    'swayidle'
+    'swaylock'
+    'swaybg'
+    'tela-circle-icon-theme-git')
 install="$pkgname".install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-	install -d "$pkgdir/etc"
-	cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
-	install -d "$pkgdir/usr"
-	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
+    install -d "$pkgdir/etc"
+    cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
+    install -d "$pkgdir/usr"
+    cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }
