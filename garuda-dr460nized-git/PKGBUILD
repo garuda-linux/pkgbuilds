@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized-git
 _pkgname=garuda-dr460nized
 pkgver=2.0.12.r49.g1853ac8
-pkgrel=4
+pkgrel=5
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$_pkgname"
 license=('GPL')
