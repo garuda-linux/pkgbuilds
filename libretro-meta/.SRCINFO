@@ -1,7 +1,7 @@
 pkgbase = libretro-meta
 	pkgdesc = Meta-package for all supported Libretro emulators
 	pkgver = 1
-	pkgrel = 7
+	pkgrel = 8
 	url = libretro.org
 	install = libretro.install
 	arch = any
@@ -21,7 +21,6 @@ pkgname = libretro-meta
 	depends = libretro-core-info
 	depends = libretro-desmume
 	depends = libretro-dolphin
-	depends = libretro-duckstation
 	depends = libretro-flycast
 	depends = libretro-gambatte
 	depends = libretro-genesis-plus-gx
