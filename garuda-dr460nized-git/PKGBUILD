@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized-git
 _pkgname=garuda-dr460nized
 pkgver=2.0.12.r49.g1853ac8
-pkgrel=9
+pkgrel=10
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$_pkgname"
 license=('GPL')
@@ -33,7 +33,7 @@ package() {
         'garuda-wallpapers'
         'ksysguard'
         'kvantum'
-        #'plasma6-applets-window-buttons'
+        'plasma6-applets-window-buttons'
         'plasma6-applets-window-title'
         'plasma5-themes-sweet-full-git'
         'ttf-fira-sans'
