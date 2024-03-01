@@ -29,6 +29,11 @@ array set auto_replace_conflicts {
     sweet-kde-theme-git plasma5-themes-sweet-kde-git
     jre-openjdk jdk-openjdk
     jre-openjdk-headless {jdk-openjdk jre-openjdk}
+    plasma5-applets-window-appmenu {garuda-dr460nized-git garuda-dr460nized}
+    plasma5-applets-window-title {garuda-dr460nized-git garuda-dr460nized}
+    plasma5-applets-window-buttons {garuda-dr460nized-git garuda-dr460nized}
+    plasma5-applets-betterinlineclock-git {garuda-dr460nized-git garuda-dr460nized}
+    plasma5-wallpapers-blurredwallpaper {garuda-dr460nized-git garuda-dr460nized}
 }
 
 if { $::conflictsfile_set } {

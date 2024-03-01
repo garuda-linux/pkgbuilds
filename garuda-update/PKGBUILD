@@ -3,7 +3,7 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=4.5.1
+pkgver=4.6.0
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -15,12 +15,12 @@ source=("auto-pacman"
 	"logrotate"
 	"main-update"
 	"update-helper-scripts")
-sha512sums=('d103006abf5e9ddcc38e1461923d9b19e8380a98ba832d8b971d6dac1ab3c839d5356a953a3c41f73cd492a4b55dd35417f95451d59a91731c0ed1ae2570ad81'
+sha512sums=('df0d905f68b9e69c42059f4eb7bc7b4208b031e03c9c21f3c4e6d0f6ac7c517830a1a09a342ddbb3458500584f94d755cbbb1cc93b4b84b13c600799d319e24a'
             'd5dbe3e4a47e9b5301d1e849c54f2632540f14878e6af4f11979d74fc0be1c36321229cf5128924251431087aa42c497c0ab57e0743973c9baaeccc24114e2e1'
             'aec7bbfbf2e6c749158ab723e48e2ceb7af4712d8a10f96dea2b95e3466f3917d26b288473acffbf1b6913a22a0d671d4e17c51a8034f7c38a919ba6f27c1eab'
             'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de'
             '28421f4c0a610f15deccd1e603b1a1a2371db1d5092440ce3d4c1de9dd3d1da864d202a471e4f8d73bb7ef3feb59119ec157f298ca14542d84e02ea4e38f54c1'
-            '6529d283da520a577f996ef3aa8e1c9a7254c9e15f7d099b56062a9e3c6ac6eff499e782a78e2affab7c4d3191460a69c93aaf930a9266f8fb15f0cd0c879b2a')
+            '2efb7e9b72957dd6c48216e4714b1e02ee7c0fba091077f18ee3df2edd175ea223e63577b9c4d6bddd6bdb10d20d205e3cdd6f611646f7da8340022a4b839f3b')
 
 package() {
 	install -Dm755 garuda-update "$pkgdir"/usr/bin/garuda-update

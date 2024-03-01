@@ -1,6 +1,15 @@
 #!/bin/bash
 set -e
 
+# Hacky way to check if the package is installed
+package-exists-fast() {
+	if compgen -G "/var/lib/pacman/local/$1-*" >/dev/null; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 update_keyrings() {
 	local packages=("archlinux-keyring" "chaotic-keyring" "garuda-hotfixes")
 	if $PACMAN -Qq blackarch-keyring &>/dev/null; then
@@ -16,7 +25,14 @@ update_keyrings() {
 # If we are dealing with a more legacy garuda install, we should auto install expect to get auto-pacman working.
 install_expect() {
 	if [ -x /usr/bin/tclsh ] && [ ! -x /usr/bin/expect ]; then
-		SKIP_AUTOSNAP=1 SNAP_PAC_SKIP=y pacman -U https://archive.archlinux.org/repos/2022/04/25/extra/os/x86_64/expect-5.45.4-2-x86_64.pkg.tar.zst --noconfirm --asdeps
+		SKIP_AUTOSNAP=1 SNAP_PAC_SKIP=y $PACMAN -U https://archive.archlinux.org/repos/2022/04/25/extra/os/x86_64/expect-5.45.4-2-x86_64.pkg.tar.zst --noconfirm --asdeps
+	fi
+}
+
+remove-chaotic-kf5-dummy() {
+	# Hacky, fast way to check
+	if package-exists-fast chaotic-kf5-dummy && $PACMAN -Sddp "plasma-workspace>=6.0.0" --print-format "%v"; then
+		SNAP_PAC_SKIP=y $PACMAN -Rdd --noconfirm chaotic-kf5-dummy
 	fi
 }
 
@@ -61,6 +77,7 @@ package-replaces() {
 pre-update-routines() {
 	update_keyrings
 	install_expect
+	remove-chaotic-kf5-dummy
 }
 
 migrate-garuda-repo() {
