@@ -14,7 +14,6 @@ pkgdesc='Dr460nized settings'
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
-replaces=('garuda-dr460nized-next')
 
 package() {
 	install -d "$pkgdir"/etc

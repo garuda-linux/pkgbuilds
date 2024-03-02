@@ -14,7 +14,6 @@ pkgdesc='Dr460nized settings'
 install=$_pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings' 'plasma5-applets-window-appmenu' 'plasma5-applets-window-buttons' 'plasma5-applets-window-title' 'plasma5-applets-betterinlineclock-git' 'plasma5-wallpapers-blurredwallpaper')
-replaces=('garuda-dr460nized-next')
 
 pkgver() {
     cd "$_pkgname"
