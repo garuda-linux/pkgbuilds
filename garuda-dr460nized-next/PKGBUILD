@@ -3,7 +3,7 @@
 
 pkgname=garuda-dr460nized-next
 _pkgname=garuda-dr460nized
-pkgver=4.0.0
+pkgver=4.0.1
 _commit=53e499d42e5f02a43be781e471c5f486b73210b2
 pkgrel=1
 arch=('any')
