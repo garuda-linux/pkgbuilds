@@ -28,7 +28,7 @@ self_update() {
 		fi
 		$INT
 		if [ "$success" == "true" ]; then
-			GARUDA_UPDATE_SELFUPDATE=1 exec /usr/bin/garuda-update "$@"
+			GARUDA_UPDATE_SELFUPDATE=2 exec /usr/bin/garuda-update "$@"
 		fi
 	fi
 	# Check if we have received sigint and should exit

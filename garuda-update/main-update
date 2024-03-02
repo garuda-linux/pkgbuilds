@@ -161,6 +161,11 @@ while true; do
 		;;
 	--)
 		shift
+		# If argc == 1 and the argument is empty as well as $GARUDA_UPDATE_SELFUPDATE == 1, assume no extra arguments
+		# This is code to handle a bug in ancient versions of garuda-update
+		if [ "$GARUDA_UPDATE_SELFUPDATE" == 1 ] && [ "$#" -eq 1 ] && [ -z "$1" ]; then
+			break
+		fi
 		PACMAN_EXTRA_OPTS+=("${@}")
 		break
 		;;
