@@ -187,7 +187,7 @@ update_mirrorlist
 self_update "$@"
 
 # Run pre-update routines and hotfixes
-/usr/lib/garuda/garuda-update/update-helper-scripts pre-update-routines
+/usr/lib/garuda/garuda-update/update-helper-scripts pre-update-routines || { if [ "$?" -eq 2 ]; then self_update "$@"; fi; }
 
 pacman_args=("-Su")
 if [ "$DATABASE_UPDATED" == false ]; then pacman_args+=("-y"); elif [ "$DATABASE_UPDATED" == "force" ]; then pacman_args+=("-yy"); fi
