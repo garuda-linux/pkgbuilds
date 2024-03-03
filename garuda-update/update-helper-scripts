@@ -76,7 +76,7 @@ package-replaces() {
 	fi
 	if [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] && $PACMAN -Sddp "plasma-workspace>=6.0.0" --print-format "%v" &> /dev/null; then
 		echo --ignore
-		echo plasma5-applets-window-appmenu,plasma5-applets-window-buttons,plasma5-applets-window-title,plasma5-applets-betterinlineclock-git,plasma5-wallpapers-blurredwallpaper,garuda-dr460nized
+		echo plasma5-applets-window-appmenu,plasma5-applets-window-title,plasma5-applets-betterinlineclock-git,plasma5-wallpapers-blurredwallpaper,garuda-dr460nized
 		echo garuda-dr460nized-next
 	fi
 }
