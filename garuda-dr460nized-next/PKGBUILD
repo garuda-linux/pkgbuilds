@@ -3,8 +3,8 @@
 
 pkgname=garuda-dr460nized-next
 _pkgname=garuda-dr460nized
-pkgver=4.0.4
-_commit=d8a5108e7177c57e935e0aaa28363a76e22c9ea3
+pkgver=4.1.0
+_commit=4605601175e5757e45736c03d1726d3ab8622231
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$_pkgname"
