@@ -3,7 +3,7 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=4.7.0
+pkgver=4.7.1
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -15,7 +15,7 @@ source=("auto-pacman"
 	"logrotate"
 	"main-update"
 	"update-helper-scripts")
-sha512sums=('f564589a2ab739683f1c82f242192172b3e0c220b514912cf02eefc9b31995e3033e86ce10f485c67cce665c99cebeefa79d39f2f51a50ea16657b16ca5934db'
+sha512sums=('e1bef6cfa27c41d544cbef56be9b44769632e0fd695b703ec1398097871af4af01e2702f075697191cf13c5f672a19ba6f95973e00d197fa2565c759837b0f79'
             'd5dbe3e4a47e9b5301d1e849c54f2632540f14878e6af4f11979d74fc0be1c36321229cf5128924251431087aa42c497c0ab57e0743973c9baaeccc24114e2e1'
             'c284b82847160901bcd214c5f2bbb855f55806c8e9b91e90ff4de877e56987002f8e81723bf1427205d4a53b1c5aa9c07f04e5f5b4946c3139a446aba1b69dfd'
             'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de'

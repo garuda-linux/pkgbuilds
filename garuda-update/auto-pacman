@@ -76,9 +76,6 @@ proc doExit {} {
     exit [lindex $result 3]
 }
 
-# Silence the ugly spawn pacman -Su output only
-log_user 0
-
 spawn {*}$argv
 
 log_user 1
