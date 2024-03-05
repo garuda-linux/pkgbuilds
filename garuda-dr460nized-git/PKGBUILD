@@ -34,6 +34,7 @@ package() {
         'kvantum'
         'plasma-applet-window-buttons'
         'plasma6-applets-window-title'
+        'plasma6-wallpapers-blurredwallpaper'
         'plasma5-themes-sweet-full-git'
         'ttf-fira-sans'
         'ttf-firacode-nerd')
