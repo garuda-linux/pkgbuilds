@@ -6,14 +6,14 @@ pkgname=garuda-cinnamon-settings
 pkgdesc='Garuda Linux Cinnamon settings'
 pkgver="1.0.10"
 _commit='2cfee74c984a89a22935d577644b0567a265f9d3'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cinnamon-settings/-/archive/${_commit}/garuda-cinnamon-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
-depends=('kvantum-qt5'
+depends=('kvantum'
 	'noto-fonts'
 	'garuda-common-settings')
 install=$pkgname.install
