@@ -3,12 +3,12 @@
 
 pkgname=garuda-dr460nized-git
 _pkgname=garuda-dr460nized
-pkgver=2.0.12.r71.g53e499d
-pkgrel=4
+pkgver=4.2.0
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$_pkgname"
 license=('GPL')
-source=("git+$url.git#branch=plasma6")
+source=("git+$url.git")
 sha256sums=('SKIP')
 pkgdesc='Dr460nized settings'
 install=$_pkgname.install
@@ -27,15 +27,15 @@ package() {
     cp -rf "$srcdir"/$_pkgname/usr "$pkgdir"
     depends=('beautyline'
         'garuda-common-settings'
-        'garuda-icons'
         'garuda-fish-config'
+        'garuda-icons'
         'garuda-wallpapers'
-        'plasma-systemmonitor'
         'kvantum'
         'plasma-applet-window-buttons'
+        'plasma-systemmonitor'
+        'plasma5-themes-sweet-full-git'
         'plasma6-applets-window-title'
         'plasma6-wallpapers-blurredwallpaper'
-        'plasma5-themes-sweet-full-git'
         'ttf-fira-sans'
         'ttf-firacode-nerd')
 }

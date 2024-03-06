@@ -19,11 +19,14 @@ update_gtk() {
 
 # Post installation
 post_install() {
-    post_upgrade
+    update_fonts
+    update_gtk
 }
 
 # Post upgrade
 post_upgrade() {
-    update_fonts
-    update_gtk
+    post_install
+    if [[ $(vercmp 4.0.1-1 $2) -gt 0 ]] && [ -f /etc/sddm.conf.d/kde_settings.conf ] && grep -qe "^Current=Dr460nized-Sugar-Candy$" /etc/sddm.conf.d/kde_settings.conf; then
+        rm -f /etc/sddm.conf.d/kde_settings.conf
+    fi
 }
