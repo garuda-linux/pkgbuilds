@@ -1,7 +1,7 @@
 pkgbase = firedragon
 	pkgdesc = Floorp fork build using custom branding & settings
 	pkgver = 11.10.5
-	pkgrel = 1
+	pkgrel = 2
 	epoch = 1
 	url = http://dr460nf1r3.org
 	install = firedragon.install
@@ -32,6 +32,8 @@ pkgbase = firedragon
 	makedepends = xorg-server-xvfb
 	makedepends = yasm
 	makedepends = zip
+	makedepends = weston
+	makedepends = xwayland-run
 	depends = dbus
 	depends = dbus-glib
 	depends = ffmpeg
