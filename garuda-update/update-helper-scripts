@@ -41,7 +41,7 @@ remove-chaotic-kf5-dummy() {
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
 	local packages
-	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk 2>/dev/null | xargs || true)"
+	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 2>/dev/null | xargs || true)"
 	# We replace python-xdg with python-pyxdg from community
 	# This is not done automatically for some reason
 	if [[ "$packages" =~ (^| )python-xdg($| ) ]]; then
@@ -78,6 +78,10 @@ package-replaces() {
 		echo --ignore
 		echo plasma5-applets-window-appmenu,plasma5-applets-window-title,plasma5-applets-betterinlineclock-git,plasma5-wallpapers-blurredwallpaper,garuda-dr460nized
 		echo garuda-dr460nized-next
+	fi
+	# TODO: Remove this when pinta is updated to .NET 8 or pacman's dependency resolver is fixed lmao
+	if [[ "$packages" =~ (^| )pinta($| ) ]] && ! [[ "$packages" =~ (^| )dotnet-runtime-7.0($| ) ]]; then
+		echo dotnet-runtime-7.0
 	fi
 }
 
