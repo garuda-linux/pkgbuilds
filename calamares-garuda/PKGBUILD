@@ -1,9 +1,12 @@
 # Maintainer: TNE <TNE[at]garudalinux[dot]org>
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: librewish <librewish@gmail.com>
+# Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
-pkgname=calamares-git
-pkgver=3.3.0.r38.g1d8a19724
+pkgname=calamares-garuda
+pkgver=3.3.5.r19.g10acebff4
 pkgrel=1
-pkgdesc='Distribution-independent installer framework (development version)'
+pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
 url="https://github.com/calamares/calamares"
@@ -11,16 +14,12 @@ license=('LGPL')
 conflicts=('calamares' 'calamares-dev')
 provides=('calamares' 'calamares-dev')
 replaces=('calamares-dev')
-depends=('kconfig5' 'kcoreaddons5' 'kiconthemes5' 'ki18n5' 'kio5' 'solid5' 'yaml-cpp' 'kpmcore'
-	'boost-libs' 'ckbcomp' 'hwinfo' 'qt5-svg' 'polkit-qt5' 'gtk-update-icon-cache' 'plasma-framework5'
-	'qt5-xmlpatterns' 'squashfs-tools' 'libpwquality' 'appstream-qt5' 'python')
-makedepends=('extra-cmake-modules' 'qt5-tools' 'qt5-translations' 'git' 'boost')
-# backup=('usr/share/calamares/modules/bootloader.conf'
-#         'usr/share/calamares/modules/displaymanager.conf'
-#         'usr/share/calamares/modules/initcpio.conf'
-#         'usr/share/calamares/modules/unpackfs.conf')
+depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmcore'
+	'boost-libs' 'ckbcomp' 'hwinfo' 'qt6-svg' 'polkit-qt6'
+	'squashfs-tools' 'libpwquality' 'python')
+makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
-source+=(git+https://github.com/calamares/calamares.git#commit=1d8a1972422d83c36f2b934c2629ae1f564c0428
+source+=(git+https://github.com/calamares/calamares.git#commit=10acebff462c2c1ac02c5e06d52772242ee801f8
 	garuda-fswhitelist.patch
 	0001-Apply-garuda-specific-patches.patch
 	partition.conf
@@ -28,7 +27,7 @@ source+=(git+https://github.com/calamares/calamares.git#commit=1d8a1972422d83c36
 	mhwdcfg.conf
 	chrootcfg.conf)
 sha256sums=('SKIP'
-            'ac4c7e5e7a3d2aeb62462bbee17f3abeaf4d25560285da4b1b1804562f1d159f'
+            '81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7'
             'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
             '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
@@ -84,8 +83,10 @@ build() {
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_INSTALL_LIBDIR=lib \
-		-DWITH_PYTHONQT:BOOL=ON \
 		-DBoost_NO_BOOST_CMAKE=ON \
+		-DWITH_QT6=ON \
+		-DWITH_APPSTREAM=OFF \
+		-DBUILD_TESTING=OFF \
 		-DSKIP_MODULES="webview interactiveterminal initramfs \
                               initramfscfg packagechooser packagechooserq \
                               dummyprocess dummypython dummycpp \
