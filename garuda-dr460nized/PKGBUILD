@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized
 pkgver=4.2.0
 _commit=631515c91b67722969fb7e36958aa5ee370e43dd
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -18,9 +18,9 @@ replaces=('garuda-dr460nized-next')
 
 package() {
     install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+    cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+    install -d "$pkgdir"/usr
+    cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 
     depends=('beautyline'
         'garuda-common-settings'
