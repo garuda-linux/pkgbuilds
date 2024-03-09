@@ -5,7 +5,7 @@
 pkgname=garuda-hyprland-settings
 pkgver="0.4.120"
 _commit='06682a6258882747e20d7a28a3f67ececc6bb224'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -19,6 +19,7 @@ depends=('beautyline'
     'plasma5-themes-sweet-full-git'
     'waybar'
     'hyprland'
+    'kvantum-qt5'
     'kvantum'
     'ttf-fira-code'
     'ttf-firacode-nerd'
