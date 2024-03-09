@@ -3,7 +3,7 @@
 pkgname=garuda-gnome-settings
 pkgver="1.5.6"
 _commit='5a93a443f377859331aa9c3a74d4366f11d608f0'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -21,6 +21,8 @@ package() {
 	depends=('garuda-backgrounds'
 		'garuda-common-settings'
 		'gnome-themes-extra'
+		'kvantum'
+		'kvantum-qt5'
 		'volantes-cursors'
 		'ttf-fira-sans'
 		'ttf-firacode-nerd')
