@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized
 pkgver=4.2.0
 _commit=631515c91b67722969fb7e36958aa5ee370e43dd
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -28,6 +28,7 @@ package() {
         'garuda-icons'
         'garuda-wallpapers'
         'kvantum'
+        'kvantum-qt5'
         'plasma-applet-window-buttons'
         'plasma-systemmonitor'
         'plasma5-themes-sweet-full-git'
