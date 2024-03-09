@@ -5,7 +5,7 @@ pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
 pkgver="1.1.37"
 _commit='812461c6b02b88982c22d199b172774d74816f1e'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -15,6 +15,7 @@ sha256sums=('SKIP')
 depends=('capitaine-cursors'
     'gtk-engine-murrine'
     'kvantum'
+    'kvantum-qt5'
     'kvantum-theme-nordic-git'
     'nordic-darker-theme'
     'sway'
