@@ -38,5 +38,6 @@ package() {
         'plasma6-applets-window-title'
         'plasma6-wallpapers-blurredwallpaper'
         'ttf-fira-sans'
-        'ttf-firacode-nerd')
+        'ttf-firacode-nerd'
+        'xdg-desktop-portal-gtk') # fixes Wayland GTK theming
 }

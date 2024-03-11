@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized
 pkgver=4.2.0
 _commit=631515c91b67722969fb7e36958aa5ee370e43dd
-pkgrel=3
+pkgrel=4
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -35,5 +35,6 @@ package() {
         'plasma6-applets-window-title'
         'plasma6-wallpapers-blurredwallpaper'
         'ttf-fira-sans'
-        'ttf-firacode-nerd')
+        'ttf-firacode-nerd'
+        'xdg-desktop-portal-gtk') # fixes Wayland GTK theming
 }
