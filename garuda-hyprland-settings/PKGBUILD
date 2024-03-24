@@ -3,8 +3,8 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver="0.4.120"
-_commit='06682a6258882747e20d7a28a3f67ececc6bb224'
+pkgver="0.4.121"
+_commit='08ca666232cc5510be888c1ff0777e024c088c2b'
 pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
