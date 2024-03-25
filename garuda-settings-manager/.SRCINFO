@@ -1,7 +1,7 @@
 pkgbase = garuda-settings-manager
 	pkgdesc = Garuda Linux system settings (Manjaro settings manager ported to work with Arch standards and limited to only DKMS drivers)
 	pkgver = 1.0.4
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/applications/garuda-settings-manager
 	arch = i686
 	arch = x86_64
