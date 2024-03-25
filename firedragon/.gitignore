@@ -3,6 +3,7 @@
 common/
 floorp-core/
 floorp-l10n-central/
+floorp-private
 pkg/
 settings/
 src/
