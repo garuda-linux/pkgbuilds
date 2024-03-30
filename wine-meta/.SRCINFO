@@ -1,7 +1,7 @@
 pkgbase = wine-meta
 	pkgdesc = Meta-package for WINE support
 	pkgver = 1
-	pkgrel = 5
+	pkgrel = 6
 	url = https://wiki.archlinux.org/index.php/wine
 	arch = any
 	license = GPL
@@ -60,8 +60,6 @@ pkgname = wine-meta
 	depends = lib32-sdl2
 	depends = vkd3d
 	depends = lib32-vkd3d
-	depends = faudio
-	depends = lib32-faudio
 	depends = vulkan-icd-loader
 	depends = lib32-vulkan-icd-loader
 	depends = libgpg-error
