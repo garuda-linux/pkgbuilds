@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver="2.6.23"
-_commit='7734878323b117c89d7c97cbe049a8c44b5dcee5'
+pkgver="2.6.24"
+_commit='d42fe80486e803f09d3d59eef4643907b48b05cd'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -12,33 +12,33 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-com
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
-	'garuda-bash-config'
-	'garuda-hooks'
-	'garuda-icons'
-	'garuda-migrations'
-	'garuda-update'
-	'garuda-wallpapers'
-	'profile-sync-daemon'
-	'zram-generator'
-	'systemd-oomd-defaults'
-	'noto-color-emoji-fontconfig')
+    'garuda-bash-config'
+    'garuda-hooks'
+    'garuda-icons'
+    'garuda-migrations'
+    'garuda-update'
+    'garuda-wallpapers'
+    'profile-sync-daemon'
+    'zram-generator'
+    'systemd-oomd-defaults'
+    'noto-color-emoji-fontconfig')
 optdepends=('garuda-browser-settings: Garuda Linux Browser settings'
-	'performance-tweaks: Tuning for best performance'
-	'powersave-tweaks: Tuning for lower power usage'
-	'pacutils: Required for garuda-inxi funstuff')
+    'performance-tweaks: Tuning for best performance'
+    'powersave-tweaks: Tuning for lower power usage'
+    'pacutils: Required for garuda-inxi funstuff')
 makedepends=('polkit')
 conflicts=('systemd-swap' 'ipw2100-fw' 'ipw2200-fw' 'firedragon-extension-xdm-browser-monitor')
 backup=(etc/sudoers.d/{editor,insults,pwfeedback})
 install=$pkgname.install
 
 package() {
-	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+    install -d "$pkgdir"/etc
+    cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+    install -d "$pkgdir"/usr
+    cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 
-	# Fix permissions
-	chmod -R 750 "$pkgdir"/etc/sudoers.d/
-	chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
-	chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d
+    # Fix permissions
+    chmod -R 750 "$pkgdir"/etc/sudoers.d/
+    chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+    chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d
 }
