@@ -25,9 +25,9 @@ source=("garuda-fish-completions-update.service"
 	"garuda-update.fish"
 	"https://raw.githubusercontent.com/franciscolourenco/done/1.19.2/conf.d/done.fish")
 sha256sums=('6f7ffc81204fa908a324d0030d211e522ee0b0eee5be34b67ae885de4c02ffe7'
-	'e0220be11552cb30bb0d941c5bf901557341d359df47544d54d6ea04ff0ab176'
-	'054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462'
-	'10bac59fa5bd3e9d76d562bc7e8c7c4b35024c72af8575ba7e9f10f42d08708d')
+            '2dff01a947a9c48355082d3881fab27df68658186c10b83e40c57b28a1d5c32b'
+            '054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462'
+            '10bac59fa5bd3e9d76d562bc7e8c7c4b35024c72af8575ba7e9f10f42d08708d')
 
 package() {
 	cd "$srcdir" || exit
