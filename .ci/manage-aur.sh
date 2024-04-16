@@ -71,10 +71,10 @@ for package in "${PACKAGES[@]}"; do
 
         # Rsync: delete files in the destination that are not in the source. Exclude copying .CI and .git            
         # shellcheck disable=SC2046
-        rsync -a --delete $(UTIL_GET_EXCLUDE_LIST "--exclude") "$package/" "$TMPDIR/aur-push/$package/"
+        rsync -av --delete $(UTIL_GET_EXCLUDE_LIST "--exclude") "$package/" "$TMPDIR/aur-push/$package/"
 
         # Only push if there are changes
-        if ! git diff --exit-code --quiet; then
+        if [[ -n $(git status -uno --porcelain) ]]; then
             git add .
             if [ -v _CI_COMMITS_URL ]; then
                 git commit -m "chore: update $package" \
