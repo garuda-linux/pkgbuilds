@@ -69,7 +69,7 @@ for package in "${PACKAGES[@]}"; do
         # We always run shfmt on the PKGBUILD. Two runs of shfmt on the same file should not change anything
         shfmt -w "$TMPDIR/aur-push/$package/PKGBUILD"
 
-        # Rsync: delete files in the destination that are not in the source. Exclude copying .CI and .git
+        # Rsync: delete files in the destination that are not in the source. Exclude copying .CI and .git            
         # shellcheck disable=SC2046
         rsync -a --delete $(UTIL_GET_EXCLUDE_LIST "--exclude") "$package/" "$TMPDIR/aur-push/$package/"
 
