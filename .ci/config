@@ -6,3 +6,4 @@ REDIS_SSH_HOST=builds.garudalinux.org
 REDIS_SSH_PORT=400
 REDIS_SSH_USER=package-deployer
 REPO_NAME=garuda
+CI_MANAGE_AUR="true"
