@@ -74,6 +74,7 @@ for package in "${PACKAGES[@]}"; do
         rsync -av --delete $(UTIL_GET_EXCLUDE_LIST "--exclude") "$package/" "$TMPDIR/aur-push/$package/"
 
         # Only push if there are changes
+        pushd "$TMPDIR/aur-push/$package"
         if [[ -n $(git status -uno --porcelain) ]]; then
             git add .
             if [ -v _CI_COMMITS_URL ]; then
@@ -91,6 +92,7 @@ for package in "${PACKAGES[@]}"; do
             echo "No changes detected, skipping!"
             continue
         fi
+        popd
     else
         continue
     fi
