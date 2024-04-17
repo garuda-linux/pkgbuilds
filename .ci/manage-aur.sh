@@ -84,10 +84,10 @@ for package in "${PACKAGES[@]}"; do
         pushd "$TMPDIR/aur-push/$package"
         if [[ -n $(git status -uno --porcelain) ]]; then
             git add .
-            if [ -v _CI_COMMITS_URL ]; then
+            if [ -v _CI_REPOSITORY_URL ]; then
                 git commit -m "chore: update $package" \
                     -m "This commit was automatically generated to reflect changes to this package in another repository." \
-                    -m "The changelog for this package can be found at ${_CI_COMMITS_URL}." \
+                    -m "The changelog for this package can be found at ${_CI_REPOSITORY_URL}." \
                     -m "Logs of the corresponding pipeline run can be found here: $_CI_PIPELINE_URL."
             else
                 git commit -m "chore: update $package" \
