@@ -4,7 +4,7 @@ set -euo pipefail
 # $1: pkgbase
 
 if [ -z "${ACCESS_TOKEN:-}" ]; then
-    echo "ERROR: ACCESS_TOKEN is not set. Please set it to a valid access token to use human review or disable CI_HUMAN_REVIEW."
+    UTIL_PRINT_ERROR "ACCESS_TOKEN is not set. Please set it to a valid access token to use human review or disable CI_HUMAN_REVIEW."
     exit 0
 fi
 
@@ -21,7 +21,7 @@ function create_gitlab_pr() {
     # one with the same source branch
     local _COUNTBRANCHES _LISTMR _MR_EXISTS BODY
     if ! _LISTMR=$(curl --fail-with-body --silent "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/merge_requests?state=opened" --header "PRIVATE-TOKEN:${ACCESS_TOKEN}"); then
-        echo "ERROR: $pkgbase: Failed to get list of merge requests." >&2
+        UTIL_PRINT_ERROR "$pkgbase: Failed to get list of merge requests."
         return
     fi
 
@@ -54,9 +54,9 @@ function create_gitlab_pr() {
         curl --fail-with-body -s -X POST "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/merge_requests" \
             --header "PRIVATE-TOKEN:${ACCESS_TOKEN}" \
             --header "Content-Type: application/json" \
-            --data "${BODY}" && echo "$pkgbase: Created merge request." || echo "ERROR: $pkgbase: Failed to create merge request." >&2
+            --data "${BODY}" && UTIL_PRINT_INFO "$pkgbase: Created merge request." || UTIL_PRINT_ERROR "$pkgbase: Failed to create merge request."
     else
-        echo "$pkgbase: No new merge request opened due to an already existing MR."
+        UTIL_PRINT_INFO "$pkgbase: No new merge request opened due to an already existing MR."
     fi
 }
 
@@ -76,7 +76,7 @@ function create_github_pr() {
         -H "Accept: application/vnd.github+json" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         -H "Authorization: token ${ACCESS_TOKEN}"); then
-        echo "ERROR: $pkgbase: Failed to get list of pull requests." >&2
+        UTIL_PRINT_ERROR "$pkgbase: Failed to get list of pull requests."
         return
     fi
 
@@ -105,9 +105,9 @@ function create_github_pr() {
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             -H "Authorization: token ${ACCESS_TOKEN}" \
-            --data "${BODY}" && echo "$pkgbase: Created pull request." || echo "ERROR: $pkgbase Failed to create pull request." >&2
+            --data "${BODY}" && UTIL_PRINT_INFO "$pkgbase: Created pull request." || UTIL_PRINT_ERROR "$pkgbase Failed to create pull request."
     else
-        echo "$pkgbase: No new pull request opened due to an already existing MR."
+        UTIL_PRINT_INFO "$pkgbase: No new pull request opened due to an already existing MR."
     fi
 }
 
@@ -129,14 +129,14 @@ function manage_branch() {
             # Not up to date
             git reset --hard "origin/$target_branch"
             git checkout stash -- "$pkgbase"
-            git commit -m "chore($1): PKGBUILD modified"
+            git commit -q -m "chore($1): PKGBUILD modified"
             git push --force-with-lease origin "$CHANGE_BRANCH"
         fi
     else
         # Branch does not exist, let's create it
         git switch -C "$branch" "origin/$target_branch"
         git checkout stash -- "$pkgbase"
-        git commit -m "chore($1): PKGBUILD modified"
+        git commit -q -m "chore($1): PKGBUILD modified"
         git push --force-with-lease origin "$CHANGE_BRANCH"
     fi
     git stash drop
@@ -163,7 +163,7 @@ if [ -v GITLAB_CI ]; then
 elif [ -v GITHUB_ACTIONS ]; then
     create_github_pr "$PKGBASE" "$CHANGE_BRANCH" "$TARGET_BRANCH"
 else
-    echo "WARNING: Pull request creation is only supported on GitLab CI/GitHub Actions. Please disable CI_HUMAN_REVIEW." >&2
+    UTIL_PRINT_WARNING "Pull request creation is only supported on GitLab CI/GitHub Actions. Please disable CI_HUMAN_REVIEW."
     exit 0
 fi
 
