@@ -137,7 +137,7 @@ function update_via_git() {
 
     if package_changed "$TMPDIR/aur-pulls/$pkgbase" "$pkgbase"; then
         if [ -v CI_HUMAN_REVIEW ] && [ "$CI_HUMAN_REVIEW" == "true" ] && package_major_change "$TMPDIR/aur-pulls/$pkgbase" "$pkgbase"; then
-            UTIL_PRINT_INFO "$pkgbase: Major change detected in."
+            UTIL_PRINT_INFO "$pkgbase: Major change detected."
             VARIABLES_VIA_GIT[CI_REQUIRES_REVIEW]=true
         fi
         # Rsync: delete files in the destination that are not in the source. Exclude deleting .CI, exclude copying .git

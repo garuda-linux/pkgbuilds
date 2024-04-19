@@ -3,6 +3,8 @@ set -euo pipefail
 
 # $1: pkgbase
 
+source .ci/util.shlib
+
 if [ -z "${ACCESS_TOKEN:-}" ]; then
     UTIL_PRINT_ERROR "ACCESS_TOKEN is not set. Please set it to a valid access token to use human review or disable CI_HUMAN_REVIEW."
     exit 0
@@ -119,27 +121,27 @@ function manage_branch() {
     local target_branch="$2"
     local pkgbase="$3"
 
-    git stash
+    git stash -q
     if git show-ref --quiet "origin/$branch"; then
-        git switch "$branch"
-        git checkout stash -- "$pkgbase"
+        git switch -q "$branch"
+        git checkout -q stash -- "$pkgbase"
         # Branch already exists, let's see if it's up to date
         # Also check if previous parent commit is no longer ancestor of target_branch
         if ! git diff --staged --exit-code --quiet || ! git merge-base --is-ancestor HEAD^ "origin/$target_branch"; then
             # Not up to date
-            git reset --hard "origin/$target_branch"
-            git checkout stash -- "$pkgbase"
+            git reset -q --hard "origin/$target_branch"
+            git checkout stash -q -- "$pkgbase"
             git commit -q -m "chore($1): PKGBUILD modified"
             git push --force-with-lease origin "$CHANGE_BRANCH"
         fi
     else
         # Branch does not exist, let's create it
-        git switch -C "$branch" "origin/$target_branch"
-        git checkout stash -- "$pkgbase"
+        git switch -q -C "$branch" "origin/$target_branch"
+        git checkout stash -q -- "$pkgbase"
         git commit -q -m "chore($1): PKGBUILD modified"
         git push --force-with-lease origin "$CHANGE_BRANCH"
     fi
-    git stash drop
+    git stash drop -q
 }
 
 PKGBASE="$1"
@@ -168,4 +170,4 @@ else
 fi
 
 # Switch back to the original branch
-git -c advice.detachedHead=false checkout "$ORIGINAL_REF"
+git -c advice.detachedHead=false checkout -q "$ORIGINAL_REF"
