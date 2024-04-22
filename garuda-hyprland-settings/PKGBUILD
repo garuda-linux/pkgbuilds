@@ -3,8 +3,8 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver="0.4.123"
-_commit='b1734e60e294779d06be68d9caa98fe17b2f43b3'
+pkgver="0.4.124"
+_commit='e8a1b5705b49b14a403d7e820463d3f03bd88397'
 pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -14,23 +14,23 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyp
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux Hyprland settings'
 depends=('beautyline'
-    'garuda-common-settings'
-    'gtk-engine-murrine'
-    'plasma5-themes-sweet-full-git'
-    'waybar'
-    'hyprland'
-    'kvantum-qt5'
-    'kvantum'
-    'ttf-fira-code'
-    'ttf-firacode-nerd'
-    'qt5ct')
+  'garuda-common-settings'
+  'gtk-engine-murrine'
+  'plasma5-themes-sweet-full-git'
+  'waybar'
+  'hyprland'
+  'kvantum-qt5'
+  'kvantum'
+  'ttf-fira-code'
+  'ttf-firacode-nerd'
+  'qt5ct')
 conflicts=(garuda-desktop-settings)
 provides=(garuda-desktop-settings)
 install=$pkgname.install
 
 package() {
-    install -d "$pkgdir"/etc
-    cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-    install -d "$pkgdir"/usr
-    cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }
