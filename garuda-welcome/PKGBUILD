@@ -2,8 +2,8 @@
 # Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-welcome
-pkgver="1.2.10"
-_commit='e60d123d3528ff04ee9b15a57c0cc272af2b832a'
+pkgver="1.2.11"
+_commit='2070e30e0d570c1fe79745623a9feab9c12188f6'
 pkgrel=1
 pkgdesc="A Welcome app for Garuda Linux"
 arch=('any')
@@ -17,12 +17,12 @@ source=("https://gitlab.com/garuda-linux/applications/garuda-welcome/-/archive/$
 sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	qmake-qt5 "$pkgname".pro
-	make
+  cd "$srcdir/$pkgname-$_commit" || exit
+  qmake-qt5 "$pkgname".pro
+  make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	make INSTALL_ROOT="$pkgdir" install
+  cd "$srcdir/$pkgname-$_commit" || exit
+  make INSTALL_ROOT="$pkgdir" install
 }
