@@ -1,6 +1,6 @@
 pkgbase = garuda-dracut-support
 	pkgdesc = Dracut support for Garuda Linux
-	pkgver = 1.0.1
+	pkgver = 1.1.0
 	pkgrel = 1
 	arch = any
 	license = GPL
@@ -13,7 +13,7 @@ pkgbase = garuda-dracut-support
 	source = 90-dracut-install.hook
 	source = 60-dracut-remove.hook
 	sha256sums = 8b48b3aa1b7599fa5060b0b3c08896d6845da0e1ccd7bf1bfc9b1892c48bf7e2
-	sha256sums = 99834ac554e800ada204e3d6c26149db080bee9b3ed9dea04f2f47e2b3dbcd2a
+	sha256sums = 017588cd975eff20ce60f9d2f498932cc60e7627aefdf9dc21470b2a95da6a32
 	sha256sums = cdf87309be00c23c2b74dd936be8861b7930edf51f5ea1d3f8f7b1d7dee37924
 	sha256sums = 6978fa3f65a73329a06e67219ab6a53ea4c969e5d865866f04ee84672ee862f9
 	sha256sums = 82b5f2e70530c98e990278a974a58641fa6e699d1b295bb10d2ca2af02c3937b
