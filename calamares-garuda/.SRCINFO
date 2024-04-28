@@ -1,7 +1,7 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
 	pkgver = 3.3.6.r29.g2e9618440
-	pkgrel = 1
+	pkgrel = 3
 	url = https://github.com/calamares/calamares
 	arch = i686
 	arch = x86_64
@@ -26,6 +26,7 @@ pkgbase = calamares-garuda
 	depends = squashfs-tools
 	depends = libpwquality
 	depends = python
+	depends = python-distutils-extra
 	provides = calamares
 	provides = calamares-dev
 	conflicts = calamares

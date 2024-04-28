@@ -5,7 +5,7 @@
 
 pkgname=calamares-garuda
 pkgver=3.3.6.r29.g2e9618440
-pkgrel=2
+pkgrel=3
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -16,7 +16,7 @@ provides=('calamares' 'calamares-dev')
 replaces=('calamares-dev')
 depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmcore'
     'boost-libs' 'ckbcomp' 'hwinfo' 'qt6-svg' 'polkit-qt6'
-    'squashfs-tools' 'libpwquality' 'python')
+    'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
 makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
 source+=(git+https://github.com/calamares/calamares.git#commit=2e9618440652a1adfaf8e125e2cc2f4cca3aa5cc
