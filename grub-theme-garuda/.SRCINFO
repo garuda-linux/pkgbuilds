@@ -1,7 +1,7 @@
-pkgbase = grub-theme-garuda-live
+pkgbase = grub-theme-garuda
 	pkgdesc = Garuda Linux GRUB theme
-	pkgver = r14.1cd9ac3
-	pkgrel = 1
+	pkgver = r26.972b17c
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/grub-theme-garuda
 	arch = any
 	license = GPL
