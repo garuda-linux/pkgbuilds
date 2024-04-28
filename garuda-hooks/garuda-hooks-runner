@@ -36,7 +36,7 @@ Lsb_release() {
 		-e 's,DISTRIB_ID=.*,DISTRIB_ID=Garuda,' \
 		-e 's,DISTRIB_RELEASE=.*,DISTRIB_RELEASE=Soaring,' \
 		-e 's,DISTRIB_CODENAME=.*,DISTRIB_CODENAME="BirdOfPrey",' \
-		-e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux\",'
+		-e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux Bird of Prey\",'
 }
 
 Post() {
