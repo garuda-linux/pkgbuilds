@@ -1,6 +1,6 @@
 pkgbase = garuda-i3-settings
 	pkgdesc = Garuda Linux i3 settings
-	pkgver = 1.2.2
+	pkgver = 1.2.3
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-i3-settings
 	install = garuda-i3-settings.install
@@ -10,7 +10,7 @@ pkgbase = garuda-i3-settings
 	depends = garuda-common-settings
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-i3-settings/-/archive/66190acf35a290dd5097f1550a8a20bc9eee4885/garuda-i3-settings-66190acf35a290dd5097f1550a8a20bc9eee4885.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-i3-settings/-/archive/84cd348eef23a5bc494bde865ac325f10c5c49e9/garuda-i3-settings-84cd348eef23a5bc494bde865ac325f10c5c49e9.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-i3-settings
