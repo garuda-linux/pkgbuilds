@@ -1,12 +1,4 @@
-*.tar.xz*
-*.tar.gz*
-*.tar.bz2*
 *.tar.zst*
-common/
-floorp-core/
-floorp-l10n-central/
-floorp-private
 pkg/
-settings/
 src/
 firedragon.psd
