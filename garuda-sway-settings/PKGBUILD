@@ -5,24 +5,21 @@ pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
 pkgver="1.1.40"
 _commit='89ad957964b447410ab5eb0fc09ddc26834edcbe'
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/${_commit}/garuda-sway-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
-depends=('capitaine-cursors'
-  'gtk-engine-murrine'
-  'kvantum'
+depends=('kvantum'
   'kvantum-qt5'
   'kvantum-theme-nordic-git'
   'nordic-darker-theme'
   'sway'
   'swayidle'
   'swaylock'
-  'swaybg'
-  'tela-circle-icon-theme-git')
+  'swaybg')
 install="$pkgname".install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
