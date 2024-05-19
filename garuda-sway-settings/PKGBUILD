@@ -5,21 +5,23 @@ pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
 pkgver="1.1.42"
 _commit='8ae8599752fda102444fab3b5af3e78af1ca73f5'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/${_commit}/garuda-sway-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
-depends=('kvantum'
-  'kvantum-qt5'
-  'kvantum-theme-nordic-git'
-  'nordic-darker-theme'
-  'sway'
-  'swayidle'
-  'swaylock'
-  'swaybg')
+depends=('sway')
+optdepends=('kvantum: for theming Qt apps'
+            'kvantum-qt5: Qt5 integration for Kvantum'
+            'kvantum-theme-nordic-git: default Kvantum theme'
+            'nordic-darker-theme: default GTK theme'
+            'swaybg: for setting desktop background'
+            'swayidle: default idle management daemon'
+            'swaylock: default screen locker'
+            'tela-circle-icon-theme-nord: default icon theme')
+
 install="$pkgname".install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
@@ -30,3 +32,4 @@ package() {
   install -d "$pkgdir/usr"
   cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }
+
