@@ -167,6 +167,9 @@ function update_via_git() {
         if [ "$i" -ne 2 ]; then
             echo "$pkgbase: Failed to clone $2. Retrying in 30 seconds."
             sleep 30
+        else
+            # Give up
+            false
         fi
     done
 
