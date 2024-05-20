@@ -104,7 +104,7 @@ function collect_aur_timestamps() {
     done
 
     # Get all timestamps from AUR
-    UTIL_FETCH_AUR_TIMESTAMPS collect_aur_timestamps_output "${AUR_PACKAGES[*]}"
+    http_proxy="$CI_AUR_PROXY" https_proxy="$CI_AUR_PROXY" UTIL_FETCH_AUR_TIMESTAMPS collect_aur_timestamps_output "${AUR_PACKAGES[*]}"
 }
 
 # $1: dir1
@@ -282,14 +282,12 @@ function update_pkgbuild() {
         # Check if CI_PKGBUILD_TIMESTAMP is set
         if [ -v "VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_TIMESTAMP]" ]; then
             local PKGBUILD_TIMESTAMP="${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_TIMESTAMP]}"
-            if [ "$PKGBUILD_TIMESTAMP" != "$NEW_TIMESTAMP" ]; then
-                update_via_git VARIABLES_UPDATE_PKGBUILD "$git_url"
-                UTIL_UPDATE_AUR_TIMESTAMP VARIABLES_UPDATE_PKGBUILD "$NEW_TIMESTAMP"
+            if [ "$PKGBUILD_TIMESTAMP" == "$NEW_TIMESTAMP" ]; then
+                break
             fi
-        else
-            update_via_git VARIABLES_UPDATE_PKGBUILD "$git_url"
-            UTIL_UPDATE_AUR_TIMESTAMP VARIABLES_UPDATE_PKGBUILD "$NEW_TIMESTAMP"
         fi
+        http_proxy="$CI_AUR_PROXY" https_proxy="$CI_AUR_PROXY" update_via_git VARIABLES_UPDATE_PKGBUILD "$git_url"
+        UTIL_UPDATE_AUR_TIMESTAMP VARIABLES_UPDATE_PKGBUILD "$NEW_TIMESTAMP"
     fi
 }
 
@@ -396,5 +394,5 @@ if [ "$PUSH" = true ]; then
     done
     [ -v GITLAB_CI ] && git_push_args+=("-o" "ci.skip")
     [ "$COMMIT" == "force" ] && git_push_args+=("--force-with-lease=main")
-    git push --atomic origin HEAD:main +refs/tags/scheduled "${git_push_args[@]}"
+    git push --atomic origin HEAD:main +state +refs/tags/scheduled "${git_push_args[@]}"
 fi
