@@ -160,7 +160,15 @@ function update_via_git() {
     local -n VARIABLES_VIA_GIT=${1:-VARIABLES}
     local pkgbase="${VARIABLES_VIA_GIT[PKGBASE]}"
 
-    git clone -q --depth=1 "$2" "$TMPDIR/aur-pulls/$pkgbase"
+    for i in {1..2}; do
+        if git clone -q --depth=1 "$2" "$TMPDIR/aur-pulls/$pkgbase"; then
+            break
+        fi
+        if [ "$i" -ne 2 ]; then
+            echo "$pkgbase: Failed to clone $2. Retrying in 30 seconds."
+            sleep 30
+        fi
+    done
 
     # We always run shfmt on the PKGBUILD. Two runs of shfmt on the same file should not change anything
     shfmt -w "$TMPDIR/aur-pulls/$pkgbase/PKGBUILD"
