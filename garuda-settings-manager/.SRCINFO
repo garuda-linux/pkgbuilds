@@ -1,6 +1,6 @@
 pkgbase = garuda-settings-manager
 	pkgdesc = Garuda Linux system settings (Manjaro settings manager ported to work with Arch standards and limited to only DKMS drivers)
-	pkgver = 1.0.4
+	pkgver = 1.0.5
 	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/applications/garuda-settings-manager
 	arch = i686
@@ -25,7 +25,7 @@ pkgbase = garuda-settings-manager
 	optdepends = garuda-settings-manager-notifier: qt-based
 	optdepends = garuda-settings-manager-knotifier: knotifications-based
 	conflicts = kcm-msm
-	source = https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/659a606f9b576775988e3c671eb7db8d41a2fa5e/garuda-settings-manager-659a606f9b576775988e3c671eb7db8d41a2fa5e.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/41e34ec9e2875fdfebb1465509d7fdf8635b4fc6/garuda-settings-manager-41e34ec9e2875fdfebb1465509d7fdf8635b4fc6.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-settings-manager

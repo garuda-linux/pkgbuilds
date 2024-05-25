@@ -5,93 +5,93 @@
 
 pkgbase=garuda-settings-manager
 pkgname=('garuda-settings-manager' 'garuda-settings-manager-kcm'
-    'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier')
-pkgver="1.0.4"
-_commit='659a606f9b576775988e3c671eb7db8d41a2fa5e'
+  'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier')
+pkgver="1.0.5"
+_commit='41e34ec9e2875fdfebb1465509d7fdf8635b4fc6'
 pkgrel=3
 pkgdesc="Garuda Linux system settings (Manjaro settings manager ported to work with Arch standards and limited to only DKMS drivers)"
 arch=('i686' 'x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgbase"
 license=("GPL")
 depends=('icu' 'qt5-base>=5.12.3' 'hwinfo' 'kitemmodels5' 'kauth5'
-    'kcoreaddons5' 'ckbcomp' 'xdg-utils' 'mhwd-garuda')
+  'kcoreaddons5' 'ckbcomp' 'xdg-utils' 'mhwd-garuda')
 optdepends=('garuda-settings-manager-notifier: qt-based'
-    'garuda-settings-manager-knotifier: knotifications-based')
+  'garuda-settings-manager-knotifier: knotifications-based')
 makedepends=('git' 'extra-cmake-modules' 'kdoctools5' 'qt5-tools' 'knotifications5'
-    'kconfigwidgets5' 'kcmutils5')
+  'kconfigwidgets5' 'kcmutils5')
 conflicts=('kcm-msm')
 source=("https://gitlab.com/garuda-linux/applications/garuda-settings-manager/-/archive/${_commit}/garuda-settings-manager-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-    cd "$srcdir/$pkgbase-$_commit" || exit
-    mkdir -p build
-    cd build || exit
-    cmake ../ \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DLIB_INSTALL_DIR=lib \
-        -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
-        -DSYSCONF_INSTALL_DIR=/etc
-    CXXFLAGS+="-std=gnu++98" make
+  cd "$srcdir/$pkgbase-$_commit" || exit
+  mkdir -p build
+  cd build || exit
+  cmake ../ \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DLIB_INSTALL_DIR=lib \
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
+    -DSYSCONF_INSTALL_DIR=/etc
+  CXXFLAGS+="-std=gnu++98" make
 }
 
 package_garuda-settings-manager() {
-    provides=("$pkgbase")
-    conflicts=("$pkgbase")
-    cd "$srcdir/$pkgbase-$_commit/build" || exit
-    make DESTDIR="${pkgdir}" install
-    rm -rf "$pkgdir"/usr/bin/msm_notifier
-    rm -rf "$pkgdir"/usr/bin/msm_kde_notifier
-    rm -rf "$pkgdir"/usr/lib/qt
-    rm -rf "$pkgdir"/usr/share/kservices5
-    rm -rf "$pkgdir"/usr/share/applications/msm_notifier_settings.desktop
-    rm -rf "$pkgdir"/usr/share/applications/msm_kde_notifier_settings.desktop
-    rm -rf "$pkgdir"/etc/xdg
+  provides=("$pkgbase")
+  conflicts=("$pkgbase")
+  cd "$srcdir/$pkgbase-$_commit/build" || exit
+  make DESTDIR="${pkgdir}" install
+  rm -rf "$pkgdir"/usr/bin/msm_notifier
+  rm -rf "$pkgdir"/usr/bin/msm_kde_notifier
+  rm -rf "$pkgdir"/usr/lib/qt
+  rm -rf "$pkgdir"/usr/share/kservices5
+  rm -rf "$pkgdir"/usr/share/applications/msm_notifier_settings.desktop
+  rm -rf "$pkgdir"/usr/share/applications/msm_kde_notifier_settings.desktop
+  rm -rf "$pkgdir"/etc/xdg
 }
 
 package_garuda-settings-manager-kcm() {
-    pkgdesc="Garuda Linux system settings - KCM for Plasma 5"
-    depends=('garuda-settings-manager' 'kcmutils' 'kconfigwidgets')
-    replaces=('kcm-msm')
-    cd "$srcdir/$pkgbase-$_commit/build" || exit
-    make DESTDIR="${pkgdir}" install
-    rm -rf "$pkgdir"/etc
-    rm -rf "$pkgdir"/usr/bin
-    rm -rf "$pkgdir"/usr/lib/kauth
-    rm -rf "$pkgdir"/usr/share/{applications,dbus-1,icons,polkit-1}
+  pkgdesc="Garuda Linux system settings - KCM for Plasma 5"
+  depends=('garuda-settings-manager' 'kcmutils' 'kconfigwidgets')
+  replaces=('kcm-msm')
+  cd "$srcdir/$pkgbase-$_commit/build" || exit
+  make DESTDIR="${pkgdir}" install
+  rm -rf "$pkgdir"/etc
+  rm -rf "$pkgdir"/usr/bin
+  rm -rf "$pkgdir"/usr/lib/kauth
+  rm -rf "$pkgdir"/usr/share/{applications,dbus-1,icons,polkit-1}
 }
 
 package_garuda-settings-manager-notifier() {
-    pkgdesc="Garuda Linux system settings - notifier"
-    depends=('garuda-settings-manager')
-    provides=('garuda-settings-manager-kde-notifier')
-    conflicts=('garuda-settings-manager-kde-notifier')
-    cd "$srcdir/$pkgbase-$_commit/build" || exit
-    make DESTDIR="${pkgdir}" install
-    rm -rf "$pkgdir"/etc/dbus-1
-    rm -rf "$pkgdir"/etc/xdg/autostart/msm_kde_notifier.desktop
-    rm -rf "$pkgdir"/usr/lib/
-    rm -rf "$pkgdir"/usr/share/{kservices5,dbus-1,icons,polkit-1}
-    rm -rf "$pkgdir"/usr/share/applications/garuda*
-    rm -rf "$pkgdir"/usr/share/applications/msm_kde_notifier_settings.desktop
-    rm -rf "$pkgdir"/usr/bin/garuda*
-    rm -rf "$pkgdir"/usr/bin/msm_kde_notifier
+  pkgdesc="Garuda Linux system settings - notifier"
+  depends=('garuda-settings-manager')
+  provides=('garuda-settings-manager-kde-notifier')
+  conflicts=('garuda-settings-manager-kde-notifier')
+  cd "$srcdir/$pkgbase-$_commit/build" || exit
+  make DESTDIR="${pkgdir}" install
+  rm -rf "$pkgdir"/etc/dbus-1
+  rm -rf "$pkgdir"/etc/xdg/autostart/msm_kde_notifier.desktop
+  rm -rf "$pkgdir"/usr/lib/
+  rm -rf "$pkgdir"/usr/share/{kservices5,dbus-1,icons,polkit-1}
+  rm -rf "$pkgdir"/usr/share/applications/garuda*
+  rm -rf "$pkgdir"/usr/share/applications/msm_kde_notifier_settings.desktop
+  rm -rf "$pkgdir"/usr/bin/garuda*
+  rm -rf "$pkgdir"/usr/bin/msm_kde_notifier
 }
 
 package_garuda-settings-manager-knotifier() {
-    pkgdesc="Garuda Linux system settings - knotifier"
-    depends=('garuda-settings-manager' 'knotifications')
-    conflicts=('garuda-settings-manager-notifier')
-    replaces=('garuda-settings-manager-kde-notifier')
-    cd "$srcdir/$pkgbase-$_commit/build" || exit
-    make DESTDIR="${pkgdir}" install
-    rm -rf "$pkgdir"/etc/dbus-1
-    rm -rf "$pkgdir"/etc/xdg/autostart/msm_notifier.desktop
-    rm -rf "$pkgdir"/usr/lib/
-    rm -rf "$pkgdir"/usr/share/{kservices5,dbus-1,icons,polkit-1}
-    rm -rf "$pkgdir"/usr/share/applications/garuda*
-    rm -rf "$pkgdir"/usr/share/applications/msm_notifier_settings.desktop
-    rm -rf "$pkgdir"/usr/bin/garuda*
-    rm -rf "$pkgdir"/usr/bin/msm_notifier
+  pkgdesc="Garuda Linux system settings - knotifier"
+  depends=('garuda-settings-manager' 'knotifications')
+  conflicts=('garuda-settings-manager-notifier')
+  replaces=('garuda-settings-manager-kde-notifier')
+  cd "$srcdir/$pkgbase-$_commit/build" || exit
+  make DESTDIR="${pkgdir}" install
+  rm -rf "$pkgdir"/etc/dbus-1
+  rm -rf "$pkgdir"/etc/xdg/autostart/msm_notifier.desktop
+  rm -rf "$pkgdir"/usr/lib/
+  rm -rf "$pkgdir"/usr/share/{kservices5,dbus-1,icons,polkit-1}
+  rm -rf "$pkgdir"/usr/share/applications/garuda*
+  rm -rf "$pkgdir"/usr/share/applications/msm_notifier_settings.desktop
+  rm -rf "$pkgdir"/usr/bin/garuda*
+  rm -rf "$pkgdir"/usr/bin/msm_notifier
 }
