@@ -6,6 +6,11 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
+# Launch dbus session if not already running
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
+	eval $(dbus-launch --sh-syntax --exit-with-session)
+fi
+
 # Restore some variables from parent process
 while IFS= read -rd '' var; do export "$var"; done < <(grep --null-data -ae "^\(XDG_CURRENT_DESKTOP\|WAYLAND_DISPLAY\|XDG_RUNTIME_DIR\|XDG_SESSION_TYPE\|XCURSOR_SIZE\|LC_.*\|LANG\|LANGUAGE\|QT_WAYLAND_FORCE_DPI\|QT_QPA_PLATFORMTHEME\|QT_STYLE_OVERRIDE\|\)=.*\$" /proc/$PPID/environ)
 if [[ -v WAYLAND_DISPLAY ]]; then
