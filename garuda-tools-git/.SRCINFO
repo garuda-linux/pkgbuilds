@@ -1,7 +1,7 @@
 pkgbase = garuda-tools-git
 	pkgdesc = Development tools for Garuda Linux
 	pkgver = r202.da426ca
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/tools/garuda-tools
 	arch = x86_64
 	arch = i686
@@ -41,7 +41,7 @@ pkgname = garuda-tools-iso-git
 	depends = libisoburn
 	depends = squashfs-tools
 	depends = garuda-tools-yaml-git
-	depends = mkinitcpio
+	depends = dracut
 	depends = mktorrent
 	depends = grub
 	depends = git

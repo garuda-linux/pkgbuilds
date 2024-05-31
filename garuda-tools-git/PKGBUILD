@@ -12,7 +12,7 @@ pkgname=('garuda-tools-base-git'
 	'garuda-tools-iso-git'
 	'garuda-tools-yaml-git')
 pkgver=r202.da426ca
-pkgrel=1
+pkgrel=2
 arch=('x86_64' 'i686')
 pkgdesc='Development tools for Garuda Linux'
 license=('GPL')
@@ -81,7 +81,7 @@ package_garuda-tools-iso-git() {
 	pkgdesc='Development tools for Garuda Linux (ISO tools)'
 	provides=("garuda-tools-iso=$_ver")
 	depends=('dosfstools' 'libisoburn' 'squashfs-tools' 'garuda-tools-yaml-git'
-		'mkinitcpio' 'mktorrent' 'grub' 'git' 'zsync' 'rclone')
+		'dracut' 'mktorrent' 'grub' 'git' 'zsync' 'rclone')
 	conflicts=('garuda-tools-iso')
 	optdepends=('virtualbox: quickly test isos'
 		'snapd: for snapd support')
