@@ -4,8 +4,8 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.3.6.r29.g2e9618440
-pkgrel=3
+pkgver=3.3.7.r56.g81c82ef34
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -19,20 +19,20 @@ depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmco
     'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
 makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
-source+=(git+https://github.com/calamares/calamares.git#commit=2e9618440652a1adfaf8e125e2cc2f4cca3aa5cc
+source+=(git+https://github.com/calamares/calamares.git#commit=81c82ef343353dd37af33a7c9570e61a6a22121a
     garuda-fswhitelist.patch
     0001-Apply-garuda-specific-patches.patch
     partition.conf
     mount.conf
     mhwdcfg.conf
     chrootcfg.conf)
-sha256sums=('d6aa1f6cc37012cda977436e6450ce7c7e9ea835effc34913b8b2633e847a1ce'
-    '81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7'
-    'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
-    '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
-    '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
-    '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
-    'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
+sha256sums=('b5d828291a3f32dcd5fd8b51f7ba1a105e8251c80edfa237d00b59c1ca75e27f'
+            '81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7'
+            'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
+            '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
+            '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
+            '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
+            'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
     cd "$srcdir/calamares" || exit

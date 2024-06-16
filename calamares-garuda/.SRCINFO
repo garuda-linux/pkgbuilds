@@ -1,7 +1,7 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
-	pkgver = 3.3.6.r29.g2e9618440
-	pkgrel = 3
+	pkgver = 3.3.7.r56.g81c82ef34
+	pkgrel = 1
 	url = https://github.com/calamares/calamares
 	arch = i686
 	arch = x86_64
@@ -32,14 +32,14 @@ pkgbase = calamares-garuda
 	conflicts = calamares
 	conflicts = calamares-dev
 	replaces = calamares-dev
-	source = git+https://github.com/calamares/calamares.git#commit=2e9618440652a1adfaf8e125e2cc2f4cca3aa5cc
+	source = git+https://github.com/calamares/calamares.git#commit=81c82ef343353dd37af33a7c9570e61a6a22121a
 	source = garuda-fswhitelist.patch
 	source = 0001-Apply-garuda-specific-patches.patch
 	source = partition.conf
 	source = mount.conf
 	source = mhwdcfg.conf
 	source = chrootcfg.conf
-	sha256sums = d6aa1f6cc37012cda977436e6450ce7c7e9ea835effc34913b8b2633e847a1ce
+	sha256sums = b5d828291a3f32dcd5fd8b51f7ba1a105e8251c80edfa237d00b59c1ca75e27f
 	sha256sums = 81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7
 	sha256sums = d681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c
 	sha256sums = 13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244
