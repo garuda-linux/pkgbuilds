@@ -19,14 +19,14 @@ depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmco
     'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
 makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
-source+=(git+https://github.com/calamares/calamares.git#commit=81c82ef343353dd37af33a7c9570e61a6a22121a
+source+=(git+https://github.com/calamares/calamares.git#commit=ea744a0c0cb573ec84a183c4138ba1e0a175d8e2
     garuda-fswhitelist.patch
     0001-Apply-garuda-specific-patches.patch
     partition.conf
     mount.conf
     mhwdcfg.conf
     chrootcfg.conf)
-sha256sums=('b5d828291a3f32dcd5fd8b51f7ba1a105e8251c80edfa237d00b59c1ca75e27f'
+sha256sums=('c0fd5e72e56122ebbf8549bcce7a57d0966669d37a3434db55ba56ca6a3baecf'
             '81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7'
             'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
