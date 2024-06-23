@@ -35,6 +35,10 @@ fi
 git config --global user.name "$GIT_AUTHOR_NAME"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
+# Silence some very insane log spam. Master is set by default and the silenced
+# message is declared as hint.
+git config --global init.defaultBranch "master"
+
 if [ -v TEMPLATE_ENABLE_UPDATES ] && [ "$TEMPLATE_ENABLE_UPDATES" == "true" ]; then
     .ci/update-template.sh && UTIL_PRINT_INFO "Updated CI template." && exit 0 || true
 fi
@@ -60,8 +64,8 @@ function manage_state() {
         git worktree add .state origin/state --detach -q
         # We have to make sure that the commit is still in the history of the state branch
         # Otherwise, this implies a force push happened. We need to re-create the state from scratch.
-        if [ ! -f .state/.commit ] || ! git branch --contains "$(cat .state/.commit)"; then
-            git worktree remove .state -q
+        if [ ! -f .state/.commit ] || ! git branch --contains "$(cat .state/.commit)" &>/dev/null; then
+            git worktree remove .state
         fi
     fi
     git worktree add .newstate -B state --orphan -q
