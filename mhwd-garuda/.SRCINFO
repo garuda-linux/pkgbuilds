@@ -1,7 +1,7 @@
 pkgbase = mhwd-garuda
 	pkgdesc = MHWD-db backported to Archlinux with additional features and limited to DKMS drivers
 	pkgver = 1.1.4
-	pkgrel = 1
+	pkgrel = 3
 	url = https://gitlab.com/garuda-linux/applications/mhwd-garuda
 	arch = x86_64
 	license = GPL
