@@ -37,7 +37,7 @@ depends=(dbus
   ttf-font
   zlib)
 makedepends=(cbindgen
-  clang
+  clang17
   diffutils
   dump_syms
   imagemagick
@@ -45,15 +45,15 @@ makedepends=(cbindgen
   inetutils
   git
   jack
-  lld
-  llvm
+  lld17
+  llvm17
   mesa
   mold
   nasm
   nodejs
   python
   unzip
-  wasi-compiler-rt
+  wasi-compiler-rt17
   wasi-libc
   wasi-libc++
   wasi-libc++abi
@@ -120,6 +120,8 @@ prepare() {
   patch -Nsp1 -i "${srcdir}/patch-python3.12-bug1860051.patch"
   patch -Nsp1 -i "${srcdir}/patch-python3.12-bug1866829.patch"
   patch -Nsp1 -i "${srcdir}/patch-python3.12-bug1874280.patch"
+
+  export LD_LIBRARY_PATH=/usr/lib/llvm17/lib
 
   cat > ../mozconfig << END
 ac_add_options --with-app-basename=${_pkgname}
@@ -200,11 +202,11 @@ ac_add_options OPT_LEVEL="3"
 ac_add_options RUSTC_OPT_LEVEL="3"
 
 # Other
-export AR=llvm-ar
-export CC=clang
-export CXX=clang++
-export NM=llvm-nm
-export RANLIB=llvm-ranlib
+export AR=/usr/lib/llvm17/bin/llvm-ar
+export CC=/usr/lib/llvm17/bin/clang
+export CXX=/usr/lib/llvm17/bin/clang++
+export NM=/usr/lib/llvm17/bin/llvm-nm
+export RANLIB=/usr/lib/llvm17/bin/llvm-ranlib
 END
 }
 
