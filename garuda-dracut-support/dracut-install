@@ -20,6 +20,7 @@ if ((all)); then
 	lines=(/usr/lib/modules/*)
 fi
 
+status=0
 for line in "${lines[@]}"; do
 	if ! pacman -Qqo "${line}/pkgbase" &>/dev/null; then
 		# if pkgbase does not belong to any package then skip this kernel
@@ -29,9 +30,19 @@ for line in "${lines[@]}"; do
 	pkgbase="$(<"${line}/pkgbase")"
 	kver="${line##*/}"
 
-	echo ":: Building initramfs for ${pkgbase} (${kver})"
-	dracut -L 3 --force "/boot/initramfs-${pkgbase}.img" "${kver}"
+	set +e
+	(
+		set -e
+		echo ":: Building initramfs for ${pkgbase} (${kver})"
+		dracut -L 3 --force "/boot/initramfs-${pkgbase}.img" "${kver}"
 
-	echo ":: Building fallback initramfs for ${pkgbase} (${kver})"
-	dracut -L 1 --force --no-hostonly -o "network" "/boot/initramfs-${pkgbase}-fallback.img" "${kver}"
+		echo ":: Building fallback initramfs for ${pkgbase} (${kver})"
+		dracut -L 1 --force --no-hostonly -o "network" "/boot/initramfs-${pkgbase}-fallback.img" "${kver}"
+	)
+	_status="$?"
+	# only accumulates error status
+	[ "$_status" = 0 ] || status="$_status"
+	set +e
 done
+
+exit "$status"
