@@ -15,7 +15,6 @@ sha256sums=('SKIP')
 depends=('sway')
 optdepends=('kvantum: for theming Qt apps'
   'kvantum-qt5: Qt5 integration for Kvantum'
-  'kvantum-theme-nordic-git: default Kvantum theme'
   'nordic-darker-theme: default GTK theme'
   'swaybg: for setting desktop background'
   'swayidle: default idle management daemon'
