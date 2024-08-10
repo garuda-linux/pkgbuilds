@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # This script is triggered by a scheduled pipeline
-# shellcheck source=/dev/null
+# shellcheck source=./util.shlib
 source .ci/util.shlib
 
 # Read config file into global variables
@@ -120,6 +120,7 @@ function collect_changed_libs() {
         return 0
     fi
     if [ ! -f .state/versions ]; then
+        mkdir -p .state || true
         touch .state/versions
     fi
 
@@ -159,7 +160,7 @@ function update-lib-bump() {
     done
 
     if [ $bump -eq 1 ]; then
-        echo "Bumping pkgrel of $package because of a detected library mismatch"
+        UTIL_PRINT_INFO "Bumping pkgrel of $package because of a detected library mismatch"
         
         local _PKGVER _BUMPCOUNT _PKGVER_IN_DB
         # Example format: 1:1.2.3-1/1 or 1.2.3
@@ -234,11 +235,11 @@ function update_via_git() {
     local pkgbase="${VARIABLES_VIA_GIT[PKGBASE]}"
 
     for i in {1..2}; do
-        if git clone -q --depth=1 "$2" "$TMPDIR/aur-pulls/$pkgbase"; then
+        if git clone -q --depth=1 "$2" "$TMPDIR/aur-pulls/$pkgbase" 2>/dev/null; then
             break
         fi
         if [ "$i" -ne 2 ]; then
-            echo "$pkgbase: Failed to clone $2. Retrying in 30 seconds."
+            UTIL_PRINT_WARNING "$pkgbase: Failed to clone $2. Retrying in 30 seconds."
             sleep 30
         else
             # Give up
@@ -449,9 +450,11 @@ for package in "${PACKAGES[@]}"; do
 
             # We don't want to schedule packages that have a specific trigger to prevent 
             # large packages getting scheduled too often and wasting resources (e.g. llvm-git)
-            if [[ ! -v VARIABLES[CI_ON_TRIGGER] ]]; then
+            if [[ ${VARIABLES[CI_ON_TRIGGER]+x} ]]; then 
+                UTIL_PRINT_INFO "Will not schedule $package because it has trigger ${VARIABLES[CI_ON_TRIGGER]} set."
+            else 
                 MODIFIED_PACKAGES+=("$package")
-            fi
+            fi 
 
             if [ -v CI_HUMAN_REVIEW ] && [ "$CI_HUMAN_REVIEW" == "true" ] && git show-ref --quiet "origin/update-$package"; then
                 DELETE_BRANCHES+=("update-$package")
