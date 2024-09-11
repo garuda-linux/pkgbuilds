@@ -221,9 +221,9 @@ if [[ -v UPDATE_AUR ]]; then
 	$INT
 fi
 
-# Update mlocate index in the background
+# Update plocate index in the background
 if [ -x /usr/bin/locate ]; then
-	systemctl start updatedb.service --no-block
+	systemctl start plocate-updatedb.service --no-block
 fi
 
 # Update fish completions
