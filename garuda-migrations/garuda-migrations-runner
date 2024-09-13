@@ -134,6 +134,11 @@ apply_migrations() {
 		/usr/share/libalpm/scripts/garuda-migrations-firedragon &&
 			garudalib_add_update_notice "Due to a rebase and major changes related to the FireDragon browser, a new browser profile has been created. Certain settings, cookies and localstorage could not be migrated automatically. More information on this topic can be found here: https://forum.garudalinux.org/t/34585."
 	fi
+
+	# Add info about plocate migration
+	if [[ $(vercmp 2.5.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		garudalib_add_update_notice "Arch dropped mlocate in favor of plocate. Service migrations have already been applied by garuda-update, but you definitely also want to migrate your .pacsave files by running this command: 'sudo mv /etc/updatedb.conf.pacsave /etc/updatedb.conf'. More information can be found here: https://forum.garudalinux.org/t/39190/2."
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"
