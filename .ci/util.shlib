@@ -137,10 +137,12 @@ function UTIL_FETCH_VCS_COMMIT() {
         return 0
     fi
 
-    IFS=$'\n' read -rd '' source fragment <<<"$(UTIL_GET_URI_PARTS "$source")"
+    declare -a results
+    mapfile -t results <<<"$(UTIL_GET_URI_PARTS "$source")"
+    source="${results[0]}"
 
-    if [ -n "$fragment" ]; then
-        local type
+    if [ -v "results[1]" ]; then
+        local type fragment="${results[1]}"
         type="${fragment%%=*}"
         # This heuristic is used to check if the fragment is a branch.
         # If the fragment is not a branch, it must be a commit hash or a tag.
