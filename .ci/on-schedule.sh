@@ -65,6 +65,8 @@ COMMIT_MESSAGE_PACKAGES=()
 function manage_state() {
     if git show-ref --quiet "origin/state"; then
         git worktree add .state origin/state --detach -q
+    else
+        mkdir .state
     fi
     git worktree add .newstate -B state --orphan -q
 }
