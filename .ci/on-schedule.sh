@@ -58,6 +58,7 @@ declare -A CHANGED_LIBS=()
 DELETE_BRANCHES=()
 UTIL_GET_PACKAGES PACKAGES
 COMMIT="${COMMIT:-false}"
+COMMIT_MESSAGE_PACKAGES=()
 
 # Manage the .state worktree to confine the state of packages to a separate branch
 # The goal is to keep the commit history clean
@@ -132,12 +133,33 @@ function collect_changed_libs() {
 
 function generate-commit() {
     set -euo pipefail
-    if [ "$COMMIT" == "false" ]; then
-        COMMIT=true
-        if [ -v GITLAB_CI ]; then git commit -q -m "chore(packages): update packages"; fi
-        if [ -v GITHUB_ACTIONS ]; then git commit -q -m "chore(packages): update packages [skip ci]"; fi
+
+    local COMMIT_MESSAGE="chore(packages): update packages"
+    if [ -v GITHUB_ACTIONS ]; then
+        COMMIT_MESSAGE+=" [skip ci]"
+    fi
+    if [ "$1" == ".final" ]; then
+        local COMMIT_DESCRIPTION="" packages=""
+        if (( ${#COMMIT_MESSAGE_PACKAGES[@]} > 0 )); then
+            packages="$(printf "%s, " "${COMMIT_MESSAGE_PACKAGES[@]}")"
+            COMMIT_DESCRIPTION="Package files were changed for the following package"
+            if (( ${#COMMIT_MESSAGE_PACKAGES[@]} > 1 )); then
+                COMMIT_DESCRIPTION+=$'s:\n'
+            else
+                COMMIT_DESCRIPTION+=$':\n'
+            fi
+            COMMIT_DESCRIPTION+="${packages%, }"
+            COMMIT_DESCRIPTION+=$'\n\nNote: This is not the same as the list of packages that were scheduled for a rebuild. Certain packages listed here may be built on a different schedule.'
+        fi
+        git commit -q --amend -m "$COMMIT_MESSAGE" -m "$COMMIT_DESCRIPTION"
     else
-        git commit -q --amend --no-edit --date=now
+        COMMIT_MESSAGE_PACKAGES+=("$1")
+        if [ "$COMMIT" == "false" ]; then
+            COMMIT=true
+            git commit -q -m "$COMMIT_MESSAGE"
+        else
+            git commit -q --amend --no-edit
+        fi
     fi
 }
 
@@ -436,7 +458,7 @@ for package in "${PACKAGES[@]}"; do
             fi
         else
             git add "$package"
-            generate-commit
+            generate-commit "$package"
 
             # We don't want to schedule packages that have a specific trigger to prevent
             # large packages getting scheduled too often and wasting resources (e.g. llvm-git)
@@ -460,13 +482,14 @@ git -C .newstate add -A
 git -C .newstate commit -q -m "chore(state): update state" --allow-empty
 
 if [ ${#MODIFIED_PACKAGES[@]} -ne 0 ]; then
-    git add .ci/aur-state
-    generate-commit
     .ci/schedule-packages.sh schedule "${MODIFIED_PACKAGES[@]}"
     .ci/manage-aur.sh "${MODIFIED_PACKAGES[@]}"
 fi
 
-if [ "$COMMIT" = true ]; then
+if [ "$COMMIT" == "true" ]; then
+    git add .ci/aur-state
+    generate-commit ".final"
+
     git tag -f scheduled
     git_push_args=()
     for branch in "${DELETE_BRANCHES[@]}"; do
