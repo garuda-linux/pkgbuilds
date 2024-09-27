@@ -51,14 +51,22 @@ fi
 
 PACKAGES=()
 declare -A AUR_TIMESTAMPS
+LAST_AUR_TIMESTAMP=0
 MODIFIED_PACKAGES=()
 # shellcheck disable=SC2034
 declare -A CHANGED_LIBS=()
 DELETE_BRANCHES=()
 UTIL_GET_PACKAGES PACKAGES
 COMMIT="${COMMIT:-false}"
-# Signals if the .ci/version-state file has already been comitted or not
-VERSION_STATE_UPDATED=false
+
+# Manage the .state worktree to confine the state of packages to a separate branch
+# The goal is to keep the commit history clean
+function manage_state() {
+    if git show-ref --quiet "origin/state"; then
+        git worktree add .state origin/state --detach -q
+    fi
+    git worktree add .newstate -B state --orphan -q
+}
 
 # Loop through all packages to do optimized aur RPC calls
 # $1 = Output associative array
@@ -67,6 +75,11 @@ function collect_aur_timestamps() {
     # shellcheck disable=SC2034
     local -n collect_aur_timestamps_output=$1
     local AUR_PACKAGES=()
+
+    if [ -f .ci/aur-state ]; then
+        LAST_AUR_TIMESTAMP="$(<.ci/aur-state)"
+    fi
+    date +%s >.ci/aur-state
 
     for package in "${PACKAGES[@]}"; do
         unset VARIABLES
@@ -91,8 +104,8 @@ function collect_changed_libs() {
     if [ -z "$CI_LIB_DB" ]; then
         return 0
     fi
-    if [ ! -f .ci/version-state ]; then
-        touch .ci/version-state
+    if [ ! -f .state/.version-state ]; then
+        touch .state/.version-state
     fi
 
     IFS=' ' read -r -a link_array <<<"${CI_LIB_DB//\"/}"
@@ -106,14 +119,14 @@ function collect_changed_libs() {
 
     # Sort versions file in-place because comm requires it
     sort -o "${_TEMP_LIB}/version-state"{,}
-    comm -13 .ci/version-state "${_TEMP_LIB}/version-state" >"$_TEMP_LIB/versions.diff"
+    comm -13 .state/.version-state "${_TEMP_LIB}/version-state" >"$_TEMP_LIB/versions.diff"
 
     while IFS= read -r line; do
         IFS=':' read -r -a pkg <<<"$line"
         CHANGED_LIBS["${pkg[0]}"]="true"
     done <"$_TEMP_LIB/versions.diff"
 
-    mv "${_TEMP_LIB}/version-state" .ci/version-state
+    mv "${_TEMP_LIB}/version-state" .newstate/.version-state
     rm -rf "$_TEMP_LIB"
 }
 
@@ -125,15 +138,6 @@ function generate-commit() {
         if [ -v GITHUB_ACTIONS ]; then git commit -q -m "chore(packages): update packages [skip ci]"; fi
     else
         git commit -q --amend --no-edit --date=now
-    fi
-}
-
-function save-version-state() {
-    set -euo pipefail
-    if [ "$VERSION_STATE_UPDATED" == "false" ]; then
-        git add .ci/version-state
-        generate-commit
-        VERSION_STATE_UPDATED=true
     fi
 }
 
@@ -156,7 +160,6 @@ function update-lib-bump() {
     done
 
     if [ $bump -eq 1 ]; then
-        save-version-state
         UTIL_PRINT_INFO "$package: Bumping pkgrel of $package because of a detected library version change"
 
         local _PKGVER _BUMPCOUNT _PKGVER_IN_DB
@@ -357,15 +360,10 @@ function update_pkgbuild() {
         fi
         local NEW_TIMESTAMP="${AUR_TIMESTAMPS[$pkgbase]}"
 
-        # Check if CI_PKGBUILD_TIMESTAMP is set
-        if [ -v "VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_TIMESTAMP]" ]; then
-            local PKGBUILD_TIMESTAMP="${VARIABLES_UPDATE_PKGBUILD[CI_PKGBUILD_TIMESTAMP]}"
-            if [ "$PKGBUILD_TIMESTAMP" == "$NEW_TIMESTAMP" ]; then
-                return 0
-            fi
+        if (( NEW_TIMESTAMP <= LAST_AUR_TIMESTAMP )); then
+            return 0
         fi
         http_proxy="$CI_AUR_PROXY" https_proxy="$CI_AUR_PROXY" update_via_git VARIABLES_UPDATE_PKGBUILD "$git_url"
-        UTIL_UPDATE_AUR_TIMESTAMP VARIABLES_UPDATE_PKGBUILD "$NEW_TIMESTAMP"
     fi
 }
 
@@ -400,6 +398,9 @@ function update_vcs() {
         UTIL_UPDATE_VCS_COMMIT VARIABLES_UPDATE_VCS "$_NEWEST_COMMIT"
     fi
 }
+
+# Create .state and .newstate worktrees
+manage_state
 
 # Collect last modified timestamps from AUR in an efficient way
 collect_aur_timestamps AUR_TIMESTAMPS
@@ -439,7 +440,7 @@ for package in "${PACKAGES[@]}"; do
 
             # We don't want to schedule packages that have a specific trigger to prevent
             # large packages getting scheduled too often and wasting resources (e.g. llvm-git)
-            if [[ ${VARIABLES[CI_ON_TRIGGER]+x} ]]; then
+            if [[ -v "VARIABLES[CI_ON_TRIGGER]" ]]; then
                 UTIL_PRINT_INFO "Will not schedule $package because it has trigger ${VARIABLES[CI_ON_TRIGGER]} set."
             else
                 MODIFIED_PACKAGES+=("$package")
@@ -449,10 +450,18 @@ for package in "${PACKAGES[@]}"; do
                 DELETE_BRANCHES+=("update-$package")
             fi
         fi
+    # We also need to check the worktree for changes, because we might have an updated git hash
+    elif ! UTIL_CHECK_STATE_DIFF "$package"; then
+        MODIFIED_PACKAGES+=("$package")
     fi
 done
 
+git -C .newstate add -A
+git -C .newstate commit -q -m "chore(state): update state" --allow-empty
+
 if [ ${#MODIFIED_PACKAGES[@]} -ne 0 ]; then
+    git add .ci/aur-state
+    generate-commit
     .ci/schedule-packages.sh schedule "${MODIFIED_PACKAGES[@]}"
     .ci/manage-aur.sh "${MODIFIED_PACKAGES[@]}"
 fi
@@ -464,5 +473,5 @@ if [ "$COMMIT" = true ]; then
         git_push_args+=(":$branch")
     done
     [ -v GITLAB_CI ] && git_push_args+=("-o" "ci.skip")
-    git push --atomic origin HEAD:main +refs/tags/scheduled "${git_push_args[@]}"
+    git push --atomic origin HEAD:main +state +refs/tags/scheduled "${git_push_args[@]}"
 fi
