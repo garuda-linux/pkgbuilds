@@ -4,8 +4,8 @@
 
 pkgname=garuda-cinnamon-settings
 pkgdesc='Garuda Linux Cinnamon settings'
-pkgver="1.0.10"
-_commit='2cfee74c984a89a22935d577644b0567a265f9d3'
+pkgver="1.0.11"
+_commit='24a6932699acf7804a8776607601956318b79073'
 pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -18,12 +18,12 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-	depends=('kvantum-qt5'
-			 'noto-fonts'
-			 'garuda-common-settings')
+  depends=('kvantum-qt5'
+    'noto-fonts'
+    'garuda-common-settings')
 
-	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }
