@@ -39,6 +39,12 @@ self_update() {
 INT=true
 trap "INT=false" INT
 
+# Show a help text in case it was requested
+if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ "$1" == "help" ]; then
+	# shellcheck source=./help
+	source /usr/lib/garuda/garuda-update/help
+fi
+
 # Elevate once and stop asking for the password constantly
 if [[ $EUID -ne 0 ]]; then
 	exec sudo --preserve-env="SKIP_MIRRORLIST,UPDATE_AUR,PACMAN_EXE,GARUDA_SNAPSHOT_PACMAN,PACMAN_EXTRA_OPTS" /usr/bin/garuda-update "$@"
@@ -65,5 +71,5 @@ fi
 
 self_update "$@"
 
-# shellcheck disable=1091
+# shellcheck source=./main-update
 source /usr/lib/garuda/garuda-update/main-update

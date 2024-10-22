@@ -3,7 +3,7 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=4.8.1
+pkgver=4.8.2
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -12,12 +12,14 @@ backup=(etc/garuda/garuda-update/config)
 source=("auto-pacman"
 	"config"
 	"garuda-update"
+	"help"
 	"logrotate"
 	"main-update"
 	"update-helper-scripts")
 sha512sums=('67bb8da7436653148361704eb1ec944f9cf670f3ef66ed33621675231423982b7d93b08064c4e8c033cfe879cd314136d3f02395bb78321d72280d1d1430c801'
             'd5dbe3e4a47e9b5301d1e849c54f2632540f14878e6af4f11979d74fc0be1c36321229cf5128924251431087aa42c497c0ab57e0743973c9baaeccc24114e2e1'
-            'c284b82847160901bcd214c5f2bbb855f55806c8e9b91e90ff4de877e56987002f8e81723bf1427205d4a53b1c5aa9c07f04e5f5b4946c3139a446aba1b69dfd'
+            '04a629a3942647167c73d0695ce3d76a18eafa84e788ba0708375860562466d9ce4119a51cb0e39c150ea4b847269d65de63093e594f8be1f30bdf34d185cac5'
+            '4a9d6c017b8e6763a574a98d4e6c1e7a3520716c4f74f28bdb1a0bc35ffe9b0e859d5c03d413720e6477218509e3ca24ad701202e46158c6197d660e3ef9d60f'
             'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de'
             '5f8f6a66d4593cefccdcd2827a2ba885e69baa5d912bc61ee449774934debf44d94304514df78694868813464afdd390c100553fd3330461543bf40a134c0c59'
             'dbf205f0548616538218e77c763f269e3eb0c1a896dc5b760c4cf30db8c6aed760c661867ddef373fc029221b8f70e97797cf4a5a7c0bfafbd0f2748fda56835')
@@ -25,9 +27,10 @@ sha512sums=('67bb8da7436653148361704eb1ec944f9cf670f3ef66ed33621675231423982b7d9
 package() {
 	install -Dm755 garuda-update "$pkgdir"/usr/bin/garuda-update
 	ln -s /usr/bin/garuda-update "$pkgdir"/usr/bin/update
-	install -Dm755 update-helper-scripts "$pkgdir"/usr/lib/garuda/garuda-update/update-helper-scripts
-	install -Dm755 main-update "$pkgdir"/usr/lib/garuda/garuda-update/main-update
-	install -Dm755 auto-pacman "$pkgdir"/usr/lib/garuda/garuda-update/auto-pacman
-	install -Dm644 logrotate "$pkgdir"/etc/logrotate.d/garuda-update
 	install -Dm644 config "$pkgdir"/etc/garuda/garuda-update/config
+	install -Dm644 logrotate "$pkgdir"/etc/logrotate.d/garuda-update
+	install -Dm755 auto-pacman "$pkgdir"/usr/lib/garuda/garuda-update/auto-pacman
+	install -Dm755 help "$pkgdir"/usr/lib/garuda/garuda-update/help
+	install -Dm755 main-update "$pkgdir"/usr/lib/garuda/garuda-update/main-update
+	install -Dm755 update-helper-scripts "$pkgdir"/usr/lib/garuda/garuda-update/update-helper-scripts
 }
