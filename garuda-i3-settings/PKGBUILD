@@ -4,8 +4,8 @@
 
 pkgname=garuda-i3-settings
 pkgdesc='Garuda Linux i3 settings'
-pkgver="1.2.8"
-_commit='212b3d67d8d9f7bef4f4689fcb791dd68b5b344c'
+pkgver="1.2.9"
+_commit='104144b248cd9dbf5dcd42f0141a2055b08c7b67'
 pkgrel=1
 arch=('any')
 depends=('garuda-common-settings')
