@@ -4,8 +4,8 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.3.9.r29.g7987cc572
-_commit=7987cc5727607178eca071002c5e5a3711d83fc1
+pkgver=3.3.10.r47.g16cb360a6
+_commit=16cb360a69328a99317cd9a9ebea7213aef23887
 pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
@@ -27,7 +27,7 @@ source+=(git+https://github.com/calamares/calamares.git#commit="${_commit}"
     mount.conf
     mhwdcfg.conf
     chrootcfg.conf)
-sha256sums=('ad43d754e2d3560df57b6daeffaf24188fd96f7436faec739746ea4ef46eef35'
+sha256sums=('894946708bbc9a77d3e0aacd136b63dd8484fbbf78b36f1313e7fa40f50445b8'
             '81dbbfcc96f4e75ff9f11b59b6d715d2da93981810141691af1d58d4068253a7'
             'd681b09c9f6daf22efb08cbcaad577487b4c749205697bf61b96d053ab50db7c'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
