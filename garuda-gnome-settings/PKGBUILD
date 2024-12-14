@@ -2,7 +2,7 @@
 
 pkgname=garuda-gnome-settings
 pkgver="1.5.8"
-_commit='5a93a443f377859331aa9c3a74d4366f11d608f0'
+_commit='be45ad0e50b6da39eedf42bfbf852c8fc76215c9'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
