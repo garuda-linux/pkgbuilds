@@ -1,8 +1,8 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-gnome-settings
-pkgver="1.5.8"
-_commit='be45ad0e50b6da39eedf42bfbf852c8fc76215c9'
+pkgver="v1.5.3"
+_commit='c61421853523ad9eb26d6c681c3db880c3c06910'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -16,15 +16,15 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-	install -Dm644 "${srcdir}/$pkgname-$_commit/zz_garuda.org.gnome.login-screen.gschema.override" "${pkgdir}/usr/share/glib-2.0/schemas/zz_garuda.org.gnome.login-screen.gschema.override"
-	depends=('garuda-backgrounds'
-		'garuda-common-settings'
-		'gnome-themes-extra'
-		'kvantum'
-		'kvantum-qt5'
-		'volantes-cursors'
-		'ttf-fira-sans'
-		'ttf-firacode-nerd')
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+  install -Dm644 "${srcdir}/$pkgname-$_commit/zz_garuda.org.gnome.login-screen.gschema.override" "${pkgdir}/usr/share/glib-2.0/schemas/zz_garuda.org.gnome.login-screen.gschema.override"
+  depends=('garuda-backgrounds'
+    'garuda-common-settings'
+    'gnome-themes-extra'
+    'kvantum'
+    'kvantum-qt5'
+    'volantes-cursors'
+    'ttf-fira-sans'
+    'ttf-firacode-nerd')
 }
