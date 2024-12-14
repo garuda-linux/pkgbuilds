@@ -1,6 +1,6 @@
 pkgbase = garuda-gnome-settings
 	pkgdesc = Garuda Linux GNOME settings
-	pkgver = v1.5.3
+	pkgver = 1.5.8
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings
 	install = garuda-gnome-settings.install
@@ -9,13 +9,15 @@ pkgbase = garuda-gnome-settings
 	makedepends = coreutils
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/c61421853523ad9eb26d6c681c3db880c3c06910/garuda-gnome-settings-c61421853523ad9eb26d6c681c3db880c3c06910.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/5a93a443f377859331aa9c3a74d4366f11d608f0/garuda-gnome-settings-5a93a443f377859331aa9c3a74d4366f11d608f0.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-gnome-settings
 	depends = garuda-backgrounds
 	depends = garuda-common-settings
 	depends = gnome-themes-extra
+	depends = kvantum
+	depends = kvantum-qt5
 	depends = volantes-cursors
 	depends = ttf-fira-sans
 	depends = ttf-firacode-nerd
