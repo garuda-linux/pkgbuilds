@@ -1,8 +1,8 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-gnome-settings
-pkgver="v1.5.3"
-_commit='c61421853523ad9eb26d6c681c3db880c3c06910'
+pkgver="v1.5.1"
+_commit='fdece665daa4506925fa57d4b66f664d48cd0c5b'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
