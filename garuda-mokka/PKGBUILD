@@ -1,0 +1,42 @@
+# Maintainer: FGD
+# Co-Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-mokka
+pkgver="0.0.1"
+#_commit=''
+pkgrel=1
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname/-/archive/${_commit}/$pkgname-${_commit}.tar.gz
+git clone https://github.com/L4ki/Vivid-Plasma-Themes && mv ./Vivid-Plasma-Themes ./Vivid-Dark-Icons && cd Vivid-Dark-Icons && git filter-branch --subdirectory-filter ./Vivid\ Icons\ Themes/Vivid-Dark-Icons")
+sha256sums=('SKIP')
+pkgdesc='Mokka settings'
+install=$pkgname.install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings' 'plasma5-applets-window-appmenu' 'plasma5-applets-window-buttons' 'plasma5-applets-window-title' 'plasma5-applets-betterinlineclock-git' 'plasma5-wallpapers-blurredwallpaper')
+replaces=('')
+
+prepare() {
+    #cd Vivid-Dark-Icons
+    sed -i "s|00ccff|b4befe|g" ./places/64/folder.svg && sed -i "s|00ccff|b4befe|g" ./places/32/folder.svg && sed -i "s|5599ff|cba6f7|g" ./places/64/folder.svg && sed -i "s|5599ff|cba6f7|g" ./places/32/folder.svg
+}
+
+package() {
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+
+  depends=('garuda-common-settings'
+    'garuda-fish-config'
+    'garuda-icons'
+    'garuda-wallpapers'
+    'kvantum'
+    'plasma-applet-window-buttons'
+    'plasma-systemmonitor'
+    'plasma6-applets-window-title'
+    'plasma6-wallpapers-blurredwallpaper'
+    'noto-fonts'
+    'xdg-desktop-portal-gtk') # fixes Wayland GTK theming
+}
