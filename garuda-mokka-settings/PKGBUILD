@@ -1,0 +1,93 @@
+# Maintainer: FGD
+# Co-Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# shellcheck disable=SC2034,2154,2164
+
+pkgname=garuda-mokka
+pkgver=r44.52bd77f
+pkgrel=1
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+source=("git+https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname.git"
+  git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
+  git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
+  git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
+  git+https://github.com/catppuccin/fish.git#commit=cc8e4d8fffbdaab07b3979131030b234596f18da
+  git+https://github.com/catppuccin/konsole#commit=3b64040e3f4ae5afb2347e7be8a38bc3cd8c73a8
+  git+https://github.com/catppuccin/bat.git#commit=699f60fc8ec434574ca7451b444b880430319941
+  git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312)
+sha256sums=('SKIP'
+  '57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320'
+  'da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f'
+  '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
+  'eaf82aaafdc83c6569a6805fa5727d18a22dcacc08668a29499c4d263900ec65'
+  '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
+  'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
+  '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82')
+pkgdesc='Garuda Mokka desktop settings and presets'
+makedepends=(git unzip wget)
+install=$pkgname.install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings')
+
+prepare() {
+  rm -rf ./out ./dist || true
+  mkdir -p ./out ./work
+}
+
+pkgver() {
+  cd "$srcdir/garuda-mokka"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+  cp -r "$srcdir/kde" ./work
+  pushd ./work/kde &> /dev/null
+  bash "$srcdir/garuda-mokka/mokka-install.sh" 1 4 2
+  popd &> /dev/null
+}
+
+package() {
+  cp -r ./work/kde/out/* "$pkgdir"
+
+  install -d -m 0755 "$pkgdir/etc/skel/.config/micro/colorschemes"
+  cp "$srcdir/micro/src/catppuccin-mocha.micro" "$pkgdir/etc/skel/.config/micro/colorschemes/"
+
+  install -d -m 0755 "$pkgdir"/etc/skel/.config/conky
+  cp "$srcdir/conky/mocha.conf" "$pkgdir/etc/skel/.config/conky/"
+
+  install -d -m 0755 "$pkgdir"/usr/share/fish/themes
+  cp "$srcdir/fish/themes/Catppuccin Mocha.theme" "$pkgdir/usr/share/fish/themes/catppuccin-mocha.fish"
+
+  install -d -m 0755 "$pkgdir/usr/share/konsole/themes"
+  cp -r "$srcdir/konsole/themes/catppuccin-mocha.colorscheme" "$pkgdir/usr/share/konsole/themes/"
+  sed -i 's/Opacity=1/Opacity=0.9/g' "$pkgdir/usr/share/konsole/themes/catppuccin-mocha.colorscheme"
+
+  install -d -m 0755 "$pkgdir/etc/skel/.config/bat/themes"
+  cp -r "$srcdir/bat/themes/Catppuccin Mocha.tmTheme" "$pkgdir/etc/skel/.config/bat/themes/"
+
+  install -d -m 0755 "$pkgdir/usr/share/grub/themes/"
+  cp -r "$srcdir/grub/src/catppuccin-mocha-grub-theme" "$pkgdir/usr/share/grub/themes/catppuccin-mocha"
+
+  cp -r "$srcdir/garuda-mokka/etc" "$pkgdir/"
+  cp -r "$srcdir/garuda-mokka/usr" "$pkgdir/"
+
+  install -d -m 0755 "$pkgdir/usr/share/wallpapers"
+  cp -r "$srcdir/garuda-mokka/wallpapers" "$pkgdir/usr/share/wallpapers/garuda-mokka"
+
+  depends=(
+    'garuda-common-settings'
+    'garuda-fish-config'
+    'garuda-icons'
+    'garuda-wallpapers'
+    'inter-font'
+    'kvantum'
+    'kwin-effects-forceblur'
+    'plasma-applet-window-buttons'
+    'plasma-systemmonitor'
+    'plasma6-applets-window-title'
+    'plasma6-wallpapers-blurredwallpaper'
+    'tela-circle-icon-theme-dracula'
+    'xdg-desktop-portal-gtk'
+  )
+}
