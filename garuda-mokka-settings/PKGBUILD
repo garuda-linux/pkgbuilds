@@ -24,11 +24,12 @@ sha256sums=('SKIP'
   '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
   'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
   '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82')
-pkgdesc='Garuda Mokka desktop settings and presets'
+pkgdesc='DO NOT INSTALL - TEST PACKAGE for Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget)
 install=$pkgname.install
 provides=('garuda-desktop-settings')
-conflicts=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings
+plasma5-themes-sweet-full-git')
 
 prepare() {
   rm -rf ./out ./dist || true
