@@ -29,7 +29,10 @@ makedepends=(git unzip wget)
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings
-plasma5-themes-sweet-full-git')
+plasma5-themes-sweet-full-git
+plasma5-themes-sweet-kde-git
+candy-icons-git
+beautyline')
 
 prepare() {
   rm -rf ./out ./dist || true
