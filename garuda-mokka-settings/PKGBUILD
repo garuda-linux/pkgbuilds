@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r44.52bd77f
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -30,9 +30,7 @@ install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings
 plasma5-themes-sweet-full-git
-plasma5-themes-sweet-kde-git
-candy-icons-git
-beautyline')
+plasma5-themes-sweet-kde-git')
 
 prepare() {
   rm -rf ./out ./dist || true
@@ -78,6 +76,8 @@ package() {
 
   install -d -m 0755 "$pkgdir/usr/share/wallpapers"
   cp -r "$srcdir/garuda-mokka/wallpapers" "$pkgdir/usr/share/wallpapers/garuda-mokka"
+
+  cp -r "$srcdir/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/"
 
   depends=(
     'garuda-common-settings'
