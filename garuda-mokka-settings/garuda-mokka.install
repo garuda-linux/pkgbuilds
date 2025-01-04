@@ -16,15 +16,20 @@ update_gtk() {
   /bin/sh -c 'dconf update'
 }
 
+# Apply GRUB theme and TTY colors
+apply_grub() {
+  sed -i 's&GRUB_CMDLINE_LINUX=""&GRUB_CMDLINE_LINUX="vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166 vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173 vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200"&g' /etc/default/grub  
+  sed -i -e 's,.*GRUB_THEME=.*,GRUB_THEME="/usr/share/grub/themes/catppuccin-mocha/theme.txt",' /etc/default/grub
+  sed -i -e 's,.*GRUB_GFXMODE=.*,GRUB_GFXMODE=auto,' /etc/default/grub
+  sed -i -e 's,.*GRUB_DISTRIBUTOR=.*,GRUB_DISTRIBUTOR="Garuda",' /etc/default/grub
+  grub-mkconfig -o /boot/grub/grub.cfg
+}
+
 # Post installation
 post_install() {
   update_fonts
   update_gtk
-  #echo "GRUB_CMDLINE_LINUX=vt.default_red=30,243,166,249,137,245,148,186,88,243,166,249,137,245,148,166 vt.default_grn=30,139,227,226,180,194,226,194,91,139,227,226,180,194,226,173 vt.default_blu=46,168,161,175,250,231,213,222,112,168,161,175,250,231,213,200" >>/etc/default/grub
-  #sed -i -e 's,.*GRUB_THEME=.*,GRUB_THEME="/usr/share/grub/themes/catppuccin-mocha/theme.txt",' /etc/default/grub
-  #sed -i -e 's,.*GRUB_GFXMODE=.*,GRUB_GFXMODE=auto,' /etc/default/grub
-  #sed -i -e 's,.*GRUB_DISTRIBUTOR=.*,GRUB_DISTRIBUTOR="Garuda",' /etc/default/grub
-  #grub-mkconfig -o /boot/grub/grub.cfg
+  apply_grub
 }
 
 # Post upgrade
