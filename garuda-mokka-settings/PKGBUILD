@@ -3,8 +3,8 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver=r44.52bd77f
-pkgrel=6
+pkgver=r53.02036d8
+pkgrel=7
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -28,10 +28,9 @@ pkgdesc='DO NOT INSTALL - TEST PACKAGE for Garuda Mokka desktop settings and pre
 makedepends=(git unzip wget)
 install=$pkgname.install
 provides=('garuda-desktop-settings')
-conflicts=('garuda-desktop-settings
-garuda-dr460nized
-plasma5-themes-sweet-full-git
-plasma5-themes-sweet-kde-git')
+conflicts=('garuda-desktop-settings'
+  'plasma5-themes-sweet-full-git'
+  'plasma5-themes-sweet-kde-git')
 
 prepare() {
   rm -rf ./out ./dist || true
@@ -78,7 +77,8 @@ package() {
   install -d -m 0755 "$pkgdir/usr/share/wallpapers"
   cp -r "$srcdir/garuda-mokka/wallpapers" "$pkgdir/usr/share/wallpapers/garuda-mokka"
 
-  cp "$srcdir/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
+  install -d -m 0755 "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps"
+  cp "$srcdir/garuda-mokka/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
 
   rm -rf "$pkgdir/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
 

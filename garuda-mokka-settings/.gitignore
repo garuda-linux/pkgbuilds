@@ -1,3 +1,11 @@
-!garuda-mokka.install
-!mokka-install.sh
-!PKGBUILD
+bat
+conky
+fish
+garuda-mokka
+grub
+kde
+konsole
+micro
+pkg
+src
+*.tar.zst
