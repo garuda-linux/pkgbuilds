@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r53.02036d8
-pkgrel=8
+pkgrel=9
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -52,34 +52,43 @@ build() {
 package() {
   cp -r ./work/kde/out/* "$pkgdir"
 
+  # Install Micro color schemes
   install -d -m 0755 "$pkgdir/etc/skel/.config/micro/colorschemes"
   cp "$srcdir/micro/src/catppuccin-mocha.micro" "$pkgdir/etc/skel/.config/micro/colorschemes/"
 
+  # Install Conky color schemes
   install -d -m 0755 "$pkgdir"/etc/skel/.config/conky
   cp "$srcdir/conky/mocha.conf" "$pkgdir/etc/skel/.config/conky/"
 
+  # Install Fish color schemes
   install -d -m 0755 "$pkgdir"/etc/skel/.config/fish/themes
   cp "$srcdir/fish/themes/Catppuccin Mocha.theme" "$pkgdir/etc/skel/.config/fish/themes/Catppuccin Mocha.theme"
 
+  # Install Konsole color schemes
   install -d -m 0755 "$pkgdir/usr/share/konsole/themes"
   cp -r "$srcdir/konsole/themes/catppuccin-mocha.colorscheme" "$pkgdir/usr/share/konsole/themes/"
   sed -i 's/Opacity=1/Opacity=0.9/g' "$pkgdir/usr/share/konsole/themes/catppuccin-mocha.colorscheme"
 
+  # Install Bat color schemes
   install -d -m 0755 "$pkgdir/etc/skel/.config/bat/themes"
   cp -r "$srcdir/bat/themes/Catppuccin Mocha.tmTheme" "$pkgdir/etc/skel/.config/bat/themes/"
 
+  # Install GRUB theme
   install -d -m 0755 "$pkgdir/usr/share/grub/themes/"
   cp -r "$srcdir/grub/src/catppuccin-mocha-grub-theme" "$pkgdir/usr/share/grub/themes/catppuccin-mocha"
 
   cp -r "$srcdir/garuda-mokka/etc" "$pkgdir/"
   cp -r "$srcdir/garuda-mokka/usr" "$pkgdir/"
 
+  # Install Mokka-specific wallpapers
   install -d -m 0755 "$pkgdir/usr/share/wallpapers"
   cp -r "$srcdir/garuda-mokka/wallpapers" "$pkgdir/usr/share/wallpapers/garuda-mokka"
 
+  # Install Application Menu logo
   install -d -m 0755 "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps"
   cp "$srcdir/garuda-mokka/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
 
+  # Removes standard Catppuccin Mocha Global Theme as Garuda's Mokka theme is used
   rm -rf "$pkgdir/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
 
   depends=(
