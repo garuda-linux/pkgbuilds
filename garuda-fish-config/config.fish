@@ -2,9 +2,14 @@
 # Hide welcome message & ensure we are reporting fish as shell
 set fish_greeting
 set VIRTUAL_ENV_DISABLE_PROMPT "1"
+set -x SHELL /usr/bin/fish
+
+# Use bat for man pages
 set -xU MANPAGER "sh -c 'col -bx | bat -l man -p'"
 set -xU MANROFFOPT "-c"
-set -x SHELL /usr/bin/fish
+
+# Hint to exit PKGBUILD review in Paru
+set -x PARU_PAGER "less -P \"Press 'q' to exit the PKGBUILD review.\""
 
 ## Export variable need for qt-theme
 if type "qtile" >> /dev/null 2>&1
@@ -14,7 +19,6 @@ end
 # Set settings for https://github.com/franciscolourenco/done
 set -U __done_min_cmd_duration 10000
 set -U __done_notification_urgency_level low
-
 
 ## Environment setup
 # Apply .profile: use this to put fish compatible .profile stuff in
@@ -36,16 +40,13 @@ if test -d ~/Applications/depot_tools
     end
 end
 
-
 ## Starship prompt
 if status --is-interactive
    source ("/usr/bin/starship" init fish --print-full-init | psub)
 end
 
-
 ## Advanced command-not-found hook
 source /usr/share/doc/find-the-command/ftc.fish
-
 
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
