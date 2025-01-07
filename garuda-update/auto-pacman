@@ -35,6 +35,7 @@ array set auto_replace_conflicts {
     plasma5-applets-betterinlineclock-git garuda-dr460nized
     plasma5-wallpapers-blurredwallpaper garuda-dr460nized
     plasma-applet-window-buttons garuda-dr460nized
+    alpm_octopi_utils octopi
 }
 
 if { $::conflictsfile_set } {
