@@ -1,6 +1,3 @@
 .direnv
 .pre-commit-config.yaml
-pkg
 pkgbuilds
-src
-**/*.pkg.tar.zst
