@@ -99,7 +99,7 @@ prepare() {
   rm -rf "${srcdir}/mozbuild"
   mkdir "${srcdir}/mozbuild"
 
-  cd firedragon-v"${_pkgver}" || exit
+  cd firedragon-catppuccin-v"${_pkgver}" || exit
 
   cat > ../mozconfig << END
 ac_add_options --with-app-basename=${_pkgname}
@@ -188,7 +188,7 @@ END
 }
 
 build() {
-  cd firedragon-v"${_pkgver}" || exit
+  cd firedragon-catppuccin-v"${_pkgver}" || exit
 
   export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=pip
   export MOZBUILD_STATE_PATH="${srcdir}/mozbuild"
@@ -297,7 +297,7 @@ build() {
 }
 
 package() {
-  cd firedragon-v"${_pkgver}" || exit
+  cd firedragon-catppuccin-v"${_pkgver}" || exit
 
   install -Ddvm755 "${pkgdir}/usr/lib/${__pkgname}"
   cp -rvf "obj/dist/firedragon/." "${pkgdir}/usr/lib/${__pkgname}"
