@@ -14,7 +14,7 @@ __pkgname=firedragon
 pkgname=$__pkgname-catppuccin
 _pkgname=FireDragon
 pkgver=${_pkgver//-/_}
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="Floorp fork build using custom branding and settings"
 url='https://firedragon.garudalinux.org'
@@ -366,10 +366,10 @@ END
 
   # Application icons
   for i in 16 32 48 64 128; do
-    install -Dvm644 browser/branding/firedragon/default$i.png \
+    install -Dvm644 browser/branding/firedragon-catppuccin/default$i.png \
       "${pkgdir}/usr/share/icons/hicolor/${i}x${i}/apps/${__pkgname}.png"
   done
-  install -Dvm644 browser/branding/firedragon/content/about-logo.png \
+  install -Dvm644 browser/branding/firedragon-catppuccin/content/about-logo.png \
     "${pkgdir}/usr/share/icons/hicolor/192x192/apps/${__pkgname}.png"
 
   # Replace duplicate binary with wrapper
