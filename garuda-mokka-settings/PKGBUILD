@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r53.02036d8
-pkgrel=13
+pkgrel=14
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
