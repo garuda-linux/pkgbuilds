@@ -1,6 +1,6 @@
 pkgbase = garuda-dr460nized
 	pkgdesc = Dr460nized settings
-	pkgver = 4.4.5
+	pkgver = 4.4.6
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
 	install = garuda-dr460nized.install
@@ -14,7 +14,7 @@ pkgbase = garuda-dr460nized
 	conflicts = plasma5-applets-betterinlineclock-git
 	conflicts = plasma5-wallpapers-blurredwallpaper
 	replaces = garuda-dr460nized-next
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/c57ee4c86bd21b75fa02031bdb2699a99ce060f1/garuda-dr460nized-c57ee4c86bd21b75fa02031bdb2699a99ce060f1.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/6bd73333f68e87939f6cddfa192872d5ad853098/garuda-dr460nized-6bd73333f68e87939f6cddfa192872d5ad853098.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-dr460nized
