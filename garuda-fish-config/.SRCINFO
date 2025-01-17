@@ -1,6 +1,6 @@
 pkgbase = garuda-fish-config
 	pkgdesc = Fish configuration of Garuda Linux
-	pkgver = 1.5.23
+	pkgver = 1.5.24
 	pkgrel = 1
 	url = https://garudalinux.org
 	arch = any
