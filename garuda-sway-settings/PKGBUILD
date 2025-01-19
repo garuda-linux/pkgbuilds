@@ -13,12 +13,12 @@ makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/${_commit}/garuda-sway-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 depends=('sway')
-optdepends=('kvantum: for theming Qt apps'
+optdepends=('gtklock: default screen locker'
+  'kvantum: for theming Qt apps'
   'kvantum-qt5: Qt5 integration for Kvantum'
   'nordic-darker-theme: default GTK theme'
   'swaybg: for setting desktop background'
   'swayidle: default idle management daemon'
-  'swaylock: default screen locker'
   'tela-circle-icon-theme-nord: default icon theme')
 
 install="$pkgname".install
