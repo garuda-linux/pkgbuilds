@@ -4,27 +4,27 @@
 pkgname=garuda-gamer
 pkgver="1.1.9"
 _commit='a798afe2058087ae197bb082edf84cec80f00e35'
-pkgrel=1
+pkgrel=2
 pkgdesc="An application which provides makes installing gaming related utilities easy"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL3')
-depends=('qt5-base' 'xdg-utils' 'garuda-libs')
+depends=('qt6-base' 'xdg-utils' 'garuda-libs')
 makedepends=('git')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-gamer/-/archive/${_commit}/garuda-gamer-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	qmake-qt5 $pkgname.pro
-	make
+  cd "$srcdir/$pkgname-$_commit" || exit
+  qmake6 $pkgname.pro
+  make
 }
 
 package() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	make INSTALL_ROOT="$pkgdir" install
+  cd "$srcdir/$pkgname-$_commit" || exit
+  make INSTALL_ROOT="$pkgdir" install
 
-	install -Dm0644 org.garuda.garuda-gamer.pkexec.policy "$pkgdir"/usr/share/polkit-1/actions/org.garuda.garuda-gamer.pkexec.policy
-	install -Dm0755 rootshell.sh "$pkgdir"/usr/share/garuda/scripts/garuda-gamer/rootshell.sh
+  install -Dm0644 org.garuda.garuda-gamer.pkexec.policy "$pkgdir"/usr/share/polkit-1/actions/org.garuda.garuda-gamer.pkexec.policy
+  install -Dm0755 rootshell.sh "$pkgdir"/usr/share/garuda/scripts/garuda-gamer/rootshell.sh
 }
