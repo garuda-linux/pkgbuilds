@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r53.02036d8
-pkgrel=27
+pkgrel=28
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -86,7 +86,7 @@ package() {
 
   # Install Mokka snapper-tools.svg
   install -d -m 0755 "$pkgdir/usr/share/pixmaps/"
-  cp -f "$srcdir/garuda-mokka/usr/share/icons/garuda/snapper-tools.svg" "$pkgdir/usr/share/pixmaps/snapper-tools.svg"
+  cp -rf "$srcdir/garuda-mokka/usr/share/icons/garuda/snapper-tools.svg" "$pkgdir/usr/share/pixmaps/"
 
   # Install Application Menu logo
   install -d -m 0755 "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps"
