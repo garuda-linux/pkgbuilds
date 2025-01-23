@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r53.02036d8
-pkgrel=35
+pkgrel=36
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -27,7 +27,7 @@ sha256sums=('SKIP'
 pkgdesc='DO NOT INSTALL - TEST PACKAGE for Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget)
 install=$pkgname.install
-provides=('garuda-desktop-settings' 'plasma6-applets-panel-colorizer')
+provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
   'plasma5-themes-sweet-kde-git')
@@ -104,6 +104,7 @@ package() {
     'plasma-applet-window-buttons'
     'plasma-systemmonitor'
     'plasma6-applets-window-title'
+    'plasma6-applets-panel-colorizer'
     'plasma6-wallpapers-blurredwallpaper'
     'tela-circle-icon-theme-dracula'
     'xdg-desktop-portal-gtk'
