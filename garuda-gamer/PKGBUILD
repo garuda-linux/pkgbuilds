@@ -2,8 +2,8 @@
 # Contributor: librewish <librewish@garudalinux.org>
 
 pkgname=garuda-gamer
-pkgver="1.1.10"
-_commit='f8be757d76fd8638bf90cb573484022736912ac3'
+pkgver="1.1.9"
+_commit='a798afe2058087ae197bb082edf84cec80f00e35'
 pkgrel=1
 pkgdesc="An application which provides makes installing gaming related utilities easy"
 arch=('any')
