@@ -31,6 +31,7 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
   'plasma5-themes-sweet-kde-git')
+depends=('plasma6-applets-panel-colorizer')
 
 
 prepare() {
