@@ -33,6 +33,7 @@ package() {
     'plasma-systemmonitor'
     'plasma5-themes-sweet-full-git'
     'plasma6-applets-window-title'
+    'plasma6-applets-panel-colorizer'
     'plasma6-wallpapers-blurredwallpaper'
     'ttf-fira-sans'
     'ttf-firacode-nerd'
