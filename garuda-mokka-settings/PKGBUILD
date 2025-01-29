@@ -89,10 +89,6 @@ package() {
   install -d -m 0755 "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps"
   cp "$srcdir/garuda-mokka/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
 
-  # Install Panel-Colorizer custom Mokka presets
-  #install -d -m 0755 "$pkgdir/usr/share/plasma/plasmoids/luisbocanegra.panel.colorizer/contents/ui/presets/"
-  #cp "$srcdir/garuda-mokka/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
-
   # Removes standard Catppuccin Mocha Global Theme as Garuda's Mokka theme is used
   rm -rf "$pkgdir/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
 
