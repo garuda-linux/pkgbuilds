@@ -1,7 +1,7 @@
 pkgbase = libretro-meta
 	pkgdesc = Meta-package for all supported Libretro emulators
 	pkgver = 1
-	pkgrel = 8
+	pkgrel = 9
 	url = libretro.org
 	install = libretro.install
 	arch = any
@@ -17,7 +17,6 @@ pkgname = libretro-meta
 	depends = libretro-bsnes
 	depends = libretro-bsnes-hd
 	depends = libretro-bsnes2014
-	depends = libretro-citra
 	depends = libretro-core-info
 	depends = libretro-desmume
 	depends = libretro-dolphin
