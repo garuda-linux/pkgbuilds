@@ -286,5 +286,14 @@ The builder can be used by any machine capable of running the container. It will
 This repository features a NixOS flake, which may be used to set up the needed things like pre-commit hooks and checks,
 as well as needed utilities, automatically via [direnv](https://direnv.net/). This includes checking PKGBUILDs
 via `shellcheck` and `shfmt`.
+
+## With Nix
+
 Needed are `nix` (the package manager) and [direnv](https://direnv.net/), after that, the environment may be entered by
 running `direnv allow`.
+
+## Without Nix
+
+A bundled variant of the devshell is available via the `repo-common` [GitLab CI artifacts](https://gitlab.com/chaotic-aur/repo-common/-/pipelines).
+After downloading and unzipping simply execute the binary inside the PKGBUILDS folder.
+Bootstrapping will take a while since dependencies will be unpacked.
