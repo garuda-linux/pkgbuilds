@@ -231,6 +231,11 @@ if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ -n "
 	systemctl --user -M "$SUDO_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
 fi
 
+# Rebuild bat cache
+if [ -f /usr/lib/systemd/user/garuda-bat-cache-rebuild.service ] && [ -n "$SUDO_USER" ]; then
+	systemctl --user -M "$SUDO_USER@.host" start garuda-bat-cache-rebuild.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+fi
+
 # Update micro plugins
 if [ -x /usr/bin/micro ] && [ -n "$SUDO_USER" ]; then
 	systemd-run --user -M "$SUDO_USER@.host" --no-block -G -q micro -plugin update

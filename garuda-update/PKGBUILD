@@ -7,7 +7,7 @@ pkgver=4.8.3
 pkgrel=1
 arch=('any')
 license=('GPL')
-depends=('coreutils' 'sed' 'gawk' 'pacman' 'wget')
+depends=('coreutils' 'sed' 'gawk' 'pacman' 'wget' 'bat')
 backup=(etc/garuda/garuda-update/config)
 source=("auto-pacman"
   "config"
