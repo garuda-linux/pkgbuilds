@@ -1,6 +1,6 @@
-From 392eebcf517c890dd6be881f8ba781af044cfe8b Mon Sep 17 00:00:00 2001
+From 4bb53ec15acdd0e9f8da25e636fb5c0ee22924f1 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
-Date: Sun, 12 Feb 2023 05:40:58 +0100
+Date: Sun, 2 Feb 2025 07:31:02 +0100
 Subject: [PATCH] dw
 
 ---
@@ -376,7 +376,7 @@ index 47944640d..c4da0d7f8 100644
      cryptdevice_params = []
  
 diff --git a/src/modules/initcpiocfg/main.py b/src/modules/initcpiocfg/main.py
-index 0939054fb..b56a09bb6 100644
+index a70d4ffe9..cf5b9f290 100644
 --- a/src/modules/initcpiocfg/main.py
 +++ b/src/modules/initcpiocfg/main.py
 @@ -36,6 +36,14 @@ def detect_plymouth():
@@ -394,15 +394,15 @@ index 0939054fb..b56a09bb6 100644
  
  class cpuinfo(object):
      """
-@@ -239,6 +247,9 @@ def find_initcpio_features(partitions, root_mount_point):
+@@ -247,6 +255,9 @@ def find_initcpio_features(partitions, root_mount_point):
      else:
          hooks.append("fsck")
  
 +    if detect_grub_btrfs_overlayfs():
 +        hooks.append("grub-btrfs-overlayfs")
 +
-     return hooks, modules, files, binaries
- 
+     # Modify according to the keys in the configuration
+     hooks = [h for h in (hooks_prepend + hooks + hooks_append) if h not in hooks_remove]
  
 diff --git a/src/modules/mhwdcfg/main.py b/src/modules/mhwdcfg/main.py
 new file mode 100644
@@ -659,7 +659,7 @@ index e338da252..30c7eb152 100644
      int width = 0;
      for ( const QString& textLine : text )
 diff --git a/src/modules/partition/partition.conf b/src/modules/partition/partition.conf
-index ca94ef387..0d5a4704a 100644
+index 2f56df715..f56672b53 100644
 --- a/src/modules/partition/partition.conf
 +++ b/src/modules/partition/partition.conf
 @@ -34,7 +34,7 @@
@@ -684,7 +684,7 @@ index ca94ef387..0d5a4704a 100644
  
  # This optional setting specifies the name of the swap partition (see
  # PARTLABEL; gpt only; requires KPMCore >= 4.2.0).
-@@ -205,7 +205,7 @@ initialSwapChoice: none
+@@ -207,7 +207,7 @@ initialSwapChoice: none
  # If nothing is specified, Calamares defaults to "ext4".
  #
  # Names are case-sensitive and defined by KPMCore.
@@ -871,5 +871,5 @@ index 000000000..7ad198f95
 +    - archlinux
 +    - chaotic
 -- 
-2.43.0
+2.47.0
 

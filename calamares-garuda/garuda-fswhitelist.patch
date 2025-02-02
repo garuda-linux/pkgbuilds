@@ -1,20 +1,20 @@
-From b5348090d4e5df5b0f41b680aa57ec609bd54a50 Mon Sep 17 00:00:00 2001
+From 7b4f97f0488b29a5db7d55692fc2c70a52f540a1 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
-Date: Thu, 7 Mar 2024 10:38:11 +0100
+Date: Sun, 2 Feb 2025 07:32:47 +0100
 Subject: [PATCH] Garuda hardcoded FS whitelist
 
 ---
  src/modules/partition/gui/CreatePartitionDialog.cpp       | 3 ++-
  src/modules/partition/gui/EditExistingPartitionDialog.cpp | 3 ++-
  src/modules/partition/gui/PartitionDialogHelpers.cpp      | 7 +++++++
- src/modules/partition/gui/PartitionDialogHelpers.h        | 4 ++++
- 4 files changed, 15 insertions(+), 2 deletions(-)
+ src/modules/partition/gui/PartitionDialogHelpers.h        | 2 ++
+ 4 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/src/modules/partition/gui/CreatePartitionDialog.cpp b/src/modules/partition/gui/CreatePartitionDialog.cpp
-index d18676138..6a4dca0b0 100644
+index 213f5c793..03e2c713b 100644
 --- a/src/modules/partition/gui/CreatePartitionDialog.cpp
 +++ b/src/modules/partition/gui/CreatePartitionDialog.cpp
-@@ -104,8 +104,9 @@ CreatePartitionDialog::CreatePartitionDialog( Device* device,
+@@ -100,8 +100,9 @@ CreatePartitionDialog::CreatePartitionDialog( PartitionCoreModule* core,
      int defaultFsIndex = -1;
      int fsCounter = 0;
      QStringList fsNames;
@@ -26,11 +26,11 @@ index d18676138..6a4dca0b0 100644
          if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
               || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
 diff --git a/src/modules/partition/gui/EditExistingPartitionDialog.cpp b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
-index 7a3f4951a..e895ffef6 100644
+index 2b9b9405b..0532c7feb 100644
 --- a/src/modules/partition/gui/EditExistingPartitionDialog.cpp
 +++ b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
-@@ -109,8 +109,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( Device* device,
-
+@@ -116,8 +116,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( PartitionCoreModule* c
+ 
      // File system
      QStringList fsNames;
 -    for ( auto fs : FileSystemFactory::map() )
@@ -41,13 +41,13 @@ index 7a3f4951a..e895ffef6 100644
          if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
               || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
 diff --git a/src/modules/partition/gui/PartitionDialogHelpers.cpp b/src/modules/partition/gui/PartitionDialogHelpers.cpp
-index b41c12cc9..63eb5aea3 100644
+index db1943a23..65c083b36 100644
 --- a/src/modules/partition/gui/PartitionDialogHelpers.cpp
 +++ b/src/modules/partition/gui/PartitionDialogHelpers.cpp
-@@ -24,6 +24,13 @@
+@@ -27,6 +27,13 @@
  #include <QListWidget>
  #include <QPushButton>
-
+ 
 +QSet< FileSystem::Type > garuda_allowed_fs( {
 +    FileSystem::Btrfs,
 +    FileSystem::Fat32,
@@ -59,28 +59,18 @@ index b41c12cc9..63eb5aea3 100644
  standardMountPoints()
  {
 diff --git a/src/modules/partition/gui/PartitionDialogHelpers.h b/src/modules/partition/gui/PartitionDialogHelpers.h
-index eea0998c4..f95189dcc 100644
+index 4f77c3a71..29795f713 100644
 --- a/src/modules/partition/gui/PartitionDialogHelpers.h
 +++ b/src/modules/partition/gui/PartitionDialogHelpers.h
-@@ -13,14 +13,18 @@
- #define PARTITION_GUI_PARTITIONDIALOGHELPERS
-
- #include <kpmcore/core/partitiontable.h>
-+#include <kpmcore/fs/filesystem.h>
-
- #include <QStringList>
-+#include <QSet>
-
- class QPushButton;
- class QComboBox;
- class QLabel;
- class QListWidget;
-
+@@ -30,6 +30,8 @@ static QSet< FileSystem::Type > s_unmountableFS( { FileSystem::Unformatted,
+                                                    FileSystem::Unknown,
+                                                    FileSystem::Lvm2_PV } );
+ 
 +extern QSet< FileSystem::Type > garuda_allowed_fs;
 +
  /**
   * Returns a list of standard mount points (e.g. /, /usr, ...).
   * This also includes the EFI mount point if that is necessary
---
-2.44.0
+-- 
+2.47.0
 
