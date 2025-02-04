@@ -1,0 +1,56 @@
+From 4bcb0b33e94cedb8d6687ef04b20d9df92070358 Mon Sep 17 00:00:00 2001
+From: TNE <tne@garudalinux.org>
+Date: Tue, 4 Feb 2025 09:01:02 +0100
+Subject: [PATCH] [parition] Do not unmount /dev/mapper/ventoy
+
+Ventoy uses /dev/mapper/ventoy to provide the ISO.
+Unmounting /dev/mapper/ventoy is not desired since certain ISOs may have mounts that rely on it existing for the unpackfs step
+---
+ src/modules/partition/jobs/ClearMountsJob.cpp | 20 ++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/src/modules/partition/jobs/ClearMountsJob.cpp b/src/modules/partition/jobs/ClearMountsJob.cpp
+index 2865d9538..a1e544f9c 100644
+--- a/src/modules/partition/jobs/ClearMountsJob.cpp
++++ b/src/modules/partition/jobs/ClearMountsJob.cpp
+@@ -105,18 +105,20 @@ getSwapsForDevice( const QString& deviceName )
+ }
+ 
+ static inline bool
+-isControl( const QString& baseName )
+-{
+-    return baseName == "control";
+-}
+-
+-static inline bool
+-isFedoraSpecial( const QString& baseName )
++isSpecial( const QString& baseName )
+ {
+     // Fedora live images use /dev/mapper/live-* internally. We must not
+     // unmount those devices, because they are used by the live image and
+     // because we need /dev/mapper/live-base in the unpackfs module.
+-    return baseName.startsWith( "live-" );
++    if (baseName.startsWith( "live-" ))
++        return true;
++    // Exclude /dev/mapper/control
++    if (baseName == "control")
++        return true;
++    // When ventoy is used, ventoy uses the /dev/mapper/ventoy device. We
++    // must not unmount this device, because it is used by the live image
++    // and because we need /dev/mapper/ventoy in the unpackfs module.
++    return baseName == "ventoy";
+ }
+ 
+ /** @brief Returns a list of unneeded crypto devices
+@@ -135,7 +137,7 @@ getCryptoDevices( const QStringList& mapperExceptions )
+     for ( const QFileInfo& fi : fiList )
+     {
+         QString baseName = fi.baseName();
+-        if ( isControl( baseName ) || isFedoraSpecial( baseName ) || mapperExceptions.contains( baseName ) )
++        if ( isSpecial( baseName ) || mapperExceptions.contains( baseName ) )
+         {
+             continue;
+         }
+-- 
+2.47.0
+
