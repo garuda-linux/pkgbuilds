@@ -4,12 +4,13 @@
 
 pkgname=garuda-mokka
 pkgver=r53.02036d8
-pkgrel=44
+pkgrel=45
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("git+https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname.git"
   git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
+  #git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=ef460f796f90815c59396b22babfc2048bc427c5
   git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
   git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
   git+https://github.com/catppuccin/fish.git#commit=cc8e4d8fffbdaab07b3979131030b234596f18da
