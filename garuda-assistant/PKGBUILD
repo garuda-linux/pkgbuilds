@@ -9,19 +9,19 @@ pkgdesc="An app which helps with all kind of system maintenance related tasks on
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL3')
-depends=('qt5-base' 'qt5-svg' 'noto-fonts' 'xdg-utils' 'polkit' 'reflector-simple' 'hblock' 'pace' 'garuda-update' 'garuda-libs' 'btrfs-assistant')
+depends=('qt6-base' 'qt6-svg' 'noto-fonts' 'xdg-utils' 'polkit' 'reflector-simple' 'hblock' 'pace' 'garuda-update' 'garuda-libs' 'btrfs-assistant')
 optdepends=('snapper-tools')
-makedepends=('git' 'cmake' 'qt5-tools')
+makedepends=('git' 'cmake' 'qt6-tools')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-assistant/-/archive/${_commit}/garuda-assistant-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir" || exit
-	cmake -B build -S "$pkgname-$_commit" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
-	make -C build
+  cd "$srcdir" || exit
+  cmake -B build -S "$pkgname-$_commit" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE='Release'
+  make -C build
 }
 
 package() {
-	make -C build DESTDIR="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
