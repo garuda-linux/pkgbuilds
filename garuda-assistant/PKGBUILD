@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-assistant
-pkgver="2.7.6"
-_commit='35436ed61d8148fb18f02d0ca642c5caf8124331'
+pkgver="3.0.0"
+_commit='9cf09a550b31b021361cee55cc42ff024bea1bc5'
 pkgrel=1
 pkgdesc="An app which helps with all kind of system maintenance related tasks on Garuda Linux"
 arch=('x86_64')
