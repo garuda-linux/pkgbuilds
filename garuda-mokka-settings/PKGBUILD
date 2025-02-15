@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r104.c6069ed
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -99,7 +99,7 @@ package() {
   # GTK theme
   cd Colloid-gtk-theme
   install -d "$pkgdir/usr/share/themes"
-  ./install.sh -n Catppuccin -t purple -c dark —tweaks catppuccin -d "$pkgdir/usr/share/themes"
+  ./install.sh -n Catppuccin -t purple -c dark --tweaks catppuccin -d "$pkgdir/usr/share/themes"
 
   depends=(
     'garuda-common-settings'
