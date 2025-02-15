@@ -3,20 +3,20 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver=r53.02036d8
-pkgrel=45
+pkgver=r104.c6069ed
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("git+https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname.git"
   git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
-  #git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=ef460f796f90815c59396b22babfc2048bc427c5
   git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
   git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
   git+https://github.com/catppuccin/fish.git#commit=cc8e4d8fffbdaab07b3979131030b234596f18da
   git+https://github.com/catppuccin/konsole#commit=3b64040e3f4ae5afb2347e7be8a38bc3cd8c73a8
   git+https://github.com/catppuccin/bat.git#commit=699f60fc8ec434574ca7451b444b880430319941
-  git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312)
+  git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312
+  git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=559faed6062b6c891c9d1f0c778e66841209fb27)
 sha256sums=('SKIP'
   '57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320'
   'da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f'
@@ -24,19 +24,22 @@ sha256sums=('SKIP'
   'eaf82aaafdc83c6569a6805fa5727d18a22dcacc08668a29499c4d263900ec65'
   '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
   'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
-  '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82')
+  '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82'
+  '00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249')
 pkgdesc='DO NOT INSTALL - TEST PACKAGE for Garuda Mokka desktop settings and presets'
-makedepends=(git unzip wget)
+makedepends=(git unzip wget sassc)
 install=$pkgname.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
   'plasma5-themes-sweet-kde-git')
 
-
 prepare() {
-  rm -rf ./out ./dist || true
   mkdir -p ./out ./work
+
+  # Don't call clean_theme function
+  cd Colloid-gtk-theme
+  sed -i 's/clean_theme && install_theme/install_theme/g' install.sh
 }
 
 pkgver() {
@@ -92,6 +95,11 @@ package() {
 
   # Removes standard Catppuccin Mocha Global Theme as Garuda's Mokka theme is used
   rm -rf "$pkgdir/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
+
+  # GTK theme
+  cd Colloid-gtk-theme
+  install -d "$pkgdir/usr/share/themes"
+  ./install.sh -n Colloid -t purple -s compact --tweaks catppuccin -d "$pkgdir/usr/share/themes"
 
   depends=(
     'garuda-common-settings'
