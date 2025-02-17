@@ -18,6 +18,6 @@ pkgbase = garuda-welcome
 	optdepends = garuda-gamer
 	optdepends = garuda-boot-options
 	source = https://gitlab.com/garuda-linux/applications/garuda-welcome/-/archive/98028f06a5ba0fc359c8820c871898e5ed33cabb/garuda-welcome-98028f06a5ba0fc359c8820c871898e5ed33cabb.tar.gz
-	sha256sums = 073458204cb34a4fc1471850d7b09e4f2d12804df12ee1f996e290819ad77f80
+	sha256sums = SKIP
 
 pkgname = garuda-welcome
