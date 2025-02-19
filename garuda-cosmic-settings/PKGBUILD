@@ -1,0 +1,26 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: Librewish <librewish@gmail.com>
+
+pkgname=garuda-cosmic-settings
+pkgdesc='Garuda Linux Cosmic settings'
+pkgver="0.0.1"
+_commit='6acf973df068aa82039efa00c32a62a8519f7427'
+pkgrel=1
+arch=('any')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+license=('GPL')
+makedepends=('coreutils')
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cosmic-settings/-/archive/${_commit}/garuda-cosmic-settings-${_commit}.tar.gz")
+sha256sums=('SKIP')
+depends=('cosmic-session')
+
+install="$pkgname".install
+provides=('garuda-desktop-settings')
+conflicts=('garuda-desktop-settings')
+
+package() {
+  install -d "$pkgdir/etc"
+  cp -rf "$srcdir/$pkgname-$_commit/etc" "$pkgdir"
+  install -d "$pkgdir/usr"
+  cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
+}
