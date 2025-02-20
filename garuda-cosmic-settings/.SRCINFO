@@ -6,11 +6,10 @@ pkgbase = garuda-cosmic-settings
 	install = garuda-cosmic-settings.install
 	arch = any
 	license = GPL
-	makedepends = coreutils
-	depends = cosmic-session
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
 	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cosmic-settings/-/archive/9ad38952201f180addb6ac585191e097e59ae5e2/garuda-cosmic-settings-9ad38952201f180addb6ac585191e097e59ae5e2.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-cosmic-settings
+	depends = cosmic-session
