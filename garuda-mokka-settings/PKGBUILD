@@ -4,7 +4,7 @@
 
 pkgname=garuda-mokka
 pkgver=r104.c6069ed
-pkgrel=6
+pkgrel=7
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -26,7 +26,7 @@ sha256sums=('SKIP'
   'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
   '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82'
   '00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249')
-pkgdesc='DO NOT INSTALL - TEST PACKAGE for Garuda Mokka desktop settings and presets'
+pkgdesc='Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget sassc)
 install=$pkgname.install
 provides=('garuda-desktop-settings')
