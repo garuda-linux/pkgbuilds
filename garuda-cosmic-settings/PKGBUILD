@@ -3,8 +3,8 @@
 
 pkgname=garuda-cosmic-settings
 pkgdesc='Garuda Linux Cosmic settings'
-pkgver="0.0.2"
-_commit='9ad38952201f180addb6ac585191e097e59ae5e2'
+pkgver="0.0.3"
+_commit='12d2a8d5c2966a65e51c25e1186babf26e3b1a45'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
