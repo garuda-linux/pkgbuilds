@@ -4,9 +4,9 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.3.13.r0.gf594bfb5e
-_commit=f594bfb5e35479cecce2bf336465edc6dc7a4bc5
-pkgrel=2
+pkgver=3.3.14.r46.g21ea80352
+_commit=21ea803527735cfaf54fa6059e71d1ef65004864
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -16,94 +16,91 @@ conflicts=('calamares' 'calamares-dev')
 provides=('calamares' 'calamares-dev')
 replaces=('calamares-dev')
 depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmcore'
-    'boost-libs' 'ckbcomp' 'hwinfo' 'qt6-svg' 'polkit-qt6'
-    'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
+  'boost-libs' 'ckbcomp' 'hwinfo' 'qt6-svg' 'polkit-qt6'
+  'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
 makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
 source+=(git+https://github.com/calamares/calamares.git#commit="${_commit}"
-    garuda-fswhitelist.patch
-    0001-Apply-garuda-specific-patches.patch
-    0001-parition-Do-not-unmount-dev-mapper-ventoy.patch
-    partition.conf
-    mount.conf
-    mhwdcfg.conf
-    chrootcfg.conf)
-sha256sums=('8d0146ddc8af4368496fc6d965d7e30dcb55cbb9c2cef0c79a08d24c35094676'
-            '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
-            'c518d22225c6b6520adb206e8334fa881b59538021b6498e6c24a6823764dcf3'
-            '00e53e0d13aa051e72682879e2773fc4dcf2b99878c1a265f872e018bf72a1ff'
-            '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
-            '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
-            '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
-            'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
+  garuda-fswhitelist.patch
+  0001-Apply-garuda-specific-patches.patch
+  partition.conf
+  mount.conf
+  mhwdcfg.conf
+  chrootcfg.conf)
+sha256sums=('e06f8d5d185120ce3c02ea94137eb51e84a76bb8f5b09be7e9f6e9129c0f81af'
+  '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
+  'c518d22225c6b6520adb206e8334fa881b59538021b6498e6c24a6823764dcf3'
+  '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
+  '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
+  '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
+  'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
-    cd "$srcdir/calamares" || exit
+  cd "$srcdir/calamares" || exit
 
-    _regex='^set\(CALAMARES_VERSION ([0-9]+\.[0-9]+\.[0-9]+([^0-9].*)?)\)\s*$'
-    _file='CMakeLists.txt'
+  _regex='^set\(CALAMARES_VERSION ([0-9]+\.[0-9]+\.[0-9]+([^0-9].*)?)\)\s*$'
+  _file='CMakeLists.txt'
 
-    _line=$(
-        grep -E "$_regex" "$_file" |
-            head -1
-    )
-    _version=$(
-        printf '%s' "$_line" | sed -E "s@$_regex@\1@;s@alpha@a@;s@beta@b@;s@-@.@"
-    )
-    _line=$(
-        printf '%s' "$_line" |
-            sed -E 's@\(@\\(@;s@\)@\\)@'
-    )
-    _commit=$(
-        git log -G "$_line" -1 --pretty=oneline --no-color | sed 's@\ .*$@@'
-    )
-    _revision=$(
-        git rev-list --count "$_commit"..HEAD
-    )
-    _hash=$(
-        git rev-parse --short HEAD
-    )
+  _line=$(
+    grep -E "$_regex" "$_file" \
+      | head -1
+  )
+  _version=$(
+    printf '%s' "$_line" | sed -E "s@$_regex@\1@;s@alpha@a@;s@beta@b@;s@-@.@"
+  )
+  _line=$(
+    printf '%s' "$_line" \
+      | sed -E 's@\(@\\(@;s@\)@\\)@'
+  )
+  _commit=$(
+    git log -G "$_line" -1 --pretty=oneline --no-color | sed 's@\ .*$@@'
+  )
+  _revision=$(
+    git rev-list --count "$_commit"..HEAD
+  )
+  _hash=$(
+    git rev-parse --short HEAD
+  )
 
-    printf '%s.r%s.g%s' \
-        "$_version" \
-        "$_revision" \
-        "$_hash"
+  printf '%s.r%s.g%s' \
+    "$_version" \
+    "$_revision" \
+    "$_hash"
 }
 
 prepare() {
-    cd "${srcdir}/calamares" || exit
+  cd "${srcdir}/calamares" || exit
 
-    # patches here
-    patch -p1 -N -i "$srcdir/garuda-fswhitelist.patch"
-    patch -p1 -N -i "$srcdir/0001-Apply-garuda-specific-patches.patch"
-    patch -p1 -N -i "$srcdir/0001-parition-Do-not-unmount-dev-mapper-ventoy.patch"
+  # patches here
+  patch -p1 -N -i "$srcdir/garuda-fswhitelist.patch"
+  patch -p1 -N -i "$srcdir/0001-Apply-garuda-specific-patches.patch"
 }
 
 build() {
-    cd "${srcdir}/calamares" || exit
+  cd "${srcdir}/calamares" || exit
 
-    mkdir -p build && cd build || exit
-    cmake .. \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_INSTALL_PREFIX=/usr \
-        -DCMAKE_INSTALL_LIBDIR=lib \
-        -DBoost_NO_BOOST_CMAKE=ON \
-        -DWITH_QT6=ON \
-        -DWITH_APPSTREAM=OFF \
-        -DBUILD_TESTING=OFF \
-        -DSKIP_MODULES="webview interactiveterminal initramfs \
+  mkdir -p build && cd build || exit
+  cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DBoost_NO_BOOST_CMAKE=ON \
+    -DWITH_QT6=ON \
+    -DWITH_APPSTREAM=OFF \
+    -DBUILD_TESTING=OFF \
+    -DSKIP_MODULES="webview interactiveterminal initramfs \
                               initramfscfg packagechooser packagechooserq \
                               dummyprocess dummypython dummycpp \
                               dummypythonqt services-openrc"
-    make
+  make
 }
 
 package() {
-    cd "${srcdir}" || exit
-    install -Dm755 partition.conf "$pkgdir"/etc/calamares/modules/partition.conf
-    install -Dm755 mount.conf "$pkgdir"/etc/calamares/modules/mount.conf
-    install -Dm755 chrootcfg.conf "$pkgdir"/etc/calamares/modules/chrootcfg.conf
+  cd "${srcdir}" || exit
+  install -Dm755 partition.conf "$pkgdir"/etc/calamares/modules/partition.conf
+  install -Dm755 mount.conf "$pkgdir"/etc/calamares/modules/mount.conf
+  install -Dm755 chrootcfg.conf "$pkgdir"/etc/calamares/modules/chrootcfg.conf
 
-    cd "${srcdir}/calamares/build" || exit
-    make DESTDIR="$pkgdir" install
+  cd "${srcdir}/calamares/build" || exit
+  make DESTDIR="$pkgdir" install
 }
