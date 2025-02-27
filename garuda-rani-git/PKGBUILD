@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani-git
-pkgver=0.0.1
+pkgver=r27.20aced3
 pkgrel=1
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('any')
@@ -11,7 +11,7 @@ depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon
 makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs' 'dpkg' 'pnpm>10')
 provides=('garuda-rani')
 conflicts=('garuda-rani')
-options=('!strip' '!emptydirs')
+options=('!strip' '!emptydirs' '!lto' '!debug')
 source=("git+$url.git")
 sha256sums=('SKIP')
 
@@ -20,6 +20,11 @@ prepare() {
   pnpm install
 
   rustup default stable
+}
+
+pkgver() {
+  cd rani
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
 }
 
 build() {
