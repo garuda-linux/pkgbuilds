@@ -18,6 +18,8 @@ sha256sums=('SKIP')
 prepare() {
   cd rani
   pnpm install
+
+  rustup default stable
 }
 
 build() {
