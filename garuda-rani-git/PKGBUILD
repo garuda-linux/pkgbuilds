@@ -1,0 +1,43 @@
+# Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
+
+pkgname=garuda-rani-git
+pkgver=0.0.1
+pkgrel=1
+pkgdesc="Garuda's Reliable Assistant for Native Installations"
+arch=('any')
+url="https://gitlab.com/garuda-linux/applications/rani"
+license=('GPL3')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1')
+makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs' 'dpkg' 'pnpm>10')
+provides=('garuda-rani')
+conflicts=('garuda-rani')
+options=('!strip' '!emptydirs')
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+prepare() {
+  cd rani
+  pnpm install
+}
+
+build() {
+  cd rani
+  pnpm run tauri build --no-bundle
+}
+
+package() {
+  pnpm run tauri bundle --bundles deb
+  cd "$srcdir/garuda-rani/src-tauri/target/release/bundle/deb"
+  dpkg-deb -x *.deb extracted
+  cd extracted
+
+  install -Dm755 usr/bin/rani "$pkgdir/usr/bin/rani"
+
+  # Install desktop file
+  install -Dm644 usr/share/applications/rani.desktop "$pkgdir/usr/share/applications/rani.desktop"
+
+  # Install icons
+  install -Dm644 usr/share/icons/hicolor/128x128/apps/rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/rani.png"
+  install -Dm644 usr/share/icons/hicolor/256x256@2/apps/rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/rani.png"
+  install -Dm644 usr/share/icons/hicolor/32x32/apps/rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/rani.png"
+}
