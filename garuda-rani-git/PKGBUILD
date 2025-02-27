@@ -14,6 +14,7 @@ conflicts=('garuda-rani')
 options=('!strip' '!emptydirs' '!lto' '!debug')
 source=("git+$url.git")
 sha256sums=('SKIP')
+install=garuda-rani.install
 
 prepare() {
   cd rani
@@ -33,18 +34,16 @@ build() {
 }
 
 package() {
+  cd rani
+
   pnpm run tauri bundle --bundles deb
-  cd "$srcdir/garuda-rani/src-tauri/target/release/bundle/deb"
+  cd "$srcdir/rani/src-tauri/target/release/bundle/deb"
   dpkg-deb -x *.deb extracted
+
   cd extracted
-
-  install -Dm755 usr/bin/rani "$pkgdir/usr/bin/rani"
-
-  # Install desktop file
-  install -Dm644 usr/share/applications/rani.desktop "$pkgdir/usr/share/applications/rani.desktop"
-
-  # Install icons
-  install -Dm644 usr/share/icons/hicolor/128x128/apps/rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/rani.png"
-  install -Dm644 usr/share/icons/hicolor/256x256@2/apps/rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/rani.png"
-  install -Dm644 usr/share/icons/hicolor/32x32/apps/rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/rani.png"
+  install -Dm755 usr/bin/garuda-rani "$pkgdir/usr/bin/garuda-rani"
+  install -Dm644 usr/share/applications/org.garudalinux.rani.desktop "$pkgdir/usr/share/applications/org.garudalinux.rani.desktop"
+  install -Dm644 usr/share/icons/hicolor/128x128/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/garuda-rani.png"
+  install -Dm644 usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png"
+  install -Dm644 usr/share/icons/hicolor/32x32/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/garuda-rani.png"
 }

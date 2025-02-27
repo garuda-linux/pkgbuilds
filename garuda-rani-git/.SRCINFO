@@ -3,6 +3,7 @@ pkgbase = garuda-rani-git
 	pkgver = r27.20aced3
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/rani
+	install = garuda-rani.install
 	arch = any
 	license = GPL3
 	makedepends = git
