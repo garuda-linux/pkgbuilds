@@ -1,0 +1,44 @@
+# Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
+
+pkgname=garuda-rani
+pkgver="0.0.1"
+_commit="aa2d89509dffa83cf784c31e5aca7b5f686b3124"
+pkgrel=1
+pkgdesc="Garuda's Reliable Assistant for Native Installations"
+arch=('x86_64')
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-rani"
+license=('GPL3')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1')
+makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs' 'dpkg' 'pnpm>10')
+conflicts=('garuda-rani-git')
+options=('!strip' '!emptydirs' '!lto' '!debug')
+source=("https://gitlab.com/garuda-linux/applications/rani/-/archive/${_commit}/rani-${_commit}.tar.gz")
+sha256sums=('SKIP')
+install=${pkgname}.install
+
+prepare() {
+  cd rani-${_commit}
+  pnpm install
+
+  rustup default stable
+}
+
+build() {
+  cd rani-${_commit}
+  pnpm run tauri build --no-bundle
+}
+
+package() {
+  cd rani-${_commit}
+
+  pnpm run tauri bundle --bundles deb
+  cd ./src-tauri/target/release/bundle/deb
+  dpkg-deb -x *.deb extracted
+
+  cd extracted
+  install -Dm755 usr/bin/garuda-rani "$pkgdir/usr/bin/garuda-rani"
+  install -Dm644 usr/share/applications/org.garudalinux.rani.desktop "$pkgdir/usr/share/applications/org.garudalinux.rani.desktop"
+  install -Dm644 usr/share/icons/hicolor/128x128/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/garuda-rani.png"
+  install -Dm644 usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png"
+  install -Dm644 usr/share/icons/hicolor/32x32/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/garuda-rani.png"
+}
