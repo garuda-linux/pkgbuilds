@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Path
+Target = usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc
+
+[Action]
+Description = Patching Sweet Aurorae...
+When = PostTransaction
+Depends = coreutils
+Exec = /bin/sh -c 'cp /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc-dr460nized /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc'

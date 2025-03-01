@@ -8,7 +8,10 @@ pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$_pkgname"
 license=('GPL')
-source=("git+$url.git")
+source=("git+$url.git"
+  "dr460nized-patch.hook")
+sha256sums=('SKIP'
+  '4121188ba1198f415f151a293a808c507c53128daa4165eb628e4b0e794a0c5f')
 sha256sums=('SKIP')
 pkgdesc='Dr460nized settings'
 install=$_pkgname.install
@@ -16,28 +19,28 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings' 'plasma5-applets-window-appmenu' 'plasma5-applets-window-buttons' 'plasma5-applets-window-title' 'plasma5-applets-betterinlineclock-git' 'plasma5-wallpapers-blurredwallpaper')
 
 pkgver() {
-    cd "$_pkgname"
-    git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  cd "$_pkgname"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 package() {
-    install -d "$pkgdir"/etc
-    cp -rf "$srcdir"/$_pkgname/etc "$pkgdir"
-    install -d "$pkgdir"/usr
-    cp -rf "$srcdir"/$_pkgname/usr "$pkgdir"
-    depends=('beautyline'
-        'garuda-common-settings'
-        'garuda-fish-config'
-        'garuda-icons'
-        'garuda-wallpapers'
-        'kvantum'
-        'kvantum-qt5'
-        'plasma-applet-window-buttons'
-        'plasma-systemmonitor'
-        'plasma5-themes-sweet-full-git'
-        'plasma6-applets-window-title'
-        'plasma6-wallpapers-blurredwallpaper'
-        'ttf-fira-sans'
-        'ttf-firacode-nerd'
-        'xdg-desktop-portal-gtk') # fixes Wayland GTK theming
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$_pkgname/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/$_pkgname/usr "$pkgdir"
+  depends=('beautyline'
+    'garuda-common-settings'
+    'garuda-fish-config'
+    'garuda-icons'
+    'garuda-wallpapers'
+    'kvantum'
+    'kvantum-qt5'
+    'plasma-applet-window-buttons'
+    'plasma-systemmonitor'
+    'plasma5-themes-sweet-full-git'
+    'plasma6-applets-window-title'
+    'plasma6-wallpapers-blurredwallpaper'
+    'ttf-fira-sans'
+    'ttf-firacode-nerd'
+    'xdg-desktop-portal-gtk') # fixes Wayland GTK theming
 }

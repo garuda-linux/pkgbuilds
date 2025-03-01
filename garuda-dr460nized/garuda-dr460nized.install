@@ -17,16 +17,10 @@ update_gtk() {
   /bin/sh -c 'dconf update'
 }
 
-# Put our custom window button margins in place
-update_themes() {
-  cp /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc-dr460nized /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc
-}
-
 # Post installation
 post_install() {
   update_fonts
   update_gtk
-  update_themes
 }
 
 # Post upgrade
