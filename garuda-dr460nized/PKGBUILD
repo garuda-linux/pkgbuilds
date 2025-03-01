@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized
 pkgver="4.5.8"
 _commit='8eb3d74f5d9bfe73d533b67bc661c8968796c104'
-pkgrel=4
+pkgrel=5
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -25,7 +25,7 @@ package() {
   cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 
   install -d "$pkgdir"/usr/share/libalpm/hooks
-  install -Dm644 dr460nized-patch.hook "$pkgdir"/usr/share/libalpm/hooks/00-garuda-migrations.hook
+  install -Dm644 dr460nized-patch.hook "$pkgdir"/usr/share/libalpm/hooks/80-dr460nized-patch.hook
 
   depends=('beautyline'
     'garuda-common-settings'
