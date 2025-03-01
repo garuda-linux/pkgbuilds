@@ -8,4 +8,4 @@ Target = usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc
 Description = Patching Sweet Aurorae...
 When = PostTransaction
 Depends = coreutils
-Exec = sudo /bin/sh -c 'cp /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc-dr460nized /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc'
+Exec = /bin/sh -c 'cp /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc-dr460nized /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc'

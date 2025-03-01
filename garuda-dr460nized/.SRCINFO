@@ -1,7 +1,7 @@
 pkgbase = garuda-dr460nized
 	pkgdesc = Dr460nized settings
 	pkgver = 4.5.8
-	pkgrel = 4
+	pkgrel = 7
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
 	install = garuda-dr460nized.install
 	arch = any

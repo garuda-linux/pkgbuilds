@@ -19,7 +19,7 @@ update_gtk() {
 
 # Put our custom Sweet-Dark Window Buttons margins in place
 update_themes() {
-  /usr/share/libalpm/hooks/80-dr460nized-patch.hook
+  cp /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc-dr460nized /usr/share/aurorae/themes/Sweet-Dark/Sweet-Darkrc
 }
 
 # Post installation
