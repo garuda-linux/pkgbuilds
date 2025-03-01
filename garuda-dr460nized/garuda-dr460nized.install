@@ -17,10 +17,16 @@ update_gtk() {
   /bin/sh -c 'dconf update'
 }
 
+# Put our custom Sweet-Dark Window Buttons margins in place
+update_themes() {
+  /usr/share/libalpm/hooks/80-dr460nized-patch.hook
+}
+
 # Post installation
 post_install() {
   update_fonts
   update_gtk
+  update_themes
 }
 
 # Post upgrade
