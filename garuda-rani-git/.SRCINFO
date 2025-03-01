@@ -1,6 +1,6 @@
 pkgbase = garuda-rani-git
 	pkgdesc = Garuda's Reliable Assistant for Native Installations
-	pkgver = r27.20aced3
+	pkgver = 0.2.0.r0.gd9c2736
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/rani
 	install = garuda-rani.install
@@ -28,6 +28,8 @@ pkgbase = garuda-rani-git
 	depends = libsoup
 	depends = pango
 	depends = webkit2gtk-4.1
+	depends = pacman-contrib
+	optdepends = paru: helper for installing games from AUR
 	provides = garuda-rani
 	conflicts = garuda-rani
 	options = !strip

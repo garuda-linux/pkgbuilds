@@ -1,14 +1,15 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani-git
-pkgver=r27.20aced3
+pkgver=0.2.0.r0.gd9c2736
 pkgrel=1
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/rani"
 license=('GPL3')
-depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1' 'pacman-contrib')
 makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs' 'dpkg' 'pnpm>10')
+optdepends=('paru: helper for installing games from AUR')
 provides=('garuda-rani')
 conflicts=('garuda-rani')
 options=('!strip' '!emptydirs' '!lto' '!debug')
@@ -25,7 +26,7 @@ prepare() {
 
 pkgver() {
   cd rani
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+  git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
