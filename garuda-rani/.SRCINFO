@@ -1,6 +1,6 @@
 pkgbase = garuda-rani
 	pkgdesc = Garuda's Reliable Assistant for Native Installations
-	pkgver = 0.1.1
+	pkgver = 0.2.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-rani
 	install = garuda-rani.install
@@ -35,7 +35,7 @@ pkgbase = garuda-rani
 	options = !emptydirs
 	options = !lto
 	options = !debug
-	source = https://gitlab.com/garuda-linux/applications/rani/-/archive/01c8ebe0e8928f403912351be4ffbb39978ebc26/rani-01c8ebe0e8928f403912351be4ffbb39978ebc26.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/rani/-/archive/a37a6399ba7e57a7df5ea8f4f27332c7a07aeefb/rani-a37a6399ba7e57a7df5ea8f4f27332c7a07aeefb.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-rani
