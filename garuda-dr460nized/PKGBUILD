@@ -3,7 +3,7 @@
 
 pkgname=garuda-dr460nized
 pkgver="4.5.7"
-_commit='81381b856f12ff85166f5b7585722f9f0e0e266e'
+_commit='8eb3d74f5d9bfe73d533b67bc661c8968796c104'
 pkgrel=4
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
