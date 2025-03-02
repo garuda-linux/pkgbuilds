@@ -2,8 +2,8 @@
 # Maintainer: TNE <tne at garudalinux dot org>
 
 pkgname=garuda-setup-assistant
-pkgver="3.1.16"
-_commit='bbfa24fba9a8a6cc2c137a583846365bed5b4f5b'
+pkgver="4.0.0"
+_commit='11c2978cc054671c566bf545d5d0a2d6aca7b353'
 pkgrel=1
 pkgdesc="A setup utility for Garuda Linux which helps setting up & installing applications"
 arch=('any')
