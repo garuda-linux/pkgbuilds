@@ -3,12 +3,13 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver=r104.c6069ed
-pkgrel=9
+pkgver="1.0.0"
+_commit="73d4c7cb4dd7a5ff272f77c152767e4a9e93abe1"
+pkgrel=1
 arch=('any')
-url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
+url="https://gitlab.com/garuda-linux/themes-and-settings/settings/${pkgname}"
 license=('GPL')
-source=("git+https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname.git"
+source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/${_commit}/garuda-mokka-${_commit}.tar.gz"
   git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
   git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
   git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
@@ -28,7 +29,7 @@ sha256sums=('SKIP'
   '00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249')
 pkgdesc='Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget sassc)
-install=$pkgname.install
+install=${pkgname}.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
@@ -42,64 +43,59 @@ prepare() {
   sed -i 's/clean_theme && install_theme/install_theme/g' install.sh
 }
 
-pkgver() {
-  cd "$srcdir/garuda-mokka"
-  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
-}
-
 build() {
-  cp -r "$srcdir/kde" ./work
+  cp -r "${srcdir}/kde" ./work
   pushd ./work/kde &> /dev/null
-  bash "$srcdir/garuda-mokka/mokka-install.sh" 1 4 2
+  bash "${srcdir}/${pkgname}-${_commit}/mokka-install.sh" 1 4 2
   popd &> /dev/null
 }
 
 package() {
-  cp -r ./work/kde/out/* "$pkgdir"
+  cp -r ./work/kde/out/* "${pkgdir}"
 
   # Install Micro color schemes
-  install -d -m 0755 "$pkgdir/etc/skel/.config/micro/colorschemes"
-  cp "$srcdir/micro/src/catppuccin-mocha.micro" "$pkgdir/etc/skel/.config/micro/colorschemes/"
+  install -d -m 0755 "${pkgdir}/etc/skel/.config/micro/colorschemes"
+  cp "${srcdir}/micro/src/catppuccin-mocha.micro" "${pkgdir}/etc/skel/.config/micro/colorschemes/"
 
   # Install Conky color schemes
-  install -d -m 0755 "$pkgdir"/etc/skel/.config/conky
-  cp "$srcdir/conky/mocha.conf" "$pkgdir/etc/skel/.config/conky/"
+  install -d -m 0755 "${pkgdir}"/etc/skel/.config/conky
+  cp "${srcdir}/conky/mocha.conf" "${pkgdir}/etc/skel/.config/conky/"
 
   # Install Fish color schemes
-  install -d -m 0755 "$pkgdir"/etc/skel/.config/fish/themes
-  cp "$srcdir/fish/themes/Catppuccin Mocha.theme" "$pkgdir/etc/skel/.config/fish/themes/Catppuccin Mocha.theme"
+  install -d -m 0755 "${pkgdir}"/etc/skel/.config/fish/themes
+  cp "${srcdir}/fish/themes/Catppuccin Mocha.theme" "${pkgdir}/etc/skel/.config/fish/themes/Catppuccin Mocha.theme"
 
   # Install Konsole color schemes
-  install -d -m 0755 "$pkgdir/usr/share/konsole/themes"
-  cp -r "$srcdir/konsole/themes/catppuccin-mocha.colorscheme" "$pkgdir/usr/share/konsole/themes/"
-  sed -i 's/Opacity=1/Opacity=0.9/g' "$pkgdir/usr/share/konsole/themes/catppuccin-mocha.colorscheme"
+  install -d -m 0755 "${pkgdir}/usr/share/konsole/themes"
+  cp -r "${srcdir}/konsole/themes/catppuccin-mocha.colorscheme" "${pkgdir}/usr/share/konsole/themes/"
+  sed -i 's/Opacity=1/Opacity=0.9/g' "${pkgdir}/usr/share/konsole/themes/catppuccin-mocha.colorscheme"
 
   # Install Bat color schemes
-  install -d -m 0755 "$pkgdir/etc/skel/.config/bat/themes"
-  cp -r "$srcdir/bat/themes/Catppuccin Mocha.tmTheme" "$pkgdir/etc/skel/.config/bat/themes/"
+  install -d -m 0755 "${pkgdir}/etc/skel/.config/bat/themes"
+  cp -r "${srcdir}/bat/themes/Catppuccin Mocha.tmTheme" "${pkgdir}/etc/skel/.config/bat/themes/"
 
   # Install GRUB theme
-  install -d -m 0755 "$pkgdir/usr/share/grub/themes/"
-  cp -r "$srcdir/grub/src/catppuccin-mocha-grub-theme" "$pkgdir/usr/share/grub/themes/catppuccin-mocha"
+  install -d -m 0755 "${pkgdir}/usr/share/grub/themes/"
+  cp -r "${srcdir}/grub/src/catppuccin-mocha-grub-theme" "${pkgdir}/usr/share/grub/themes/catppuccin-mocha"
 
-  cp -r "$srcdir/garuda-mokka/etc" "$pkgdir/"
-  cp -r "$srcdir/garuda-mokka/usr" "$pkgdir/"
+  cp -r "${srcdir}/${pkgname}-${_commit}/etc" "${pkgdir}/"
+  cp -r "${srcdir}/${pkgname}-${_commit}/usr" "${pkgdir}/"
 
   # Install Mokka-specific wallpapers
-  install -d -m 0755 "$pkgdir/usr/share/wallpapers"
-  cp -r "$srcdir/garuda-mokka/wallpapers" "$pkgdir/usr/share/wallpapers/garuda-mokka"
+  install -d -m 0755 "${pkgdir}/usr/share/wallpapers"
+  cp -r "${srcdir}/${pkgname}-${_commit}/wallpapers" "${pkgdir}/usr/share/wallpapers/garuda-mokka"
 
   # Install Application Menu logo
-  install -d -m 0755 "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps"
-  cp "$srcdir/garuda-mokka/usr/share/icons/garuda/distributor-logo-garuda.svg" "$pkgdir/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
+  install -d -m 0755 "${pkgdir}/usr/share/icons/Tela-circle-dracula/scalable/apps"
+  cp "${srcdir}/${pkgname}-${_commit}/usr/share/icons/garuda/distributor-logo-garuda.svg" "${pkgdir}/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
 
   # Removes standard Catppuccin Mocha Global Theme as Garuda's Mokka theme is used
-  rm -rf "$pkgdir/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
+  rm -rf "${pkgdir}/usr/share/plasma/look-and-feel/Catppuccin-Mocha-Mauve/"
 
   # GTK theme
   cd Colloid-gtk-theme
-  install -d "$pkgdir/usr/share/themes"
-  ./install.sh -n Catppuccin -t purple -c dark --tweaks catppuccin -d "$pkgdir/usr/share/themes"
+  install -d "${pkgdir}/usr/share/themes"
+  ./install.sh -n Catppuccin -t purple -c dark --tweaks catppuccin -d "${pkgdir}/usr/share/themes"
 
   depends=(
     'garuda-common-settings'
