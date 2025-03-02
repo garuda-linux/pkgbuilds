@@ -4,11 +4,12 @@
 pkgname=garuda-hooks
 pkgdesc="Additions and enhancements for Garuda Linux"
 pkgver=2.13.0
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL')
 depends=('pacman' 'pacman-contrib' 'chaotic-mirrorlist' 'nss-mdns' 'kernel-modules-hook' 'grub' 'update-grub' 'awk' 'garuda-libs' 'gcc-libs')
 makedepends=('cargo' 'git')
+conflicts=(check-broken-packages-pacman-hook-git)
 install=${pkgname}.install
 source=(01-snapshot-reject.hook
   filesystem.hook

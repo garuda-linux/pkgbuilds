@@ -1,7 +1,7 @@
 pkgbase = garuda-hooks
 	pkgdesc = Additions and enhancements for Garuda Linux
 	pkgver = 2.13.0
-	pkgrel = 1
+	pkgrel = 2
 	install = garuda-hooks.install
 	arch = any
 	license = GPL
@@ -17,6 +17,7 @@ pkgbase = garuda-hooks
 	depends = awk
 	depends = garuda-libs
 	depends = gcc-libs
+	conflicts = check-broken-packages-pacman-hook-git
 	source = 01-snapshot-reject.hook
 	source = filesystem.hook
 	source = foreign.hook
