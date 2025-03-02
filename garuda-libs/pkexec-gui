@@ -23,12 +23,10 @@ mkdir "$overlays_dir"/{upper,work,home}
 # Overlayfs mount
 mount -t overlay overlay -o lowerdir="$HOME",upperdir="$overlays_dir/upper",workdir="$overlays_dir/work" "$overlays_dir/home"
 
+# If not set, the default behavior of the program that is launched will be used automatically
 if [[ -v XDG_CONFIG_DIRS ]]; then
 	# Replace any mention of the user's home directory with the overlay in XDG_CONFIG_DIRS
 	export XDG_CONFIG_DIRS="${XDG_CONFIG_DIRS//"$HOME"/"$overlays_dir/home"}"
-else
-	# If XDG_CONFIG_DIRS is not set, set it to the default per the XDG Base Directory Specification
-	export XDG_CONFIG_DIRS="/etc/xdg"
 fi
 
 # Set HOME to the overlay
