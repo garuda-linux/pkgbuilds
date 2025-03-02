@@ -1,7 +1,7 @@
 pkgbase = garuda-libs
 	pkgdesc = Libraries commonly used by Garuda Linux software
-	pkgver = 1.4.7
-	pkgrel = 2
+	pkgver = 1.5.1
+	pkgrel = 1
 	arch = any
 	license = GPL
 	depends = libnotify
@@ -23,6 +23,6 @@ pkgbase = garuda-libs
 	sha512sums = 2ba2701c933b37fd708efe9cd8a2dc9e17d33f6c7ecafcdd3ffd4292b5d88cde10595e15af1560b8c03bd3e1b94e13a69d23d72899ec75b500856c71bd23c446
 	sha512sums = aa5ade90651d4b2ee9199277c7b8737ca717d69d4e7a0afc37e06542ba5dc34f33d8c8b50c0a79920c8fb7c71cc60e8b59fcca39055cfda589725401afe1ca30
 	sha512sums = 80987b22253b99ba62ebc63d35455949747a5d530afc72782891319a803c2fa2d78ee831a8eb95069d6209bf0f46da6c5be84fc484e84b77054fcb9b6d89b5cd
-	sha512sums = 7225c4ee2d95237dca9679deba1f4009510ac3215054964d11c67171306ef42cc90fbccc6c5995dff373bac77ec658046c6bbcd28c0ff42478439380ba776487
+	sha512sums = 041effb0c2316338482e94654538876c2e47664c89e8f9dc007443f1ce106a7401b718134dff9f5dbcba6de9c014406ee334b14267f157e9690972a304a57e1e
 
 pkgname = garuda-libs
