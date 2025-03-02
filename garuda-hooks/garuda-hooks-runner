@@ -1,6 +1,7 @@
 #!/bin/bash
 # Run garuda hooks related commands.
 
+# shellcheck source=/dev/null
 source /usr/lib/garuda/garuda.shlib
 
 Filesystem() {
@@ -35,8 +36,8 @@ Lsb_release() {
 	sed -i $file \
 		-e 's,DISTRIB_ID=.*,DISTRIB_ID=Garuda,' \
 		-e 's,DISTRIB_RELEASE=.*,DISTRIB_RELEASE=Soaring,' \
-		-e 's,DISTRIB_CODENAME=.*,DISTRIB_CODENAME="BirdOfPrey",' \
-		-e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux Bird of Prey\",'
+		-e 's,DISTRIB_CODENAME=.*,DISTRIB_CODENAME="Broadwing",' \
+		-e 's,DISTRIB_DESCRIPTION=.*,DISTRIB_DESCRIPTION=\"Garuda Linux Broadwing\",'
 }
 
 Post() {
