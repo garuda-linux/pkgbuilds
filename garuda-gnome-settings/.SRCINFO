@@ -1,6 +1,6 @@
 pkgbase = garuda-gnome-settings
 	pkgdesc = Garuda Linux GNOME settings
-	pkgver = 1.5.8
+	pkgver = 1.5.9
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings
 	install = garuda-gnome-settings.install
@@ -9,7 +9,7 @@ pkgbase = garuda-gnome-settings
 	makedepends = coreutils
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/be45ad0e50b6da39eedf42bfbf852c8fc76215c9/garuda-gnome-settings-be45ad0e50b6da39eedf42bfbf852c8fc76215c9.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/105259cc9f125cb36f73c4b4f613519913c94453/garuda-gnome-settings-105259cc9f125cb36f73c4b4f613519913c94453.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-gnome-settings
