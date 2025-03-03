@@ -2,16 +2,16 @@
 # Co-Maintainer: FGD
 
 pkgname=garuda-dr460nized
-pkgver="4.5.11"
-_commit='5ab8e60ff41dc90dc724c3436a112c1384432c0a'
-pkgrel=7
+pkgver="4.5.12"
+_commit='23d86f1e37c65637fc71fcb8a0a71a111b050909'
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/${_commit}/garuda-dr460nized-${_commit}.tar.gz"
   "dr460nized-patch.hook")
-sha256sums=('SKIP'
-  '4121188ba1198f415f151a293a808c507c53128daa4165eb628e4b0e794a0c5f')
+sha256sums=('6d2b580a20a090ce55f0bf37e78e252252604920bf628625cef0a5edda51ccb1'
+            '4121188ba1198f415f151a293a808c507c53128daa4165eb628e4b0e794a0c5f')
 pkgdesc='Dr460nized settings'
 install=$pkgname.install
 provides=('garuda-desktop-settings')
