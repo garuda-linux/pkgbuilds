@@ -1,6 +1,6 @@
 pkgbase = garuda-cosmic-settings
 	pkgdesc = Garuda Linux Cosmic settings
-	pkgver = 0.0.3
+	pkgver = 0.0.4
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cosmic-settings
 	install = garuda-cosmic-settings.install
@@ -8,7 +8,7 @@ pkgbase = garuda-cosmic-settings
 	license = GPL
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cosmic-settings/-/archive/12d2a8d5c2966a65e51c25e1186babf26e3b1a45/garuda-cosmic-settings-12d2a8d5c2966a65e51c25e1186babf26e3b1a45.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-cosmic-settings/-/archive/15410873a3dd985f7433240ba1f2a3336af316f7/garuda-cosmic-settings-15410873a3dd985f7433240ba1f2a3336af316f7.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-cosmic-settings
