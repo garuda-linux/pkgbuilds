@@ -22,6 +22,9 @@ prepare() {
   pnpm install
 
   rustup default stable
+
+  # This is a preview version, so logging is verbose by default
+  sed -i 's/logLevel = LogLevel.INFO/logLevel = LogLevel.TRACE/g' "$srcdir/rani/src/app/logging/logging.ts"
 }
 
 pkgver() {
