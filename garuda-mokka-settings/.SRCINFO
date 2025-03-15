@@ -1,7 +1,7 @@
 pkgbase = garuda-mokka
 	pkgdesc = Garuda Mokka desktop settings and presets
 	pkgver = 1.0.5
-	pkgrel = 2
+	pkgrel = 3
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka
 	install = garuda-mokka.install
 	arch = any
