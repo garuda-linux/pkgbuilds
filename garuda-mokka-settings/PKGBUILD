@@ -90,7 +90,7 @@ package() {
 
   # Install Application Menu logo
   install -d -m 0755 "${pkgdir}/usr/share/icons/Tela-circle-dracula/scalable/apps"
-  cp "${srcdir}/${pkgname}-${_commit}/usr/share/icons/garuda/distributor-logo-garuda.svg" "${pkgdir}/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
+  ln -s "/usr/share/icons/garuda/distributor-logo-garuda.svg" "${pkgdir}/usr/share/icons/Tela-circle-dracula/scalable/apps/distributor-logo-garuda.svg"
 
   # GTK theme
   cd Colloid-gtk-theme
