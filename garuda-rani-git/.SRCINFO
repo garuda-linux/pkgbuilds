@@ -37,7 +37,7 @@ pkgbase = garuda-rani-git
 	options = !emptydirs
 	options = !lto
 	options = !debug
-	source = git+https://gitlab.com/garuda-linux/applications/rani.git#branch=operations-rewrite
+	source = git+https://gitlab.com/garuda-linux/applications/rani.git
 	sha256sums = SKIP
 
 pkgname = garuda-rani-git

@@ -13,7 +13,7 @@ optdepends=('paru: helper for installing games from AUR')
 provides=('garuda-rani')
 conflicts=('garuda-rani')
 options=('!strip' '!emptydirs' '!lto' '!debug')
-source=("git+$url.git#branch=operations-rewrite")
+source=("git+$url.git")
 sha256sums=('SKIP')
 install=garuda-rani.install
 
