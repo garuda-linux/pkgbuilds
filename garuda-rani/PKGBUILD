@@ -1,8 +1,8 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani
-pkgver="2.0.0"
-_commit='35f37a5b4d411c835b7213286e0b74de0114e3e3'
+pkgver="2.1.0"
+_commit='3e20cd3aa35c42569e2d8b9a6ac991e679b82a1f'
 pkgrel=1
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('x86_64')
