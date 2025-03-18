@@ -31,11 +31,11 @@ build() {
 
 package() {
   # First build a deb package, as that is inbuilt in Tauri
-  cd rani || exit
+  cd rani-${_commit} || exit
   pnpm run tauri bundle --bundles deb
 
   # Then extract the deb package's contents
-  cd "$srcdir/rani/src-tauri/target/release/bundle/deb" || exit
+  cd "$srcdir/rani-${_commit}/src-tauri/target/release/bundle/deb" || exit
   dpkg-deb -x *.deb extracted
 
   # Now install the extracted files, like binaries, desktop files, icons, etc.
@@ -45,7 +45,7 @@ package() {
   install -Dm644 usr/share/icons/hicolor/128x128/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/garuda-rani.png"
   install -Dm644 usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png"
   install -Dm644 usr/share/icons/hicolor/32x32/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/garuda-rani.png"
-  install -Dm644 "$srcdir/rani/LICENSE" "$pkgdir/usr/share/licenses/garuda-rani/LICENSE"
+  install -Dm644 "$srcdir/rani-${_commit}/LICENSE" "$pkgdir/usr/share/licenses/garuda-rani/LICENSE"
 
   # Copy any assets like translations or application lists
   install -d "$pkgdir/usr/lib/garuda-rani"
