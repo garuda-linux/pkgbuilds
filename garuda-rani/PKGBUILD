@@ -1,16 +1,21 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani
-pkgver="2.2.0"
-_commit='a9691b76e958eb8555d5f4835f85d6439e722187'
+pkgver="2.3.0"
+_commit='b81900de1397f0bc1e81b65da42ffa2eac38cc2e'
 pkgrel=1
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-rani"
 license=('GPL3')
-depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1' 'pacman-contrib' 'garuda-libs')
+depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1' 'pacman-contrib' 'garuda-libs' 'garuda-update')
 makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs-lts-jod' 'dpkg' 'pnpm>10')
-optdepends=('paru: show pending AUR updates')
+optdepends=('paru: show pending AUR updates'
+  'meld: compare pacdiff files via a GUI on GTK systems'
+  'kompare: compare pacdiff files via a GUI on Qt systems'
+  'pace: manage Pacman repositories via a GUI'
+  'reflector-simple: update Arch mirrorlists interactively'
+  'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 conflicts=('garuda-rani-git')
 options=('!strip' '!emptydirs' '!lto' '!debug')
 source=("https://gitlab.com/garuda-linux/applications/rani/-/archive/${_commit}/rani-${_commit}.tar.gz")
