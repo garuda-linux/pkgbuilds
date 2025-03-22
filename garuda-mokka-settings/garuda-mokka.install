@@ -29,7 +29,11 @@ apply_grub() {
 post_install() {
   update_fonts
   update_gtk
-  apply_grub
+  # Check if garuda-mokka is already installed
+  if ! pacman -Q garuda-mokka &>/dev/null; then
+    # Package is NOT installed, run as initial setup
+    apply_grub
+  fi
 }
 
 # Post upgrade
