@@ -19,14 +19,14 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mok
   git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312
   git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=559faed6062b6c891c9d1f0c778e66841209fb27)
 sha256sums=('4d806da2558b1bff5c4c35d47f973ada25dd542fc70abf415bdbdea7038a60ba'
-  '57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320'
-  'da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f'
-  '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
-  'eaf82aaafdc83c6569a6805fa5727d18a22dcacc08668a29499c4d263900ec65'
-  '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
-  'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
-  '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82'
-  '00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249')
+            '57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320'
+            'da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f'
+            '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
+            'eaf82aaafdc83c6569a6805fa5727d18a22dcacc08668a29499c4d263900ec65'
+            '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
+            'd83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5'
+            '524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82'
+            '00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249')
 pkgdesc='Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget sassc)
 install=${pkgname}.install
