@@ -44,10 +44,10 @@ post_install() {
   # Check if garuda-mokka is already installed by checking marker file
     if [ ! -f "$marker_file" ]; then
       # Marker file does not exist, run initial setup
-      echo "Garuda-mokka not installed, running initial setup"
-        apply_grub
-  else
-    echo "Garuda-mokka is already installed, skipping grub configuration."
+      echo "Garuda-mokka is not already installed, running initial Mokka default grub setup."
+      apply_grub
+    else
+      echo "Garuda-mokka is already installed, skipping Mokka default grub configuration."
   fi
 }
 
@@ -55,5 +55,3 @@ post_install() {
 post_upgrade() {
   post_install
 }
-
-echo "Ending garuda-mokka post-install script."
