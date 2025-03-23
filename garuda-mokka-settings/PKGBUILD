@@ -35,6 +35,14 @@ conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
   'plasma5-themes-sweet-kde-git')
 
+  pre_remove() {
+
+  # Manage the post-install script to prevent resetting GRUB configs on upgrades/reinstalls
+  echo "Garuda-mokka pre_remove function called"
+  rm -rf /usr/share/garuda-mokka/
+  echo "Package successfully uninstalled"
+}
+
 prepare() {
   mkdir -p ./out ./work
 
@@ -115,12 +123,4 @@ package() {
     'tela-circle-icon-theme-dracula'
     'xdg-desktop-portal-gtk'
   )
-}
-
-pre_remove() {
-
-  # Manage the post-install script to prevent resetting GRUB configs on upgrades/reinstalls
-  echo "Garuda-mokka pre_remove function called"
-  rm -rf /usr/share/garuda-mokka/
-  echo "Package successfully uninstalled"
 }
