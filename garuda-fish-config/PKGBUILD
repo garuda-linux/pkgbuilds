@@ -3,7 +3,7 @@
 
 pkgname=garuda-fish-config
 pkgver=1.5.24
-pkgrel=1
+pkgrel=2
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
 url="https://garudalinux.org"
@@ -13,7 +13,6 @@ depends=('bat'
 	'expac'
 	'find-the-command-git'
 	'fish'
-	'fish-autopair'
 	'fzf'
 	'garuda-starship-prompt'
 	'pkgfile'
