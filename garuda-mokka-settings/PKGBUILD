@@ -97,9 +97,6 @@ package() {
   install -d "${pkgdir}/usr/share/themes"
   ./install.sh -n Catppuccin -t purple -c dark --tweaks catppuccin -d "${pkgdir}/usr/share/themes"
 
-  # Manage the post-install script to prevent resetting GRUB configs on upgrades/reinstalls
-  rm -f "${pkgdir}/usr/share/garuda-mokka/.initial-install-done"
-
   depends=(
     'garuda-common-settings'
     'garuda-fish-config'
@@ -118,4 +115,10 @@ package() {
     'tela-circle-icon-theme-dracula'
     'xdg-desktop-portal-gtk'
   )
+}
+
+pre_remove() {
+
+  # Manage the post-install script to prevent resetting GRUB configs on upgrades/reinstalls
+  rm -f "/usr/share/garuda-mokka/.initial-install-done"
 }
