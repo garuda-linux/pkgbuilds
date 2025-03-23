@@ -120,5 +120,7 @@ package() {
 pre_remove() {
 
   # Manage the post-install script to prevent resetting GRUB configs on upgrades/reinstalls
-  rm -f "/usr/share/garuda-mokka/.initial-install-done"
+  echo "Garuda-mokka pre_remove function called"
+  rm -rf /usr/share/garuda-mokka/
+  echo "Package successfully uninstalled"
 }
