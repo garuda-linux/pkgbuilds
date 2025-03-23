@@ -42,7 +42,7 @@ post_install() {
   update_fonts
   update_gtk
   # Check if garuda-mokka is already installed by checking marker file
-    if [ -f "$marker_file" ]; then
+    if [ ! -f "$marker_file" ]; then
       # Marker file does not exist, run initial setup
       echo "Garuda-mokka is not already installed, running initial Mokka default grub setup."
       apply_grub
