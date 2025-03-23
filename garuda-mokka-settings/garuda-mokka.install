@@ -1,5 +1,8 @@
 echo "Starting garuda-mokka post-install script..."
 
+marker_dir="/usr/share/garuda-mokka"
+marker_file="/usr/share/garuda-mokka/.initial-install-done"
+
 # Font-icon directories
 FONT_DIRS="/usr/share/fonts/TTF /usr/share/fonts/OTF /usr/share/fonts/gsfonts /usr/share/fonts/misc"
 ICON_DIR="/usr/share/icons/hicolor"
@@ -27,17 +30,22 @@ apply_grub() {
   sed -i -e 's,.*GRUB_DISTRIBUTOR=.*,GRUB_DISTRIBUTOR="Garuda",' /etc/default/grub
   grub-mkconfig -o /boot/grub/grub.cfg
   echo "Exiting apply_grub function..."
+  # Create the marker directory if it doesn't exist
+  if [ ! -d "$marker_dir" ]; then
+    mkdir -p "$marker_dir"
+  fi
+  touch "$marker_file"
 }
 
 # Post installation
 post_install() {
   update_fonts
   update_gtk
-  # Check if garuda-mokka is already installed
-  if ! pacman -Q garuda-mokka &>/dev/null; then
-    # Package is NOT installed, run as initial setup
-    echo "garuda-mokka not found, running apply_grub"
-    apply_grub
+  # Check if garuda-mokka is already installed by checking marker file
+    if [ ! -f "$marker_file" ]; then
+      # Marker file does not exist, run initial setup
+      echo "Garuda-mokka not installed, running initial setup"
+        apply_grub
   else
     echo "Garuda-mokka is already installed, skipping grub configuration."
   fi
