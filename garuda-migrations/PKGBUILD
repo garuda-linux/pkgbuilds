@@ -2,15 +2,15 @@
 
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
-pkgver=2.5.3
-pkgrel=2
+pkgver=2.6.0
+pkgrel=1
 arch=('any')
 license=('GPL')
 depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
 source=(garuda-migrations-runner
 	garuda-migrations-firedragon
 	garuda-migrations.hook)
-sha256sums=('8016d10c48df6a3821418199a4ed0c32d5435338a043b3d1dd1d95b0ad3ce45b'
+sha256sums=('86ffb96c2e03f7d1b4e72d2b3662724e8bbc0c5351c2707a62a750e4454b2981'
             '17c4e9014ba6f6368eaa6f1531f328753f685abedfe27575f4b0dd9ad71122c3'
             '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65')
 
