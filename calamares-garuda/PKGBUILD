@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.3.14.r46.g21ea80352
 _commit=21ea803527735cfaf54fa6059e71d1ef65004864
-pkgrel=1
+pkgrel=2
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)

@@ -1,7 +1,7 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
 	pkgver = 3.3.14.r46.g21ea80352
-	pkgrel = 1
+	pkgrel = 2
 	url = https://github.com/calamares/calamares
 	arch = i686
 	arch = x86_64
