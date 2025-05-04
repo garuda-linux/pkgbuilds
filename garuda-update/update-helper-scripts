@@ -119,9 +119,9 @@ migrate-garuda-repo() {
       }
       set=1
     }
-    else if ($0 == "[core-testing]")
+    else if ($0 == "[testing]")
     {
-        print "[testing]"
+        print "[core-testing]"
         err=0
         next
     }
