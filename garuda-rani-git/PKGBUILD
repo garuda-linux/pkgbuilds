@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani-git
-pkgver=2.1.0.r6.ga4661ba
+pkgver=2.5.0.r13.g3266a59
 pkgrel=1
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('any')
@@ -39,7 +39,7 @@ pkgver() {
 
 build() {
   cd rani || exit
-  pnpm run tauri build --no-bundle
+  NX_TUI=false pnpm run tauri build --no-bundle
 }
 
 package() {
