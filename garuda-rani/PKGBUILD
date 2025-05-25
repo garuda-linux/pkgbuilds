@@ -31,7 +31,7 @@ prepare() {
 
 build() {
   cd rani-${_commit} || exit
-  pnpm run tauri build --no-bundle
+  NX_TUI=false pnpm run tauri build --no-bundle
 }
 
 package() {
