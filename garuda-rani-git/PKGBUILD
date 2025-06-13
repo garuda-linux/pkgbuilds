@@ -10,7 +10,7 @@ arch=('any')
 url="https://gitlab.com/garuda-linux/applications/rani"
 license=('GPL3')
 depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs' 'garuda-update')
-makedepends=('git' 'base-devel')
+makedepends=('git' 'base-devel' 'nodejs-lts-jod' 'pnpm')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
   'kompare: compare pacdiff files via a GUI on Qt systems'
@@ -19,7 +19,7 @@ optdepends=('paru: show pending AUR updates'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 provides=('garuda-rani')
 conflicts=('garuda-rani')
-options=('!strip' '!emptydirs' '!lto' '!debug')
+options=('!strip' '!emptydirs' '!debug')
 source=("git+$url.git")
 sha256sums=('SKIP')
 
@@ -49,16 +49,25 @@ prepare() {
   HOME="${srcdir}/.electron-gyp"
   mkdir -p "${srcdir}/.electron-gyp"
   sed -i "s/\"electron\": \"[^\"]*\"/\"electron\": \"${SYSTEM_ELECTRON_VERSION}\"/g" package.json
-  NODE_ENV=development corepack pnpm -r install
+  corepack pnpm -r install
 }
 
 build() {
   cd rani || exit
   local electronDist="/usr/lib/electron${_electronversion}"
 
-  NODE_ENV=production corepack pnpm run build
-  NODE_ENV=production corepack pnpm exec electron-builder --linux --dir \
-    -c.electronDist="${electronDist}" -c.electronVersion="${SYSTEM_ELECTRON_VERSION}"
+  corepack pnpm run build
+
+  # Clear shell profile variables that might contaminate JSON output
+  unset PROMPT_COMMAND
+  export BASH_ENV=""
+  export ENV=""
+
+  pnpm run compile
+  pnpm exec electron-builder --linux dir \
+    --config electron-builder.mjs \
+    -c.electronDist="${electronDist}" \
+    -c.electronVersion="${SYSTEM_ELECTRON_VERSION}"
 }
 
 package() {
