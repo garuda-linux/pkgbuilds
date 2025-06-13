@@ -29,6 +29,10 @@ pkgver() {
 }
 
 prepare() {
+  echo "Build is broken currently."
+  echo "May be https://github.com/electron-userland/electron-builder/issues/9020, but who knows."
+  exit 123
+
   cd rani || exit
 
   # Verbose by default as preview version
@@ -63,7 +67,6 @@ build() {
   export BASH_ENV=""
   export ENV=""
 
-  pnpm run compile
   pnpm exec electron-builder --linux dir \
     --config electron-builder.mjs \
     -c.electronDist="${electronDist}" \
