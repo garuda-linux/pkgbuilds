@@ -1,14 +1,16 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani-git
-pkgver=2.5.0.r13.g3266a59
+pkgver=2.5.1.r30.g8c66368
 pkgrel=1
+_electronversion=36
+_pkgname=garuda-rani
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/rani"
 license=('GPL3')
-depends=('cairo' 'desktop-file-utils' 'gdk-pixbuf2' 'glib2' 'gtk3' 'hicolor-icon-theme' 'libsoup' 'pango' 'webkit2gtk-4.1' 'pacman-contrib' 'garuda-libs' 'garuda-update')
-makedepends=('git' 'file' 'openssl' 'appmenu-gtk-module' 'libappindicator-gtk3' 'librsvg' 'base-devel' 'curl' 'wget' 'rustup' 'nodejs-lts-jod' 'dpkg' 'pnpm>10')
+depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs' 'garuda-update')
+makedepends=('git' 'base-devel')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
   'kompare: compare pacdiff files via a GUI on Qt systems'
@@ -20,47 +22,49 @@ conflicts=('garuda-rani')
 options=('!strip' '!emptydirs' '!lto' '!debug')
 source=("git+$url.git")
 sha256sums=('SKIP')
-install=garuda-rani.install
-
-prepare() {
-  cd rani || exit
-  pnpm install
-
-  rustup default stable
-
-  # This is a preview version, so logging is verbose by default
-  sed -i 's/logLevel = LogLevel.INFO/logLevel = LogLevel.TRACE/g' "$srcdir/rani/src/app/logging/logging.ts"
-}
 
 pkgver() {
   cd rani || exit
   git describe --long --tags --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
+prepare() {
+  cd rani || exit
+
+  # Verbose by default as preview version
+  sed -i 's/logLevel = LogLevel.INFO/logLevel = LogLevel.VERBOSE/g' "$srcdir/rani/packages/renderer/src/app/logging/logging.ts"
+
+  sed -i -e "
+        s/@electronversion@/${_electronversion}/g
+        s/@appname@/${_pkgname}/g
+        s/@runname@/app.asar/g
+        s/@cfgdirname@/${_pkgname}/g
+        s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto/g
+    " "${srcdir}/rani/assets/garuda-rani.sh"
+
+  export ELECTRON_SKIP_BINARY_DOWNLOAD=1
+  export SYSTEM_ELECTRON_VERSION="$(electron${_electronversion} -v | sed 's/v//g')"
+  export ELECTRON_OVERRIDE_DIST_PATH="/usr/lib/electron${_electronversion}"
+
+  HOME="${srcdir}/.electron-gyp"
+  mkdir -p "${srcdir}/.electron-gyp"
+  sed -i "s/\"electron\": \"[^\"]*\"/\"electron\": \"${SYSTEM_ELECTRON_VERSION}\"/g" package.json
+  NODE_ENV=development corepack pnpm -r install
+}
+
 build() {
   cd rani || exit
-  NX_TUI=false pnpm run tauri build --no-bundle
+  local electronDist="/usr/lib/electron${_electronversion}"
+
+  NODE_ENV=production corepack pnpm run build
+  NODE_ENV=production corepack pnpm exec electron-builder --linux --dir \
+    -c.electronDist="${electronDist}" -c.electronVersion="${SYSTEM_ELECTRON_VERSION}"
 }
 
 package() {
-  # First build a deb package, as that is inbuilt in Tauri
-  cd rani || exit
-  pnpm run tauri bundle --bundles deb
-
-  # Then extract the deb package's contents
-  cd "$srcdir/rani/src-tauri/target/release/bundle/deb" || exit
-  dpkg-deb -x *.deb extracted
-
-  # Now install the extracted files, like binaries, desktop files, icons, etc.
-  cd extracted || exit
-  install -Dm755 usr/bin/garuda-rani "$pkgdir/usr/bin/garuda-rani"
-  install -Dm644 usr/share/applications/org.garudalinux.rani.desktop "$pkgdir/usr/share/applications/org.garudalinux.rani.desktop"
-  install -Dm644 usr/share/icons/hicolor/128x128/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/128x128/apps/garuda-rani.png"
-  install -Dm644 usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/256x256@2/apps/garuda-rani.png"
-  install -Dm644 usr/share/icons/hicolor/32x32/apps/garuda-rani.png "$pkgdir/usr/share/icons/hicolor/32x32/apps/garuda-rani.png"
-  install -Dm644 "$srcdir/rani/LICENSE" "$pkgdir/usr/share/licenses/garuda-rani/LICENSE"
-
-  # Copy any assets like translations or application lists
-  install -d "$pkgdir/usr/lib/garuda-rani"
-  cp -r usr/lib/garuda-rani/* "$pkgdir/usr/lib/garuda-rani"
+  install -Dm755 "${srcdir}/rani/assets/garuda-rani.sh" "${pkgdir}/usr/bin/${_pkgname}"
+  install -Dm644 "${srcdir}/rani/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${_pkgname}"
+  cp -Pr --no-preserve=ownership "${srcdir}/rani/dist/linux-unpacked/resources/app.asar.unpacked" "${pkgdir}/usr/lib/${_pkgname}"
+  install -Dm644 "${srcdir}/rani/assets/${_pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
+  install -Dm644 "${srcdir}/rani/LICENSE" -t "${pkgdir}/usr/share/licenses/${_pkgname}"
 }
