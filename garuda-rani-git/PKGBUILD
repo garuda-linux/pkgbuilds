@@ -29,9 +29,9 @@ pkgver() {
 }
 
 prepare() {
-  echo "Build is broken currently."
-  echo "May be https://github.com/electron-userland/electron-builder/issues/9020, but who knows."
-  exit 123
+  #echo "Build is broken currently."
+  #echo "May be https://github.com/electron-userland/electron-builder/issues/9020, but who knows."
+  #exit 123
 
   cd rani || exit
 
@@ -61,11 +61,6 @@ build() {
   local electronDist="/usr/lib/electron${_electronversion}"
 
   corepack pnpm run build
-
-  # Clear shell profile variables that might contaminate JSON output
-  unset PROMPT_COMMAND
-  export BASH_ENV=""
-  export ENV=""
 
   pnpm exec electron-builder --linux dir \
     --config electron-builder.mjs \
