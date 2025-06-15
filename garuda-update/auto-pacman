@@ -36,6 +36,7 @@ array set auto_replace_conflicts {
     plasma5-wallpapers-blurredwallpaper garuda-dr460nized
     plasma-applet-window-buttons garuda-dr460nized
     alpm_octopi_utils octopi
+    scenefx swayfx
 }
 
 if { $::conflictsfile_set } {
