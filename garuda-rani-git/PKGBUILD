@@ -29,10 +29,6 @@ pkgver() {
 }
 
 prepare() {
-  #echo "Build is broken currently."
-  #echo "May be https://github.com/electron-userland/electron-builder/issues/9020, but who knows."
-  #exit 123
-
   cd rani || exit
 
   # Verbose by default as preview version
@@ -53,16 +49,15 @@ prepare() {
   HOME="${srcdir}/.electron-gyp"
   mkdir -p "${srcdir}/.electron-gyp"
   sed -i "s/\"electron\": \"[^\"]*\"/\"electron\": \"${SYSTEM_ELECTRON_VERSION}\"/g" package.json
-  corepack pnpm -r install
+  NODE_ENV=development pnpm -r install
 }
 
 build() {
   cd rani || exit
   local electronDist="/usr/lib/electron${_electronversion}"
 
-  corepack pnpm run build
-
-  pnpm exec electron-builder --linux dir \
+  NODE_ENV=production pnpm run build
+  NODE_ENV=production pnpm exec electron-builder --linux dir \
     --config electron-builder.mjs \
     -c.electronDist="${electronDist}" \
     -c.electronVersion="${SYSTEM_ELECTRON_VERSION}"
@@ -74,4 +69,5 @@ package() {
   cp -Pr --no-preserve=ownership "${srcdir}/rani/dist/linux-unpacked/resources/app.asar.unpacked" "${pkgdir}/usr/lib/${_pkgname}"
   install -Dm644 "${srcdir}/rani/assets/${_pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
   install -Dm644 "${srcdir}/rani/LICENSE" -t "${pkgdir}/usr/share/licenses/${_pkgname}"
+  install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" -t "${pkgdir}/usr/share/icons/garuda/garuda-rani.svg"
 }
