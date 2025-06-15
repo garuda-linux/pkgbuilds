@@ -69,5 +69,5 @@ package() {
   cp -Pr --no-preserve=ownership "${srcdir}/rani/dist/linux-unpacked/resources/app.asar.unpacked" "${pkgdir}/usr/lib/${_pkgname}"
   install -Dm644 "${srcdir}/rani/assets/${_pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
   install -Dm644 "${srcdir}/rani/LICENSE" -t "${pkgdir}/usr/share/licenses/${_pkgname}"
-  install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" -t "${pkgdir}/usr/share/icons/garuda/garuda-rani.svg"
+  install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${_pkgname}.svg"
 }
