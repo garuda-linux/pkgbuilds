@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2317
 set -e
 
 # Hacky way to check if the package is installed
@@ -34,7 +35,7 @@ install_expect() {
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
 	local packages
-	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 2>/dev/null | xargs || true)"
+	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session 2>/dev/null | xargs || true)"
 	# We replace python-xdg with python-pyxdg from extra
 	# This is not done automatically for some reason
 	if [[ "$packages" =~ (^| )python-xdg($| ) ]]; then
@@ -71,6 +72,11 @@ package-replaces() {
 	if [[ "$packages" =~ (^| )pinta($| ) ]] && ! [[ "$packages" =~ (^| )dotnet-runtime-7.0($| ) ]]; then
 		echo dotnet-runtime-7.0
 	fi
+  # Detect if we are running on X11 and installed kwin-x11 explicitly, we need to install plasma-x11-session to ensure
+  # that the user can log into their desktop environment.
+  if [[ "$packages" =~ (^| )kwin-x11($| ) ]] && [[ "$packages" =~ (^| )plasma-desktop($| ) ]] && ! [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
+    echo plasma-x11-session
+  fi
 }
 
 # Exit codes:
