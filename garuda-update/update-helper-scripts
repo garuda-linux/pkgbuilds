@@ -1,7 +1,6 @@
 #!/bin/bash
 # shellcheck disable=SC2317
 set -e
-shopt -s extglob
 
 # Hacky way to check if the package is installed
 package-exists-fast() {
@@ -36,7 +35,7 @@ install_expect() {
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
 	local packages
-	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session "linux-firmware<20250613.12fe085f-5" 2>/dev/null | xargs || true)"
+	packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session 2>/dev/null | xargs || true)"
 	# We replace python-xdg with python-pyxdg from extra
 	# This is not done automatically for some reason
 	if [[ "$packages" =~ (^| )python-xdg($| ) ]]; then
@@ -73,35 +72,11 @@ package-replaces() {
 	if [[ "$packages" =~ (^| )pinta($| ) ]] && ! [[ "$packages" =~ (^| )dotnet-runtime-7.0($| ) ]]; then
 		echo dotnet-runtime-7.0
 	fi
-	# Detect if kwin-x11 is installed, we need to install plasma-x11-session to ensure
-	# that the user can log into their desktop environment.
-	# https://archlinux.org/news/plasma-640-will-need-manual-intervention-if-you-are-on-x11/
-	if [[ "$packages" =~ (^| )kwin-x11($| ) ]] && [[ "$packages" =~ (^| )plasma-desktop($| ) ]] && ! [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
-		echo plasma-x11-session
-	fi
-	# https://archlinux.org/news/linux-firmware-2025061312fe085f-5-upgrade-requires-manual-intervention/
-	# linux-firmware<20250613.12fe085f-5
-	if [[ "$packages" =~ (^| )linux-firmware($| ) ]]; then
-		# It doesn't handle symlinks very well, it seems
-		# We create the symlinks in the format it expects instead
-
-		# Find linux-firmware database path
-		local db_path
-		db_path="$(echo /var/lib/pacman/local/linux-firmware-+([^-])-+([0-9]))"
-		if [ -d "$db_path" ]; then
-			# Remove any lines that match /usr/lib/firmware/nvidia/ad*/gsp from the files list that are not ad102
-			gawk -i inplace '!/usr\/lib\/firmware\/nvidia\/ad[^\/]+\/gsp.*/ || /usr\/lib\/firmware\/nvidia\/ad102\/.*$/' "$db_path/files"
-			# Delete faulty symlinks
-			rm -r /usr/lib/firmware/nvidia/ad103 /usr/lib/firmware/nvidia/ad104 /usr/lib/firmware/nvidia/ad106 /usr/lib/firmware/nvidia/ad107
-			# Create symlinks to ad102
-			ln -s /usr/lib/firmware/nvidia/ad102 /usr/lib/firmware/nvidia/ad103
-			ln -s /usr/lib/firmware/nvidia/ad102 /usr/lib/firmware/nvidia/ad104
-			ln -s /usr/lib/firmware/nvidia/ad102 /usr/lib/firmware/nvidia/ad106
-			ln -s /usr/lib/firmware/nvidia/ad102 /usr/lib/firmware/nvidia/ad107
-			echo --overwrite
-			echo "/usr/lib/firmware/nvidia/ad*"
-		fi
-	fi
+  # Detect if we are running on X11 and installed kwin-x11 explicitly, we need to install plasma-x11-session to ensure
+  # that the user can log into their desktop environment.
+  if [[ "$packages" =~ (^| )kwin-x11($| ) ]] && [[ "$packages" =~ (^| )plasma-desktop($| ) ]] && ! [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
+    echo plasma-x11-session
+  fi
 }
 
 # Exit codes:
