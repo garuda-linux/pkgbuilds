@@ -4,11 +4,14 @@ set -e
 
 # Hacky way to check if the package is installed
 package-exists-fast() {
-	if compgen -G "/var/lib/pacman/local/$1-*" >/dev/null; then
-		return 0
-	else
-		return 1
-	fi
+    [[ -n "$1" ]] || return 1
+    local p
+    for p in "/var/lib/pacman/local/$1-"*/; do
+        if [[ $p =~ /$1-[^-]+-[0-9.]+/$ ]]; then
+            return 0
+        fi
+    done
+    return 1
 }
 
 update_keyrings() {
@@ -70,6 +73,7 @@ update_hotfixes() {
 		fi
 	fi
 }
+
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
 	local packages
@@ -129,6 +133,7 @@ pre-update-routines() {
 	update_keyrings || exit_code=2
 	install_expect || exit_code=1
 	update_hotfixes || exit_code=1
+
 	return $exit_code
 }
 
