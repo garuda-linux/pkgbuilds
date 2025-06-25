@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Double check that we are running as root
+if [[ $EUID -ne 0 ]]; then
+    echo -e "\033[1;31mThe Garuda Hardware Tool must be run as root.\033[0m"
+    exit 1
+fi
+
+print_usage() {
+    echo -e "\033[1;34mUsage: $0 [OPTIONS]\033[0m"
+    echo -e "\033[1;34mOptions:\033[0m"
+    echo -e "  --help, -h            Show this help message."
+    echo -e "  --nonfree             Install non-free drivers."
+    echo -e "  --free                Install free drivers only."
+    echo -e "  --noconfirm           Do not prompt for confirmation during installation."
+    echo -e "\033[1;34mEither --nonfree or --free must be specified.\033[0m"
+}
+
+# Parse CLI options
+PARAMETERS=("$@")
+PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
+# shellcheck disable=SC2181
+if [[ $? -ne 0 ]]; then
+  echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
+fi
+eval set -- "$PARSED_OPTIONS"
+while true; do
+  case "$1" in
+    --noconfirm)
+    PACMAN_NOCONFIRM=1
+    shift
+    ;;
+    --free)
+    NONFREE=0
+    shift
+    ;;
+    --nonfree)
+    NONFREE=1
+    shift
+    ;;
+    --pacmanconfig)
+    PACMAN_CONFIG="$2"
+    shift 2
+    ;;
+    --help|-h)
+    print_usage
+    exit 0
+    ;;
+    --)
+    shift
+    break
+    ;;
+    *)
+    echo "Programming error"
+    exit 3
+    ;;
+  esac
+done
+
+if [[ ! -v NONFREE ]]; then
+    print_usage
+    exit 0
+fi
+
+# Packages that are pending installation
+packages=()
+
+echo -e "\033[1;34mDetecting hardware...\033[0m"
+
+VIRT=false
+NVIDIA=false
+NVIDIA_CLOSED=false
+
+# Check if virtual machine is in use
+if systemd-detect-virt -q; then
+    VIRT=true
+fi
+
+# Detect all GPU devices
+gpu_devices="$(lspci -nn -d *:*:0300)"
+
+# Any GPU devices found?
+if [[ -n "$gpu_devices" ]]; then
+    # 00:02.0 VGA compatible controller [0300]: Intel Corporation Alder Lake-P GT2 [Iris Xe Graphics] [8086:46a6] (rev 0c)
+    # 01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] [10de:24a0] (rev a1)
+    # ${BASH_REMATCH[1]} == pci id
+    # ${BASH_REMATCH[2]} == manufacturer name/family
+    # ${BASH_REMATCH[3]} == model name
+    # ${BASH_REMATCH[4]} == vendor id
+    regex='^([0-9a-f]{2}:[0-9a-f]{2}\.[0-9])\s+VGA compatible controller \[0300\]:\s+(.*?)\s+\[([^]]+)\]\s+\[([0-9a-f]{4}):([0-9a-f]{4})\]'
+
+    while read -r line; do
+        if [[ $line =~ $regex ]]; then
+            pci_id="${BASH_REMATCH[1]}"
+            manufacturer="${BASH_REMATCH[2]}"
+            model="${BASH_REMATCH[3]}"
+            vendor_id="${BASH_REMATCH[4]}"
+
+            echo -e "\033[1;32mDetected GPU: Product: $manufacturer $model, PCI ID: $pci_id, Vendor ID: $vendor_id\033[0m"
+
+            # Detect nvidia
+            if [[ "$vendor_id" == "10de" ]]; then
+                # Detect if family is between (and including) volta and maxwell
+                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}$ ]]; then
+                    family="${BASH_REMATCH[1]}"
+                    case "$family" in
+                        "GV" | "GP" | "GM")
+                            NVIDIA_CLOSED=true
+                            ;;
+                        *)
+                            NVIDIA=true
+                            packages+=("garuda-hardware-profile-nvidia")
+                            ;;
+                    esac
+                fi
+            fi
+        fi
+    done <<< "$gpu_devices"
+fi
+
+if [[ "$VIRT" == true ]]; then
+    # If virtual machine, add the VM profile
+    echo -e "\033[1;32mVirtual machine detected, added: \033[1;34mgaruda-hardware-profile-vm\033[0m\033[1;32m.\033[0m"
+    packages+=("garuda-hardware-profile-vm")
+fi
+
+if [[ "$NONFREE" == "1" ]]; then
+    if [[ "$NVIDIA_CLOSED" == true ]]; then
+        echo -e "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia-closed\033[0m\033[1;32m.\033[0m"
+        packages+=("garuda-hardware-profile-nvidia-closed")
+    elif [[ "$NVIDIA" == true ]]; then
+        echo -e "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia\033[0m\033[1;32m.\033[0m"
+        packages+=("garuda-hardware-profile-nvidia")
+    fi
+elif [[ "$NVIDIA" == true ]] || [[ "$NVIDIA_CLOSED" == true ]]; then
+    echo -e "\033[1;31mNVIDIA GPU detected, but --nonfree not specified. Skipping NVIDIA driver installation.\033[0m"
+fi
+
+PACMAN_PARAMS=()
+if [[ -v PACMAN_NOCONFIRM ]]; then
+    PACMAN_PARAMS+=("--noconfirm")
+fi
+if [[ -v PACMAN_CONFIG ]]; then
+    PACMAN_PARAMS+=("--config" "$PACMAN_CONFIG")
+fi
+
+if [[ ${#packages[@]} -gt 0 ]]; then
+    echo -e "\033[1;34mInstalling packages: ${packages[*]}\033[0m"
+    pacman "${PACMAN_PARAMS[@]}" --needed -S "${packages[@]}"
+else
+    echo -e "\033[1;32mNo hardware profiles detected, nothing to install.\033[0m"
+fi

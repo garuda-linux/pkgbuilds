@@ -1,0 +1,15 @@
+pkgname="garuda-hardware-tool"
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
+arch=('x86_64')
+source=(garuda-hardware-tool)
+sha256sums=('16dd4db7faca8ba2c95ce87ec995952780c3ea4cae56d5af4d03c28782ea45d1')
+license=('GPL-3.0-or-later')
+depends=('pciutils' 'coreutils' 'grep')
+
+package() {
+  pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
+
+  install -Dm755 "$srcdir/garuda-hardware-tool" "$pkgdir/usr/bin/garuda-hardware-tool"
+}
