@@ -7,7 +7,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
-pkgver=0.1.1
+pkgver=0.1.2
 pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
@@ -68,7 +68,7 @@ package_garuda-hardware-profile-nvidia-prime-closed() {
 
 package_garuda-hardware-profile-vm() {
   pkgdesc="Garuda Linux hardware profile for virtual machines"
-  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils' 'xf86-video-vmware' 'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
+  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
 
   install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
   install -d "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/

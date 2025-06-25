@@ -1,6 +1,6 @@
 pkgbase = garuda-hardware-profile-standard
 	pkgdesc = Garuda Linux hardware profiles
-	pkgver = 0.1.1
+	pkgver = 0.1.2
 	pkgrel = 1
 	arch = any
 	license = GPL-3.0-or-later
@@ -80,7 +80,6 @@ pkgname = garuda-hardware-profile-vm
 	depends = garuda-hardware-profile-standard
 	depends = xf86-video-fbdev
 	depends = virtualbox-guest-utils
-	depends = xf86-video-vmware
 	depends = open-vm-tools
 	depends = xf86-input-vmmouse
 	depends = spice-vdagent
