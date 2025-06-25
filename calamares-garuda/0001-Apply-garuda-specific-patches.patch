@@ -474,7 +474,7 @@ index 000000000..f3e612aa7
 +        call(["mkdir", "-p", join(self.root, dir)])
 +
 +    def configure(self):
-+        cmd = ["garuda-hardware-tool", "--noconfirm", "--" + str(self.driver)]
++        cmd = ["garuda-hardware-tool", "--sync", "--noconfirm", "--" + str(self.driver)]
 +        if self.local:
 +            self.mkdir("opt/ght")
 +            self.mount("opt/ght")

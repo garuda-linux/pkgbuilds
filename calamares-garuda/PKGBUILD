@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.3.14.r46.g21ea80352
 _commit=21ea803527735cfaf54fa6059e71d1ef65004864
-pkgrel=3
+pkgrel=4
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -29,7 +29,7 @@ source+=(git+https://github.com/calamares/calamares.git#commit="${_commit}"
   chrootcfg.conf)
 sha256sums=('e06f8d5d185120ce3c02ea94137eb51e84a76bb8f5b09be7e9f6e9129c0f81af'
   '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
-  '245ec1f3c889b156d0a3357adb4c0ac7d1f10ebfd21877fd138e288d41dc5b0b'
+  '0c0bb7061b53f9fa357b49cfc07591b8ef6dbe99a2c4d5ab14d2fe8be57e8c69'
   '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
   '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
   'e395942636b7b1e9110248fb2912efea14ccf6b967b2dab9db73febc303d2e3e'

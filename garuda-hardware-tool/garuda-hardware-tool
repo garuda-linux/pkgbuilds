@@ -19,7 +19,7 @@ print_usage() {
 
 # Parse CLI options
 PARAMETERS=("$@")
-PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig:,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
+PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig:,noconfirm,sync" --name "$0" -- "${PARAMETERS[@]}")
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
   echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
@@ -42,6 +42,10 @@ while true; do
     --pacmanconfig)
     PACMAN_CONFIG="$2"
     shift 2
+    ;;
+    --sync)
+    PACMAN_SYNC=1
+    shift
     ;;
     --help|-h)
     print_usage
@@ -143,6 +147,9 @@ if [[ -v PACMAN_NOCONFIRM ]]; then
 fi
 if [[ -v PACMAN_CONFIG ]]; then
     PACMAN_PARAMS+=("--config" "$PACMAN_CONFIG")
+fi
+if [[ -v PACMAN_SYNC ]]; then
+    PACMAN_PARAMS+=("-y")
 fi
 
 if [[ ${#packages[@]} -gt 0 ]]; then
