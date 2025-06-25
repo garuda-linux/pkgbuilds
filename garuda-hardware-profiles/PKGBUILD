@@ -1,0 +1,79 @@
+# Maintainer: TNE <tne at garudalinux org>
+
+_pkgname=garuda-hardware-profiles
+pkgname=(garuda-hardware-profile-standard
+         garuda-hardware-profile-nvidia
+         garuda-hardware-profile-nvidia-closed
+         garuda-hardware-profile-nvidia-prime
+         garuda-hardware-profile-nvidia-prime-closed
+         garuda-hardware-profile-virtualmachine)
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Garuda Linux hardware profiles"
+arch=(any)
+license=(GPL-3.0-or-later)
+source=(
+  nvidia-modules-load.conf
+  nvidia-modprobe.conf
+  garuda-nvidia-prime-powersaving.conf
+  90-nvidia-prime-powermanagement.rules
+  garuda-virtualmachine-guest-config.target
+)
+sha256sums=('9135036c0fb97eb630e9452c75a77927f01aedf1e7359f29019acc8b4c22cf6d'
+            'ee3d6dabac95eeaf9f97aa16bef05dde84fca5bb1f7351591c70f9448f988cb9'
+            'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
+            '2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
+            'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480')
+
+package_garuda-hardware-profile-standard() {
+  pkgdesc="Garuda Linux hardware profile with opensource drivers"
+  depends=(xf86-video-ati xf86-video-amdgpu xf86-video-nouveau vulkan-intel vulkan-radeon intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-vulkan-mesa-layers)
+  optdepends=(opencl-mesa lib32-opencl-mesa intel-compute-runtime libva-vdpau-driver lib32-libva-vdpau-driver)
+}
+
+_nvidia_shared() {
+  cd "$srcdir"
+
+  install -Dm644 nvidia-modules-load.conf $pkgdir/usr/lib/modules-load.d/garuda-nvidia.conf
+  install -Dm644 nvidia-modprobe.conf $pkgdir/usr/lib/modprobe.d/garuda-nvidia.conf
+  install -Dm644 garuda-nvidia-prime-powersaving.conf $pkgdir/usr/lib/modprobe.d/garuda-nvidia-prime-powersaving.conf
+  install -Dm644 90-nvidia-prime-powermanagement.rules $pkgdir/usr/lib/udev/rules.d/90-nvidia-prime-powermanagement.rules
+}
+
+package_garuda-hardware-profile-nvidia() {
+  pkgdesc="Garuda Linux hardware profile with nvidia drivers"
+  depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-open-dkms nvidia-prime)
+  conflicts=(garuda-hardware-profile-nvidia-closed)
+
+  _nvidia_shared
+}
+
+package_garuda-hardware-profile-nvidia-closed() {
+  pkgdesc="Garuda Linux hardware profile with legacy closed source nvidia kernel drivers"
+  depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-dkms nvidia-prime)
+  conflicts=(garuda-hardware-profile-nvidia-closed)
+
+  _nvidia_shared
+}
+
+package_garuda-hardware-profile-nvidia-prime() {
+  pkgdesc="Garuda Linux hardware profile with nvidia prime support (virtual package)"
+  depends=(garuda-hardware-profile-nvidia)
+}
+
+package_garuda-hardware-profile-nvidia-prime-closed() {
+  pkgdesc="Garuda Linux hardware profile with nvidia prime support (virtual package)"
+  depends=(garuda-hardware-profile-nvidia-closed)
+}
+
+package_garuda-hardware-profile-virtualmachine() {
+  pkgdesc="Garuda Linux hardware profile for virtual machines"
+  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils' 'xf86-video-vmware' 'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
+
+  install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
+  install -d "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/
+  ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/garuda-virtualmachine-guest-config.target
+
+  install -d "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/
+  ln -s /usr/lib/systemd/user/spice-vdagent.service "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/spice-vdagent.service
+}
