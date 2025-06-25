@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.3.14.r46.g21ea80352
 _commit=21ea803527735cfaf54fa6059e71d1ef65004864
-pkgrel=2
+pkgrel=3
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -25,14 +25,14 @@ source+=(git+https://github.com/calamares/calamares.git#commit="${_commit}"
   0001-Apply-garuda-specific-patches.patch
   partition.conf
   mount.conf
-  mhwdcfg.conf
+  ghtcfg.conf
   chrootcfg.conf)
 sha256sums=('e06f8d5d185120ce3c02ea94137eb51e84a76bb8f5b09be7e9f6e9129c0f81af'
   '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
-  'c518d22225c6b6520adb206e8334fa881b59538021b6498e6c24a6823764dcf3'
+  '245ec1f3c889b156d0a3357adb4c0ac7d1f10ebfd21877fd138e288d41dc5b0b'
   '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
   '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
-  '13250117481c1ac8d13eac00b2efc0a6b006f19ffe7b93cd87bea04b88169c4b'
+  'e395942636b7b1e9110248fb2912efea14ccf6b967b2dab9db73febc303d2e3e'
   'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
