@@ -19,7 +19,7 @@ print_usage() {
 
 # Parse CLI options
 PARAMETERS=("$@")
-PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
+PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig:,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
   echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"

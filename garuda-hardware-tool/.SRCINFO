@@ -8,7 +8,7 @@ pkgbase = garuda-hardware-tool
 	depends = coreutils
 	depends = grep
 	source = garuda-hardware-tool
-	sha256sums = 16dd4db7faca8ba2c95ce87ec995952780c3ea4cae56d5af4d03c28782ea45d1
+	sha256sums = 1f4c0cb6c0fb306f0f106ff2c0e59e854e0255401d487c58373e5ae0767515ce
 
 pkgname = garuda-hardware-tool
 	pkgdesc = A tool to manage hardware drivers and configurations in Garuda Linux.
