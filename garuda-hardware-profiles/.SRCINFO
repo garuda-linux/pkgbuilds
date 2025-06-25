@@ -1,6 +1,6 @@
 pkgbase = garuda-hardware-profile-standard
 	pkgdesc = Garuda Linux hardware profiles
-	pkgver = 0.1.2
+	pkgver = 0.1.3
 	pkgrel = 1
 	arch = any
 	license = GPL-3.0-or-later
@@ -9,11 +9,13 @@ pkgbase = garuda-hardware-profile-standard
 	source = garuda-nvidia-prime-powersaving.conf
 	source = 90-nvidia-prime-powermanagement.rules
 	source = garuda-virtualmachine-guest-config.target
+	source = garuda-nvidia-live.service
 	sha256sums = 9135036c0fb97eb630e9452c75a77927f01aedf1e7359f29019acc8b4c22cf6d
 	sha256sums = ee3d6dabac95eeaf9f97aa16bef05dde84fca5bb1f7351591c70f9448f988cb9
 	sha256sums = b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844
 	sha256sums = 2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e
 	sha256sums = a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480
+	sha256sums = 4b5e1fde346918258576bef9f87d06a2ddc75b99f734c2a638114c93add2e470
 
 pkgname = garuda-hardware-profile-standard
 	pkgdesc = Garuda Linux hardware profile with opensource drivers

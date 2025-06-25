@@ -1,0 +1,7 @@
+[Unit]
+Description=Load NVIDIA DRM and UVM modules in live environment
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'modprobe nvidia_drm && modprobe nvidia-uvm'
+RemainAfterExit=yes
