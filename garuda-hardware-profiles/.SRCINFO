@@ -1,6 +1,6 @@
 pkgbase = garuda-hardware-profile-standard
 	pkgdesc = Garuda Linux hardware profiles
-	pkgver = 0.1.0
+	pkgver = 0.1.1
 	pkgrel = 1
 	arch = any
 	license = GPL-3.0-or-later
@@ -75,7 +75,7 @@ pkgname = garuda-hardware-profile-nvidia-prime-closed
 	pkgdesc = Garuda Linux hardware profile with nvidia prime support (virtual package)
 	depends = garuda-hardware-profile-nvidia-closed
 
-pkgname = garuda-hardware-profile-virtualmachine
+pkgname = garuda-hardware-profile-vm
 	pkgdesc = Garuda Linux hardware profile for virtual machines
 	depends = garuda-hardware-profile-standard
 	depends = xf86-video-fbdev

@@ -6,8 +6,8 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-closed
          garuda-hardware-profile-nvidia-prime
          garuda-hardware-profile-nvidia-prime-closed
-         garuda-hardware-profile-virtualmachine)
-pkgver=0.1.0
+         garuda-hardware-profile-vm)
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
@@ -66,7 +66,7 @@ package_garuda-hardware-profile-nvidia-prime-closed() {
   depends=(garuda-hardware-profile-nvidia-closed)
 }
 
-package_garuda-hardware-profile-virtualmachine() {
+package_garuda-hardware-profile-vm() {
   pkgdesc="Garuda Linux hardware profile for virtual machines"
   depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils' 'xf86-video-vmware' 'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
 
