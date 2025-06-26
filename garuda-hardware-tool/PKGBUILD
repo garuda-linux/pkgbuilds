@@ -1,10 +1,10 @@
 pkgname="garuda-hardware-tool"
-pkgver=0.1.3
+pkgver=0.1.4
 pkgrel=1
 pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
 arch=('x86_64')
 source=(garuda-hardware-tool)
-sha256sums=('6168a01419759cfed630ba72536aa5353fb336964d216b61be7209f30d82f817')
+sha256sums=('eeaf7c7a5d81a1af7b76f6230b25a5a6d1472b9987b8ab4a0fbbf639a6b56514')
 license=('GPL-3.0-or-later')
 depends=('pciutils' 'coreutils' 'grep')
 

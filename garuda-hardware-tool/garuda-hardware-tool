@@ -160,7 +160,6 @@ if [[ ${#packages[@]} -gt 0 ]]; then
     else
         echo -e "\033[1;31mNo valid packages found for installation.\033[0m"
     fi
-fi
 else
     echo -e "\033[1;32mNo hardware profiles detected, nothing to install.\033[0m"
 fi
