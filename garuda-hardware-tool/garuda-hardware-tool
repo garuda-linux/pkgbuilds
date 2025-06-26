@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Double check that we are running as root
 if [[ $EUID -ne 0 ]]; then
-    echo -e "\033[1;31mThe Garuda Hardware Tool must be run as root.\033[0m"
+    echo -e "\033[1;31mThe Garuda Hardware Tool must be run as root.\033[0m" >&2
     exit 1
 fi
 
@@ -14,15 +14,28 @@ print_usage() {
     echo -e "  --nonfree             Install non-free drivers."
     echo -e "  --free                Install free drivers only."
     echo -e "  --noconfirm           Do not prompt for confirmation during installation."
+    echo -e "  --check               Print any missing hardware profiles."
     echo -e "\033[1;34mEither --nonfree or --free must be specified.\033[0m"
+}
+
+print_log() {
+    if [[ ! -v CHECK_ONLY ]]; then
+        echo -e "${1}"
+    fi
+}
+
+print_error() {
+    if [[ ! -v CHECK_ONLY ]]; then
+        echo -e "${1}" >&2
+    fi
 }
 
 # Parse CLI options
 PARAMETERS=("$@")
-PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig:,noconfirm,sync" --name "$0" -- "${PARAMETERS[@]}")
+PARSED_OPTIONS=$(getopt --options="h" --longoptions="help,nonfree,free,pacmanconfig:,noconfirm,sync,check" --name "$0" -- "${PARAMETERS[@]}")
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
-  echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
+  print_error "\033[1;31m\nFailed to parse CLI options\n\033[0m"
 fi
 eval set -- "$PARSED_OPTIONS"
 while true; do
@@ -45,6 +58,10 @@ while true; do
     ;;
     --sync)
     PACMAN_SYNC=1
+    shift
+    ;;
+    --check)
+    CHECK_ONLY=1
     shift
     ;;
     --help|-h)
@@ -70,7 +87,13 @@ fi
 # Packages that are pending installation
 packages=()
 
-echo -e "\033[1;34mDetecting hardware...\033[0m"
+print_log "\033[1;34mDetecting hardware...\033[0m"
+
+if [[ -x /usr/bin/Xorg ]]; then
+    packages+=("garuda-hardware-profile-standard-x11")
+else
+    packages+=("garuda-hardware-profile-standard")
+fi
 
 VIRT=false
 NVIDIA=false
@@ -101,7 +124,7 @@ if [[ -n "$gpu_devices" ]]; then
             model="${BASH_REMATCH[3]}"
             vendor_id="${BASH_REMATCH[4]}"
 
-            echo -e "\033[1;32mDetected GPU: Product: $manufacturer $model, PCI ID: $pci_id, Vendor ID: $vendor_id\033[0m"
+            print_log "\033[1;32mDetected GPU: Product: $manufacturer $model, PCI ID: $pci_id, Vendor ID: $vendor_id\033[0m"
 
             # Detect nvidia
             if [[ "$vendor_id" == "10de" ]]; then
@@ -124,20 +147,20 @@ fi
 
 if [[ "$VIRT" == true ]]; then
     # If virtual machine, add the VM profile
-    echo -e "\033[1;32mVirtual machine detected, added: \033[1;34mgaruda-hardware-profile-vm\033[0m\033[1;32m.\033[0m"
+    print_log "\033[1;32mVirtual machine detected, added: \033[1;34mgaruda-hardware-profile-vm\033[0m\033[1;32m.\033[0m"
     packages+=("garuda-hardware-profile-vm")
 fi
 
 if [[ "$NONFREE" == "1" ]]; then
     if [[ "$NVIDIA_CLOSED" == true ]]; then
-        echo -e "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia-closed\033[0m\033[1;32m.\033[0m"
+        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia-closed\033[0m\033[1;32m.\033[0m"
         packages+=("garuda-hardware-profile-nvidia-closed")
     elif [[ "$NVIDIA" == true ]]; then
-        echo -e "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia\033[0m\033[1;32m.\033[0m"
+        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia\033[0m\033[1;32m.\033[0m"
         packages+=("garuda-hardware-profile-nvidia")
     fi
 elif [[ "$NVIDIA" == true ]] || [[ "$NVIDIA_CLOSED" == true ]]; then
-    echo -e "\033[1;31mNVIDIA GPU detected, but --nonfree not specified. Skipping NVIDIA driver installation.\033[0m"
+    print_log "\033[1;31mNVIDIA GPU detected, but --free specified. Skipping NVIDIA driver installation.\033[0m"
 fi
 
 PACMAN_PARAMS=()
@@ -148,18 +171,29 @@ fi
 if [[ -v PACMAN_CONFIG ]]; then
     PACMAN_PARAMS+=("--config" "$PACMAN_CONFIG")
 fi
-if [[ -v PACMAN_SYNC ]]; then
-    pacman "${PACMAN_PARAMS[@]}" -Sy
-fi
 
 if [[ ${#packages[@]} -gt 0 ]]; then
+    if [[ -v PACMAN_SYNC ]]; then
+        pacman "${PACMAN_PARAMS[@]}" -Sy
+    fi
+
     existing_packages=($(comm -12 <(pacman ${PACMAN_PARAMS[@]} -Slq | sort) <(printf "%s\n" "${packages[@]}" | sort)))
     if [[ ${#existing_packages[@]} -gt 0 ]]; then
-        echo -e "\033[1;34mInstalling packages: ${existing_packages[*]}\033[0m"
-        pacman "${PACMAN_INSTALL_PARAMS[@]}" "${PACMAN_PARAMS[@]}" --needed -S "${existing_packages[@]}"
+        # Packages that are not yet installed
+        pending=($(comm -13 <(pacman ${PACMAN_PARAMS[@]} -Qq | sort) <(printf "%s\n" "${existing_packages[@]}" | sort)))
+        if [[ ${#pending[@]} -gt 0 ]]; then
+            print_log "\033[1;34mInstalling packages: ${pending[*]}\033[0m"
+            if [[ -v CHECK_ONLY ]]; then
+                printf "%s\n" "${pending[@]}"
+            else
+                pacman "${PACMAN_INSTALL_PARAMS[@]}" "${PACMAN_PARAMS[@]}" --needed -S "${pending[@]}"
+            fi
+        else
+            print_error "\033[1;32mAll required packages are already installed: ${existing_packages[*]}\033[0m"
+        fi
     else
-        echo -e "\033[1;31mNo valid packages found for installation.\033[0m"
+        print_log "\033[1;31mNo valid packages found for installation.\033[0m"
     fi
 else
-    echo -e "\033[1;32mNo hardware profiles detected, nothing to install.\033[0m"
+    print_error "\033[1;32mNo hardware profiles detected, nothing to install.\033[0m"
 fi
