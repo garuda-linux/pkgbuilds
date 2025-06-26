@@ -1,4 +1,4 @@
-From 68c2af44deff4bd823c3d2c13a3755115ccd5e04 Mon Sep 17 00:00:00 2001
+From a92aaef1edef2e96b40a086050178ad94478d122 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sun, 2 Feb 2025 07:31:02 +0100
 Subject: [PATCH] dw
@@ -15,10 +15,10 @@ Subject: [PATCH] dw
  src/modules/mount/mount.conf                  |  64 +---
  .../partition/gui/PartitionLabelsView.cpp     |   2 +-
  src/modules/partition/partition.conf          |   8 +-
- src/modules/postcfg/main.py                   | 134 ++++++++
+ src/modules/postcfg/main.py                   | 141 +++++++++
  src/modules/postcfg/module.desc               |   6 +
  src/modules/postcfg/postcfg.conf              |   4 +
- 14 files changed, 618 insertions(+), 62 deletions(-)
+ 14 files changed, 625 insertions(+), 62 deletions(-)
  create mode 100644 src/modules/chrootcfg/chrootcfg.conf
  create mode 100644 src/modules/chrootcfg/main.py
  create mode 100644 src/modules/chrootcfg/module.desc
@@ -691,10 +691,10 @@ index 4c78f5814..6b2dea970 100644
  #
 diff --git a/src/modules/postcfg/main.py b/src/modules/postcfg/main.py
 new file mode 100644
-index 000000000..d4cfcad87
+index 000000000..920ef0b72
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,134 @@
+@@ -0,0 +1,141 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -819,6 +819,13 @@ index 000000000..d4cfcad87
 +        if exists(join(self.root, "usr/bin/snapper")):
 +            target_env_call(["snapper", "-c", "root" "create-config", "/"])
 +            target_env_call(["btrfs", "subvolume", "create", "/.snapshots"])
++
++        # There is a nasty bug in *something*, probably grub, that causes us to be completely unable to boot once the system is installed
++        # We have to do some nasty dd nonsense to fix it
++        # TODO remove me when this is fixed
++        if exists(join(self.root, "usr/bin/dd")):
++            # Create temporary directory, copy /boot/vmlinuz-* to it, copy back with dd
++            target_env_call(["sh", "-c", 'mkdir -p /tmp/vmlinuz-hack && mv /boot/vmlinuz-* /tmp/vmlinuz-hack/ && find /tmp/vmlinuz-hack/ -maxdepth 1 -type f -exec sh -c \'dd if="$1" of="/boot/$(basename "$1")"\' sh {} \;'])
 +
 +        return None
 +
