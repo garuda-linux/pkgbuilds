@@ -114,7 +114,6 @@ if [[ -n "$gpu_devices" ]]; then
                             ;;
                         *)
                             NVIDIA=true
-                            packages+=("garuda-hardware-profile-nvidia")
                             ;;
                     esac
                 fi
@@ -142,19 +141,26 @@ elif [[ "$NVIDIA" == true ]] || [[ "$NVIDIA_CLOSED" == true ]]; then
 fi
 
 PACMAN_PARAMS=()
+PACMAN_INSTALL_PARAMS=("--needed")
 if [[ -v PACMAN_NOCONFIRM ]]; then
-    PACMAN_PARAMS+=("--noconfirm")
+    PACMAN_INSTALL_PARAMS+=("--noconfirm")
 fi
 if [[ -v PACMAN_CONFIG ]]; then
     PACMAN_PARAMS+=("--config" "$PACMAN_CONFIG")
 fi
 if [[ -v PACMAN_SYNC ]]; then
-    PACMAN_PARAMS+=("-y")
+    pacman "${PACMAN_PARAMS[@]}" -Sy
 fi
 
 if [[ ${#packages[@]} -gt 0 ]]; then
-    echo -e "\033[1;34mInstalling packages: ${packages[*]}\033[0m"
-    pacman "${PACMAN_PARAMS[@]}" --needed -S "${packages[@]}"
+    existing_packages=($(comm -12 <(pacman ${PACMAN_PARAMS[@]} -Slq | sort) <(printf "%s\n" "${packages[@]}" | sort)))
+    if [[ ${#existing_packages[@]} -gt 0 ]]; then
+        echo -e "\033[1;34mInstalling packages: ${existing_packages[*]}\033[0m"
+        pacman "${PACMAN_INSTALL_PARAMS[@]}" "${PACMAN_PARAMS[@]}" --needed -S "${existing_packages[@]}"
+    else
+        echo -e "\033[1;31mNo valid packages found for installation.\033[0m"
+    fi
+fi
 else
     echo -e "\033[1;32mNo hardware profiles detected, nothing to install.\033[0m"
 fi
