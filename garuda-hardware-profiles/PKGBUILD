@@ -2,12 +2,13 @@
 
 _pkgname=garuda-hardware-profiles
 pkgname=(garuda-hardware-profile-standard
+         garuda-hardware-profile-standard-x11
          garuda-hardware-profile-nvidia
          garuda-hardware-profile-nvidia-closed
          garuda-hardware-profile-nvidia-prime
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
-pkgver=0.1.3
+pkgver=1.0.0
 pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
@@ -29,8 +30,13 @@ sha256sums=('9135036c0fb97eb630e9452c75a77927f01aedf1e7359f29019acc8b4c22cf6d'
 
 package_garuda-hardware-profile-standard() {
   pkgdesc="Garuda Linux hardware profile with opensource drivers"
-  depends=(xf86-video-ati xf86-video-amdgpu xf86-video-nouveau vulkan-intel vulkan-radeon intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-vulkan-mesa-layers)
+  depends=(vulkan-intel vulkan-radeon intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-vulkan-mesa-layers)
   optdepends=(opencl-mesa lib32-opencl-mesa intel-compute-runtime libva-vdpau-driver lib32-libva-vdpau-driver)
+}
+
+package_garuda-hardware-profile-standard-x11() {
+  pkgdesc="Garuda Linux hardware profile with opensource x11 drivers"
+  depends=(garuda-hardware-profile-standard xf86-video-ati xf86-video-amdgpu xf86-video-nouveau)
 }
 
 _nvidia_shared() {
@@ -49,7 +55,7 @@ _nvidia_shared() {
 package_garuda-hardware-profile-nvidia() {
   pkgdesc="Garuda Linux hardware profile with nvidia drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-open-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia-closed)
+  conflicts=(garuda-hardware-profile-nvidia-closed nvidia)
 
   _nvidia_shared
 }
@@ -57,7 +63,7 @@ package_garuda-hardware-profile-nvidia() {
 package_garuda-hardware-profile-nvidia-closed() {
   pkgdesc="Garuda Linux hardware profile with legacy closed source nvidia kernel drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia-closed)
+  conflicts=(garuda-hardware-profile-nvidia nvidia-open)
 
   _nvidia_shared
 }
