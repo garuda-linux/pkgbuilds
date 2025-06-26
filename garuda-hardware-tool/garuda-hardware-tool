@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Double check that we are running as root
-if [[ $EUID -ne 0 ]]; then
-    echo -e "\033[1;31mThe Garuda Hardware Tool must be run as root.\033[0m" >&2
-    exit 1
-fi
-
 print_usage() {
     echo -e "\033[1;34mUsage: $0 [OPTIONS]\033[0m"
     echo -e "\033[1;34mOptions:\033[0m"
@@ -82,6 +76,12 @@ done
 if [[ ! -v NONFREE ]]; then
     print_usage
     exit 0
+fi
+
+# Double check that we are running as root
+if [[ $EUID -ne 0 ]] && [[ ! -v CHECK_ONLY ]]; then
+    echo -e "\033[1;31mThe Garuda Hardware Tool must be run as root.\033[0m" >&2
+    exit 1
 fi
 
 # Packages that are pending installation

@@ -1,6 +1,6 @@
 pkgbase = garuda-hardware-tool
 	pkgdesc = A tool to manage hardware drivers and configurations in Garuda Linux.
-	pkgver = 0.2.0
+	pkgver = 0.2.1
 	pkgrel = 1
 	arch = x86_64
 	license = GPL-3.0-or-later
@@ -8,7 +8,7 @@ pkgbase = garuda-hardware-tool
 	depends = coreutils
 	depends = grep
 	source = garuda-hardware-tool
-	sha256sums = 67ad53edc5b6d3f9247a92a52d1001145d3427f2cf688f660d21e3cdf6b15da8
+	sha256sums = 235d7a2351f057ca50a23ae951c2984aa2d75370f292665d24a8c47f78db428e
 
 pkgname = garuda-hardware-tool
 	pkgdesc = A tool to manage hardware drivers and configurations in Garuda Linux.
