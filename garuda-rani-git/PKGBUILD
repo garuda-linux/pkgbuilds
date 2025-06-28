@@ -1,7 +1,7 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani-git
-pkgver=2.5.1.r30.g8c66368
+pkgver=3.0.0.r0.ga1902a8
 pkgrel=1
 _electronversion=36
 _pkgname=garuda-rani
@@ -13,7 +13,6 @@ depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-li
 makedepends=('git' 'base-devel' 'nodejs-lts-jod' 'pnpm')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
-  'kompare: compare pacdiff files via a GUI on Qt systems'
   'pace: manage Pacman repositories via a GUI'
   'reflector-simple: update Arch mirrorlists interactively'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
@@ -66,7 +65,6 @@ build() {
 package() {
   install -Dm755 "${srcdir}/rani/assets/garuda-rani.sh" "${pkgdir}/usr/bin/${_pkgname}"
   install -Dm644 "${srcdir}/rani/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${_pkgname}"
-  cp -Pr --no-preserve=ownership "${srcdir}/rani/dist/linux-unpacked/resources/app.asar.unpacked" "${pkgdir}/usr/lib/${_pkgname}"
   install -Dm644 "${srcdir}/rani/assets/${_pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
   install -Dm644 "${srcdir}/rani/LICENSE" -t "${pkgdir}/usr/share/licenses/${_pkgname}"
   install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${_pkgname}.svg"
