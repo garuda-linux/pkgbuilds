@@ -1,6 +1,0 @@
-post_install() {
-	bootctl install
-	bootctl set-timeout 5
-	gen-dracut-cmdline
-	sbctl create-keys
-}
