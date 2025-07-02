@@ -8,6 +8,7 @@ pkgbase = firedragon-beta
 	arch = aarch64
 	license = MPL2
 	makedepends = deno
+	makedepends = rsync
 	makedepends = cbindgen
 	makedepends = clang
 	makedepends = diffutils
