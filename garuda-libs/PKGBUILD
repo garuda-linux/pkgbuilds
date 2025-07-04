@@ -4,7 +4,7 @@
 pkgname=garuda-libs
 pkgdesc="Libraries commonly used by Garuda Linux software"
 pkgver=1.6.0
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL')
 depends=('libnotify' 'expect')
@@ -23,7 +23,7 @@ package() {
   install -Dm755 install-software "$pkgdir"/usr/lib/garuda/install-software
   install -Dm755 is-snapshot-boot "$pkgdir"/usr/lib/garuda/is-snapshot-boot
   install -Dm755 pkexec-gui "$pkgdir"/usr/lib/garuda/pkexec-gui
-  install -Dm755 pacdiff-merge "$pkgdir"/usr/bin/pacdiff-merge
+  install -Dm755 pacdiff-merge "$pkgdir"/usr/lib/garuda/pacdiff-merge
   install -Dm644 garuda.shlib "$pkgdir"/usr/lib/garuda/garuda.shlib
   install -d "$pkgdir"/var/lib/garuda/tmp
 

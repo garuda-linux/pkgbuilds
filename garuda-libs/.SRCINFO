@@ -1,7 +1,7 @@
 pkgbase = garuda-libs
 	pkgdesc = Libraries commonly used by Garuda Linux software
 	pkgver = 1.6.0
-	pkgrel = 1
+	pkgrel = 2
 	arch = any
 	license = GPL
 	depends = libnotify
