@@ -1,6 +1,6 @@
 # Maintainer: TNE <tne at garudalinux org>
 
-_pkgname=garuda-hardware-profiles
+pkgbase=garuda-hardware-profiles
 pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-standard-x11
          garuda-hardware-profile-nvidia
@@ -9,7 +9,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)

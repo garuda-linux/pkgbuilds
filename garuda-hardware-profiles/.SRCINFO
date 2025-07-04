@@ -1,7 +1,7 @@
 pkgbase = garuda-hardware-profile-standard
 	pkgdesc = Garuda Linux hardware profiles
-	pkgver = 0.1.3
-	pkgrel = 1
+	pkgver = 1.0.0
+	pkgrel = 2
 	arch = any
 	license = GPL-3.0-or-later
 	source = nvidia-modules-load.conf
