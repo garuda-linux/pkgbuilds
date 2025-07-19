@@ -37,21 +37,6 @@ array set auto_replace_conflicts {
     plasma-applet-window-buttons garuda-dr460nized
     alpm_octopi_utils octopi
     scenefx swayfx
-
-    mhwd-amdgpu garuda-hardware-tool
-    mhwd-ati garuda-hardware-tool
-    mhwd-nvidia garuda-hardware-tool
-    mhwd-nvidia-390xx garuda-hardware-tool
-    mhwd-nvidia-470xx garuda-hardware-tool
-    mhwd-db-garuda-git garuda-hardware-tool
-    mhwd-db-garuda garuda-hardware-tool
-    zdummy-vlkdrv garuda-hardware-tool
-
-    garuda-settings-manager-kcm garuda-rani
-    garuda-settings-manager-notifier garuda-rani
-    garuda-settings-manager-knotifier garuda-rani
-    garuda-settings-manager-knotifier-git garuda-rani
-    garuda-settings-manager-notifier-git garuda-rani
 }
 
 if { $::conflictsfile_set } {
