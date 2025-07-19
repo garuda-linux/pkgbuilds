@@ -47,11 +47,11 @@ array set auto_replace_conflicts {
     mhwd-db-garuda garuda-hardware-tool
     zdummy-vlkdrv garuda-hardware-tool
 
-    garuda-settings-manager-kcm garuda-system-maintenance
-    garuda-settings-manager-notifier garuda-system-maintenance
-    garuda-settings-manager-knotifier garuda-system-maintenance
-    garuda-settings-manager-knotifier-git garuda-system-maintenance
-    garuda-settings-manager-notifier-git garuda-system-maintenance
+    garuda-settings-manager-kcm garuda-rani
+    garuda-settings-manager-notifier garuda-rani
+    garuda-settings-manager-knotifier garuda-rani
+    garuda-settings-manager-knotifier-git garuda-rani
+    garuda-settings-manager-notifier-git garuda-rani
 }
 
 if { $::conflictsfile_set } {
