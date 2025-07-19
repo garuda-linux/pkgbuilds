@@ -3,14 +3,14 @@
 pkgname=garuda-system-maintenance
 pkgver="3.0.0"
 _commit='17c0a0cdd45013d1b085c41d9834ceb3416aa3eb'
-pkgrel=2
+pkgrel=3
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL')
 depends=('qt6-base' 'garuda-hotfixes' 'knotifications' 'kstatusnotifieritem' 'garuda-libs' 'snapper-tools')
 makedepends=('qt6-tools' 'cmake' 'git' 'polkit')
-replaces=(garuda-settings-manager-knotifier-git garuda-settings-manager-notifier-git)
+replaces=('garuda-settings-manager' 'garuda-settings-manager-kcm' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git')
 source=("https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/archive/${_commit}/garuda-system-maintenance-${_commit}.tar.gz")
 sha256sums=('SKIP')
 

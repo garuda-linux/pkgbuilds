@@ -9,7 +9,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
 pkgver=1.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
@@ -37,6 +37,8 @@ package_garuda-hardware-profile-standard() {
 package_garuda-hardware-profile-standard-x11() {
   pkgdesc="Garuda Linux hardware profile with opensource x11 drivers"
   depends=(garuda-hardware-profile-standard xf86-video-ati xf86-video-amdgpu xf86-video-nouveau)
+  # Replace MHWD legacy, defaults to the x11 version since we can not be sure what the user has installed
+  replaces=("garuda-video-linux-config")
 }
 
 _nvidia_shared() {
@@ -64,6 +66,8 @@ package_garuda-hardware-profile-nvidia-closed() {
   pkgdesc="Garuda Linux hardware profile with legacy closed source nvidia kernel drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-dkms nvidia-prime)
   conflicts=(garuda-hardware-profile-nvidia nvidia-open)
+  # Replace MHWD legacy
+  replaces=("garuda-nvidia-config")
 
   _nvidia_shared
 }
@@ -76,11 +80,15 @@ package_garuda-hardware-profile-nvidia-prime() {
 package_garuda-hardware-profile-nvidia-prime-closed() {
   pkgdesc="Garuda Linux hardware profile with nvidia prime support (virtual package)"
   depends=(garuda-hardware-profile-nvidia-closed)
+  # Replace MHWD legacy
+  replaces=("garuda-nvidia-prime-config")
 }
 
 package_garuda-hardware-profile-vm() {
   pkgdesc="Garuda Linux hardware profile for virtual machines"
   depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
+  # Replace MHWD legacy
+  replaces=("garuda-virtualmachine-guest-config")
 
   install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
   install -d "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/

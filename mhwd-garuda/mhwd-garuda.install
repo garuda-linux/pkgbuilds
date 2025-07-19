@@ -1,7 +1,0 @@
-post_install() {
-	mhwd-gpu --check
-}
-
-post_upgrade() {
-	mhwd-gpu --check
-}
