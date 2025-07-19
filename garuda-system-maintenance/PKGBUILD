@@ -3,7 +3,7 @@
 pkgname=garuda-system-maintenance
 pkgver="3.0.0"
 _commit='17c0a0cdd45013d1b085c41d9834ceb3416aa3eb'
-pkgrel=4
+pkgrel=5
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
@@ -23,7 +23,8 @@ build() {
 
 package() {
     # Replaces all of garuda-settings-manager
-    replaces=('garuda-settings-manager' 'garuda-settings-manager-kcm' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git')
+    replaces=('garuda-settings-manager')
+    conflicts=('garuda-settings-manager-kcm' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git')
 
     make -C build DESTDIR="$pkgdir" install
 
