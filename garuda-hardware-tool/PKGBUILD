@@ -1,17 +1,17 @@
 pkgname="garuda-hardware-tool"
 pkgver=0.2.1
-pkgrel=2
+pkgrel=3
 pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
 arch=('x86_64')
 source=(garuda-hardware-tool)
 sha256sums=('235d7a2351f057ca50a23ae951c2984aa2d75370f292665d24a8c47f78db428e')
 license=('GPL-3.0-or-later')
 depends=('pciutils' 'coreutils' 'grep')
-# Replaces all of MHWD
-replaces=('mhwd-garuda' 'mhwd-garuda-git' 'mhwd-amdgpu' 'mhwd-ati' 'mhwd-nvidia' 'mhwd-nvidia-390xx' 'mhwd-nvidia-470xx' 'mhwd-db-garuda-git' 'mhwd-db-garuda')
 
 package() {
   pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
+  # Replaces all of MHWD
+  replaces=('mhwd-garuda' 'mhwd-garuda-git' 'mhwd-amdgpu' 'mhwd-ati' 'mhwd-nvidia' 'mhwd-nvidia-390xx' 'mhwd-nvidia-470xx' 'mhwd-db-garuda-git' 'mhwd-db-garuda')
 
   install -Dm755 "$srcdir/garuda-hardware-tool" "$pkgdir/usr/bin/garuda-hardware-tool"
 }
