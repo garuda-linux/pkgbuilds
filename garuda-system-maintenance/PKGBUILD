@@ -1,8 +1,8 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=garuda-system-maintenance
-pkgver="3.0.0"
-_commit='17c0a0cdd45013d1b085c41d9834ceb3416aa3eb'
+pkgver="3.0.1"
+_commit='7cf4dd87a2f36593f5c6ed5ebca0f2f3a9b6ed45'
 pkgrel=6
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
@@ -14,28 +14,28 @@ source=("https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/
 sha256sums=('SKIP')
 
 build() {
-    cmake -B build -S "$pkgname-$_commit" \
-        -DCMAKE_BUILD_TYPE='Release' \
-        -DCMAKE_INSTALL_PREFIX='/usr' \
-        -Wno-dev
-    make -C build
+  cmake -B build -S "$pkgname-$_commit" \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -Wno-dev
+  make -C build
 }
 
 package() {
-    make -C build DESTDIR="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 
-    cd "$pkgname-$_commit" || exit
-    install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
-    install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
-    install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
-    install -Dm0644 $pkgname@.service "$pkgdir/etc/systemd/system/$pkgname@.service"
-    install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
-    install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
-    install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
-    install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
-    install -Dm0644 $pkgname-alert.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname-alert.svg"
+  cd "$pkgname-$_commit" || exit
+  install -Dm0755 update-packages "$pkgdir/usr/lib/$pkgname/update-packages"
+  install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
+  install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
+  install -Dm0644 $pkgname@.service "$pkgdir/etc/systemd/system/$pkgname@.service"
+  install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
+  install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
+  install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
+  install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
+  install -Dm0644 $pkgname-alert.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname-alert.svg"
 
-    # Fix permissions
-    chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
-    chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d/
+  # Fix permissions
+  chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+  chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d/
 }
