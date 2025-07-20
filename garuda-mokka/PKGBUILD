@@ -18,7 +18,7 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mok
   git+https://github.com/catppuccin/bat.git#commit=699f60fc8ec434574ca7451b444b880430319941
   git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312
   git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=559faed6062b6c891c9d1f0c778e66841209fb27)
-sha256sums=('62455356a3f218e37f0aa91878104c9b7ddcea10544e3f44b5c2730e6a5345d3'
+sha256sums=('SKIP'
   '57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320'
   'da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f'
   '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
