@@ -9,7 +9,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
 pkgver=1.0.0
-pkgrel=3
+pkgrel=4
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
@@ -39,6 +39,7 @@ package_garuda-hardware-profile-standard-x11() {
   depends=(garuda-hardware-profile-standard xf86-video-ati xf86-video-amdgpu xf86-video-nouveau)
   # Replace MHWD legacy, defaults to the x11 version since we can not be sure what the user has installed
   replaces=("garuda-video-linux-config")
+  provides=("garuda-video-linux-config")
 }
 
 _nvidia_shared() {
@@ -68,6 +69,7 @@ package_garuda-hardware-profile-nvidia-closed() {
   conflicts=(garuda-hardware-profile-nvidia nvidia-open)
   # Replace MHWD legacy
   replaces=("garuda-nvidia-config")
+  provides=("garuda-nvidia-config")
 
   _nvidia_shared
 }
