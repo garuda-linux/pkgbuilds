@@ -9,7 +9,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
 pkgver=1.0.0
-pkgrel=4
+pkgrel=5
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
