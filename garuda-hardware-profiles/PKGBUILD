@@ -32,6 +32,7 @@ package_garuda-hardware-profile-standard() {
   pkgdesc="Garuda Linux hardware profile with opensource drivers"
   depends=(vulkan-intel vulkan-radeon intel-media-driver libvdpau-va-gl libva-intel-driver libva-mesa-driver mesa-vdpau vulkan-mesa-layers vulkan-swrast lib32-vulkan-intel lib32-vulkan-radeon lib32-mesa-vdpau lib32-libva-intel-driver lib32-libva-mesa-driver lib32-vulkan-mesa-layers)
   optdepends=(opencl-mesa lib32-opencl-mesa intel-compute-runtime libva-vdpau-driver lib32-libva-vdpau-driver)
+  provides=('vulkan-driver' 'lib32-vulkan-driver')
 }
 
 package_garuda-hardware-profile-standard-x11() {
