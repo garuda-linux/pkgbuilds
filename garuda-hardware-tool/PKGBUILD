@@ -11,7 +11,7 @@ depends=('pciutils' 'coreutils' 'grep')
 package() {
   pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
   # Replaces all of MHWD
-  replaces=('mhwd-garuda' 'mhwd-garuda-git' 'mhwd-amdgpu' 'mhwd-ati' 'mhwd-nvidia' 'mhwd-nvidia-390xx' 'mhwd-nvidia-470xx' 'mhwd-db-garuda-git' 'mhwd-db-garuda' 'zdummy-vlkdrv')
+  replaces=('mhwd-garuda' 'mhwd-garuda-git' 'mhwd-amdgpu' 'mhwd-ati' 'mhwd-nvidia' 'mhwd-nvidia-390xx' 'mhwd-nvidia-470xx' 'mhwd-db-garuda-git' 'mhwd-db-garuda')
 
   install -Dm755 "$srcdir/garuda-hardware-tool" "$pkgdir/usr/bin/garuda-hardware-tool"
 }
