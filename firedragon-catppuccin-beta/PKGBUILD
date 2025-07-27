@@ -115,6 +115,8 @@ prepare() {
 
   cd firedragon-source-v"${_pkgver}" || exit
 
+  export DENO_DIR="${srcdir}/deno"
+
   _deno install --allow-scripts --frozen
 
   _target="$(_deno task build --get-target)"
