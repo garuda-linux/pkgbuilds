@@ -8,8 +8,8 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
-pkgver=1.0.0
-pkgrel=5
+pkgver=1.1.0
+pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
@@ -20,13 +20,15 @@ source=(
   90-nvidia-prime-powermanagement.rules
   garuda-virtualmachine-guest-config.target
   garuda-nvidia-live.service
+  garuda-virtualbox-live.service
 )
 sha256sums=('9135036c0fb97eb630e9452c75a77927f01aedf1e7359f29019acc8b4c22cf6d'
             'ee3d6dabac95eeaf9f97aa16bef05dde84fca5bb1f7351591c70f9448f988cb9'
             'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
             '2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
             'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
-            '4b5e1fde346918258576bef9f87d06a2ddc75b99f734c2a638114c93add2e470')
+            '4b5e1fde346918258576bef9f87d06a2ddc75b99f734c2a638114c93add2e470'
+            '345689cad75fc5cd4189b12ebee06eea61cb24acb0c56747bf7c0b10e4230e3a')
 
 package_garuda-hardware-profile-standard() {
   pkgdesc="Garuda Linux hardware profile with opensource drivers"
@@ -99,6 +101,7 @@ package_garuda-hardware-profile-vm() {
   ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/garuda-virtualmachine-guest-config.target
   install -d "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/
   ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualmachine-guest-config.target
+  ln -s /usr/lib/systemd/system/garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualbox-live.service
 
   install -d "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/
   ln -s /usr/lib/systemd/user/spice-vdagent.service "$pkgdir"/usr/lib/systemd/user/graphical-session.target.wants/spice-vdagent.service

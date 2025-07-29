@@ -1,0 +1,9 @@
+[Unit]
+Description=Set permissions for user-side guest additions (clipboard, drag and drop, etc.)
+After=vboxservice.service vboxclient.service
+ConditionPathExists=/dev/vboxuser
+
+[Service]
+Type=oneshot
+ExecStart=chmod 666 /dev/vboxuser
+RemainAfterExit=yes
