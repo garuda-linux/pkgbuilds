@@ -4,13 +4,13 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.3.14.r46.g21ea80352
-_commit=21ea803527735cfaf54fa6059e71d1ef65004864
-pkgrel=5
+pkgver=3.4.0.r6.g78d4208a0
+_commit=78d4208a03b0abdfb68e94c9c08a28f37a473ee6
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
-url="https://github.com/calamares/calamares"
+url="https://https://calamares.codeberg.page"
 license=('LGPL')
 conflicts=('calamares' 'calamares-dev')
 provides=('calamares' 'calamares-dev')
@@ -20,20 +20,20 @@ depends=('kconfig' 'kcoreaddons' 'kiconthemes' 'ki18n' 'solid' 'yaml-cpp' 'kpmco
   'squashfs-tools' 'libpwquality' 'python' 'python-distutils-extra')
 makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
-source+=(git+https://github.com/calamares/calamares.git#commit="${_commit}"
+source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   garuda-fswhitelist.patch
   0001-Apply-garuda-specific-patches.patch
   partition.conf
   mount.conf
   ghtcfg.conf
   chrootcfg.conf)
-sha256sums=('e06f8d5d185120ce3c02ea94137eb51e84a76bb8f5b09be7e9f6e9129c0f81af'
-  '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
-  '37f30d54d40beae82910b53d6c703cabfab4e01205bc506022d6f4763717ded1'
-  '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
-  '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
-  'e395942636b7b1e9110248fb2912efea14ccf6b967b2dab9db73febc303d2e3e'
-  'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
+sha256sums=('03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67'
+            '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
+            '37f30d54d40beae82910b53d6c703cabfab4e01205bc506022d6f4763717ded1'
+            '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
+            '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
+            'e395942636b7b1e9110248fb2912efea14ccf6b967b2dab9db73febc303d2e3e'
+            'a98b4ed205c0cc8fa0b7833aec97e48b69aea8f414be4d8f44315ed9f1c62469')
 
 pkgver() {
   cd "$srcdir/calamares" || exit
