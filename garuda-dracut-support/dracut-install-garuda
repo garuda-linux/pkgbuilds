@@ -12,7 +12,13 @@ while read -r line; do
 	# Does not match usr/lib/modules/*
 	if [[ "$line" != 'usr/lib/modules/'* ]]; then
 		echo ":: Rebuilding all initramfs due to changes in dracut files."
+		lines=()
 		for line in /usr/lib/modules/*/pkgbase; do
+			# if pkgbase file does not belong to any package then skip this kernel
+			# This likely means it's a restored kernel modules backup and not relevant for the next reboot.
+			if ! pacman -Qqo "$line" &>/dev/null; then
+				continue
+			fi
 			# Without leading slash
 			lines+=("${line#'/'}")
 		done
