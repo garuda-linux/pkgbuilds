@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+args=('--force' '--no-hostonly-cmdline')
+lines=()
+status=0
+
+while read -r line; do
+	# Check if any changed file is not a kernel image. This means we need to rebuild all initramfs.
+	# Triggers when it's a change to dracut files
+	# Does not match usr/lib/modules/*
+	if [[ "$line" != 'usr/lib/modules/'* ]]; then
+		echo ":: Rebuilding all initramfs due to changes in dracut files."
+		for line in /usr/lib/modules/*/pkgbase; do
+			# Without leading slash
+			lines+=("${line#'/'}")
+		done
+		break
+	fi
+
+	if [[ "$line" == 'usr/lib/modules/'+([^/])'/pkgbase' ]]; then
+		lines+=("${line}")
+	fi
+done
+
+for line in "${lines[@]}"; do
+	read -r pkgbase < "/${line}"
+	kver="${line#'usr/lib/modules/'}"
+	kver="${kver%'/pkgbase'}"
+
+	if ! (
+		echo ":: Building initramfs for ${pkgbase} (${kver})"
+		install -Dm0644 "/${line%'/pkgbase'}/vmlinuz" "/boot/vmlinuz-${pkgbase}"
+		dracut "${args[@]}" -L 3 --hostonly "/boot/initramfs-${pkgbase}.img" --kver "$kver"
+
+		echo ":: Building fallback initramfs for ${pkgbase} (${kver})"
+		dracut "${args[@]}" -L 1 --no-hostonly -o "network" "/boot/initramfs-${pkgbase}-fallback.img" --kver "$kver"
+	); then
+		# If dracut fails, we capture the error status but continue processing other kernels.
+		echo -e "\033[1;31mFailed to build initramfs for ${pkgbase} (${kver})\033[0m"
+		status=1
+		continue
+	fi
+done
+
+exit $status

@@ -2,19 +2,17 @@
 
 pkgname=garuda-dracut-support
 pkgdesc="Dracut support for Garuda Linux"
-pkgver=1.1.1
+pkgver=1.2.0
 pkgrel=1
 arch=('any')
 license=('GPL')
-source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install dracut-rebuild dracut-remove 90-dracut-install.hook 60-dracut-remove.hook)
+source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda dracut-rebuild 90-dracut-install.hook)
 sha256sums=('8b48b3aa1b7599fa5060b0b3c08896d6845da0e1ccd7bf1bfc9b1892c48bf7e2'
             '017588cd975eff20ce60f9d2f498932cc60e7627aefdf9dc21470b2a95da6a32'
             'cdf87309be00c23c2b74dd936be8861b7930edf51f5ea1d3f8f7b1d7dee37924'
-            '5b880b02aed16ed9d5ceccd49ef917ac734230e09d62f66cae54fb94b80bbb56'
+            '331c264adb44255cf3eb2cb4e9afb99361e889e7f7d3591a1b7ebc8162ca753d'
             '82b5f2e70530c98e990278a974a58641fa6e699d1b295bb10d2ca2af02c3937b'
-            'cf2d89e3a6076b6e85da2c6d43a168ae9d9b907bf21eff4a4f039643ef7182e5'
-            'b0bfb10eed37a5e44e74ba3424686e8bc67ff58a23a16a37745d09b6e8d7bf76'
-            'e79f8e9572c5d1af6052104eac7ff956754f7a191b52b16adf12b65a38e9b4ed')
+            '169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f')
 
 package() {
 	depends=('dracut' 'zstd')
@@ -28,11 +26,9 @@ package() {
 	install -Dm755 snapshot-overlay.sh "$pkgdir"/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/snapshot-overlay.sh
 	install -Dm755 module-setup.sh "$pkgdir"/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/module-setup.sh
 
-	# Custom version of dracut-hook on the AUR
-	install -Dm644 90-dracut-install.hook "${pkgdir}/usr/share/libalpm/hooks/90-dracut-install.hook"
-	install -Dm644 60-dracut-remove.hook "${pkgdir}/usr/share/libalpm/hooks/60-dracut-remove.hook"
-	install -Dm755 dracut-install "${pkgdir}/usr/share/libalpm/scripts/dracut-install"
-	install -Dm755 dracut-remove "${pkgdir}/usr/share/libalpm/scripts/dracut-remove"
+	# Custom version of the dracut hooks from Arch Linux
+	install -Dm644 90-dracut-install.hook "${pkgdir}/etc/pacman.d/hooks/90-dracut-install.hook"
+	install -Dm755 dracut-install-garuda "${pkgdir}/usr/share/libalpm/scripts/dracut-install-garuda"
 
 	# Rebuild script
 	install -Dm755 dracut-rebuild "${pkgdir}/usr/bin/dracut-rebuild"
