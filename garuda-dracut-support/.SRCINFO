@@ -1,7 +1,7 @@
 pkgbase = garuda-dracut-support
 	pkgdesc = Dracut support for Garuda Linux
 	pkgver = 1.2.3
-	pkgrel = 1
+	pkgrel = 2
 	arch = any
 	license = GPL
 	source = 05-garuda.conf
@@ -18,7 +18,7 @@ pkgbase = garuda-dracut-support
 	sha256sums = 169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f
 
 pkgname = garuda-dracut-support
-	depends = dracut
+	depends = dracut>=108
 	depends = zstd
 	conflicts = mkinitcpio
 	conflicts = mkinitcpio-openswap

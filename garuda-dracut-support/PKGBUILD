@@ -3,7 +3,7 @@
 pkgname=garuda-dracut-support
 pkgdesc="Dracut support for Garuda Linux"
 pkgver=1.2.3
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL')
 source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda dracut-rebuild 90-dracut-install.hook)
@@ -15,7 +15,7 @@ sha256sums=('8b48b3aa1b7599fa5060b0b3c08896d6845da0e1ccd7bf1bfc9b1892c48bf7e2'
             '169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f')
 
 package() {
-	depends=('dracut' 'zstd')
+	depends=('dracut>=108' 'zstd')
 	conflicts=('mkinitcpio' 'mkinitcpio-openswap' 'mkinitcpio-systemd-tool' 'garuda-bootctl-dracut' 'dracut-hook')
 
 	cd "$srcdir" || exit
