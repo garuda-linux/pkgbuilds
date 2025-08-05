@@ -5,4 +5,4 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
-echo rebuild | /usr/share/libalpm/scripts/dracut-install
+echo rebuild | /usr/share/libalpm/scripts/dracut-install-garuda
