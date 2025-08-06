@@ -355,7 +355,7 @@ fix_remove_old_btrfs_snapshots = Fixer(fix_function=_fix_remove_old_btrfs_snapsh
 
 # -- Check Implementations --
 
-def check_for_packages(severity: Severity, package_names: List[str], text: str) -> Optional[HealthCheckResult]:
+def check_for_packages(severity: Severity, package_names: List[str], package_names_providable: List[str], text: str) -> Optional[HealthCheckResult]:
     """
     Check if garuda linux packages are installed.
 
@@ -364,6 +364,7 @@ def check_for_packages(severity: Severity, package_names: List[str], text: str) 
     :return: A HealthCheckResult if any package is missing, otherwise None.
     """
     missing_packages = [pkg for pkg in package_names if not check_arch_package_exists(pkg)]
+    missing_packages += [pkg for pkg in package_names_providable if not check_arch_package_or_provides(pkg)]
     
     if missing_packages:
         return HealthCheckResult(
@@ -383,7 +384,7 @@ def check_for_core_packages() -> Optional[HealthCheckResult]:
     """
     core_packages = ["base", "chaotic-keyring", "chaotic-mirrorlist"]
     return check_for_packages(
-        Severity.CRITICAL, core_packages, "Core garuda linux packages are missing"
+        Severity.CRITICAL, core_packages, [], "Core garuda linux packages are missing"
     )
 
 def check_for_important_packages() -> Optional[HealthCheckResult]:
@@ -394,7 +395,7 @@ def check_for_important_packages() -> Optional[HealthCheckResult]:
     """
     important_packages = ["garuda-common-settings", "garuda-hotfixes", "garuda-update", "garuda-libs"]
     return check_for_packages(
-        Severity.HIGH, important_packages, "Important garuda linux packages are missing"
+        Severity.HIGH, important_packages, [], "Important garuda linux packages are missing"
     )
 
 def check_for_optional_packages() -> Optional[HealthCheckResult]:
@@ -405,7 +406,7 @@ def check_for_optional_packages() -> Optional[HealthCheckResult]:
     """
     optional_packages = ["garuda-rani", "garuda-hardware-tool", "garuda-system-maintenance"]
     return check_for_packages(
-        Severity.INFO, optional_packages, "Optional garuda linux utilities are missing"
+        Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
     )
 
 def check_pacman_conf() -> Optional[HealthCheckResult]:
@@ -462,14 +463,32 @@ def check_nvidia_drivers() -> Optional[HealthCheckResult]:
     if result.exit_code != 0:
         return None
     if "nvidia" in result.stdout.lower():
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "Nvidia drivers are not installed",
-                fix=fix_install_nvidia_drivers
+        if check_arch_package_or_provides("NVIDIA-MODULE"):
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "Nvidia drivers are installed, but no/the incorrect/subobptimal hardware profile is active",
+                    fix=fix_install_nvidia_drivers
+                )
             )
-        )
-    elif check_arch_package_or_provides("NVIDIA-MODULE"):
+        else:
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "Nvidia drivers are not installed",
+                    fix=fix_install_nvidia_drivers
+                )
+            )
+
+    return None
+
+def check_nvidia_kernel_module() -> Optional[HealthCheckResult]:
+    """
+    Check if the nvidia kernel module is loaded.
+
+    :return: A HealthCheckResult if the nvidia kernel module is not loaded, otherwise None.
+    """
+    if check_arch_package_or_provides("NVIDIA-MODULE"):
         # Check if "nvidia" kernel module is loaded
         if not os.path.exists("/sys/module/nvidia/"):
             return HealthCheckResult(
@@ -479,7 +498,6 @@ def check_nvidia_drivers() -> Optional[HealthCheckResult]:
                     fix=None
                 )
             )
-        
     return None
 
 def check_btrfs_root_storage() -> Optional[HealthCheckResult]:
