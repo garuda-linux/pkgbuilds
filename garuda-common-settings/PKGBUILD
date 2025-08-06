@@ -4,7 +4,7 @@
 pkgname=garuda-common-settings
 pkgver="2.7.3"
 _commit='f7531c32f55710abbd3a8cb6a86d0dc89f58d70f'
-pkgrel=2
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -14,6 +14,7 @@ pkgdesc='Garuda Linux common settings'
 depends=('btrfsmaintenance'
   'garuda-bash-config'
   'garuda-hardware-tool'
+  'garuda-health'
   'garuda-hooks'
   'garuda-icons'
   'garuda-migrations'
