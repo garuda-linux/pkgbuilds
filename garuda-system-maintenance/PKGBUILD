@@ -3,7 +3,7 @@
 pkgname=garuda-system-maintenance
 pkgver="3.0.1"
 _commit='7cf4dd87a2f36593f5c6ed5ebca0f2f3a9b6ed45'
-pkgrel=6
+pkgrel=1
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
@@ -29,7 +29,7 @@ package() {
   install -Dm0755 migrate-dr460nized "$pkgdir/usr/lib/$pkgname/migrate-dr460nized"
   install -Dm0644 $pkgname.rules "$pkgdir/usr/share/polkit-1/rules.d/$pkgname.rules"
   install -Dm0644 $pkgname@.service "$pkgdir/etc/systemd/system/$pkgname@.service"
-  install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications5/$pkgname.notifyrc"
+  install -Dm0644 $pkgname.notifyrc "$pkgdir/usr/share/knotifications6/$pkgname.notifyrc"
   install -Dm0644 $pkgname.desktop "$pkgdir/etc/xdg/autostart/$pkgname.desktop"
   install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
   install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
