@@ -8,7 +8,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
-pkgver=1.1.0
+pkgver=1.1.1
 pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
@@ -62,7 +62,7 @@ _nvidia_shared() {
 package_garuda-hardware-profile-nvidia() {
   pkgdesc="Garuda Linux hardware profile with nvidia drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-open-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia-closed nvidia)
+  conflicts=(garuda-hardware-profile-nvidia-closed garuda-hardware-profile-nvidia-prime-closed nvidia)
 
   _nvidia_shared
 }
@@ -70,7 +70,7 @@ package_garuda-hardware-profile-nvidia() {
 package_garuda-hardware-profile-nvidia-closed() {
   pkgdesc="Garuda Linux hardware profile with legacy closed source nvidia kernel drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils nvidia-settings opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia nvidia-open)
+  conflicts=(garuda-hardware-profile-nvidia garuda-hardware-profile-nvidia-prime nvidia-open)
   # Replace MHWD legacy
   replaces=("garuda-nvidia-config")
   provides=("garuda-nvidia-config")
