@@ -354,6 +354,23 @@ def _fix_remove_old_btrfs_snapshots(issue: Issue) -> Tuple[bool, str]:
 
 fix_remove_old_btrfs_snapshots = Fixer(fix_function=_fix_remove_old_btrfs_snapshots, priority=1)
 
+def _fix_time_sync(issue: Issue) -> Tuple[bool, str]:
+    """
+    Enable NTP synchronization using timedatectl.
+
+    :param issue: The Issue object
+    :return: A tuple of (success_boolean, status_message).
+    """
+    result = run_interactive_command("sudo timedatectl set-ntp true", require_consent=True)
+    if result == 0:
+        return True, "NTP synchronization enabled successfully."
+    elif result == 130:
+        return False, "Fix cancelled by user."
+    else:
+        return False, f"Failed to enable NTP synchronization. Exit code: {result}"
+
+fix_time_sync = Fixer(fix_function=_fix_time_sync, priority=10, excludes=[], actions=[])
+
 # -- Check Implementations --
 
 def check_for_packages(severity: Severity, package_names: List[str], package_names_providable: List[str], text: str) -> Optional[HealthCheckResult]:
@@ -372,7 +389,8 @@ def check_for_packages(severity: Severity, package_names: List[str], package_nam
             severity,
             Issue(
                 f"{text}: {', '.join(missing_packages)}",
-                fix=None
+                fix=fix_install_packages,
+                details={"packages": missing_packages}
             )
         )
     return None
@@ -800,6 +818,40 @@ def check_cpu_temperature() -> HealthCheck:
         return None
     return HealthCheck(check, [])
 
+def check_time_sync() -> HealthCheck:
+    """
+    Check if the system time is synchronized.
+
+    :return: A HealthCheckResult if the system time is not synchronized, otherwise None.
+    """
+    def check() -> Optional[HealthCheckResult]:
+        result = run_shell_command("timedatectl show --property=NTP --property=NTPSynchronized --value")
+        if result.exit_code != 0 or len(lines := result.stdout.strip().splitlines()) < 2:
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "Timedatectl nonfunctional",
+                    fix=None
+                )
+            )
+        if lines[0] != "yes":
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "NTP is not enabled, system time may not be synchronized",
+                    fix=fix_time_sync
+                )
+            )
+        if lines[1] != "yes":
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "System time is not synchronized",
+                    fix=None
+                )
+            )
+    return HealthCheck(check, [])
+
 checks: List[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -817,6 +869,7 @@ checks: List[HealthCheck] = [
     check_failed_systemd_services(),
     check_has_old_btrfs_snapshots(),
     check_cpu_temperature(),
+    check_time_sync(),
 ]
 
 # -- Main Execution Logic --
@@ -880,7 +933,7 @@ def print_text_report(has_issues: bool, results: CheckResults, time) -> None:
             print(f"\n{color}--- {severity.name} ---{reset}")
             for res in results[severity]:
                 fix_available = " (fix available)" if res.issue.fix else ""
-                print(f"  - {res.issue.get_summary()}{fix_available}")
+                print(f" - {res.issue.get_summary()}{fix_available}")
 
 def apply_fixes(results: CheckResults) -> bool:
     """
