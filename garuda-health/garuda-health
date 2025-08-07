@@ -12,11 +12,12 @@ from enum import Enum, auto
 import time
 from typing import Callable, Optional, List, Dict, NamedTuple, Set, Tuple, TypeAlias
 import typing
+from dataclasses import dataclass
 
 # -- ANSI color codes --
 COLORS = {
     "CRITICAL": "\033[91m", "HIGH": "\033[31m", "LOW": "\033[33m",
-    "INFO": "\033[34m", "RESET": "\033[0m",
+    "INFO": "\033[34m", "RESET": "\033[0m", "GREEN": "\033[32m",
 }
 
 
@@ -29,6 +30,10 @@ class Severity(Enum):
     LOW = auto()
     HIGH = auto()
     CRITICAL = auto()
+
+@dataclass
+class PackageInfo():
+    installed: bool; provided: bool
 
 class Issue:
     """
@@ -57,11 +62,13 @@ class HealthCheck:
     """
     Wrapper for a health check function.
     """
-    def __init__(self, check_callable: Callable[[], Optional[HealthCheckResult]]):
+    def __init__(self, check_callable: Callable[[], Optional[HealthCheckResult]], packages: Optional[List[str]] = None):
         """
         :param check_callable: A function that performs a health check and returns a HealthCheckResult or None (if no issue was found).
         """
         self.check_callable = check_callable
+        if packages:
+            cache.add(packages)
 
     def run(self) -> Optional[HealthCheckResult]:
         """
@@ -70,6 +77,64 @@ class HealthCheck:
         :return: A HealthCheckResult if an issue is found, otherwise None.
         """
         return self.check_callable()
+
+class PackageCache:
+    """
+    A simple cache to store package existence checks.
+    """
+    def __init__(self):
+        self.cache: Dict[str, PackageInfo] = {}
+        self.pending: Set[str] = set()
+
+    def add(self, packages: List[str]):
+        """
+        Ask for a list of packages to be checked.
+
+        :param packages: A list of package names to cache.
+        """
+        self.pending.update(packages)
+
+    def get(self, package_name: str) -> Optional[PackageInfo]:
+        """
+        Get the cached PackageInfo for a package name.
+
+        :param package_name: The name of the package to retrieve.
+        :return: A PackageInfo object if found, otherwise None.
+        """
+        return self.cache.get(package_name)
+
+    def execute(self) -> None:
+        """
+        Execute the cache, checking all pending packages.
+        This should be called before any checks that require package existence.
+        """
+        self.cache.clear()
+        if not self.pending:
+            return
+
+        packages = " ".join(self.pending)
+        result = run_shell_command(f"LANG=C LANGUAGE=C LC_ALL=C pacman -Qq {packages}")
+
+        if result.exit_code != 0 and result.exit_code != 1:
+            raise Exception(f"Failed to check package existence with pacman: {result.stderr}")
+
+        for package_name in self.pending:
+            self.cache[package_name] = PackageInfo(
+                installed=True,
+                provided=True,
+            )
+
+        regex_pattern = re.compile(f"^error: package '([^']+)' was not found$")
+
+        for line in result.stderr.splitlines():
+            if match := regex_pattern.match(line):
+                package_name = match.group(1)
+                self.cache[package_name].installed = False
+
+        for line in result.stdout.splitlines():
+            name = line.strip()
+            if name in self.cache:
+                self.cache[name].provided = False
 
 class Fixer:
     """A class to encapsulate a fix action, its priority, and other metadata."""
@@ -96,6 +161,8 @@ class SystemdStatus(NamedTuple):
     active_state: str; is_enabled: bool
 
 # -- Convenience Functions --
+
+cache = PackageCache()
 
 def run_shell_command(command: str, timeout: int = 10) -> ShellResult:
     """
@@ -129,56 +196,6 @@ def get_systemd_service_status(service_name: str) -> Optional[SystemdStatus]:
     active_result = run_shell_command(f"systemctl is-active {service_name}")
     enabled_result = run_shell_command(f"systemctl is-enabled {service_name}")
     return SystemdStatus(active_result.stdout, enabled_result.exit_code == 0)
-
-def check_arch_package_exists(package_name: str) -> bool:
-    """
-    Check if a package is installed on in the pacman database. This has to be an exact match.
-
-    :param package_name: The name of the package to check (e.g., "base").
-    :return: True if the package appears to be installed, False otherwise.
-    """
-    if not package_name:
-        return False
-
-    db_path = "/var/lib/pacman/local/"
-    # If the db path doesn't exist, no packages can exist.
-    if not os.path.isdir(db_path):
-        raise Exception("Failed to read pacman database directory.")
-
-    prefix = f"{package_name}-"
-    
-    regex_pattern = re.compile(f"^{re.escape(package_name)}-[^-]+-[0-9.]+$")
-
-    try:
-        for entry_name in os.listdir(db_path):
-            # Pre filter the directory entries
-            if entry_name.startswith(prefix):
-                # Check if the package matches the regex
-                if regex_pattern.match(entry_name):
-                    if os.path.isdir(os.path.join(db_path, entry_name)):
-                        return True
-    except (IOError, PermissionError):
-        raise Exception("Failed to read pacman database directory.")
-
-    return False
-
-def check_arch_package_or_provides(package_name: str) -> bool:
-    """
-    Check if a package is installed or if another package provides it.
-
-    :param package_name: The name of the package to check (e.g., "base").
-    :return: True if the package appears to be installed or provides the package, False otherwise.
-    """
-
-    # Check if it provides the package
-    result = run_shell_command(f"pacman -Qq {package_name}")
-    if result.exit_code == 0:
-        # Package is installed
-        return True
-    elif result.exit_code == 1:
-        # Package is not installed
-        return False
-    raise Exception("Failed to check package existence with pacman.")
       
 def run_interactive_command(command: str, require_consent: bool = False) -> int:
     """
@@ -281,42 +298,27 @@ def _fix_install_nvidia_drivers(issue: Issue) -> Tuple[bool, str]:
 
 fix_install_nvidia_drivers = Fixer(fix_function=_fix_install_nvidia_drivers, priority=7)
 
-
-def _fix_install_dracut(issue: Issue) -> Tuple[bool, str]:
+def _fix_install_packages(issue: Issue) -> Tuple[bool, str]:
     """
-    Install dracut and the garuda-dracut-support package.
+    Install missing packages using pacman.
 
-    :param issue: The Issue object
+    :param issue: The Issue object containing details about the missing packages.
     :return: A tuple of (success_boolean, status_message).
     """
-    result = run_interactive_command("sudo pacman -S garuda-dracut-support", require_consent=True)
+    packages = issue.details.get("packages")
+    if not packages:
+        return False, "No packages provided to install."
+
+    package_list = " ".join(packages)
+    result = run_interactive_command(f"sudo pacman -S {package_list}", require_consent=True)
     if result == 0:
-        return True, "Dracut and garuda-dracut-support installed successfully."
+        return True, f"Installed packages: {package_list} successfully."
     elif result == 130:
         return False, "Fix cancelled by user."
     else:
-        return False, f"Failed to install dracut. Exit code: {result}"
+        return False, f"Failed to install packages. Exit code: {result}"
 
-fix_install_dracut = Fixer(fix_function=_fix_install_dracut, priority=7)
-
-
-def _fix_install_pipewire(issue: Issue) -> Tuple[bool, str]:
-    """
-    Install PipeWire.
-
-    :param issue: The Issue object
-    :return: A tuple of (success_boolean, status_message).
-    """
-    result = run_interactive_command("sudo pacman -S pipewire-support", require_consent=True)
-    if result == 0:
-        return True, "PipeWire installed successfully."
-    elif result == 130:
-        return False, "Fix cancelled by user."
-    else:
-        return False, f"Failed to install PipeWire. Exit code: {result}"
-
-fix_install_pipewire = Fixer(fix_function=_fix_install_pipewire, priority=7)
-
+fix_install_packages = Fixer(fix_function=_fix_install_packages, priority=7, excludes=["install"], actions=["install"])
 
 def _fix_update_system(issue: Issue) -> Tuple[bool, str]:
     """
@@ -334,7 +336,6 @@ def _fix_update_system(issue: Issue) -> Tuple[bool, str]:
         return False, f"Failed to update system. Exit code: {result}"
 
 fix_update_system = Fixer(fix_function=_fix_update_system, priority=8, excludes=["update"], actions=["update"])
-
 
 def _fix_remove_old_btrfs_snapshots(issue: Issue) -> Tuple[bool, str]:
     """
@@ -363,8 +364,8 @@ def check_for_packages(severity: Severity, package_names: List[str], package_nam
     :param package_names: A list of package names to check.
     :return: A HealthCheckResult if any package is missing, otherwise None.
     """
-    missing_packages = [pkg for pkg in package_names if not check_arch_package_exists(pkg)]
-    missing_packages += [pkg for pkg in package_names_providable if not check_arch_package_or_provides(pkg)]
+    missing_packages = [pkg for pkg in package_names if not ((pkg_info := cache.get(pkg)).installed and not pkg_info.provided)]
+    missing_packages += [pkg for pkg in package_names_providable if not ((pkg_info := cache.get(pkg)).installed)]
     
     if missing_packages:
         return HealthCheckResult(
@@ -376,431 +377,460 @@ def check_for_packages(severity: Severity, package_names: List[str], package_nam
         )
     return None
 
-def check_for_core_packages() -> Optional[HealthCheckResult]:
+def check_for_core_packages() -> HealthCheck:
     """
     Check if core garuda linux packages are installed.
 
     :return: A HealthCheckResult if a core package is missing, otherwise None.
     """
     core_packages = ["base", "chaotic-keyring", "chaotic-mirrorlist"]
-    return check_for_packages(
-        Severity.CRITICAL, core_packages, [], "Core garuda linux packages are missing"
-    )
+    def check() -> Optional[HealthCheckResult]:
+        return check_for_packages(
+            Severity.CRITICAL, core_packages, [], "Core garuda linux packages are missing"
+        )
+    return HealthCheck(check, core_packages)
 
-def check_for_important_packages() -> Optional[HealthCheckResult]:
+def check_for_important_packages() -> HealthCheck:
     """
     Check if important garuda linux packages are installed.
 
     :return: A HealthCheckResult if an important package is missing, otherwise None.
     """
     important_packages = ["garuda-common-settings", "garuda-hotfixes", "garuda-update", "garuda-libs"]
-    return check_for_packages(
-        Severity.HIGH, important_packages, [], "Important garuda linux packages are missing"
-    )
+    def check() -> Optional[HealthCheckResult]:
+        return check_for_packages(
+            Severity.HIGH, important_packages, [], "Important garuda linux packages are missing"
+        )
+    return HealthCheck(check, important_packages)
 
-def check_for_optional_packages() -> Optional[HealthCheckResult]:
+def check_for_optional_packages() -> HealthCheck:
     """
     Check if optional garuda linux packages are installed.
 
     :return: A HealthCheckResult if an optional package is missing, otherwise None.
     """
     optional_packages = ["garuda-rani", "garuda-hardware-tool", "garuda-system-maintenance"]
-    return check_for_packages(
-        Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
-    )
+    def check() -> Optional[HealthCheckResult]:
+        return check_for_packages(
+            Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
+        )
+    return HealthCheck(check, optional_packages)
 
-def check_pacman_conf() -> Optional[HealthCheckResult]:
+def check_pacman_conf() -> HealthCheck:
     """
     Check if the pacman configuration file exists and has all the correct repositories.
 
     :return: A HealthCheckResult if the configuration is missing or incorrect, otherwise None.
     """
+    def check() -> Optional[HealthCheckResult]:
+        pacman_conf_path = "/etc/pacman.conf"
+        if not os.path.exists(pacman_conf_path):
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "Pacman configuration file is missing",
+                    fix=fix_pacman_conf
+                )
+            )
 
-    pacman_conf_path = "/etc/pacman.conf"
-    if not os.path.exists(pacman_conf_path):
-        return HealthCheckResult(
-            Severity.CRITICAL,
-            Issue(
-                "Pacman configuration file is missing",
-                fix=fix_pacman_conf
+        found_repos = set()
+        # Check if the file contains the required repositories
+        with open(pacman_conf_path, 'r') as f:
+            for line in f:
+                stripped_line = line.strip()
+                if stripped_line.startswith('[') and stripped_line.endswith(']'):
+                    found_repos.add(stripped_line)
+        required_repos = ["[garuda]", "[core]", "[extra]", "[chaotic-aur]"]
+        if not all(repo in found_repos for repo in required_repos):
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "Pacman configuration file is missing required repositories",
+                    fix=fix_pacman_conf
+                )
             )
-        )
-    
-    found_repos = set()
-    # Check if the file contains the required repositories
-    with open(pacman_conf_path, 'r') as f:
-        for line in f:
-            stripped_line = line.strip()
-            if stripped_line.startswith('[') and stripped_line.endswith(']'):
-                found_repos.add(stripped_line)
-    required_repos = ["[garuda]", "[core]", "[extra]", "[chaotic-aur]"]
-    if not all(repo in found_repos for repo in required_repos):
-        return HealthCheckResult(
-            Severity.CRITICAL,
-            Issue(
-                "Pacman configuration file is missing required repositories",
-                fix=fix_pacman_conf
+        if not any(repo == "[multilib]" for repo in found_repos):
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "Pacman configuration file does not have the multilib repository enabled",
+                    fix=None
+                )
             )
-        )
-    if not any(repo == "[multilib]" for repo in found_repos):
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "Pacman configuration file does not have the multilib repository enabled",
-                fix=None
-            )
-        )
-    
-def check_nvidia_drivers() -> Optional[HealthCheckResult]:
+        return None
+    return HealthCheck(check, [])
+
+def check_nvidia_drivers() -> HealthCheck:
     """
     Check if nvidia drivers are installed.
 
     :return: A HealthCheckResult if proprietary drivers are missing, otherwise None.
     """
-    if not os.path.exists("/usr/bin/garuda-hardware-tool"):
-        return None
-    result = run_shell_command("garuda-hardware-tool --nonfree --check")
-    if result.exit_code != 0:
-        return None
-    if "nvidia" in result.stdout.lower():
-        if check_arch_package_or_provides("NVIDIA-MODULE"):
-            return HealthCheckResult(
-                Severity.INFO,
-                Issue(
-                    "Nvidia drivers are installed, but no/the incorrect/subobptimal hardware profile is active",
-                    fix=fix_install_nvidia_drivers
+    def check() -> Optional[HealthCheckResult]:
+        if not os.path.exists("/usr/bin/garuda-hardware-tool"):
+            return None
+        result = run_shell_command("garuda-hardware-tool --nonfree --check")
+        if result.exit_code != 0:
+            return None
+        if "nvidia" in result.stdout.lower():
+            if cache.get("NVIDIA-MODULE").installed:
+                return HealthCheckResult(
+                    Severity.INFO,
+                    Issue(
+                        "Nvidia drivers are installed, but no/the incorrect/subobptimal hardware profile is active",
+                        fix=fix_install_nvidia_drivers
+                    )
                 )
-            )
-        else:
-            return HealthCheckResult(
-                Severity.INFO,
-                Issue(
-                    "Nvidia drivers are not installed",
-                    fix=fix_install_nvidia_drivers
+            else:
+                return HealthCheckResult(
+                    Severity.INFO,
+                    Issue(
+                        "Nvidia drivers are not installed",
+                        fix=fix_install_nvidia_drivers
+                    )
                 )
-            )
 
-    return None
+        return None
+    return HealthCheck(check, ["NVIDIA-MODULE"])
 
-def check_nvidia_kernel_module() -> Optional[HealthCheckResult]:
+def check_nvidia_kernel_module() -> HealthCheck:
     """
     Check if the nvidia kernel module is loaded.
 
     :return: A HealthCheckResult if the nvidia kernel module is not loaded, otherwise None.
     """
-    if check_arch_package_or_provides("NVIDIA-MODULE"):
-        # Check if "nvidia" kernel module is loaded
-        if not os.path.exists("/sys/module/nvidia/"):
-            return HealthCheckResult(
-                Severity.HIGH,
-                Issue(
-                    "Nvidia kernel module is not loaded",
-                    fix=None
+    def check() -> Optional[HealthCheckResult]:
+        if cache.get("NVIDIA-MODULE").installed:
+            # Check if "nvidia" kernel module is loaded
+            if not os.path.exists("/sys/module/nvidia/"):
+                return HealthCheckResult(
+                    Severity.HIGH,
+                    Issue(
+                        "Nvidia kernel module is not loaded",
+                        fix=None
+                    )
                 )
-            )
-    return None
+        return None
+    return HealthCheck(check, ["NVIDIA-MODULE"])
 
-def check_btrfs_root_storage() -> Optional[HealthCheckResult]:
+def check_btrfs_root_storage() -> HealthCheck:
     """
     Check if the root filesystem is using Btrfs and has enough free space.
 
     :return: A HealthCheckResult if the root filesystem is not Btrfs, otherwise None.
     """
+    def check() -> Optional[HealthCheckResult]:
+        if (not os.path.exists("/usr/bin/btrfs")):
+            return None
 
-    if (not os.path.exists("/usr/bin/btrfs")):
-        return None
-
-    # Check free space
-    free_space_result = run_shell_command("btrfs filesystem usage / -m --si")
-    if free_space_result.exit_code != 0:
-        return None
-    # Find Overall -> Device unallocated:
-    match = re.search(r"\s+Device unallocated:\s+(\d+)\.\d+MB", free_space_result.stdout)
-    if match:
-        free_space_mb = int(match.group(1))
-        if free_space_mb < 3000:  # Less than 5GB free space
-            return HealthCheckResult(
-                Severity.HIGH,
-                Issue(
-                    "Root Btrfs filesystem has less than 5GB free space",
-                    fix=None
+        # Check free space
+        free_space_result = run_shell_command("btrfs filesystem usage / -m --si")
+        if free_space_result.exit_code != 0:
+            return None
+        # Find Overall -> Device unallocated:
+        match = re.search(r"\s+Device unallocated:\s+(\d+)\.\d+MB", free_space_result.stdout)
+        if match:
+            free_space_mb = int(match.group(1))
+            if free_space_mb < 3000:  # Less than 5GB free space
+                return HealthCheckResult(
+                    Severity.HIGH,
+                    Issue(
+                        "Root Btrfs filesystem has less than 5GB free space",
+                        fix=None
+                    )
                 )
-            )
-        elif free_space_mb < 10000:  # Less than 10GB free space
-            return HealthCheckResult(
-                Severity.LOW,
-                Issue(
-                    "Root Btrfs filesystem has less than 10GB free space",
-                    fix=None
+            elif free_space_mb < 10000:  # Less than 10GB free space
+                return HealthCheckResult(
+                    Severity.LOW,
+                    Issue(
+                        "Root Btrfs filesystem has less than 10GB free space",
+                        fix=None
+                    )
                 )
-            )
 
-    return None
+        return None
+    return HealthCheck(check, [])
 
-def check_btrfs_timers() -> Optional[HealthCheckResult]:
+def check_btrfs_timers() -> HealthCheck:
     """
     Check if the Btrfs maintenance timers are enabled.
 
     :return: A HealthCheckResult if the btrfs maintenance services are not running or enabled, otherwise None.
     """
-    services = ["btrfs-scrub.timer", "btrfs-balance.timer", "btrfs-defrag.timer"]
-    missing_services = []
-    for service in services:
-        status = get_systemd_service_status(service)
-        if not status:
-            continue
-        if status.is_enabled is False:
-            missing_services.append(service)
-    
-    if missing_services:
-        issue_description = "Btrfs maintenance timers are not enabled: " + ", ".join(missing_services)
-        return HealthCheckResult(
-            Severity.LOW,
-            Issue(
-                issue_description,
-                details={"services": missing_services},
-                fix=fix_enable_services
-            )
-        )
-    return None
+    def check() -> Optional[HealthCheckResult]:
+        services = ["btrfs-scrub.timer", "btrfs-balance.timer", "btrfs-defrag.timer"]
+        missing_services = []
+        for service in services:
+            status = get_systemd_service_status(service)
+            if not status:
+                continue
+            if status.is_enabled is False:
+                missing_services.append(service)
 
-def check_using_dracut() -> Optional[HealthCheckResult]:
+        if missing_services:
+            issue_description = "Btrfs maintenance timers are not enabled: " + ", ".join(missing_services)
+            return HealthCheckResult(
+                Severity.LOW,
+                Issue(
+                    issue_description,
+                    details={"services": missing_services},
+                    fix=fix_enable_services
+                )
+            )
+        return None
+    return HealthCheck(check, [])
+
+def check_using_dracut() -> HealthCheck:
     """
     Check if the system is using dracut for initramfs.
 
     :return: A HealthCheckResult if dracut is not being used, otherwise None.
     """
-    if not check_arch_package_exists("dracut"):
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "System is not using dracut for initramfs",
-                fix=fix_install_dracut
+    def check() -> Optional[HealthCheckResult]:
+        if not ((pkg := cache.get("dracut")).installed):
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "System is not using dracut for initramfs",
+                    fix=fix_install_packages,
+                    details={"packages": ["garuda-dracut-support"]}
+                )
             )
-        )
-    if not check_arch_package_exists("garuda-dracut-support"):
-        return HealthCheckResult(
-            Severity.HIGH,
-            Issue(
-                "System is using dracut, but garuda-dracut-support is not installed",
-                fix=fix_install_dracut
+        if not ((pkg := cache.get("garuda-dracut-support")).installed and not pkg.provided):
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "System is using dracut, but garuda-dracut-support is not installed",
+                    fix=fix_install_packages,
+                    details={"packages": ["garuda-dracut-support"]}
+                )
             )
-        )
+        return None
+    return HealthCheck(check, ["dracut", "garuda-dracut-support"])
 
-    return None
-
-def check_using_pipewire() -> Optional[HealthCheckResult]:
+def check_using_pipewire() -> HealthCheck:
     """
     Check if the system is using PipeWire for audio.
 
     :return: A HealthCheckResult if PipeWire is not being used, otherwise None.
     """
-    if not check_arch_package_exists("pipewire"):
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "System is not using PipeWire for audio",
-                fix=fix_install_pipewire
+    def check() -> Optional[HealthCheckResult]:
+        if not ((pkg := cache.get("pipewire")).installed):
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "System is not using PipeWire for audio",
+                    fix=fix_install_packages,
+                    details={"packages": ["pipewire-support"]}
+                )
             )
-        )
-    
-    if not check_arch_package_exists("pipewire-support"):
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "System is using PipeWire, but pipewire-support is not installed",
-                fix=fix_install_pipewire
+
+        if not ((pkg := cache.get("pipewire-support")).installed and not pkg.provided):
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "System is using PipeWire, but pipewire-support is not installed",
+                    fix=fix_install_packages,
+                    details={"packages": ["pipewire-support"]}
+                )
             )
-        )
+        return None
+    return HealthCheck(check, ["pipewire", "pipewire-support"])
 
-    return None
-
-def check_partial_upgrade() -> Optional[HealthCheckResult]:
+def check_partial_upgrade() -> HealthCheck:
     """
     Check if the system is partially upgraded.
 
     :return: A HealthCheckResult if the system is partially upgraded, otherwise None.
     """
+    def check() -> Optional[HealthCheckResult]:
+        partial_upgrade_file = "/var/lib/garuda/partial_upgrade"
 
-    partial_upgrade_file = "/var/lib/garuda/partial_upgrade"
-
-    if os.path.exists(partial_upgrade_file):
-        return HealthCheckResult(
-            Severity.CRITICAL,
-            Issue(
-                "System is partially upgraded",
-                fix=fix_update_system
+        if os.path.exists(partial_upgrade_file):
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "System is partially upgraded",
+                    fix=fix_update_system
+                )
             )
-        )
-    return None
+        return None
+    return HealthCheck(check, [])
 
-def check_outdated_system() -> Optional[HealthCheckResult]:
+def check_outdated_system() -> HealthCheck:
     """
     Check if the system is outdated. (older than 2 weeks)
 
     :return: A HealthCheckResult if the system is outdated, otherwise None.
     """
-
-    last_update_file = "/var/lib/garuda/last_update"
-    # File timestamp is the date of the last update
-    if not os.path.exists(last_update_file):
-        return None
-    last_update_time = os.path.getmtime(last_update_file)
-    current_time = time.time()
-    # Check if the last update was more than 2 weeks ago
-    if (current_time - last_update_time) > (14 * 24 * 60 * 60):  # 2 weeks in seconds
-        return HealthCheckResult(
-            Severity.HIGH,
-            Issue(
-                "System is outdated (last update more than 2 weeks ago)",
-                fix=fix_update_system
+    def check() -> Optional[HealthCheckResult]:
+        last_update_file = "/var/lib/garuda/last_update"
+        # File timestamp is the date of the last update
+        if not os.path.exists(last_update_file):
+            return None
+        last_update_time = os.path.getmtime(last_update_file)
+        current_time = time.time()
+        # Check if the last update was more than 2 weeks ago
+        if (current_time - last_update_time) > (14 * 24 * 60 * 60):  # 2 weeks in seconds
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "System is outdated (last update more than 2 weeks ago)",
+                    fix=fix_update_system
+                )
             )
-        )
-    
-    return None
+        return None
+    return HealthCheck(check, [])
 
-def check_pending_reboot() -> Optional[HealthCheckResult]:
+def check_pending_reboot() -> HealthCheck:
     """
     Check if a reboot is pending.
 
     :return: A HealthCheckResult if a reboot is pending, otherwise None.
     """
+    def check() -> Optional[HealthCheckResult]:
+        # Check if last update is newer than the last reboot
+        last_update_file = "/var/lib/garuda/last_update"
+        last_reboot_benchmark = "/proc"
 
-    # Check if last update is newer than the last reboot
-    last_update_file = "/var/lib/garuda/last_update"
-    last_reboot_benchmark = "/proc"
+        if not os.path.exists(last_update_file):
+            return None
 
-    if not os.path.exists(last_update_file):
-        return None
-    
-    last_update_time = os.path.getmtime(last_update_file)
-    last_reboot_time = os.path.getctime(last_reboot_benchmark)
+        last_update_time = os.path.getmtime(last_update_file)
+        last_reboot_time = os.path.getctime(last_reboot_benchmark)
 
-    if last_update_time > last_reboot_time:
-        return HealthCheckResult(
-            Severity.INFO,
-            Issue(
-                "A reboot is pending (update applied since last reboot)",
-                fix=None
+        if last_update_time > last_reboot_time:
+            return HealthCheckResult(
+                Severity.INFO,
+                Issue(
+                    "A reboot is pending (update applied since last reboot)",
+                    fix=None
+                )
             )
-        )
+        return None
+    return HealthCheck(check, [])
 
-    return None
-
-def check_failed_systemd_services() -> Optional[HealthCheckResult]:
+def check_failed_systemd_services() -> HealthCheck:
     """
     Check for failed systemd services.
 
     :return: A HealthCheckResult if any failed services are found, otherwise None.
     """
-    result = run_shell_command("systemctl list-units --failed --full --all --plain --no-legend")
-    if result.exit_code != 0 or not result.stdout.strip():
-        return None  # No failed services
-    
-    failed_services = []
-    for line in result.stdout.strip().splitlines():
-        failed_services.append(line.split()[0])
+    def check() -> Optional[HealthCheckResult]:
+        result = run_shell_command("systemctl list-units --failed --full --all --plain --no-legend")
+        if result.exit_code != 0 or not result.stdout.strip():
+            return None  # No failed services
 
-    if failed_services:
-        return HealthCheckResult(
-            Severity.CRITICAL,
-            Issue(
-                "Failed systemd services found: " + ", ".join(failed_services),
-                details={"services": failed_services},
-                fix=fix_enable_services
+        failed_services = []
+        for line in result.stdout.strip().splitlines():
+            failed_services.append(line.split()[0])
+
+        if failed_services:
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "Failed systemd services found: " + ", ".join(failed_services),
+                    details={"services": failed_services},
+                    fix=fix_enable_services
+                )
             )
-        )
-    
-    return None
+        return None
+    return HealthCheck(check, [])
 
-def check_has_old_btrfs_snapshots() -> Optional[HealthCheckResult]:
+def check_has_old_btrfs_snapshots() -> HealthCheck:
     """
     Check if there are old Btrfs snapshots that can be deleted.
 
     :return: A HealthCheckResult if old snapshots are found, otherwise None.
     """
-    if not os.path.exists("/usr/bin/snapper-tools"):
-        return None
+    def check() -> Optional[HealthCheckResult]:
+        if not os.path.exists("/usr/bin/snapper-tools"):
+            return None
 
-    result = run_shell_command("pkexec snapper-tools find-old")
-    if result.exit_code == 0:
-        return HealthCheckResult(
-            Severity.LOW,
-            Issue(
-                "Old Btrfs snapshots found that can be deleted",
-                fix=fix_remove_old_btrfs_snapshots
+        result = run_shell_command("pkexec snapper-tools find-old")
+        if result.exit_code == 0:
+            return HealthCheckResult(
+                Severity.LOW,
+                Issue(
+                    "Old Btrfs snapshots found that can be deleted",
+                    fix=fix_remove_old_btrfs_snapshots
+                )
             )
-        )
-    return None
+        return None
+    return HealthCheck(check, [])
 
-def check_cpu_temperature() -> Optional[HealthCheckResult]:
+def check_cpu_temperature() -> HealthCheck:
     """
     Check if the CPU temperature is within safe limits.
 
     :return: A HealthCheckResult if the CPU temperature is too high, otherwise None.
     """
-    thermal_zone_path = "/sys/class/thermal/"
-    cpu_temp = "x86_pkg_temp"
-    try:
-        thermal_zones = Path(thermal_zone_path).glob("thermal_zone*")
-        if not thermal_zones:
-            return None
-        
-        for zone in thermal_zones:
-            type_file = zone / "type"
-            if not type_file.exists():
-                continue
-            with open(type_file, 'r') as f:
-                if cpu_temp != f.read().strip():
-                    continue
-            temp_file = zone / "temp"
-            if not temp_file.exists():
-                break
-            with open(temp_file, 'r') as f:
-                temp = int(f.read().strip())
-                if temp > 90000:  # Temperature in millidegrees Celsius
-                    return HealthCheckResult(
-                        Severity.LOW,
-                        Issue(
-                            f"CPU temperature is too high: {temp / 1000:.1f}°C",
-                            fix=None
-                        )
-                    )
-                else:
-                    break
-    except (IOError, ValueError):
-        return None
-    return None
+    def check() -> Optional[HealthCheckResult]:
+        thermal_zone_path = "/sys/class/thermal/"
+        cpu_temp = "x86_pkg_temp"
+        try:
+            thermal_zones = Path(thermal_zone_path).glob("thermal_zone*")
+            if not thermal_zones:
+                return None
 
+            for zone in thermal_zones:
+                type_file = zone / "type"
+                if not type_file.exists():
+                    continue
+                with open(type_file, 'r') as f:
+                    if cpu_temp != f.read().strip():
+                        continue
+                temp_file = zone / "temp"
+                if not temp_file.exists():
+                    break
+                with open(temp_file, 'r') as f:
+                    temp = int(f.read().strip())
+                    if temp > 90000:  # Temperature in millidegrees Celsius
+                        return HealthCheckResult(
+                            Severity.LOW,
+                            Issue(
+                                f"CPU temperature is too high: {temp / 1000:.1f}°C",
+                                fix=None
+                            )
+                        )
+                    else:
+                        break
+        except (IOError, ValueError):
+            return None
+        return None
+    return HealthCheck(check, [])
 
 checks: List[HealthCheck] = [
-    HealthCheck(check_for_core_packages),
-    HealthCheck(check_for_important_packages),
-    HealthCheck(check_for_optional_packages),
-    HealthCheck(check_pacman_conf),
-    HealthCheck(check_nvidia_drivers),
-    HealthCheck(check_btrfs_root_storage),
-    HealthCheck(check_btrfs_timers),
-    HealthCheck(check_using_dracut),
-    HealthCheck(check_using_pipewire),
-    HealthCheck(check_partial_upgrade),
-    HealthCheck(check_outdated_system),
-    HealthCheck(check_pending_reboot),
-    HealthCheck(check_failed_systemd_services),
-    HealthCheck(check_has_old_btrfs_snapshots),
-    HealthCheck(check_cpu_temperature),
+    check_for_core_packages(),
+    check_for_important_packages(),
+    check_for_optional_packages(),
+    check_pacman_conf(),
+    check_nvidia_drivers(),
+    check_nvidia_kernel_module(),
+    check_btrfs_root_storage(),
+    check_btrfs_timers(),
+    check_using_dracut(),
+    check_using_pipewire(),
+    check_partial_upgrade(),
+    check_outdated_system(),
+    check_pending_reboot(),
+    check_failed_systemd_services(),
+    check_has_old_btrfs_snapshots(),
+    check_cpu_temperature(),
 ]
-
 
 # -- Main Execution Logic --
 CheckResults: TypeAlias = Dict[Severity, List[HealthCheckResult]]
 
-def perform_check_run(debug: bool) -> Tuple[bool, CheckResults]:
+def perform_check_run(debug: bool) -> Tuple[bool, CheckResults, float]:
     """
     Run all checks and collect results.
 
     :return: A tuple containing (has_issues_boolean, results_dictionary).
     """
+    # Refresh the package cache
+    time_full_start = time.time()
+    cache.execute()
     results: CheckResults = {s: [] for s in Severity}
     for check in checks:
         if (debug):
@@ -817,7 +847,8 @@ def perform_check_run(debug: bool) -> Tuple[bool, CheckResults]:
                 print(f"Error running check {check.check_callable.__name__}: {e}")
                 continue
     has_issues = any(results.values())
-    return has_issues, results
+    time_full = time.time() - time_full_start
+    return has_issues, results, time_full
 
 def has_error_level_issues(results: CheckResults) -> bool:
     """
@@ -829,18 +860,20 @@ def has_error_level_issues(results: CheckResults) -> bool:
     severities_that_cause_failure = [Severity.LOW, Severity.HIGH, Severity.CRITICAL]
     return any(results[s] for s in severities_that_cause_failure)
 
-def print_text_report(has_issues: bool, results: CheckResults):
+def print_text_report(has_issues: bool, results: CheckResults, time) -> None:
     """
     Print a text report to the console based on check results.
 
     :param has_issues: Boolean indicating if any issues were found.
     :param results: The dictionary of results from perform_check_run.
     """
+    print(f"{COLORS['INFO']}--- System Health Check Report ---{COLORS['RESET']}")
+    print(f"{COLORS['GREEN']}{len(checks)} checks run in {time:.2f} seconds ⌛{COLORS['RESET']}")
+    print(f"{COLORS['GREEN']}Powered by garuda-health 🦅{COLORS['RESET']}")
     if not has_issues:
-        print("✅ System health check passed. No issues found.")
+        print(f"\n✅ System health check passed. No issues found.")
         return
 
-    print("--- System Health Check ---")
     for severity in reversed(list(Severity)):
         if results[severity]:
             color, reset = COLORS.get(severity.name, ""), COLORS["RESET"]
@@ -914,7 +947,7 @@ def main():
     #    print(f"{COLORS['CRITICAL']}Error: --fix requires root privileges.{COLORS['RESET']}")
     #    sys.exit(1)
 
-    has_initial_issues, initial_results = perform_check_run(args.debug)
+    has_initial_issues, initial_results, initial_time = perform_check_run(args.debug)
     should_fail_initial = has_error_level_issues(initial_results)
 
     if args.json:
@@ -923,12 +956,15 @@ def main():
             for severity in reversed(list(Severity)):
                 if initial_results[severity]:
                     json_output[severity.name] = [
-                        {"description": res.issue.get_summary()} for res in initial_results[severity]
+                        {
+                            "description": res.issue.get_summary(),
+                            "fix_available": res.issue.fix is not None,
+                        } for res in initial_results[severity]
                     ]
         print(json.dumps(json_output, indent=2))
         sys.exit(1 if should_fail_initial else 0)
 
-    print_text_report(has_initial_issues, initial_results)
+    print_text_report(has_initial_issues, initial_results, initial_time)
     
     final_exit_code = 1 if should_fail_initial else 0
 
@@ -937,10 +973,10 @@ def main():
         
         if fixes_ran_cleanly:
             print("\n--- Re-running checks after applying fixes ---")
-            has_final_issues, final_results = perform_check_run(args.debug)
+            has_final_issues, final_results, final_time = perform_check_run(args.debug)
             should_fail_final = has_error_level_issues(final_results)
             
-            print_text_report(has_final_issues, final_results)
+            print_text_report(has_final_issues, final_results, final_time)
             
             final_exit_code = 1 if should_fail_final else 0
 
