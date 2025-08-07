@@ -47,7 +47,7 @@ for line in "${lines[@]}"; do
 		dracut "${args[@]}" -L 3 --hostonly "/boot/initramfs-${pkgbase}.img" --kver "$kver"
 
 		echo ":: Building fallback initramfs for ${pkgbase} (${kver})"
-		dracut "${args[@]}" -L 1 --no-hostonly -o "network" "/boot/initramfs-${pkgbase}-fallback.img" --kver "$kver"
+		dracut "${args[@]}" -L 1 --no-hostonly -o "network rdma" "/boot/initramfs-${pkgbase}-fallback.img" --kver "$kver"
 	); then
 		# If dracut fails, we capture the error status but continue processing other kernels.
 		echo -e "\033[1;31mFailed to build initramfs for ${pkgbase} (${kver})\033[0m"
