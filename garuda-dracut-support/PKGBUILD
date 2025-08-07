@@ -2,8 +2,8 @@
 
 pkgname=garuda-dracut-support
 pkgdesc="Dracut support for Garuda Linux"
-pkgver=1.2.3
-pkgrel=2
+pkgver=1.2.4
+pkgrel=1
 arch=('any')
 license=('GPL')
 source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda dracut-rebuild 90-dracut-install.hook)
@@ -23,8 +23,8 @@ package() {
 	install -Dm644 05-garuda.conf "$pkgdir"/usr/lib/dracut/dracut.conf.d/05-garuda.conf
 
 	# Custom dracut module to create an overlayfs if booted from a snapshot
-	install -Dm755 snapshot-overlay.sh "$pkgdir"/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/snapshot-overlay.sh
-	install -Dm755 module-setup.sh "$pkgdir"/usr/lib/dracut/modules.d/91btrfs-snapshot-overlay/module-setup.sh
+	install -Dm755 snapshot-overlay.sh "$pkgdir"/usr/lib/dracut/modules.d/50btrfs-snapshot-overlay/snapshot-overlay.sh
+	install -Dm755 module-setup.sh "$pkgdir"/usr/lib/dracut/modules.d/50btrfs-snapshot-overlay/module-setup.sh
 
 	# Custom version of the dracut hooks from Arch Linux
 	install -Dm644 90-dracut-install.hook "${pkgdir}/etc/pacman.d/hooks/90-dracut-install.hook"

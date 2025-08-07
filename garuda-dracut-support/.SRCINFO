@@ -1,7 +1,7 @@
 pkgbase = garuda-dracut-support
 	pkgdesc = Dracut support for Garuda Linux
-	pkgver = 1.2.3
-	pkgrel = 2
+	pkgver = 1.2.4
+	pkgrel = 1
 	arch = any
 	license = GPL
 	source = 05-garuda.conf
