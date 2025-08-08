@@ -1118,7 +1118,7 @@ def main():
     if args.json:
         json_output = {}
         if printable_issues > 0:
-            for severity in reversed(list(Severity)):
+            for severity in reversed(printable_severities):
                 if initial_results[severity]:
                     json_output[severity.name] = [
                         {
