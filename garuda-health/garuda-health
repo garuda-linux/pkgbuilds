@@ -759,7 +759,7 @@ def check_failed_systemd_services() -> HealthCheck:
 
         if failed_services:
             return HealthCheckResult(
-                Severity.CRITICAL,
+                Severity.LOW,
                 Issue(
                     "Failed systemd services found: " + ", ".join(failed_services),
                 )

@@ -2,12 +2,12 @@
 
 pkgname=garuda-health
 pkgdesc="The Garuda Linux health checker command"
-pkgver=1.4.0
+pkgver=1.4.1
 pkgrel=1
 arch=('any')
 license=('GPL-3.0-or-later')
 source=("garuda-health")
-sha512sums=('72a68465c6a92223b1dc85e0d99b70f4f09119aab7adf45f9a7a1978a8db93e84a80c4f96c45d05e857f376bd12a5322298dee34b08b43f56de8fb281301bb32')
+sha512sums=('ddfd0080476a1606309d6fb02059550fac2cb1ec9dfc2acdc1fdba4ddb952031af990686dc0ba27ffe0e2801069efa05850cffd4cf8edf4d1f3a22c76160ab18')
 
 package() {
   depends=('garuda-update' 'pacman')
