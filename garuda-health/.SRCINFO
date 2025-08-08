@@ -1,11 +1,11 @@
 pkgbase = garuda-health
 	pkgdesc = The Garuda Linux health checker command
-	pkgver = 1.2.0
+	pkgver = 1.3.0
 	pkgrel = 1
 	arch = any
 	license = GPL-3.0-or-later
 	source = garuda-health
-	sha512sums = 963fea8e3ed83e6d58179e46e56988984ff59c294f9a6736397c1b3797dbc06d42197c04c2f02938418bb62b4f2e7d7f337d0c3a50bc7f0549c60428c678b3c9
+	sha512sums = dfd382b16850eea40fbc3b3d3967e04c84f19751bf3812e29f5363eb004a7222828b89a750872b80335f45510d5e5f9d4a76b1e68d9eea987207e2d2f298ffb6
 
 pkgname = garuda-health
 	depends = garuda-update

@@ -859,6 +859,46 @@ def check_time_sync() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
+def check_smart_status() -> HealthCheck:
+    """
+    Check the SMART status of all disks.
+
+    :return: A HealthCheckResult if any disk has a failing SMART status, otherwise None.
+    """
+    def check() -> HealthCheckResult:
+        if (not os.path.exists("/usr/bin/smartctl") or os.getuid() != 0):
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+        result = run_shell_command("smartctl --scan")
+        if result.exit_code != 0:
+            return HealthCheckResult(Severity.ERROR)
+        disks = result.stdout.strip().splitlines()
+        if not disks:
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+
+        for disk in disks:
+            device = disk.split()[0]
+            smart_result = run_shell_command(f"smartctl -H {device}")
+            if "FAILED" in smart_result.stdout or "FAILED" in smart_result.stderr:
+                return HealthCheckResult(
+                    Severity.CRITICAL,
+                    Issue(
+                        f"SMART status for {device} is failing",
+                        fix=None,
+                    )
+                )
+            if smart_result.exit_code != 0:
+                continue
+            if "PASSED" not in smart_result.stdout:
+                return HealthCheckResult(
+                    Severity.CRITICAL,
+                    Issue(
+                        f"SMART status for {device} is failing",
+                        fix=None,
+                    )
+                )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, [])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
