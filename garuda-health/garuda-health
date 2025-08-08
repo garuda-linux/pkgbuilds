@@ -899,6 +899,61 @@ def check_smart_status() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
+def check_available_ram() -> HealthCheck:
+    """
+    Check if the system has enough available RAM.
+
+    :return: A HealthCheckResult if the available RAM is below a threshold, otherwise None.
+    """
+    def check() -> HealthCheckResult:
+        meminfo_path = "/proc/meminfo"
+        try:
+            data = {}
+            with open(meminfo_path, 'r') as f:
+                pattern = re.compile(r"^([^:]+):\s+(\d+)\s+kB$")
+                for line in f:
+                    match = pattern.match(line)
+                    if match:
+                        key, value = match.groups()
+                        data[key] = int(value)
+            if "MemAvailable" not in data or "MemTotal" not in data:
+                return HealthCheckResult(Severity.ERROR)
+            if "SwapTotal" in data and "SwapFree" in data and data["SwapTotal"] > 0:
+                if data["MemAvailable"] < data["MemTotal"] * 0.05:
+                    return HealthCheckResult(
+                        Severity.HIGH,
+                        Issue(
+                            f"Available RAM is below 5% of total RAM: {data['MemAvailable'] / 1024:.2f} MB",
+                            fix=None
+                        )
+                    )
+                # Less than 15% of total swap available AND less than 15% of total RAM available
+                if (data["SwapFree"] < data["SwapTotal"] * 0.15
+                        and data["MemAvailable"] < data["MemTotal"] * 0.15):
+                    return HealthCheckResult(
+                        Severity.HIGH,
+                        Issue(
+                            f"Available RAM and swap are both below 15% of total: "
+                            f"{data['MemAvailable'] / 1024:.2f} MB available RAM, "
+                            f"{data['SwapFree'] / 1024:.2f} MB available swap",
+                            fix=None
+                        )
+                    )
+            # No swap
+            else:
+                if data["MemAvailable"] < data["MemTotal"] * 0.10:
+                    return HealthCheckResult(
+                        Severity.HIGH,
+                        Issue(
+                            f"Available RAM is below 10% of total RAM: {data['MemAvailable'] / 1024:.2f} MB",
+                            fix=None
+                        )
+                    )
+        except (IOError, ValueError):
+            return HealthCheckResult(Severity.ERROR)
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, [])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -918,6 +973,7 @@ checks: list[HealthCheck] = [
     check_cpu_temperature(),
     check_time_sync(),
     check_smart_status(),
+    check_available_ram(),
 ]
 
 # -- Main Execution Logic --
