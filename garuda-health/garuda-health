@@ -10,7 +10,7 @@ import argparse
 import json
 from enum import Enum, auto
 import time
-from typing import Callable, Optional, List, Dict, NamedTuple, Set, Tuple, TypeAlias
+from typing import Callable, Optional, Dict, NamedTuple, Set, Tuple, TypeAlias
 import typing
 from dataclasses import dataclass
 
@@ -25,11 +25,22 @@ COLORS = {
 Fixer = typing.NewType("Fixer", None)
 
 class Severity(Enum):
-    """Defines the 4 categories of issues"""
+    """Defines the 4 categories of issues and 3 additional states."""
+    NO_ISSUE = auto()
+    # Not applicable does not necessarily mean that the check could not be run
+    # Sometimes the check can not be run, but it is still NO_ISSUE because NOT_APPLICABLE
+    # is supposed to mean that there is missing software or another issue preventing it from running.
+    # For example, missing thermal_zones are not the fault of the user and "unsolvable", therefore NO_ISSUE
+    NOT_APPLICABLE = auto()
+    ERROR = auto()
     INFO = auto()
     LOW = auto()
     HIGH = auto()
     CRITICAL = auto()
+
+printable_severities = [
+    Severity.INFO, Severity.LOW, Severity.HIGH, Severity.CRITICAL
+]
 
 @dataclass
 class PackageInfo():
@@ -56,13 +67,13 @@ class Issue:
 
 class HealthCheckResult(NamedTuple):
     severity: Severity
-    issue: Issue
+    issue: Issue | None = None
 
 class HealthCheck:
     """
     Wrapper for a health check function.
     """
-    def __init__(self, check_callable: Callable[[], Optional[HealthCheckResult]], packages: Optional[List[str]] = None):
+    def __init__(self, check_callable: Callable[[], HealthCheckResult], packages: Optional[list[str]] = None):
         """
         :param check_callable: A function that performs a health check and returns a HealthCheckResult or None (if no issue was found).
         """
@@ -70,7 +81,7 @@ class HealthCheck:
         if packages:
             cache.add(packages)
 
-    def run(self) -> Optional[HealthCheckResult]:
+    def run(self) -> HealthCheckResult:
         """
         Execute the check callable and return its result directly.
 
@@ -86,7 +97,7 @@ class PackageCache:
         self.cache: Dict[str, PackageInfo] = {}
         self.pending: Set[str] = set()
 
-    def add(self, packages: List[str]):
+    def add(self, packages: list[str]):
         """
         Ask for a list of packages to be checked.
 
@@ -143,8 +154,8 @@ class Fixer:
         self,
         fix_function: Callable[[Issue], Tuple[bool, str]],
         priority: int = 5,
-        excludes: List[str] = None,
-        actions: List[str] = None,
+        excludes: list[str] = None,
+        actions: list[str] = None,
     ):
         self.fix_function = fix_function
         self.priority = priority
@@ -373,7 +384,7 @@ fix_time_sync = Fixer(fix_function=_fix_time_sync, priority=10, excludes=[], act
 
 # -- Check Implementations --
 
-def check_for_packages(severity: Severity, package_names: List[str], package_names_providable: List[str], text: str) -> Optional[HealthCheckResult]:
+def check_for_packages(severity: Severity, package_names: list[str], package_names_providable: list[str], text: str) -> Optional[HealthCheckResult]:
     """
     Check if garuda linux packages are installed.
 
@@ -393,7 +404,7 @@ def check_for_packages(severity: Severity, package_names: List[str], package_nam
                 details={"packages": missing_packages}
             )
         )
-    return None
+    return HealthCheckResult(Severity.NO_ISSUE)
 
 def check_for_core_packages() -> HealthCheck:
     """
@@ -402,7 +413,7 @@ def check_for_core_packages() -> HealthCheck:
     :return: A HealthCheckResult if a core package is missing, otherwise None.
     """
     core_packages = ["base", "chaotic-keyring", "chaotic-mirrorlist"]
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         return check_for_packages(
             Severity.CRITICAL, core_packages, [], "Core garuda linux packages are missing"
         )
@@ -415,7 +426,7 @@ def check_for_important_packages() -> HealthCheck:
     :return: A HealthCheckResult if an important package is missing, otherwise None.
     """
     important_packages = ["garuda-common-settings", "garuda-hotfixes", "garuda-update", "garuda-libs"]
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         return check_for_packages(
             Severity.HIGH, important_packages, [], "Important garuda linux packages are missing"
         )
@@ -428,7 +439,7 @@ def check_for_optional_packages() -> HealthCheck:
     :return: A HealthCheckResult if an optional package is missing, otherwise None.
     """
     optional_packages = ["garuda-rani", "garuda-hardware-tool", "garuda-system-maintenance"]
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         return check_for_packages(
             Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
         )
@@ -440,7 +451,7 @@ def check_pacman_conf() -> HealthCheck:
 
     :return: A HealthCheckResult if the configuration is missing or incorrect, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         pacman_conf_path = "/etc/pacman.conf"
         if not os.path.exists(pacman_conf_path):
             return HealthCheckResult(
@@ -475,7 +486,7 @@ def check_pacman_conf() -> HealthCheck:
                     fix=None
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_nvidia_drivers() -> HealthCheck:
@@ -484,12 +495,12 @@ def check_nvidia_drivers() -> HealthCheck:
 
     :return: A HealthCheckResult if proprietary drivers are missing, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         if not os.path.exists("/usr/bin/garuda-hardware-tool"):
-            return None
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
         result = run_shell_command("garuda-hardware-tool --nonfree --check")
         if result.exit_code != 0:
-            return None
+            return HealthCheckResult(Severity.ERROR)
         if "nvidia" in result.stdout.lower():
             if cache.get("NVIDIA-MODULE").installed:
                 return HealthCheckResult(
@@ -508,7 +519,7 @@ def check_nvidia_drivers() -> HealthCheck:
                     )
                 )
 
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["NVIDIA-MODULE"])
 
 def check_nvidia_kernel_module() -> HealthCheck:
@@ -517,7 +528,7 @@ def check_nvidia_kernel_module() -> HealthCheck:
 
     :return: A HealthCheckResult if the nvidia kernel module is not loaded, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         if cache.get("NVIDIA-MODULE").installed:
             # Check if "nvidia" kernel module is loaded
             if not os.path.exists("/sys/module/nvidia/"):
@@ -528,7 +539,9 @@ def check_nvidia_kernel_module() -> HealthCheck:
                         fix=None
                     )
                 )
-        return None
+        # This is not NOT_APPLICABLE because if no NVIDIA modules are installed, they can not possibly be malfunctioning.
+        # Therefore: NO_ISSUE
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["NVIDIA-MODULE"])
 
 def check_btrfs_root_storage() -> HealthCheck:
@@ -537,14 +550,14 @@ def check_btrfs_root_storage() -> HealthCheck:
 
     :return: A HealthCheckResult if the root filesystem is not Btrfs, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         if (not os.path.exists("/usr/bin/btrfs")):
-            return None
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
 
         # Check free space
         free_space_result = run_shell_command("btrfs filesystem usage / -m --si")
         if free_space_result.exit_code != 0:
-            return None
+            return HealthCheckResult(Severity.ERROR)
         # Find Overall -> Device unallocated:
         match = re.search(r"\s+Device unallocated:\s+(\d+)\.\d+MB", free_space_result.stdout)
         if match:
@@ -566,7 +579,7 @@ def check_btrfs_root_storage() -> HealthCheck:
                     )
                 )
 
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_btrfs_timers() -> HealthCheck:
@@ -575,13 +588,13 @@ def check_btrfs_timers() -> HealthCheck:
 
     :return: A HealthCheckResult if the btrfs maintenance services are not running or enabled, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         services = ["btrfs-scrub.timer", "btrfs-balance.timer", "btrfs-defrag.timer"]
         missing_services = []
         for service in services:
             status = get_systemd_service_status(service)
             if not status:
-                continue
+                return HealthCheckResult(Severity.ERROR)
             if status.is_enabled is False:
                 missing_services.append(service)
 
@@ -595,7 +608,7 @@ def check_btrfs_timers() -> HealthCheck:
                     fix=fix_enable_services
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_using_dracut() -> HealthCheck:
@@ -604,8 +617,8 @@ def check_using_dracut() -> HealthCheck:
 
     :return: A HealthCheckResult if dracut is not being used, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
-        if not ((pkg := cache.get("dracut")).installed):
+    def check() -> HealthCheckResult:
+        if not cache.get("dracut").installed:
             return HealthCheckResult(
                 Severity.INFO,
                 Issue(
@@ -623,7 +636,7 @@ def check_using_dracut() -> HealthCheck:
                     details={"packages": ["garuda-dracut-support"]}
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["dracut", "garuda-dracut-support"])
 
 def check_using_pipewire() -> HealthCheck:
@@ -632,8 +645,8 @@ def check_using_pipewire() -> HealthCheck:
 
     :return: A HealthCheckResult if PipeWire is not being used, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
-        if not ((pkg := cache.get("pipewire")).installed):
+    def check() -> HealthCheckResult:
+        if not cache.get("pipewire").installed:
             return HealthCheckResult(
                 Severity.INFO,
                 Issue(
@@ -645,14 +658,14 @@ def check_using_pipewire() -> HealthCheck:
 
         if not ((pkg := cache.get("pipewire-support")).installed and not pkg.provided):
             return HealthCheckResult(
-                Severity.INFO,
+                Severity.LOW,
                 Issue(
                     "System is using PipeWire, but pipewire-support is not installed",
                     fix=fix_install_packages,
                     details={"packages": ["pipewire-support"]}
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["pipewire", "pipewire-support"])
 
 def check_partial_upgrade() -> HealthCheck:
@@ -661,7 +674,7 @@ def check_partial_upgrade() -> HealthCheck:
 
     :return: A HealthCheckResult if the system is partially upgraded, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         partial_upgrade_file = "/var/lib/garuda/partial_upgrade"
 
         if os.path.exists(partial_upgrade_file):
@@ -672,7 +685,7 @@ def check_partial_upgrade() -> HealthCheck:
                     fix=fix_update_system
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_outdated_system() -> HealthCheck:
@@ -681,11 +694,11 @@ def check_outdated_system() -> HealthCheck:
 
     :return: A HealthCheckResult if the system is outdated, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         last_update_file = "/var/lib/garuda/last_update"
         # File timestamp is the date of the last update
         if not os.path.exists(last_update_file):
-            return None
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
         last_update_time = os.path.getmtime(last_update_file)
         current_time = time.time()
         # Check if the last update was more than 2 weeks ago
@@ -697,7 +710,7 @@ def check_outdated_system() -> HealthCheck:
                     fix=fix_update_system
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_pending_reboot() -> HealthCheck:
@@ -706,13 +719,13 @@ def check_pending_reboot() -> HealthCheck:
 
     :return: A HealthCheckResult if a reboot is pending, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         # Check if last update is newer than the last reboot
         last_update_file = "/var/lib/garuda/last_update"
         last_reboot_benchmark = "/proc"
 
         if not os.path.exists(last_update_file):
-            return None
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
 
         last_update_time = os.path.getmtime(last_update_file)
         last_reboot_time = os.path.getctime(last_reboot_benchmark)
@@ -725,7 +738,7 @@ def check_pending_reboot() -> HealthCheck:
                     fix=None
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_failed_systemd_services() -> HealthCheck:
@@ -734,10 +747,11 @@ def check_failed_systemd_services() -> HealthCheck:
 
     :return: A HealthCheckResult if any failed services are found, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         result = run_shell_command("systemctl list-units --failed --full --all --plain --no-legend")
         if result.exit_code != 0 or not result.stdout.strip():
-            return None  # No failed services
+            # No failed services
+            return HealthCheckResult(Severity.NO_ISSUE)
 
         failed_services = []
         for line in result.stdout.strip().splitlines():
@@ -748,11 +762,9 @@ def check_failed_systemd_services() -> HealthCheck:
                 Severity.CRITICAL,
                 Issue(
                     "Failed systemd services found: " + ", ".join(failed_services),
-                    details={"services": failed_services},
-                    fix=fix_enable_services
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_has_old_btrfs_snapshots() -> HealthCheck:
@@ -761,9 +773,9 @@ def check_has_old_btrfs_snapshots() -> HealthCheck:
 
     :return: A HealthCheckResult if old snapshots are found, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         if not os.path.exists("/usr/bin/snapper-tools"):
-            return None
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
 
         result = run_shell_command("pkexec snapper-tools find-old")
         if result.exit_code == 0:
@@ -774,7 +786,7 @@ def check_has_old_btrfs_snapshots() -> HealthCheck:
                     fix=fix_remove_old_btrfs_snapshots
                 )
             )
-        return None
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_cpu_temperature() -> HealthCheck:
@@ -783,13 +795,13 @@ def check_cpu_temperature() -> HealthCheck:
 
     :return: A HealthCheckResult if the CPU temperature is too high, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         thermal_zone_path = "/sys/class/thermal/"
         cpu_temp = "x86_pkg_temp"
         try:
             thermal_zones = Path(thermal_zone_path).glob("thermal_zone*")
             if not thermal_zones:
-                return None
+                return HealthCheckResult(Severity.NO_ISSUE)
 
             for zone in thermal_zones:
                 type_file = zone / "type"
@@ -814,8 +826,8 @@ def check_cpu_temperature() -> HealthCheck:
                     else:
                         break
         except (IOError, ValueError):
-            return None
-        return None
+            return HealthCheckResult(Severity.ERROR)
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
 def check_time_sync() -> HealthCheck:
@@ -824,16 +836,10 @@ def check_time_sync() -> HealthCheck:
 
     :return: A HealthCheckResult if the system time is not synchronized, otherwise None.
     """
-    def check() -> Optional[HealthCheckResult]:
+    def check() -> HealthCheckResult:
         result = run_shell_command("timedatectl show --property=NTP --property=NTPSynchronized --value")
         if result.exit_code != 0 or len(lines := result.stdout.strip().splitlines()) < 2:
-            return HealthCheckResult(
-                Severity.HIGH,
-                Issue(
-                    "Timedatectl nonfunctional",
-                    fix=None
-                )
-            )
+            return HealthCheckResult(Severity.ERROR)
         if lines[0] != "yes":
             return HealthCheckResult(
                 Severity.HIGH,
@@ -850,9 +856,10 @@ def check_time_sync() -> HealthCheck:
                     fix=None
                 )
             )
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
-checks: List[HealthCheck] = [
+checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
     check_for_optional_packages(),
@@ -870,16 +877,17 @@ checks: List[HealthCheck] = [
     check_has_old_btrfs_snapshots(),
     check_cpu_temperature(),
     check_time_sync(),
+    check_smart_status(),
 ]
 
 # -- Main Execution Logic --
-CheckResults: TypeAlias = Dict[Severity, List[HealthCheckResult]]
+CheckResults: TypeAlias = Dict[Severity, list[Issue]]
 
-def perform_check_run(debug: bool) -> Tuple[bool, CheckResults, float]:
+def perform_check_run(debug: bool) -> Tuple[CheckResults, float]:
     """
     Run all checks and collect results.
 
-    :return: A tuple containing (has_issues_boolean, results_dictionary).
+    :return: A tuple containing (results_dictionary, time_taken).
     """
     # Refresh the package cache
     time_full_start = time.time()
@@ -892,28 +900,33 @@ def perform_check_run(debug: bool) -> Tuple[bool, CheckResults, float]:
             result = check.run()
             if (debug):
                 time_end = time.time()
-                print(f"Check {check.check_callable.__name__} took {time_end - time_start:.2f} seconds")
-            if result:
-                results[result.severity].append(result)
+                print(f"Check took {time_end - time_start:.2f} seconds")
+            if not result:
+                raise ValueError(f"Check returned None or empty result.")
+            if debug and not result.severity in printable_severities:
+                print(f"Check returned a result with severity {result.severity.name}, which is not printable.")
+            results[result.severity].append(result.issue)
         except Exception as e:
+            results[Severity.ERROR].append(None)
             if debug:
-                print(f"Error running check {check.check_callable.__name__}: {e}")
-                continue
-    has_issues = any(results.values())
+                print(f"Error running check: {e}")
     time_full = time.time() - time_full_start
-    return has_issues, results, time_full
+    return results, time_full
 
-def has_error_level_issues(results: CheckResults) -> bool:
+def parse_results(results: CheckResults) -> Tuple[int, int]:
     """
-    Check if any issues are of LOW severity or higher.
+    Parse the results and count printable + run checks
 
     :param results: The dictionary of results from perform_check_run.
-    :return: True if there are any LOW, HIGH, or CRITICAL issues.
+    :return: A tuple containing (printable_issues, run_checks, error_level_issues).
     """
-    severities_that_cause_failure = [Severity.LOW, Severity.HIGH, Severity.CRITICAL]
-    return any(results[s] for s in severities_that_cause_failure)
+    printable_issues = sum(len(results[s]) for s in printable_severities)
+    info_level_issue = len(results[Severity.INFO])
+    run_checks = printable_issues + len(results[Severity.NO_ISSUE])
+    error_level_issues = printable_issues - info_level_issue
+    return printable_issues, run_checks, error_level_issues
 
-def print_text_report(has_issues: bool, results: CheckResults, time) -> None:
+def print_text_report(printable_issues: int, run_checks: int, results: CheckResults, time) -> None:
     """
     Print a text report to the console based on check results.
 
@@ -921,19 +934,22 @@ def print_text_report(has_issues: bool, results: CheckResults, time) -> None:
     :param results: The dictionary of results from perform_check_run.
     """
     print(f"{COLORS['INFO']}--- System Health Check Report ---{COLORS['RESET']}")
-    print(f"{COLORS['GREEN']}{len(checks)} checks run in {time:.2f} seconds ⌛{COLORS['RESET']}")
+    print(f"{COLORS['GREEN']}{run_checks}/{len(checks)} checks run in {time:.2f} seconds ⌛{COLORS['RESET']}")
     print(f"{COLORS['GREEN']}Powered by garuda-health 🦅{COLORS['RESET']}")
-    if not has_issues:
+    if run_checks == 0:
+        print(f"{COLORS['CRITICAL']}All checks failed with unknown errors.{COLORS['RESET']}")
+        return
+    if printable_issues == 0:
         print(f"\n✅ System health check passed. No issues found.")
         return
 
-    for severity in reversed(list(Severity)):
+    for severity in reversed(printable_severities):
         if results[severity]:
             color, reset = COLORS.get(severity.name, ""), COLORS["RESET"]
             print(f"\n{color}--- {severity.name} ---{reset}")
             for res in results[severity]:
-                fix_available = " (fix available)" if res.issue.fix else ""
-                print(f" - {res.issue.get_summary()}{fix_available}")
+                fix_available = " (fix available)" if res.fix else ""
+                print(f" - {res.get_summary()}{fix_available}")
 
 def apply_fixes(results: CheckResults) -> bool:
     """
@@ -952,23 +968,23 @@ def apply_fixes(results: CheckResults) -> bool:
 
     fixable_results = [
         res for sev_list in results.values()
-        for res in sev_list if res.issue.fix is not None
+        for res in sev_list if res.fix is not None
     ]
 
-    fixable_results.sort(key=lambda r: r.issue.fix.priority, reverse=True)
+    fixable_results.sort(key=lambda r: r.fix.priority, reverse=True)
 
     for result in fixable_results:
-        if not excluded_actions.isdisjoint(result.issue.fix.actions):
+        if not excluded_actions.isdisjoint(result.fix.actions):
             continue
 
-        print(f'Fixing "{result.issue.get_summary()}": ', flush=True)
+        print(f'Fixing "{result.get_summary()}": ', flush=True)
         try:
-            success, message = result.issue.fix.fix(result.issue)
+            success, message = result.fix.fix(result)
             print(message)
 
             if success:
-                if result.issue.fix.excludes:
-                    excluded_actions.update(result.issue.fix.excludes)
+                if result.fix.excludes:
+                    excluded_actions.update(result.fix.excludes)
 
         except Exception as e:
             print(f"Failed with exception: {e}")
@@ -1000,38 +1016,38 @@ def main():
     #    print(f"{COLORS['CRITICAL']}Error: --fix requires root privileges.{COLORS['RESET']}")
     #    sys.exit(1)
 
-    has_initial_issues, initial_results, initial_time = perform_check_run(args.debug)
-    should_fail_initial = has_error_level_issues(initial_results)
+    initial_results, initial_time = perform_check_run(args.debug)
+    printable_issues, run_checks, error_level_issues = parse_results(initial_results)
 
     if args.json:
         json_output = {}
-        if has_initial_issues:
+        if printable_issues > 0:
             for severity in reversed(list(Severity)):
                 if initial_results[severity]:
                     json_output[severity.name] = [
                         {
-                            "description": res.issue.get_summary(),
-                            "fix_available": res.issue.fix is not None,
+                            "description": res.get_summary(),
+                            "fix_available": res.fix is not None,
                         } for res in initial_results[severity]
                     ]
         print(json.dumps(json_output, indent=2))
-        sys.exit(1 if should_fail_initial else 0)
+        sys.exit(1 if error_level_issues > 0 else 0)
 
-    print_text_report(has_initial_issues, initial_results, initial_time)
+    print_text_report(printable_issues, run_checks, initial_results, initial_time)
     
-    final_exit_code = 1 if should_fail_initial else 0
+    final_exit_code = 1 if error_level_issues > 0 else 0
 
-    if args.fix and has_initial_issues:
+    if args.fix and printable_issues > 0:
         fixes_ran_cleanly = apply_fixes(initial_results)
         
         if fixes_ran_cleanly:
             print("\n--- Re-running checks after applying fixes ---")
-            has_final_issues, final_results, final_time = perform_check_run(args.debug)
-            should_fail_final = has_error_level_issues(final_results)
+            final_results, final_time = perform_check_run(args.debug)
+            printable_issues, run_checks, error_level_issues = parse_results(initial_results)
             
-            print_text_report(has_final_issues, final_results, final_time)
+            print_text_report(printable_issues, run_checks, final_results, final_time)
             
-            final_exit_code = 1 if should_fail_final else 0
+            final_exit_code = 1 if error_level_issues > 0 else 0
 
     sys.exit(final_exit_code)
 
