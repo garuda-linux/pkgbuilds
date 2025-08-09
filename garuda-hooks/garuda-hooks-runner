@@ -134,13 +134,16 @@ Mkinitcpio-Install() {
 		# Also run the right once since Arch Linux upstream merged install/remove into one
 		if [ -x /usr/share/libalpm/scripts/mkinitcpio-install ]; then
 			/usr/share/libalpm/scripts/mkinitcpio-install
+			rm -f /var/lib/garuda/initramfs_error
 		elif [ -x /usr/share/libalpm/scripts/mkinitcpio ]; then
 			/usr/share/libalpm/scripts/mkinitcpio install
+			rm -f /var/lib/garuda/initramfs_error
 		else
 			# We should let the user know
 			echo -e "\n\033[1;34m\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\nThe kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE.\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nWaiting 10 seconds.\n\033[0m"
 			garudalib_add_update_notice "The kernel update failed to determine how to update initramfs.\nYou will need to update manually using mkinitcpio or dracut yourself or your system WILL NOT BE BOOTABLE."
 			sleep 10
+			touch /var/lib/garuda/initramfs_error
 		fi
 	fi
 }

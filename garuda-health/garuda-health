@@ -85,7 +85,7 @@ class HealthCheck:
         """
         Execute the check callable and return its result directly.
 
-        :return: A HealthCheckResult if an issue is found, otherwise None.
+        :return: A HealthCheckResult if an issue is found .
         """
         return self.check_callable()
 
@@ -382,6 +382,40 @@ def _fix_time_sync(issue: Issue) -> Tuple[bool, str]:
 
 fix_time_sync = Fixer(fix_function=_fix_time_sync, priority=10, excludes=[], actions=[])
 
+def _fix_dracut_rebuild(issue: Issue) -> Tuple[bool, str]:
+    """
+    Rebuild the initramfs using dracut.
+
+    :param issue: The Issue object
+    :return: A tuple of (success_boolean, status_message).
+    """
+    result = run_interactive_command("sudo dracut-rebuild", require_consent=True)
+    if result == 0:
+        return True, "Initramfs rebuilt successfully using dracut."
+    elif result == 130:
+        return False, "Fix cancelled by user."
+    else:
+        return False, f"Failed to rebuild initramfs using dracut. Exit code: {result}"
+
+fix_dracut_rebuild = Fixer(fix_function=_fix_dracut_rebuild, priority=1, excludes=["initramfs"], actions=["initramfs"])
+
+def _fix_snapper_reset_config(issue: Issue) -> Tuple[bool, str]:
+    """
+    Reset the snapper configuration to default.
+
+    :param issue: The Issue object
+    :return: A tuple of (success_boolean, status_message).
+    """
+    result = run_interactive_command("garuda-update remote reset-snapper", require_consent=True)
+    if result == 0:
+        return True, "Snapper configuration reset to default successfully."
+    elif result == 130:
+        return False, "Fix cancelled by user."
+    else:
+        return False, f"Failed to reset snapper configuration. Exit code: {result}"
+
+fix_snapper_reset_config = Fixer(fix_function=_fix_snapper_reset_config, priority=10, excludes=["snapper"], actions=["snapper"])
+
 # -- Check Implementations --
 
 def check_for_packages(severity: Severity, package_names: list[str], package_names_providable: list[str], text: str) -> Optional[HealthCheckResult]:
@@ -390,7 +424,7 @@ def check_for_packages(severity: Severity, package_names: list[str], package_nam
 
     :param severity: The severity level for the check.
     :param package_names: A list of package names to check.
-    :return: A HealthCheckResult if any package is missing, otherwise None.
+    :return: A HealthCheckResult if any package is missing .
     """
     missing_packages = [pkg for pkg in package_names if not ((pkg_info := cache.get(pkg)).installed and not pkg_info.provided)]
     missing_packages += [pkg for pkg in package_names_providable if not ((pkg_info := cache.get(pkg)).installed)]
@@ -410,7 +444,7 @@ def check_for_core_packages() -> HealthCheck:
     """
     Check if core garuda linux packages are installed.
 
-    :return: A HealthCheckResult if a core package is missing, otherwise None.
+    :return: A HealthCheckResult if a core package is missing .
     """
     core_packages = ["base", "chaotic-keyring", "chaotic-mirrorlist"]
     def check() -> HealthCheckResult:
@@ -423,7 +457,7 @@ def check_for_important_packages() -> HealthCheck:
     """
     Check if important garuda linux packages are installed.
 
-    :return: A HealthCheckResult if an important package is missing, otherwise None.
+    :return: A HealthCheckResult if an important package is missing .
     """
     important_packages = ["garuda-common-settings", "garuda-hotfixes", "garuda-update", "garuda-libs"]
     def check() -> HealthCheckResult:
@@ -436,7 +470,7 @@ def check_for_optional_packages() -> HealthCheck:
     """
     Check if optional garuda linux packages are installed.
 
-    :return: A HealthCheckResult if an optional package is missing, otherwise None.
+    :return: A HealthCheckResult if an optional package is missing .
     """
     optional_packages = ["garuda-rani", "garuda-hardware-tool", "garuda-system-maintenance"]
     def check() -> HealthCheckResult:
@@ -449,7 +483,7 @@ def check_pacman_conf() -> HealthCheck:
     """
     Check if the pacman configuration file exists and has all the correct repositories.
 
-    :return: A HealthCheckResult if the configuration is missing or incorrect, otherwise None.
+    :return: A HealthCheckResult if the configuration is missing or incorrect .
     """
     def check() -> HealthCheckResult:
         pacman_conf_path = "/etc/pacman.conf"
@@ -493,7 +527,7 @@ def check_nvidia_drivers() -> HealthCheck:
     """
     Check if nvidia drivers are installed.
 
-    :return: A HealthCheckResult if proprietary drivers are missing, otherwise None.
+    :return: A HealthCheckResult if proprietary drivers are missing .
     """
     def check() -> HealthCheckResult:
         if not os.path.exists("/usr/bin/garuda-hardware-tool"):
@@ -526,7 +560,7 @@ def check_nvidia_kernel_module() -> HealthCheck:
     """
     Check if the nvidia kernel module is loaded.
 
-    :return: A HealthCheckResult if the nvidia kernel module is not loaded, otherwise None.
+    :return: A HealthCheckResult if the nvidia kernel module is not loaded .
     """
     def check() -> HealthCheckResult:
         if cache.get("NVIDIA-MODULE").installed:
@@ -548,7 +582,7 @@ def check_btrfs_root_storage() -> HealthCheck:
     """
     Check if the root filesystem is using Btrfs and has enough free space.
 
-    :return: A HealthCheckResult if the root filesystem is not Btrfs, otherwise None.
+    :return: A HealthCheckResult if the root filesystem is not Btrfs .
     """
     def check() -> HealthCheckResult:
         if (not os.path.exists("/usr/bin/btrfs")):
@@ -586,7 +620,7 @@ def check_btrfs_timers() -> HealthCheck:
     """
     Check if the Btrfs maintenance timers are enabled.
 
-    :return: A HealthCheckResult if the btrfs maintenance services are not running or enabled, otherwise None.
+    :return: A HealthCheckResult if the btrfs maintenance services are not running or enabled .
     """
     def check() -> HealthCheckResult:
         services = ["btrfs-scrub.timer", "btrfs-balance.timer", "btrfs-defrag.timer"]
@@ -615,7 +649,7 @@ def check_using_dracut() -> HealthCheck:
     """
     Check if the system is using dracut for initramfs.
 
-    :return: A HealthCheckResult if dracut is not being used, otherwise None.
+    :return: A HealthCheckResult if dracut is not being used .
     """
     def check() -> HealthCheckResult:
         if not cache.get("dracut").installed:
@@ -643,7 +677,7 @@ def check_using_pipewire() -> HealthCheck:
     """
     Check if the system is using PipeWire for audio.
 
-    :return: A HealthCheckResult if PipeWire is not being used, otherwise None.
+    :return: A HealthCheckResult if PipeWire is not being used .
     """
     def check() -> HealthCheckResult:
         if not cache.get("pipewire").installed:
@@ -672,7 +706,7 @@ def check_partial_upgrade() -> HealthCheck:
     """
     Check if the system is partially upgraded.
 
-    :return: A HealthCheckResult if the system is partially upgraded, otherwise None.
+    :return: A HealthCheckResult if the system is partially upgraded .
     """
     def check() -> HealthCheckResult:
         partial_upgrade_file = "/var/lib/garuda/partial_upgrade"
@@ -692,7 +726,7 @@ def check_outdated_system() -> HealthCheck:
     """
     Check if the system is outdated. (older than 2 weeks)
 
-    :return: A HealthCheckResult if the system is outdated, otherwise None.
+    :return: A HealthCheckResult if the system is outdated .
     """
     def check() -> HealthCheckResult:
         last_update_file = "/var/lib/garuda/last_update"
@@ -717,7 +751,7 @@ def check_pending_reboot() -> HealthCheck:
     """
     Check if a reboot is pending.
 
-    :return: A HealthCheckResult if a reboot is pending, otherwise None.
+    :return: A HealthCheckResult if a reboot is pending .
     """
     def check() -> HealthCheckResult:
         # Check if last update is newer than the last reboot
@@ -745,7 +779,7 @@ def check_failed_systemd_services() -> HealthCheck:
     """
     Check for failed systemd services.
 
-    :return: A HealthCheckResult if any failed services are found, otherwise None.
+    :return: A HealthCheckResult if any failed services are found .
     """
     def check() -> HealthCheckResult:
         result = run_shell_command("systemctl list-units --failed --full --all --plain --no-legend")
@@ -771,7 +805,7 @@ def check_has_old_btrfs_snapshots() -> HealthCheck:
     """
     Check if there are old Btrfs snapshots that can be deleted.
 
-    :return: A HealthCheckResult if old snapshots are found, otherwise None.
+    :return: A HealthCheckResult if old snapshots are found .
     """
     def check() -> HealthCheckResult:
         if not os.path.exists("/usr/bin/snapper-tools"):
@@ -793,7 +827,7 @@ def check_cpu_temperature() -> HealthCheck:
     """
     Check if the CPU temperature is within safe limits.
 
-    :return: A HealthCheckResult if the CPU temperature is too high, otherwise None.
+    :return: A HealthCheckResult if the CPU temperature is too high .
     """
     def check() -> HealthCheckResult:
         thermal_zone_path = "/sys/class/thermal/"
@@ -834,7 +868,7 @@ def check_time_sync() -> HealthCheck:
     """
     Check if the system time is synchronized.
 
-    :return: A HealthCheckResult if the system time is not synchronized, otherwise None.
+    :return: A HealthCheckResult if the system time is not synchronized .
     """
     def check() -> HealthCheckResult:
         result = run_shell_command("timedatectl show --property=NTP --property=NTPSynchronized --value")
@@ -863,7 +897,7 @@ def check_smart_status() -> HealthCheck:
     """
     Check the SMART status of all disks.
 
-    :return: A HealthCheckResult if any disk has a failing SMART status, otherwise None.
+    :return: A HealthCheckResult if any disk has a failing SMART status .
     """
     def check() -> HealthCheckResult:
         if (not os.path.exists("/usr/bin/smartctl") or os.getuid() != 0):
@@ -903,7 +937,7 @@ def check_available_ram() -> HealthCheck:
     """
     Check if the system has enough available RAM.
 
-    :return: A HealthCheckResult if the available RAM is below a threshold, otherwise None.
+    :return: A HealthCheckResult if the available RAM is below a threshold .
     """
     def check() -> HealthCheckResult:
         meminfo_path = "/proc/meminfo"
@@ -954,6 +988,82 @@ def check_available_ram() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
+def check_initramfs_success() -> HealthCheck:
+    """
+    Check if the initramfs error file (/var/lib/garuda/initramfs_error) exists.
+
+    :return: A HealthCheckResult if the initramfs build failed .
+    """
+    def check() -> HealthCheckResult:
+        initramfs_error_file = "/var/lib/garuda/initramfs_error"
+        if os.path.exists(initramfs_error_file):
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "Pacman hooks report that the initramfs build has failed. System may not boot.",
+                    fix=fix_dracut_rebuild if os.path.exists("/usr/bin/dracut-rebuild") else None,
+                )
+            )
+        return HealthCheckResult(Severity.NO_ISSUE)
+
+    return HealthCheck(check, [])
+
+def check_snapper_services() -> HealthCheck:
+    """
+    Check if the snapper services are running.
+
+    :return: A HealthCheckResult if the snapper services are not running .
+    """
+    def check() -> HealthCheckResult:
+        if not cache.get("snapper-support").installed:
+            return HealthCheckResult(Severity.INFO, Issue(
+                "Snapper (automatic btrfs system restore) is not installed and configured" if not cache.get("snapper").installed else
+                "Snapper (automatic btrfs system restore) is not using the official Garuda Linux configuration",
+                fix=fix_install_packages,
+                details={"packages": ["snapper-support"]}
+            ))
+        if not (service := get_systemd_service_status("snapper-cleanup.timer")):
+            return HealthCheckResult(Severity.ERROR)
+        if not service.is_enabled:
+            return HealthCheckResult(
+                Severity.LOW,
+                Issue(
+                    "Snapper cleanup timer is not enabled",
+                    fix=fix_enable_services,
+                    details={"services": ["snapper-cleanup.timer"]}
+                )
+            )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, ["snapper-support", "snapper"])
+
+def check_snapper_config() -> HealthCheck:
+    """
+    Check if the snapper configuration is correct.
+
+    :return: A HealthCheckResult if the snapper configuration is incorrect .
+    """
+    def check() -> HealthCheckResult:
+        if not cache.get("snapper-support").installed:
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+        if not os.path.exists("/etc/snapper/configs/root"):
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "Snapper configuration for root is missing",
+                    fix=fix_snapper_reset_config
+                )
+            )
+        if not os.path.exists("/.snapshots"):
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "Snapper snapshots directory is missing",
+                    fix=fix_snapper_reset_config
+                )
+            )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, ["snapper-support"])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -974,6 +1084,9 @@ checks: list[HealthCheck] = [
     check_time_sync(),
     check_smart_status(),
     check_available_ram(),
+    check_initramfs_success(),
+    check_snapper_services(),
+    check_snapper_config(),
 ]
 
 # -- Main Execution Logic --
@@ -1064,7 +1177,7 @@ def apply_fixes(results: CheckResults) -> bool:
 
     fixable_results = [
         res for sev_list in results.values()
-        for res in sev_list if res.fix is not None
+        for res in sev_list if res is not None and res.fix is not None
     ]
 
     fixable_results.sort(key=lambda r: r.fix.priority, reverse=True)
@@ -1088,6 +1201,7 @@ def apply_fixes(results: CheckResults) -> bool:
 
     if not fixable_results:
         print("No issues with available fixes were found.")
+        return False
 
     return not had_errors
 
@@ -1099,9 +1213,10 @@ def main():
     parser.add_argument('--fix', action='store_true', help="Attempt to fix issues and re-run checks.")
     parser.add_argument('--json', action='store_true', help="Output in JSON. Incompatible with --fix.")
     parser.add_argument('--debug', action='store_true', help="Enable debug output.")
+    parser.add_argument('--forcetty', action='store_true', help="Force color output even when not connected to a TTY.")
     args = parser.parse_args()
 
-    if not sys.stdout.isatty():
+    if not sys.stdout.isatty() and not args.forcetty:
         for key in COLORS: COLORS[key] = ""
 
     if args.json and args.fix:

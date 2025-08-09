@@ -6,6 +6,7 @@ args=('--force' '--no-hostonly-cmdline')
 lines=()
 status=0
 all=false
+initramfs_error_file="/var/lib/garuda/initramfs_error"
 
 while read -r line; do
 	# Check if any changed file is not a kernel image. This means we need to rebuild all initramfs.
@@ -41,19 +42,31 @@ for line in "${lines[@]}"; do
 	kver="${line#'usr/lib/modules/'}"
 	kver="${kver%'/pkgbase'}"
 
-	if ! (
-		echo ":: Building initramfs for ${pkgbase} (${kver})"
-		install -Dm0644 "/${line%'/pkgbase'}/vmlinuz" "/boot/vmlinuz-${pkgbase}"
-		dracut "${args[@]}" -L 3 --hostonly "/boot/initramfs-${pkgbase}.img" --kver "$kver"
+	if
+		echo ":: Building initramfs for ${pkgbase} (${kver})" &&
+		install -Dm0644 "/${line%'/pkgbase'}/vmlinuz" "/boot/vmlinuz-${pkgbase}" &&
+		dracut "${args[@]}" -L 3 --hostonly "/boot/initramfs-${pkgbase}.img" --kver "$kver" &&
 
-		echo ":: Building fallback initramfs for ${pkgbase} (${kver})"
+		echo ":: Building fallback initramfs for ${pkgbase} (${kver})" &&
 		dracut "${args[@]}" -L 1 --no-hostonly -o "network rdma" "/boot/initramfs-${pkgbase}-fallback.img" --kver "$kver"
-	); then
+	then
+		if [[ -f "${initramfs_error_file}" ]]; then
+			sed -i "/${pkgbase}/d" "${initramfs_error_file}"
+			if [[ ! -s "${initramfs_error_file}" ]]; then
+				rm -f "${initramfs_error_file}"
+			fi
+		fi
+	else
 		# If dracut fails, we capture the error status but continue processing other kernels.
 		echo -e "\033[1;31mFailed to build initramfs for ${pkgbase} (${kver})\033[0m"
+		echo "${pkgbase}" >> "${initramfs_error_file}"
 		status=1
 		continue
 	fi
 done
+
+if [[ $status -eq 0 ]] && [[ "$all" == true ]]; then
+	rm -f "${initramfs_error_file}"
+fi
 
 exit $status

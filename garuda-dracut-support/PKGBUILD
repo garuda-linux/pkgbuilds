@@ -2,7 +2,7 @@
 
 pkgname=garuda-dracut-support
 pkgdesc="Dracut support for Garuda Linux"
-pkgver=1.2.5
+pkgver=1.2.6
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -10,7 +10,7 @@ source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda
 sha256sums=('8b48b3aa1b7599fa5060b0b3c08896d6845da0e1ccd7bf1bfc9b1892c48bf7e2'
             '017588cd975eff20ce60f9d2f498932cc60e7627aefdf9dc21470b2a95da6a32'
             'cdf87309be00c23c2b74dd936be8861b7930edf51f5ea1d3f8f7b1d7dee37924'
-            'a6efb14a1ca92828d7d51686c89da81c5b00c9134d2d301f5a8e950b6355e5b5'
+            '0326c5ff3283ccebba0c9bd3f2788c72d2dcc5923daa21e8e823bb692372d2a3'
             '61afced29230d7169c27bb2802f20b22ae9b26eee7b9806adcc15046eeb31d44'
             '169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f')
 
