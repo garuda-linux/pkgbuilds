@@ -299,7 +299,7 @@ def _fix_install_nvidia_drivers(issue: Issue) -> Tuple[bool, str]:
     :param issue: The Issue object
     :return: A tuple of (success_boolean, status_message).
     """
-    result = run_interactive_command("garuda-hardware-tool --nonfree", require_consent=True)
+    result = run_interactive_command("sudo garuda-hardware-tool --nonfree", require_consent=True)
     if result == 0:
         return True, "Nvidia drivers installed successfully. Please reboot your system."
     elif result == 130:
@@ -537,13 +537,22 @@ def check_nvidia_drivers() -> HealthCheck:
             return HealthCheckResult(Severity.ERROR)
         if "nvidia" in result.stdout.lower():
             if cache.get("NVIDIA-MODULE").installed:
-                return HealthCheckResult(
-                    Severity.INFO,
-                    Issue(
-                        "Nvidia drivers are installed, but no/the incorrect/subobptimal hardware profile is active",
-                        fix=fix_install_nvidia_drivers
+                if cache.get("GARUDA-HARDWARE-PROFILE-NVIDIA").installed:
+                    return HealthCheckResult(
+                        Severity.INFO,
+                        Issue(
+                            "Nvidia drivers are installed, but an incorrect or a subobptimal hardware profile is active",
+                            fix=fix_install_nvidia_drivers
+                        )
                     )
-                )
+                else:
+                    return HealthCheckResult(
+                        Severity.INFO,
+                        Issue(
+                            "Nvidia drivers are installed, but no hardware profile is active",
+                            fix=fix_install_nvidia_drivers
+                        )
+                    )
             else:
                 return HealthCheckResult(
                     Severity.INFO,
@@ -554,7 +563,7 @@ def check_nvidia_drivers() -> HealthCheck:
                 )
 
         return HealthCheckResult(Severity.NO_ISSUE)
-    return HealthCheck(check, ["NVIDIA-MODULE"])
+    return HealthCheck(check, ["NVIDIA-MODULE", "GARUDA-HARDWARE-PROFILE-NVIDIA"])
 
 def check_nvidia_kernel_module() -> HealthCheck:
     """
@@ -871,23 +880,15 @@ def check_time_sync() -> HealthCheck:
     :return: A HealthCheckResult if the system time is not synchronized .
     """
     def check() -> HealthCheckResult:
-        result = run_shell_command("timedatectl show --property=NTP --property=NTPSynchronized --value")
-        if result.exit_code != 0 or len(lines := result.stdout.strip().splitlines()) < 2:
+        result = run_shell_command("timedatectl show --property=NTP --value")
+        if result.exit_code != 0 or not result.stdout.strip():
             return HealthCheckResult(Severity.ERROR)
-        if lines[0] != "yes":
+        if result.stdout.strip() != "yes":
             return HealthCheckResult(
                 Severity.HIGH,
                 Issue(
                     "NTP is not enabled, system time may not be synchronized",
                     fix=fix_time_sync
-                )
-            )
-        if lines[1] != "yes":
-            return HealthCheckResult(
-                Severity.HIGH,
-                Issue(
-                    "System time is not synchronized",
-                    fix=None
                 )
             )
         return HealthCheckResult(Severity.NO_ISSUE)
@@ -1080,7 +1081,8 @@ checks: list[HealthCheck] = [
     check_pending_reboot(),
     check_failed_systemd_services(),
     check_has_old_btrfs_snapshots(),
-    check_cpu_temperature(),
+    # Unreliable/false positives on some systems
+    # check_cpu_temperature(),
     check_time_sync(),
     check_smart_status(),
     check_available_ram(),
@@ -1152,13 +1154,21 @@ def print_text_report(printable_issues: int, run_checks: int, results: CheckResu
         print(f"\n✅ System health check passed. No issues found.")
         return
 
+    has_fix=False
+
     for severity in reversed(printable_severities):
         if results[severity]:
             color, reset = COLORS.get(severity.name, ""), COLORS["RESET"]
             print(f"\n{color}--- {severity.name} ---{reset}")
             for res in results[severity]:
-                fix_available = " (fix available)" if res.fix else ""
+                fix_available = ""
+                if res.fix:
+                    fix_available = " (fix available)"
+                    has_fix = True
                 print(f" - {res.get_summary()}{fix_available}")
+
+    if has_fix:
+        print(f"\n{COLORS['INFO']}Run garuda-health --fix to apply fixes.{COLORS['RESET']}")
 
 def apply_fixes(results: CheckResults) -> bool:
     """
