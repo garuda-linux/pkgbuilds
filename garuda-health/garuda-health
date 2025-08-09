@@ -541,7 +541,7 @@ def check_nvidia_drivers() -> HealthCheck:
                     return HealthCheckResult(
                         Severity.INFO,
                         Issue(
-                            "Nvidia drivers are installed, but an incorrect or a subobptimal hardware profile is active",
+                            "Nvidia drivers are installed, but an incorrect or a suboptimal hardware profile is active",
                             fix=fix_install_nvidia_drivers
                         )
                     )
