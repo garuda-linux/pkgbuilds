@@ -913,7 +913,7 @@ def check_smart_status() -> HealthCheck:
         for disk in disks:
             device = disk.split()[0]
             smart_result = run_shell_command(f"smartctl -H {device}")
-            expected_fail = "SMART overall-health self-assessment test result: PASSED"
+            expected_fail = "SMART overall-health self-assessment test result: FAILED"
             if expected_fail in smart_result.stdout or expected_fail in smart_result.stderr:
                 return HealthCheckResult(
                     Severity.CRITICAL,
