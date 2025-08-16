@@ -147,6 +147,12 @@ apply_migrations() {
 			# No need to be chatty for no reason for a relatively minor fix
 		fi
 	fi
+
+	# TODO: FIXME: Remove me after 2025-08-23
+	if [[ $(vercmp 2.6.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		# Just a minor notice
+		garudalib_add_update_notice "If garuda-health reported a SMART failed critical error BEFORE *this* update, it can be safely ignored if it is not present anymore after this update." || true
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"

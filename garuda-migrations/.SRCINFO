@@ -1,6 +1,6 @@
 pkgbase = garuda-migrations
 	pkgdesc = Automatically applies system configuration changes
-	pkgver = 2.6.0
+	pkgver = 2.6.1
 	pkgrel = 1
 	arch = any
 	license = GPL
@@ -11,7 +11,7 @@ pkgbase = garuda-migrations
 	source = garuda-migrations-runner
 	source = garuda-migrations-firedragon
 	source = garuda-migrations.hook
-	sha256sums = 86ffb96c2e03f7d1b4e72d2b3662724e8bbc0c5351c2707a62a750e4454b2981
+	sha256sums = b4ecd1623697028eab8e089e5d13615890dd37f3886c091da1f9910df2b7d59a
 	sha256sums = 17c4e9014ba6f6368eaa6f1531f328753f685abedfe27575f4b0dd9ad71122c3
 	sha256sums = 6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65
 
