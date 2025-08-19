@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import filecmp
 import os
 from pathlib import Path
 import pty
@@ -19,7 +20,6 @@ COLORS = {
     "CRITICAL": "\033[91m", "HIGH": "\033[31m", "LOW": "\033[33m",
     "INFO": "\033[34m", "RESET": "\033[0m", "GREEN": "\033[32m",
 }
-
 
 # -- Core data structures --
 Fixer = typing.NewType("Fixer", None)
@@ -96,6 +96,7 @@ class PackageCache:
     def __init__(self):
         self.cache: Dict[str, PackageInfo] = {}
         self.pending: Set[str] = set()
+        self.cached_kernels: Dict[str, Tuple[Path, str]] = {}
 
     def add(self, packages: list[str]):
         """
@@ -146,6 +147,22 @@ class PackageCache:
             name = line.strip()
             if name in self.cache:
                 self.cache[name].provided = False
+
+        # Find all kernels that are actual installed packages
+        result = run_shell_command(f"LANG=C LANGUAGE=C LC_ALL=C pacman -Qo /usr/lib/modules/*/pkgbase")
+        if result.exit_code != 0 and result.exit_code != 1:
+            raise Exception(f"Failed to check kernel module existence with pacman: {result.stderr}")
+
+        kernel_regex_pattern = re.compile(r"^(/usr/lib/modules/[^/]+)/pkgbase is owned by ([^ ]+) ([^ ]+)$")
+        for line in result.stdout.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if match := kernel_regex_pattern.match(line):
+                kernel_path = Path(match.group(1))
+                package_name = match.group(2)
+                package_version = match.group(3)
+                self.cached_kernels[package_name] = (kernel_path, package_version)
 
 class Fixer:
     """A class to encapsulate a fix action, its priority, and other metadata."""
@@ -416,6 +433,22 @@ def _fix_snapper_reset_config(issue: Issue) -> Tuple[bool, str]:
 
 fix_snapper_reset_config = Fixer(fix_function=_fix_snapper_reset_config, priority=10, excludes=["snapper"], actions=["snapper"])
 
+def _fix_dkms_rebuild(issue: Issue) -> Tuple[bool, str]:
+    """
+    Rebuild all DKMS modules.
+    :param issue: The Issue object
+    :return: A tuple of (success_boolean, status_message).
+    """
+    result = run_interactive_command("sudo dkms-rebuild", require_consent=True)
+    if result == 0:
+        return True, "DKMS modules were rebuilt"
+    elif result == 130:
+        return False, "Fix cancelled by user."
+    else:
+        return False, f"Failed to rebuild DKMS modules. Exit code: {result}"
+# Needs to execute before dracut to prevent depline issues
+fix_dkms_rebuild = Fixer(fix_function=_fix_dkms_rebuild, priority=2, excludes=["dkms"], actions=["dkms"])
+
 # -- Check Implementations --
 
 def check_for_packages(severity: Severity, package_names: list[str], package_names_providable: list[str], text: str) -> Optional[HealthCheckResult]:
@@ -584,6 +617,53 @@ def check_nvidia_kernel_module() -> HealthCheck:
                 )
         # This is not NOT_APPLICABLE because if no NVIDIA modules are installed, they can not possibly be malfunctioning.
         # Therefore: NO_ISSUE
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, ["NVIDIA-MODULE"])
+
+def check_nvidia_kernel_modules() -> HealthCheck:
+    """
+    Check if all the installed kernels have the nvidia kernel module installed.
+    Compared to check_nvidia_kernel_module, this applies only after a reboot, while
+    check_nvidia_kernel_module checks the currently loaded kernel module.
+    """
+    def has_nvidia_dkms() -> bool:
+        """
+        Check if any nvidia kernel module sources exist in /usr/src
+        """
+        dkms_path = Path("/usr/src")
+        nvidia_modules = list(dkms_path.glob("nvidia*"))
+        return any(nvidia_modules)
+
+    def check() -> HealthCheckResult:
+        # This is not NOT_APPLICABLE because if no NVIDIA modules are installed, they can not possibly be malfunctioning.
+        # Therefore: NO_ISSUE
+        if not cache.get("NVIDIA-MODULE").installed:
+            return HealthCheckResult(Severity.NO_ISSUE)
+
+        missing_kernels = []
+        for kernel, data in cache.cached_kernels.items():
+            kernel_path, package_version = data
+            dkms_path = kernel_path / "updates" / "dkms"
+            package_path = kernel_path / "extramodules"
+
+            dkms_modules = dkms_path.glob("nvidia.ko*")
+            if any(dkms_modules):
+                continue
+
+            package_modules = package_path.glob("nvidia.ko*")
+            if any(package_modules):
+                continue
+            missing_kernels.append(f"{kernel}")
+
+        if missing_kernels:
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "Nvidia kernel module is not installed for the following kernels: " + ", ".join(missing_kernels),
+                    fix=fix_dkms_rebuild if has_nvidia_dkms() else None,
+                )
+            )
+
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["NVIDIA-MODULE"])
 
@@ -1066,6 +1146,67 @@ def check_snapper_config() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, ["snapper-support"])
 
+def check_kernels_in_boot() -> HealthCheck:
+    """
+    Check if all the kernels present in /usr/lib/modules are properly installed in /boot.
+    """
+    def check() -> HealthCheckResult:
+        boot_path = Path("/boot")
+
+        any_kernel_installed = False
+        any_kernel_valid = False
+        missing_kernels = []
+        invalid_kernels = []
+
+        for kernel, data in cache.cached_kernels.items():
+            kernel_boot_path = boot_path / ("vmlinuz-" + kernel)
+            kernel_modules_dir, kernel_version = data
+            if kernel_boot_path.exists():
+                any_kernel_installed = True
+                if filecmp.cmp(kernel_boot_path, kernel_modules_dir / "vmlinuz", shallow=True):
+                    any_kernel_valid = True
+                else:
+                    invalid_kernels.append(kernel)
+            else:
+                missing_kernels.append(kernel)
+
+        if not any_kernel_installed:
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "No (intended) kernels are installed in /boot",
+                    fix=fix_dracut_rebuild if os.path.exists("/usr/bin/dracut-rebuild") else None,
+                )
+            )
+
+        if not any_kernel_valid:
+            return HealthCheckResult(
+                Severity.CRITICAL,
+                Issue(
+                    "Kernels in /boot are invalid (do not match expected files)",
+                    fix=fix_dracut_rebuild if os.path.exists("/usr/bin/dracut-rebuild") else None,
+                )
+            )
+
+        if missing_kernels:
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "The following kernels are missing in /boot: " + ", ".join(missing_kernels),
+                    fix=fix_dracut_rebuild if os.path.exists("/usr/bin/dracut-rebuild") else None,
+                )
+            )
+        if invalid_kernels:
+            return HealthCheckResult(
+                Severity.HIGH,
+                Issue(
+                    "The following kernels in /boot are invalid: " + ", ".join(invalid_kernels),
+                    fix=fix_dracut_rebuild if os.path.exists("/usr/bin/dracut-rebuild") else None,
+                )
+            )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, [])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -1073,6 +1214,7 @@ checks: list[HealthCheck] = [
     check_pacman_conf(),
     check_nvidia_drivers(),
     check_nvidia_kernel_module(),
+    check_nvidia_kernel_modules(),
     check_btrfs_root_storage(),
     check_btrfs_timers(),
     check_using_dracut(),
@@ -1090,6 +1232,7 @@ checks: list[HealthCheck] = [
     check_initramfs_success(),
     check_snapper_services(),
     check_snapper_config(),
+    check_kernels_in_boot(),
 ]
 
 # -- Main Execution Logic --
