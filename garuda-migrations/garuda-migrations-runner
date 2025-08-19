@@ -85,10 +85,8 @@ apply_migrations() {
 			garudalib_add_update_notice "A recovery mode option was added to your advanced options in the GRUB bootloader." || true
 	fi
 
-	# Disable IBT for now until the issue is fixed on nvidia upstream
-	# Correction: Remove the manual fix here from migrations and instead add it via other configuration files
-	# https://forum.garudalinux.org/t/nvidia-gpu-users-watch-out-for-kernel-5-18-update/19923
-	if [[ $(vercmp 2.2.0-1 $1) -gt 0 ]] && grub_has_ibt_fix; then
+	# Remove legacy intel IBT kernel parameter which was used to fix an NVIDIA kernel module issue
+	if [[ $(vercmp 2.2.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && grub_has_ibt_fix; then
 		sed -i '/# Modified by garuda-migrations: ibt=off/ s/# Modified by garuda-migrations: ibt=off//; s/\s*ibt=off//g' /etc/default/grub
 	fi
 
