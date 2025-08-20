@@ -41,7 +41,7 @@ apply_migrations() {
 	fi
 
 	# Update /etc/mkinitcpio.conf to include grub-btrfs-overlayfs
-	if [[ $(vercmp 1.3.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && ! grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf; then
+	if [[ $(vercmp 1.3.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f /etc/mkinitcpio.conf ] && ! grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf; then
 		sed -re 's/(^HOOKS=\([^)]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
 	fi
 
@@ -91,7 +91,7 @@ apply_migrations() {
 	fi
 
 	# Handle plymouth migration
-	if [[ $(vercmp 2.3.1-1 $1) -gt 0 ]]; then
+	if [[ $(vercmp 2.3.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		if [ -f /etc/mkinitcpio.conf ] && grep -qe '^HOOKS=.*\(plymouth-encrypt\|sd-plymouth\)' /etc/mkinitcpio.conf; then
 			sed -E '/^HOOKS=\(.*\)$/ s/(plymouth-encrypt)/encrypt/g; /^HOOKS=\(.*\)$/ s/(sd-plymouth)/plymouth/g' -i /etc/mkinitcpio.conf
 			garudalib_add_update_notice "The mkinitcpio configuration for plymouth was updated to a new format automatically." || true
@@ -127,12 +127,6 @@ apply_migrations() {
       1' "/etc/default/grub" && garudalib_add_update_notice 'The "splash" (Plymouth) kernel parameter was removed from your GRUB configuration automatically to ensure system stability. Plymouth may be enabled manually again, but it is strongly recommended to keep plymouth disabled.' || true
 	fi
 
-	# Migrate FireDragon profiles
-	if [[ $(vercmp 2.5.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
-		/usr/share/libalpm/scripts/garuda-migrations-firedragon &&
-			garudalib_add_update_notice "Due to a rebase and major changes related to the FireDragon browser, a new browser profile has been created. Certain settings, cookies and localstorage could not be migrated automatically. More information on this topic can be found here: https://forum.garudalinux.org/t/34585." || true
-	fi
-
 	# Add info about plocate migration
 	if [[ $(vercmp 2.5.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		garudalib_add_update_notice "Arch dropped mlocate in favor of plocate. Service migrations have already been applied by garuda-update, but you definitely also want to migrate your .pacsave files by running this command: 'sudo mv /etc/updatedb.conf.pacsave /etc/updatedb.conf'. More information can be found here: https://forum.garudalinux.org/t/39190/2." || true
@@ -145,12 +139,39 @@ apply_migrations() {
 			# No need to be chatty for no reason for a relatively minor fix
 		fi
 	fi
+}
 
-	# TODO: FIXME: Remove me after 2025-08-23
-	if [[ $(vercmp 2.6.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
-		# Just a minor notice
-		garudalib_add_update_notice "If garuda-health reported a SMART failed critical error BEFORE *this* update, it can be safely ignored if it is not present anymore after this update." || true
+# $1 Previous version
+# $2 Current version
+apply_user_migrations() {
+	if [[ $(vercmp 3.0.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/fish/config.fish" ]; then
+		# Replace --load-config neofetch with --config neofetch.jsonc
+		# and --load-config dr460nized with --config dr460nized.jsonc
+		sed -i -e 's/fastfetch --load-config neofetch/fastfetch --config neofetch.jsonc/g' \
+			-e 's/fastfetch --load-config dr460nized/fastfetch --config dr460nized.jsonc/g' \
+			".config/fish/config.fish" 2>/dev/null || true
 	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"
+
+# Apply user migrations
+# shellcheck disable=2034
+while IFS=: read -r name password uid gid gecos home shell; do
+	# Skip system users
+	if [ "$uid" -lt 1000 ] || [ "$uid" -eq 65534 ]; then
+		continue
+	fi
+	# Skip users without home directory
+	if [ -z "$home" ] || [ ! -d "$home" ] || [ "$home" == "/" ]; then
+		continue
+	fi
+	# Skip users with no shell
+	if [ -z "$shell" ] || [ ! -x "$shell" ] || [ "$shell" == "/usr/bin/nologin" ] || [ "$shell" == "/bin/false" ]; then
+		continue
+	fi
+
+	pushd "$home" >/dev/null || continue
+	USER_UID="$uid" USER_NAME="$name" apply_user_migrations "$applied_version" "$pending_version"
+	popd >/dev/null || continue
+done < <(getent passwd)
