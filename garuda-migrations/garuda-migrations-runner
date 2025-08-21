@@ -139,6 +139,14 @@ apply_migrations() {
 			# No need to be chatty for no reason for a relatively minor fix
 		fi
 	fi
+
+	# Disable psd.service on the user accounts
+	if [[ $(vercmp 3.0.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		if systemctl is-enabled --global --quiet psd.service; then
+			systemctl disable --global psd.service
+			garudalib_add_update_notice "Profile Sync Daemon (psd) was disabled automatically. The Garuda Linux developers do not recommend using psd. To continue using psd, mark the pacman package as explicitly installed and enable the service manually: 'sudo pacman -D --asexplicit profile-sync-daemon && systemctl --global enable psd.service'."
+		fi
+	fi
 }
 
 # $1 Previous version
