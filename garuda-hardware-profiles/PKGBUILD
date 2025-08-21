@@ -9,7 +9,7 @@ pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-nvidia-prime-closed
          garuda-hardware-profile-vm)
 pkgver=1.1.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
@@ -96,10 +96,10 @@ package_garuda-hardware-profile-vm() {
   depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
   # Replace MHWD legacy
   replaces=("garuda-virtualmachine-guest-config")
+  install=garuda-hardware-profile-vm.install
 
   install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
-  install -d "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/
-  ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/multi-user.target.wants/garuda-virtualmachine-guest-config.target
+  install -Dm644 garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/garuda-virtualbox-live.service
   install -d "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/
   ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualmachine-guest-config.target
   ln -s /usr/lib/systemd/system/garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualbox-live.service

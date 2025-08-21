@@ -1,7 +1,7 @@
 pkgbase = garuda-hardware-profiles
 	pkgdesc = Garuda Linux hardware profiles
 	pkgver = 1.1.1
-	pkgrel = 2
+	pkgrel = 3
 	arch = any
 	license = GPL-3.0-or-later
 	source = nvidia-modules-load.conf
@@ -99,6 +99,7 @@ pkgname = garuda-hardware-profile-nvidia-prime-closed
 
 pkgname = garuda-hardware-profile-vm
 	pkgdesc = Garuda Linux hardware profile for virtual machines
+	install = garuda-hardware-profile-vm.install
 	depends = garuda-hardware-profile-standard
 	depends = xf86-video-fbdev
 	depends = virtualbox-guest-utils

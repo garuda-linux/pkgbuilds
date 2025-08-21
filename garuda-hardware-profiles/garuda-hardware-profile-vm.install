@@ -1,0 +1,13 @@
+post_install() {
+	systemctl enable garuda-virtualmachine-guest-config.target
+}
+
+post_upgrade() {
+	if (( $(vercmp $2 1.1.1-3) < 0)); then
+		post_install
+	fi
+}
+
+pre_remove() {
+	systemctl disable garuda-virtualmachine-guest-config.target
+}
