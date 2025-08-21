@@ -3,7 +3,7 @@
 
 pkgname=libretro-meta
 pkgver=1
-pkgrel=9
+pkgrel=10
 arch=('any')
 url="libretro.org"
 license=('GPL')
@@ -39,7 +39,6 @@ package() {
     "libretro-picodrive"
     "libretro-play"
     "libretro-ppsspp"
-    "libretro-retrodream"
     "libretro-sameboy"
     "libretro-scummvm"
     "libretro-shaders-slang"
