@@ -1,45 +1,14 @@
-# Font-icon directories
-FONT_DIRS="/usr/share/fonts/TTF /usr/share/fonts/OTF /usr/share/fonts/misc"
-ICON_DIR="/usr/share/icons/hicolor"
-GLIB_SCHEMA_DIR="usr/share/glib-2.0/schemas"
-
-# Font-related commands
-update_fonts() {
-	mkfontscale "$FONT_DIRS" >/dev/null 2>&1
-	mkfontdir "$FONT_DIRS" >/dev/null 2>&1
-	fc-cache -s >/dev/null
-}
-
-# GTK related commands
-update_gtk() {
-	glib-compile-schemas $GLIB_SCHEMA_DIR
-	gtk-update-icon-cache -ftq $ICON_DIR
-	/bin/sh -c 'dconf update'
-}
-
-# Post installation
 post_install() {
-	systemctl enable btrfs-balance.timer
-	systemctl enable btrfs-defrag.timer
-	systemctl enable btrfs-scrub.timer
-	systemctl enable btrfs-trim.timer
-	systemctl enable garuda-pacman-lock
-	systemctl --global enable psd
-
-	post_upgrade
+	systemctl enable btrfs-balance.timer btrfs-defrag.timer btrfs-scrub.timer btrfs-trim.timer garuda-pacman-lock
 }
 
-# Post upgrade
 post_upgrade() {
-	echo "Attempting to enable services..."
-	systemctl enable btrfs-balance.timer
-	systemctl enable btrfs-defrag.timer
-	systemctl enable btrfs-scrub.timer
-	systemctl enable btrfs-trim.timer
-	systemctl enable garuda-pacman-lock
-	systemctl --global enable psd
+	if (( $(vercmp $2 2.8.1-2) < 0)); then
+		post_install
+	fi
+}
 
-	echo "Performing misc postinstall operations..."
-	update_fonts
-	update_gtk
+pre_remove() {
+	systemctl disable garuda-pacman-lock
+	echo -e "\033[1;31mTimers btrfs-balance.timer, btrfs-defrag.timer, btrfs-scrub.timer and btrfs-trim.timer will not be disabled automatically.\0033[0m"
 }

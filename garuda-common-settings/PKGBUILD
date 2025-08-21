@@ -4,26 +4,13 @@
 pkgname=garuda-common-settings
 pkgver="2.8.1"
 _commit='ac91f91ff2dcb78d4fe39ea3ed051224ac1ffd04'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/${_commit}/garuda-common-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux common settings'
-depends=('btrfsmaintenance'
-  'garuda-bash-config'
-  'garuda-hardware-tool'
-  'garuda-health'
-  'garuda-hooks'
-  'garuda-icons'
-  'garuda-migrations'
-  'garuda-update'
-  'garuda-wallpapers'
-  'profile-sync-daemon'
-  'zram-generator'
-  'systemd-oomd-defaults'
-  'noto-color-emoji-fontconfig')
 optdepends=('garuda-browser-settings: Garuda Linux Browser settings'
   'performance-tweaks: Tuning for best performance'
   'powersave-tweaks: Tuning for lower power usage'
@@ -34,6 +21,19 @@ backup=(etc/sudoers.d/{editor,insults,pwfeedback})
 install=$pkgname.install
 
 package() {
+  depends=('btrfsmaintenance'
+    'garuda-bash-config'
+    'garuda-hardware-tool'
+    'garuda-health'
+    'garuda-hooks'
+    'garuda-icons'
+    'garuda-migrations'
+    'garuda-update'
+    'garuda-wallpapers'
+    'zram-generator'
+    'systemd-oomd-defaults'
+    'noto-color-emoji-fontconfig')
+
   install -d "$pkgdir"/etc
   cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
   install -d "$pkgdir"/usr
@@ -41,6 +41,6 @@ package() {
 
   # Fix permissions
   chmod -R 750 "$pkgdir"/etc/sudoers.d/
-  chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
+  chmod -R 755 "$pkgdir"/usr/share/polkit-1/rules.d/
   chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d
 }
