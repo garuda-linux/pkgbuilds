@@ -682,7 +682,7 @@ def check_btrfs_root_storage() -> HealthCheck:
         if free_space_result.exit_code != 0:
             return HealthCheckResult(Severity.ERROR)
         # Find Overall -> Device unallocated:
-        match = re.search(r"\s+Device unallocated:\s+(\d+)\.\d+MB", free_space_result.stdout)
+        match = re.search(r"\s+Free \(estimated\):\s+(\d+)\.\d+MB", free_space_result.stdout)
         if match:
             free_space_mb = int(match.group(1))
             if free_space_mb < 3000:  # Less than 5GB free space
