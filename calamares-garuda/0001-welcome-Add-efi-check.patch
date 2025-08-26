@@ -1,0 +1,90 @@
+From b68d14e2f580435cb865503dd77a3d7a38ef1686 Mon Sep 17 00:00:00 2001
+From: TNE <tne@garudalinux.org>
+Date: Tue, 26 Aug 2025 13:30:07 +0200
+Subject: [PATCH] welcome: Add efi check
+
+Checks if /sys/firmware/efi exists
+---
+ .../welcome/checker/GeneralRequirements.cpp   | 28 ++++++++++++++++++-
+ .../welcome/checker/GeneralRequirements.h     |  1 +
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/src/modules/welcome/checker/GeneralRequirements.cpp b/src/modules/welcome/checker/GeneralRequirements.cpp
+index 693f81248..968ee9f0f 100644
+--- a/src/modules/welcome/checker/GeneralRequirements.cpp
++++ b/src/modules/welcome/checker/GeneralRequirements.cpp
+@@ -104,6 +104,7 @@ GeneralRequirements::checkRequirements()
+     MaybeChecked hasPower;
+     MaybeChecked hasInternet;
+     MaybeChecked isRoot;
++    MaybeChecked isEFI;
+     bool enoughScreen = availableSize.isValid() && ( availableSize.width() >= Calamares::windowMinimumWidth )
+         && ( availableSize.height() >= Calamares::windowMinimumHeight );
+ 
+@@ -134,6 +135,11 @@ GeneralRequirements::checkRequirements()
+         isRoot = checkIsRoot();
+     }
+ 
++    if ( m_entriesToCheck.contains( "efi" ) )
++    {
++        isEFI = checkIsEFI();
++    }
++
+     using TNum = Logger::DebugRow< const char*, qint64 >;
+     using TR = Logger::DebugRow< const char*, MaybeChecked >;
+     // clang-format off
+@@ -144,7 +150,8 @@ GeneralRequirements::checkRequirements()
+              << TR( "enoughRam", enoughRam )
+              << TR( "hasPower", hasPower )
+              << TR( "hasInternet", hasInternet )
+-             << TR( "isRoot", isRoot );
++             << TR( "isRoot", isRoot )
++             << TR( "isEFI", isEFI );
+     // clang-format on
+ 
+     Calamares::RequirementsList checkEntries;
+@@ -220,6 +227,17 @@ GeneralRequirements::checkRequirements()
+                                    enoughScreen,
+                                    required } );
+         }
++        else if ( entry == "efi" )
++        {
++            checkEntries.append( { entry,
++                                   [] { return tr( "is booted in UEFI mode" ); },
++                                   []
++                                   {
++                                       return tr( "The system is not booted in UEFI mode, but in BIOS/CSM/Legacy (unsupported) mode." );
++                                   },
++                                   isEFI,
++                                   required } );
++        }
+ #ifdef CALAMARES_VERSION_RC
+         if ( entry == "false" )
+         {
+@@ -515,3 +533,11 @@ GeneralRequirements::checkIsRoot()
+ {
+     return !geteuid();
+ }
++
++bool
++GeneralRequirements::checkIsEFI()
++{
++    const QFileInfo efiPath( "/sys/firmware/efi" );
++
++    return efiPath.exists() && efiPath.isDir();
++}
+diff --git a/src/modules/welcome/checker/GeneralRequirements.h b/src/modules/welcome/checker/GeneralRequirements.h
+index b6646da11..20cc7e67e 100644
+--- a/src/modules/welcome/checker/GeneralRequirements.h
++++ b/src/modules/welcome/checker/GeneralRequirements.h
+@@ -36,6 +36,7 @@ private:
+     bool checkHasPower();
+     bool checkHasInternet();
+     bool checkIsRoot();
++    bool checkIsEFI();
+ 
+     qreal m_requiredStorageGiB;
+     qreal m_requiredRamGiB;
+-- 
+2.50.1
+
