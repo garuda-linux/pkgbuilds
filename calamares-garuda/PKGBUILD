@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.4.0.r6.g78d4208a0
 _commit=78d4208a03b0abdfb68e94c9c08a28f37a473ee6
-pkgrel=2
+pkgrel=3
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -24,6 +24,7 @@ source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   garuda-fswhitelist.patch
   0001-Apply-garuda-specific-patches.patch
   0001-welcome-Add-efi-check.patch
+  0001-bootloader-Correct-a-logic-error-preventing-installa.patch
   partition.conf
   mount.conf
   ghtcfg.conf
@@ -32,6 +33,7 @@ sha256sums=('03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67'
             '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
             '37f30d54d40beae82910b53d6c703cabfab4e01205bc506022d6f4763717ded1'
             'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
+            'b019ab30907724f4f56ec56d41bd22794a88081fc0f1608d8cd65c4929a9c1e6'
             '13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244'
             '0a5acb473f36b6627ccf764b29c005f53dee3c1c7ccb2fc9935075027e220f43'
             'e395942636b7b1e9110248fb2912efea14ccf6b967b2dab9db73febc303d2e3e'

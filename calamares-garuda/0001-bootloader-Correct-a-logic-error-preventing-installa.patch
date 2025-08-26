@@ -1,0 +1,32 @@
+From 152932f4016c9b7533fb89b22049074ebeec5735 Mon Sep 17 00:00:00 2001
+From: TNE <tne@garudalinux.org>
+Date: Tue, 26 Aug 2025 17:18:29 +0200
+Subject: [PATCH] bootloader: Correct a logic error preventing installation on
+ a BIOS-only system
+
+efi_directory is always set to a value (defaults to /boot/efi) even on a BIOS/CSM/Legacy-only system.
+The function is guarded elsewhere to prevent installation of a bios bootloader on UEFI.
+---
+ src/modules/bootloader/main.py | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/src/modules/bootloader/main.py b/src/modules/bootloader/main.py
+index 4ac067b7b..e5292db9a 100644
+--- a/src/modules/bootloader/main.py
++++ b/src/modules/bootloader/main.py
+@@ -637,11 +637,7 @@ def run_grub_install(fw_type, partitions, efi_directory, install_hybrid_grub):
+                                    "--bootloader-id=" + efi_bootloader_id,
+                                    "--force"])
+     else:
+-        if efi_directory is not None and not install_hybrid_grub:
+-            libcalamares.utils.warning(_("Cannot install BIOS bootloader on UEFI installation when install_hybrid_grub is 'False'!"))
+-            return
+-
+-        if libcalamares.globalstorage.value("bootLoader") is None:
++        if libcalamares.globalstorage.value("bootLoader") is None and install_hybrid_grub:
+             efi_install_path = libcalamares.globalstorage.value("efiSystemPartition")
+             if efi_install_path is None or efi_install_path == "":
+                 efi_install_path = "/boot/efi"
+-- 
+2.50.1
+
