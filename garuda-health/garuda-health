@@ -406,7 +406,11 @@ def _fix_dracut_rebuild(issue: Issue) -> Tuple[bool, str]:
     :param issue: The Issue object
     :return: A tuple of (success_boolean, status_message).
     """
-    result = run_interactive_command("sudo dracut-rebuild && sudo update-grub", require_consent=True)
+    if os.path.exists("/usr/bin/update-grub") and os.path.exists("/boot/grub/grub.cfg"):
+        result = run_interactive_command("sudo dracut-rebuild && sudo update-grub", require_consent=True)
+    else:
+        result = run_interactive_command("sudo dracut-rebuild", require_consent=True)
+        print(f"{COLORS['INFO']}Note: It may be necessary to manually update the system's bootloader configuration to prevent boot issues.{COLORS['RESET']}")
     if result == 0:
         return True, "Initramfs rebuilt successfully using dracut."
     elif result == 130:
