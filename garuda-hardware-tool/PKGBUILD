@@ -1,10 +1,10 @@
 pkgname="garuda-hardware-tool"
-pkgver=0.2.1
-pkgrel=6
+pkgver=0.2.2
+pkgrel=1
 pkgdesc="A tool to manage hardware drivers and configurations in Garuda Linux."
 arch=('x86_64')
 source=(garuda-hardware-tool)
-sha256sums=('235d7a2351f057ca50a23ae951c2984aa2d75370f292665d24a8c47f78db428e')
+sha256sums=('011f9bdb87987756df46fe9c52d64955e958ba6fc7eb16e772c7eb59162b1484')
 license=('GPL-3.0-or-later')
 depends=('pciutils' 'coreutils' 'grep')
 # Replaces all of MHWD

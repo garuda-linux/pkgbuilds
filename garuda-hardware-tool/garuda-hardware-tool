@@ -129,7 +129,7 @@ if [[ -n "$gpu_devices" ]]; then
             # Detect nvidia
             if [[ "$vendor_id" == "10de" ]]; then
                 # Detect if family is between (and including) volta and maxwell
-                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}$ ]]; then
+                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}[A-Z]?$ ]]; then
                     family="${BASH_REMATCH[1]}"
                     case "$family" in
                         "GV" | "GP" | "GM")
