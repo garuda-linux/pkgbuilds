@@ -657,6 +657,11 @@ def check_nvidia_kernel_modules() -> HealthCheck:
             package_modules = package_path.glob("nvidia.ko*")
             if any(package_modules):
                 continue
+
+            main_modules = kernel_path.glob("nvidia.ko*")
+            if any(main_modules):
+                continue
+
             missing_kernels.append(f"{kernel}")
 
         if missing_kernels:
