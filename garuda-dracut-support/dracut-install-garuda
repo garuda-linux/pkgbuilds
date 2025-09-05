@@ -8,6 +8,43 @@ status=0
 all=false
 initramfs_error_file="/var/lib/garuda/initramfs_error"
 
+# This function implements a workaround for a bug in grub/btrfs where the vmlinuz file can not be read.
+# The workaround is to copy the vmlinuz file with a method that prevents reflinks completely.
+# $1 is the source kernel directory
+# $2 is the pkgbase
+install_kernel() {
+	set -euo pipefail
+
+	local src_dir="$1"
+	local pkgbase="$2"
+	local vmlinuz_file="${src_dir}/vmlinuz"
+	local vmlinuz_dest="/boot/vmlinuz-${pkgbase}"
+
+	# Force delete existing vmlinuz file
+	rm -f "${vmlinuz_dest}"
+
+	# Sanity check
+	if [[ ! -f "${vmlinuz_file}" ]] || [[ "${pkgbase}" == "" ]]; then
+		echo -e "\033[1;31m!!Unknown error while installing kernel!!\033[0m"
+		return 1
+	fi
+
+	# Copy vmlinuz file via dd
+	if dd if="${vmlinuz_file}" of="${vmlinuz_dest}" bs=4M status=none; then
+		chmod 0644 "${vmlinuz_dest}"
+		# Compare files to double check the integrity
+		if cmp -s "${vmlinuz_file}" "${vmlinuz_dest}"; then
+			return 0
+		fi
+	fi
+	echo -e "\033[1;31mSafe kernel copy failed: ${vmlinuz_file} -> ${vmlinuz_dest}\033[0m"
+	if install -Dm0644 "${vmlinuz_file}" "${vmlinuz_dest}"; then
+		echo -e "\033[1;33mWarning: Kernel copy with fallback method succeeded: ${vmlinuz_file} -> ${vmlinuz_dest}\033[0m"
+		return 0
+	fi
+	return 1
+}
+
 while read -r line; do
 	# Check if any changed file is not a kernel image. This means we need to rebuild all initramfs.
 	# Triggers when it's a change to dracut files
@@ -44,7 +81,7 @@ for line in "${lines[@]}"; do
 
 	if
 		echo ":: Building initramfs for ${pkgbase} (${kver})" &&
-		install -Dm0644 "/${line%'/pkgbase'}/vmlinuz" "/boot/vmlinuz-${pkgbase}" &&
+		install_kernel "/${line%'/pkgbase'}" "$pkgbase" &&
 		dracut "${args[@]}" -L 3 --hostonly "/boot/initramfs-${pkgbase}.img" --kver "$kver" &&
 
 		echo ":: Building fallback initramfs for ${pkgbase} (${kver})" &&
