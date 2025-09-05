@@ -102,6 +102,8 @@ prepare() {
   rm -rf "${srcdir}/mozbuild"
   mkdir "${srcdir}/mozbuild"
 
+  export PATH="${srcdir}:$PATH"
+
   cd firedragon-source-v"${_pkgver}" || exit
 
   _deno install --allow-scripts --frozen
