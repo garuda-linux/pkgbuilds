@@ -132,6 +132,8 @@ if [[ -n "$gpu_devices" ]]; then
                 if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}[A-Z]?$ ]]; then
                     family="${BASH_REMATCH[1]}"
                     case "$family" in
+                        "GT" | "GF" | "GK")
+                            ;; # Older than Maxwell, no support
                         "GV" | "GP" | "GM")
                             NVIDIA_CLOSED=true
                             ;;
