@@ -147,6 +147,20 @@ apply_migrations() {
 			garudalib_add_update_notice "Profile Sync Daemon (psd) was disabled automatically. The Garuda Linux developers do not recommend using psd. To continue using psd, mark the pacman package as explicitly installed and enable the service manually: 'sudo pacman -D --asexplicit profile-sync-daemon && systemctl --global enable psd.service'."
 		fi
 	fi
+
+	# Disable udevadm trigger on update via /etc/systemd/do-not-udevadm-trigger-on-update
+	if [[ $(vercmp 3.1.0-1 $1) -gt 0 ]]; then
+		local flag_file="/etc/systemd/do-not-udevadm-trigger-on-update"
+		if [ ! -e "${flag_file}" ]; then
+			if [ "$IS_NEW_INSTALL" == "false" ]; then
+				# Leave a flag behind so this can be reverted if needed
+				echo "# Modified by garuda-migrations" >"${flag_file}"
+			else
+				touch "${flag_file}"
+			fi
+			garudalib_add_update_notice "The file "${flag_file}" was created automatically to prevent crashes on certain hardware during system updates. The file can safely be deleted if running a udevadm trigger after updates to systemd/udev files is desired."
+		fi
+	fi
 }
 
 # $1 Previous version
