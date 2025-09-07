@@ -4,6 +4,7 @@ Operation = Upgrade
 Type = Package
 Target = grub
 Target = os-prober-btrfs
+Target = grub-btrfs
 
 [Action]
 Description = Enabling os-prober...

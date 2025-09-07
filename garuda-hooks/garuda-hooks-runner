@@ -126,6 +126,16 @@ Grub-config() {
       }
       1' $filename
 	fi
+	local filename="/etc/default/grub-btrfs/config"
+	if [ -f "${filename}" ]; then
+		grep -q 'garuda_grub_btrfs_d' $filename
+		if [ $? == 1 ]; then
+			gawk -i inplace 'ENDFILE {
+		print "\n# This config file imports drop-in files from /etc/default/grub-btrfs/config.d/.\nfor garuda_grub_btrfs_d in ${sysconfdir}/default/grub-btrfs/config.d/*.cfg ; do if [ -e \"${garuda_grub_btrfs_d}\" ]; then source \"${garuda_grub_btrfs_d}\"; fi; done"
+	  }
+	  1' $filename
+		fi
+	fi
 }
 
 Mkinitcpio-Install() {
