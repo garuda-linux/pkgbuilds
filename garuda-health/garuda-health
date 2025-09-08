@@ -1173,7 +1173,7 @@ def check_kernels_in_boot() -> HealthCheck:
             kernel_modules_dir, kernel_version = data
             if kernel_boot_path.exists() and initramfs_boot_path.exists():
                 any_kernel_installed = True
-                if filecmp.cmp(kernel_boot_path, kernel_modules_dir / "vmlinuz", shallow=True):
+                if filecmp.cmp(kernel_boot_path, kernel_modules_dir / "vmlinuz", shallow=False):
                     any_kernel_valid = True
                 else:
                     invalid_kernels.append(kernel)
