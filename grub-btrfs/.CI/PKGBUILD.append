@@ -1,0 +1,18 @@
+source+=("https://github.com/Antynea/grub-btrfs/commit/7aa227b378ee70cf2da8485c216d692ed093dd42.patch"
+         "https://patch-diff.githubusercontent.com/raw/Antynea/grub-btrfs/pull/389.patch")
+b2sums+=('2c5834f16ddccf32ee84f09fc292be02b4115222d5454b87ac7e895eea0368cada34f89d6a1e2a0ce2e430aeaebf45fb397a85bdf19871e2f6ccf810a93737eb'
+         '5cbea449fb47417bd9a47bcf9ccf90e7bc1decc4203315ca5928157c52941a901e8b6ff26162cfc9d1b6cd29d4725e18640bbf439a6f854f908cc8818127f06a')
+
+prepare() {
+    cd "${pkgname}-${pkgver}"
+
+    local src
+    for src in "${source[@]}"; do
+        src="${src%%::*}"
+        src="${src##*/}"
+        src="${src%.zst}"
+        [[ $src = *.patch ]] || continue
+        echo "Applying patch $src..."
+        patch -Np1 < "../$src"
+    done
+}
