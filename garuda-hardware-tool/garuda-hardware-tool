@@ -115,7 +115,7 @@ if [[ -n "$gpu_devices" ]]; then
     # ${BASH_REMATCH[2]} == manufacturer name/family
     # ${BASH_REMATCH[3]} == model name
     # ${BASH_REMATCH[4]} == vendor id
-    regex='^([0-9:\.]+)\s+VGA compatible controller \[03..\]:\s+(.*?)\s+\[([^]]+)\]\s+\[([0-9a-f]{4}):([0-9a-f]{4})\]'
+    regex='^([0-9:\.]+)\s+[0-9a-zA-Z ]+ controller \[03..\]:\s+(.*?)\s+\[([^]]+)\]\s+\[([0-9a-f]{4}):([0-9a-f]{4})\]'
 
     while read -r line; do
         if [[ $line =~ $regex ]]; then
