@@ -1,0 +1,16 @@
+source+=("0001-fix-Fix-some-log-spam.patch")
+sha256sums+=('50e54553b908e297f835206abfbad13cf93a09c5ef4920c74c5e4c72f0238112')
+
+prepare() {
+    cd "${srcdir}/${_gitname}-$pkgver"
+
+    local src
+    for src in "${source[@]}"; do
+        src="${src%%::*}"
+        src="${src##*/}"
+        src="${src%.zst}"
+        [[ $src = *.patch ]] || continue
+        echo "Applying patch $src..."
+        patch -Np1 < "../$src"
+    done
+}
