@@ -9,7 +9,7 @@ pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-boot-options"
 license=('GPL3')
-depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
+depends=('qt6-base' 'qt6-tools' 'cmake' 'xdg-utils' 'grub' 'polkit')
 optdepends=('plymouth')
 makedepends=('git')
 groups=('garuda')
@@ -18,12 +18,13 @@ sha256sums=('SKIP')
 conflicts=('grub-customizer')
 
 build() {
-  cd "$srcdir/$pkgname-$_commit" || exit
-  qmake-qt5 "$pkgname".pro
-  make
+  cmake -B build -S "$pkgname-$_commit" \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -Wno-dev
+  make -C build
 }
 
 package() {
-  cd "$srcdir/$pkgname-$_commit" || exit
-  make INSTALL_ROOT="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
