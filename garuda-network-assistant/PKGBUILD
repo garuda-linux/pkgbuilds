@@ -9,19 +9,20 @@ pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-network-assistant"
 license=('GPL3')
-depends=('qt5-base' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot' 'traceroute' 'wireless_tools')
+depends=('qt6-base' 'qt6-tools' 'cmake' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot' 'traceroute' 'wireless_tools')
 makedepends=('git')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-network-assistant/-/archive/${_commit}/garuda-network-assistant-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-  cd "$srcdir/$pkgname-$_commit" || exit
-  qmake-qt5 $pkgname.pro
-  make
+  cmake -B build -S "$pkgname-$_commit" \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -Wno-dev
+  make -C build
 }
 
 package() {
-  cd "$srcdir/$pkgname-$_commit" || exit
-  make INSTALL_ROOT="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
