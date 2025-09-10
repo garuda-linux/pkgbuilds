@@ -9,19 +9,20 @@ pkgdesc="A Grub repair utility for Garuda Linux"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-boot-repair"
 license=('GPL3')
-depends=('qt5-base' 'xdg-utils' 'grub' 'polkit')
+depends=('qt6-base' 'qt6-tools' 'cmake' 'xdg-utils' 'grub' 'polkit')
 makedepends=('git')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/${_commit}/garuda-boot-repair-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
 build() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	qmake-qt5 "$pkgname".pro
-	make
+  cmake -B build -S "$pkgname-$_commit" \
+    -DCMAKE_BUILD_TYPE='Release' \
+    -DCMAKE_INSTALL_PREFIX='/usr' \
+    -Wno-dev
+  make -C build
 }
 
 package() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	make INSTALL_ROOT="$pkgdir" install
+  make -C build DESTDIR="$pkgdir" install
 }
