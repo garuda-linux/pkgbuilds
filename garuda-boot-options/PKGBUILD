@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-boot-options
-pkgver="1.0.5"
-_commit='e5cd691b48ae784bcd8062c9619b50fe206be541'
+pkgver="1.1.0"
+_commit='c39951ec13d7eaf946d756d92738c375712e26cd'
 pkgrel=1
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
