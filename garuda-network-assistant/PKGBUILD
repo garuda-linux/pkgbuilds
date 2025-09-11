@@ -4,13 +4,13 @@
 pkgname=garuda-network-assistant
 pkgver="1.2.1"
 _commit='c231ab10923dba10655fe771795768547b131290'
-pkgrel=1
+pkgrel=2
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-network-assistant"
 license=('GPL3')
-depends=('qt6-base' 'qt6-tools' 'cmake' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot' 'traceroute' 'wireless_tools')
-makedepends=('git')
+depends=('qt6-base' 'xdg-utils' 'polkit' 'wget' 'net-tools' 'linux-wifi-hotspot' 'traceroute' 'wireless_tools')
+makedepends=('git' 'qt6-tools' 'cmake')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-network-assistant/-/archive/${_commit}/garuda-network-assistant-${_commit}.tar.gz")
 sha256sums=('SKIP')

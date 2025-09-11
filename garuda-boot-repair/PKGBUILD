@@ -4,13 +4,13 @@
 pkgname=garuda-boot-repair
 pkgver="1.1.1"
 _commit='87f2de729189382d5529a4e42854bdcc1fc88545'
-pkgrel=1
+pkgrel=2
 pkgdesc="A Grub repair utility for Garuda Linux"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/garuda-boot-repair"
 license=('GPL3')
-depends=('qt6-base' 'qt6-tools' 'cmake' 'xdg-utils' 'grub' 'polkit')
-makedepends=('git')
+depends=('qt6-base' 'xdg-utils' 'grub' 'polkit')
+makedepends=('git' 'qt6-tools' 'cmake')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/${_commit}/garuda-boot-repair-${_commit}.tar.gz")
 sha256sums=('SKIP')
