@@ -191,6 +191,7 @@ class SystemdStatus(NamedTuple):
 # -- Convenience Functions --
 
 cache = PackageCache()
+is_virtual_machine = False
 
 def run_shell_command(command: str, timeout: int = 10) -> ShellResult:
     """
@@ -990,7 +991,7 @@ def check_smart_status() -> HealthCheck:
     :return: A HealthCheckResult if any disk has a failing SMART status .
     """
     def check() -> HealthCheckResult:
-        if (not os.path.exists("/usr/bin/smartctl") or os.getuid() != 0):
+        if (not os.path.exists("/usr/bin/smartctl") or os.getuid() != 0 or is_virtual_machine):
             return HealthCheckResult(Severity.NOT_APPLICABLE)
         result = run_shell_command("smartctl --scan")
         if result.exit_code != 0:
@@ -1390,6 +1391,10 @@ def main():
     #if args.fix and os.geteuid() != 0:
     #    print(f"{COLORS['CRITICAL']}Error: --fix requires root privileges.{COLORS['RESET']}")
     #    sys.exit(1)
+
+    detect_virt = run_shell_command("systemd-detect-virt --quiet")
+    global is_virtual_machine
+    is_virtual_machine = (detect_virt.exit_code == 0)
 
     initial_results, initial_time = perform_check_run(args.debug)
     printable_issues, run_checks, error_level_issues = parse_results(initial_results)
