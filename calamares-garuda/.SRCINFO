@@ -1,7 +1,7 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
 	pkgver = 3.4.0.r6.g78d4208a0
-	pkgrel = 3
+	pkgrel = 4
 	url = https://https://calamares.codeberg.page
 	arch = i686
 	arch = x86_64
@@ -43,7 +43,7 @@ pkgbase = calamares-garuda
 	source = chrootcfg.conf
 	sha256sums = 03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67
 	sha256sums = 5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32
-	sha256sums = 37f30d54d40beae82910b53d6c703cabfab4e01205bc506022d6f4763717ded1
+	sha256sums = 8ce5168021cb0ec4de4ee8d0259622f725eb825cb2aecf6bb6f6ca34bfe9f739
 	sha256sums = f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a
 	sha256sums = b019ab30907724f4f56ec56d41bd22794a88081fc0f1608d8cd65c4929a9c1e6
 	sha256sums = 13fefb868e4ad69a1a3cf75fb8e63d075e029b2b9b622b01689571c585bfb244

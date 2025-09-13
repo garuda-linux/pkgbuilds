@@ -1,4 +1,4 @@
-From a92aaef1edef2e96b40a086050178ad94478d122 Mon Sep 17 00:00:00 2001
+From 90abbdc90f3d7ad814436d254abea4ed79a82c68 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sun, 2 Feb 2025 07:31:02 +0100
 Subject: [PATCH] dw
@@ -15,10 +15,10 @@ Subject: [PATCH] dw
  src/modules/mount/mount.conf                  |  64 +---
  .../partition/gui/PartitionLabelsView.cpp     |   2 +-
  src/modules/partition/partition.conf          |   8 +-
- src/modules/postcfg/main.py                   | 141 +++++++++
+ src/modules/postcfg/main.py                   | 126 ++++++++
  src/modules/postcfg/module.desc               |   6 +
  src/modules/postcfg/postcfg.conf              |   4 +
- 14 files changed, 625 insertions(+), 62 deletions(-)
+ 14 files changed, 610 insertions(+), 62 deletions(-)
  create mode 100644 src/modules/chrootcfg/chrootcfg.conf
  create mode 100644 src/modules/chrootcfg/main.py
  create mode 100644 src/modules/chrootcfg/module.desc
@@ -515,7 +515,7 @@ index 000000000..dfc0b2cde
 +interface:  "python"
 +script:     "main.py"   #assumed relative to the current directory
 diff --git a/src/modules/grubcfg/main.py b/src/modules/grubcfg/main.py
-index 47944640d..c4da0d7f8 100644
+index 346a267cd..77eb0caf0 100644
 --- a/src/modules/grubcfg/main.py
 +++ b/src/modules/grubcfg/main.py
 @@ -171,7 +171,7 @@ def modify_grub_default(partitions, root_mount_point, distributor):
@@ -642,10 +642,10 @@ index da9539569..ec089bff5 100644
 +      options: [ defaults, noatime ]
 \ No newline at end of file
 diff --git a/src/modules/partition/gui/PartitionLabelsView.cpp b/src/modules/partition/gui/PartitionLabelsView.cpp
-index e338da252..30c7eb152 100644
+index b9e315edb..e14066c0a 100644
 --- a/src/modules/partition/gui/PartitionLabelsView.cpp
 +++ b/src/modules/partition/gui/PartitionLabelsView.cpp
-@@ -360,7 +360,7 @@ PartitionLabelsView::drawLabel( QPainter* painter,
+@@ -373,7 +373,7 @@ PartitionLabelsView::drawLabel( QPainter* painter,
                                  const QPoint& pos,
                                  bool selected )
  {
@@ -655,7 +655,7 @@ index e338da252..30c7eb152 100644
      int width = 0;
      for ( const QString& textLine : text )
 diff --git a/src/modules/partition/partition.conf b/src/modules/partition/partition.conf
-index 4c78f5814..6b2dea970 100644
+index ae2e97f89..d5b180efc 100644
 --- a/src/modules/partition/partition.conf
 +++ b/src/modules/partition/partition.conf
 @@ -34,7 +34,7 @@
@@ -680,7 +680,7 @@ index 4c78f5814..6b2dea970 100644
  
  # This optional setting specifies the name of the swap partition (see
  # PARTLABEL; gpt only; requires KPMCore >= 4.2.0).
-@@ -207,7 +207,7 @@ initialSwapChoice: none
+@@ -214,7 +214,7 @@ initialSwapChoice: none
  # If nothing is specified, Calamares defaults to "ext4".
  #
  # Names are case-sensitive and defined by KPMCore.
@@ -691,10 +691,10 @@ index 4c78f5814..6b2dea970 100644
  #
 diff --git a/src/modules/postcfg/main.py b/src/modules/postcfg/main.py
 new file mode 100644
-index 000000000..920ef0b72
+index 000000000..3e159ced1
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,126 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -775,27 +775,12 @@ index 000000000..920ef0b72
 +        self.init_keyring()
 +        self.populate_keyring()
 +
-+        # Generate mirror list
-+        if exists(join(self.root, "usr/bin/reflector")):
-+            if libcalamares.globalstorage.value("hasInternet"):
-+                target_env_call(["reflector", "--sort", "age", "--protocol", "https", "--save", "/etc/pacman.d/mirrorlist"])
-+        else:
-+            self.copy_file('etc/pacman.d/mirrorlist')
-+
-+        # Initialize package manager databases
-+        if libcalamares.globalstorage.value("hasInternet"):
-+            target_env_call(["pacman", "-Syy"])
-+
 +        # Remove unneeded ucode
 +        cpu_ucode = subprocess.getoutput("hwinfo --cpu | grep Vendor: -m1 | cut -d\'\"\' -f2")
 +        if cpu_ucode == "AuthenticAMD":
 +            self.remove_pkg("intel-ucode", "boot/intel-ucode.img")
 +        elif cpu_ucode == "GenuineIntel":
 +            self.remove_pkg("amd-ucode", "boot/amd-ucode.img")
-+
-+        # Remove calamares
-+        self.remove_pkg("calamares", "usr/bin/calamares")
-+        self.remove_pkg("calamares-git", "usr/bin/calamares")
 +
 +        # Copy skel to root
 +        self.copy_folder('etc/skel', 'root')
@@ -859,5 +844,5 @@ index 000000000..7ad198f95
 +    - archlinux
 +    - chaotic
 -- 
-2.49.0
+2.50.1
 
