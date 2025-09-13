@@ -1218,6 +1218,29 @@ def check_kernels_in_boot() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
+def check_efi_bootmgr() -> HealthCheck:
+    """
+    Check if the system is using EFI and if the correct efi bootloader is in use.
+    """
+    def check() -> HealthCheckResult:
+        if os.path.exists("/etc/garuda/garuda-health/bypass-wrong-bootloader-check"):
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+        if not os.path.exists("/sys/firmware/efi") or not os.path.exists("/usr/bin/efibootmgr"):
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+        result = run_shell_command("efibootmgr | awk 'match($0,/^BootCurrent: ([0-9a-fA-F]{4})$/,out) { current=out[1] } match($0,/^Boot([0-9a-fA-F]{4})\\*? ([^:]+)\\t/,out) { if (out[1]==current) print out[2] }'")
+        if result.exit_code != 0 or not result.stdout.strip():
+            return HealthCheckResult(Severity.ERROR)
+        if result.stdout.strip().lower() != "garuda":
+            return HealthCheckResult(
+                Severity.LOW,
+                Issue(
+                    f'"Garuda" is not the current bootloader: https://wiki.garudalinux.org/why-garuda-bootloader',
+                    fix=None
+                )
+            )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, [])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -1244,6 +1267,7 @@ checks: list[HealthCheck] = [
     check_snapper_services(),
     check_snapper_config(),
     check_kernels_in_boot(),
+    check_efi_bootmgr(),
 ]
 
 # -- Main Execution Logic --
@@ -1292,7 +1316,7 @@ def parse_results(results: CheckResults) -> Tuple[int, int]:
     error_level_issues = printable_issues - info_level_issue
     return printable_issues, run_checks, error_level_issues
 
-def print_text_report(printable_issues: int, run_checks: int, results: CheckResults, time) -> None:
+def print_text_report(printable_issues: int, error_level_issues: int, run_checks: int, results: CheckResults, time) -> None:
     """
     Print a text report to the console based on check results.
 
@@ -1322,8 +1346,12 @@ def print_text_report(printable_issues: int, run_checks: int, results: CheckResu
                     has_fix = True
                 print(f" - {res.get_summary()}{fix_available}")
 
+    if error_level_issues == 0:
+        print(f"\n✅ System health check passed. No issues found.")
     if has_fix:
-        print(f"\n{COLORS['INFO']}Run garuda-health --fix to apply fixes.{COLORS['RESET']}")
+        if (error_level_issues != 0):
+            print()
+        print(f"{COLORS['INFO']}Run garuda-health --fix to apply fixes.{COLORS['RESET']}")
 
 def apply_fixes(results: CheckResults) -> bool:
     """
@@ -1413,7 +1441,7 @@ def main():
         print(json.dumps(json_output, indent=2))
         sys.exit(1 if error_level_issues > 0 else 0)
 
-    print_text_report(printable_issues, run_checks, initial_results, initial_time)
+    print_text_report(printable_issues, error_level_issues, run_checks, initial_results, initial_time)
     
     final_exit_code = 1 if error_level_issues > 0 else 0
 
@@ -1425,7 +1453,7 @@ def main():
             final_results, final_time = perform_check_run(args.debug)
             printable_issues, run_checks, error_level_issues = parse_results(initial_results)
             
-            print_text_report(printable_issues, run_checks, final_results, final_time)
+            print_text_report(printable_issues, error_level_issues, run_checks, final_results, final_time)
             
             final_exit_code = 1 if error_level_issues > 0 else 0
 
