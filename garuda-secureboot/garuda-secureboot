@@ -1,0 +1,342 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+import subprocess
+from typing import NamedTuple
+import shutil
+import filecmp
+import sys
+from pathlib import Path
+import re
+
+# -- ANSI color codes --
+COLORS = {
+    "CRITICAL": "\033[91m", "HIGH": "\033[31m", "LOW": "\033[33m",
+    "INFO": "\033[34m", "RESET": "\033[0m", "GREEN": "\033[32m",
+}
+
+class ShellResult(NamedTuple):
+    exit_code: int; stdout: str; stderr: str
+
+def run_shell_command(command: str, timeout: int = 10) -> ShellResult:
+    """
+    Run a command in a bash shell and capture its output.
+
+    :param command: The shell command string to execute.
+    :param timeout: The maximum time to wait for a command to complete.
+    :return: A ShellResult object containing the exit code, stdout, and stderr.
+    """
+    try:
+        process = subprocess.run(
+            ['/bin/bash', '-c', command],
+            capture_output=True, text=True, timeout=timeout, check=False
+        )
+        return ShellResult(process.returncode, process.stdout.strip(), process.stderr.strip())
+    except FileNotFoundError:
+        return ShellResult(127, "", "Shell (/bin/bash) not found.")
+    except subprocess.TimeoutExpired:
+        return ShellResult(124, "", f"Command timed out after {timeout} seconds.")
+
+def ask_consent(prompt: str) -> bool:
+    """
+    Prompt the user for a yes/no answer.
+
+    :param prompt: The question to ask the user.
+    :return: True if the user answered 'y', False otherwise.
+    """
+    while True:
+        response = input(f"{prompt} [y/N]: ").strip().lower()
+        if response in ('y', 'yes'):
+            return True
+        else:
+            return False
+
+class EfibootmgrEntry(NamedTuple):
+    label: str
+class EfibootmgrOutput(NamedTuple):
+    current: str; entries: dict[int, EfibootmgrEntry]
+
+def efibootmgr_parse() -> EfibootmgrOutput:
+    """
+    Parse the output of efibootmgr into a dictionary.
+
+    :return: A dictionary mapping boot entry numbers to their descriptions.
+    """
+    result = run_shell_command("efibootmgr")
+    if result.exit_code != 0:
+        raise RuntimeError(f"Failed to run efibootmgr: {result.stderr}")
+
+    lines = result.stdout.splitlines()
+    current = None
+    entries = {}
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith("BootCurrent:"):
+            current = line.split(":")[1].strip()
+        elif line.startswith("Boot"):
+            match = re.match(r'Boot([0-9a-fA-F]{4})\*?\s+(.+)\t[^ ]+', line)
+            if match:
+                num_hex = match.group(1)
+                num = int(num_hex, 16)
+                label = match.group(2).strip()
+                entries[num] = EfibootmgrEntry(label)
+
+    return EfibootmgrOutput(current, entries)
+
+def get_efibootmgr_params() -> str:
+    """
+    Get the -d and -p parameters for efibootmgr based on /boot/efi mount.
+
+    :return: The efibootmgr parameters as a string.
+    """
+    result = run_shell_command("findmnt -n -o SOURCE /boot/efi")
+    if result.exit_code != 0:
+        raise RuntimeError(f"Failed to find mount: {result.stderr}")
+
+    device = result.stdout.strip()
+    # Extract disk and partition, handling both /dev/sda1 and /dev/nvme0n1p1 formats
+    match = re.match(r'/dev/(\w+(?:n\d+)?)(p?\d+)', device)
+    if not match:
+        raise ValueError(f"Invalid device: {device}")
+
+    disk = f"/dev/{match.group(1)}"
+    part = match.group(2).lstrip('p')  # Remove 'p' prefix if present (for NVMe)
+    return f"-d {disk} -p {part}"
+
+def mokutil_enroll(key_path: Path) -> bool:
+    """
+    Enroll the MOK key using mokutil.
+
+    :param key_path: The path to the MOK certificate file.
+    :return: True if successful, False otherwise.
+    """
+    process = subprocess.Popen(
+        ['mokutil', '--import', str(key_path)],
+        stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+    )
+    password = "garuda"
+    try:
+        stdout, stderr = process.communicate(input=f"{password}\n{password}\n", timeout=10)
+        if process.returncode != 0:
+            return False
+        return True
+    except subprocess.TimeoutExpired:
+        process.kill()
+        return False
+
+# Check if bootloader files exist
+boot_efi = Path("/boot/efi/EFI")
+efi_garuda = boot_efi / "garuda"
+grub_path = "grubx64.efi"
+shim_path = "shimx64.efi"
+mmx_path = "mmx64.efi"
+
+def enable_secure_boot() -> bool:
+    """
+    Enable secure boot using shim-signed.
+
+    :return: True if successful, False otherwise.
+    """
+    if os.path.exists(efi_garuda / shim_path):
+        consent = ask_consent(f"{COLORS['HIGH']}Shim bootloader already exists. Are you sure you want to continue?{COLORS['RESET']}")
+        if not consent:
+            sys.exit(0)
+    if not os.path.exists(efi_garuda / grub_path):
+        print(f"{COLORS['CRITICAL']}Garuda bootloader not found at {grub_path}.{COLORS['RESET']}")
+        sys.exit(1)
+
+    efibootmgr = efibootmgr_parse()
+    # Check if "garuda" bootloader is the current bootloader
+    if efibootmgr.current is None or efibootmgr.current not in efibootmgr.entries or not efibootmgr.entries[efibootmgr.current].label.lower() == "garuda":
+        consent = ask_consent(f"{COLORS['HIGH']}Efibootmgr indicates that the \"garuda\" bootloader is not the current bootloader. Only the \"garuda\" bootloader will be signed. Are you sure you want to continue?{COLORS['RESET']}")
+        if not consent:
+            sys.exit(0)
+
+    # Check if fallback bootloader and main bootloader match
+    fallback_matches = os.path.exists(boot_efi / "boot" / "bootx64.efi") and filecmp.cmp(
+        boot_efi / "boot" / "bootx64.efi",
+        efi_garuda / grub_path
+    )
+
+    print(f"{COLORS['INFO']}:: Creating signing keys...{COLORS['RESET']}")
+    key_dir = Path("/var/lib/garuda/secureboot/keys")
+    key_dir.mkdir(exist_ok=True)
+
+    output = run_shell_command(f"openssl req -newkey rsa:2048 -nodes -keyout '{key_dir / 'MOK.key'}' -new -x509 -sha256 -days 3650 -subj '/CN=Garuda User Machine Owner Key/' -out '{key_dir / 'MOK.crt'}' && openssl x509 -outform DER -in '{key_dir / 'MOK.crt'}' -out '{key_dir / 'MOK.cer'}'", timeout=None)
+    if output.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to create signing keys: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Install the MOK key to the efi
+    shutil.copy(key_dir / "MOK.cer", efi_garuda / "MOK.cer")
+    mokutil_enroll(efi_garuda / "MOK.cer")
+
+    # Create flag file to indicate secureboot is enabled to garuda tooling
+    with open("/etc/garuda/secureboot/enabled", "w") as f:
+        f.write("1")
+
+    # Reinstall and sign grub
+    print(f"{COLORS['INFO']}:: Asking Garuda tooling to reinstall and sign GRUB...{COLORS['RESET']}")
+    if fallback_matches:
+        shutil.copy(efi_garuda / grub_path, boot_efi / "boot" / grub_path)
+    output = run_shell_command("/usr/share/libalpm/scripts/garuda-hooks-runner grub-update", timeout=None)
+    if output.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to reinstall GRUB: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Reinstall and sign kernels
+    print(f"{COLORS['INFO']}:: Asking Garuda tooling to reinstall and sign kernels...{COLORS['RESET']}")
+    output = run_shell_command("dracut-rebuild", timeout=None)
+    if output.exit_code != 0 or os.path.exists("/var/lib/garuda/initramfs_error"):
+        print(f"{COLORS['CRITICAL']}Failed to reinstall kernels: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Delete old bootloader from efibootmgr
+    print(f"{COLORS['INFO']}:: Updating UEFI boot entries...{COLORS['RESET']}")
+    to_delete = [num for num, entry in efibootmgr.entries.items() if entry.label.lower() == "garuda"]
+    for num in to_delete:
+        output = run_shell_command(f"efibootmgr -b {num:04X} -B")
+        if output.exit_code != 0:
+            print(f"{COLORS['CRITICAL']}Failed to delete old Garuda boot entry {num:04X}: {output.stderr}{COLORS['RESET']}")
+            sys.exit(1)
+
+    # Add new boot entry for shim
+    efibootmgr_params = get_efibootmgr_params()
+    output = run_shell_command(f"efibootmgr {efibootmgr_params} -c -L Garuda -l '\\EFI\\garuda\\shimx64.efi'")
+    if output.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to create new Garuda boot entry: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    print(f"{COLORS['INFO']}:: Installing shim bootloader...{COLORS['RESET']}")
+    shutil.copy("/usr/share/shim-signed/shimx64.efi", efi_garuda / shim_path)
+    shutil.copy("/usr/share/shim-signed/mmx64.efi", efi_garuda / mmx_path)
+    if fallback_matches:
+        shutil.copy(efi_garuda / shim_path, boot_efi / "boot" / "bootx64.efi")
+        shutil.copy(efi_garuda / mmx_path, boot_efi / "boot" / "mmx64.efi")
+
+    print(f"{COLORS['GREEN']}:: SecureBoot support has been enabled. Reboot, enable secureboot in the system firmware settings and complete the MOK enrollment to finalize the process.{COLORS['RESET']}")
+
+    return True
+
+def disable_secure_boot() -> bool:
+    """
+    Disable secure boot by removing the flag file.
+
+    :return: True if successful, False otherwise.
+    """
+    if os.path.exists("/etc/garuda/secureboot/enabled"):
+        os.remove("/etc/garuda/secureboot/enabled")
+
+    efibootmgr = efibootmgr_parse()
+
+    # Delete old bootloader from efibootmgr
+    print(f"{COLORS['INFO']}:: Updating UEFI boot entries...{COLORS['RESET']}")
+    to_delete = [num for num, entry in efibootmgr.entries.items() if entry.label.lower() == "garuda"]
+    for num in to_delete:
+        output = run_shell_command(f"efibootmgr -b {num:04X} -B")
+        if output.exit_code != 0:
+            print(f"{COLORS['CRITICAL']}Failed to delete old Garuda boot entry {num:04X}: {output.stderr}{COLORS['RESET']}")
+            sys.exit(1)
+
+    # Add new boot entry for grub
+    efibootmgr_params = get_efibootmgr_params()
+    output = run_shell_command(f"efibootmgr {efibootmgr_params} -c -L Garuda -l '\\EFI\\garuda\\grubx64.efi'")
+    if output.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to create new Garuda boot entry: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Check if fallback bootloader and main bootloader match
+    fallback_matches = os.path.exists(boot_efi / "boot" / grub_path) and filecmp.cmp(
+        boot_efi / "boot" / grub_path,
+        efi_garuda / grub_path
+    )
+
+    print(f"{COLORS['INFO']}:: Uninstalling shim bootloader...{COLORS['RESET']}")
+    if os.path.exists(efi_garuda / shim_path):
+        os.remove(efi_garuda / shim_path)
+    if os.path.exists(efi_garuda / mmx_path):
+        os.remove(efi_garuda / mmx_path)
+    if os.path.exists(efi_garuda / "MOK.cer"):
+        os.remove(efi_garuda / "MOK.cer")
+    if fallback_matches:
+        if os.path.exists(boot_efi / "boot" / "bootx64.efi"):
+            os.remove(boot_efi / "boot" / "bootx64.efi")
+        if os.path.exists(boot_efi / "boot" / "mmx64.efi"):
+            os.remove(boot_efi / "boot" / "mmx64.efi")
+
+    # Reinstall grub
+    print(f"{COLORS['INFO']}:: Asking Garuda tooling to reinstall GRUB...{COLORS['RESET']}")
+    if fallback_matches:
+        shutil.copy(efi_garuda / grub_path, boot_efi / "boot" / "bootx64.efi")
+    output = run_shell_command("/usr/share/libalpm/scripts/garuda-hooks-runner grub-update", timeout=None)
+    if output.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to reinstall GRUB: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Reinstall kernels
+    print(f"{COLORS['INFO']}:: Asking Garuda tooling to reinstall kernels...{COLORS['RESET']}")
+    output = run_shell_command("dracut-rebuild", timeout=None)
+    if output.exit_code != 0 or os.path.exists("/var/lib/garuda/initramfs_error"):
+        print(f"{COLORS['CRITICAL']}Failed to reinstall kernels: {output.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    # Remove keys
+    print(f"{COLORS['INFO']}:: Removing signing keys...{COLORS['RESET']}")
+    shutil.rmtree("/var/lib/garuda/secureboot/keys", ignore_errors=True)
+
+    print(f"{COLORS['GREEN']}:: SecureBoot support has been disabled.{COLORS['RESET']}")
+
+def main():
+    """
+    Parse arguments, run all checks, and report the results.
+    """
+    parser = argparse.ArgumentParser(description="A tool to enable SecureBoot on Garuda Linux.")
+    parser.add_argument('--forcetty', action='store_true', help="Force color output even when not connected to a TTY.")
+    parser.add_argument('--install', action='store_true', help="Perform actions necessary to enable SecureBoot support.")
+    parser.add_argument('--uninstall', action='store_true', help="Perform actions necessary to disable SecureBoot support.")
+    args = parser.parse_args()
+
+    if not sys.stdout.isatty() and not args.forcetty:
+        for key in COLORS: COLORS[key] = ""
+
+    # Check if running as root
+    if os.geteuid() != 0:
+        print(f"{COLORS['CRITICAL']}This script must be run as root.{COLORS['RESET']}")
+        sys.exit(1)
+    # Check if EFI
+    if not os.path.exists("/sys/firmware/efi"):
+        print(f"{COLORS['CRITICAL']}SecureBoot support is only supported on UEFI systems.{COLORS['RESET']}")
+        sys.exit(1)
+
+    if args.install and args.uninstall:
+        print(f"{COLORS['CRITICAL']}Cannot use --install and --uninstall at the same time.{COLORS['RESET']}")
+        sys.exit(1)
+
+    if args.install:
+        enable_secure_boot()
+        sys.exit(0)
+    elif args.uninstall:
+        disable_secure_boot()
+        sys.exit(0)
+
+    mokutil_status = run_shell_command("mokutil --sb-state")
+    if mokutil_status.exit_code != 0:
+        print(f"{COLORS['CRITICAL']}Failed to run mokutil: {mokutil_status.stderr}{COLORS['RESET']}")
+        sys.exit(1)
+
+    secureboot_enabled = "SecureBoot enabled" in mokutil_status.stdout
+
+    if os.path.exists("/etc/garuda/secureboot/enabled"):
+        print(f"{COLORS['GREEN']}SecureBoot support is active.{COLORS['RESET']}")
+        if secureboot_enabled:
+            print(f"{COLORS['GREEN']}SecureBoot is enabled.{COLORS['RESET']}")
+        else:
+            print(f"{COLORS['HIGH']}SecureBoot is not enabled. SecureBoot has to be enabled in the system firmware settings.{COLORS['RESET']}")
+    else:
+        print(f"{COLORS['HIGH']}SecureBoot support is not active.{COLORS['RESET']}")
+        print(f"{COLORS['INFO']}To activate SecureBoot support, run this script with the --install flag.{COLORS['RESET']}")
+
+if __name__ == "__main__":
+    main()

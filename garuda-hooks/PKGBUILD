@@ -3,7 +3,7 @@
 
 pkgname=garuda-hooks
 pkgdesc="Additions and enhancements for Garuda Linux"
-pkgver=2.14.0
+pkgver=2.15.0
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -29,7 +29,7 @@ source=(01-snapshot-reject.hook
 sha256sums=('096f1e934c2e8786040f9f9b28af6a8363ab8eea616794b341db6c569e37f084'
             '6ab585a480a47d7fa29fe72a2d40cb7ef8bce1dbc461ab073c8a4752420ba04f'
             '375e6b9dde28e248a3e9294ff1d5e15f1aef2063a45d2250469bc7ef2d972e6d'
-            'c77b087dff43d7783badf0449d3aaab707179e55b0cae8de61315b23e16d45b1'
+            'f1fcfc5298288f2b840335a1130bdeb78c1520973b3b244a9b3ba8b1ef565d3f'
             '3ac110495379bb1cd1977a721277e8bf7eff8d9b1b86016dac55be9ed2b9cd41'
             '7afd242365880d29ea337a70d36860c757ea1913bf57ae24b0c6b32562cb714e'
             '87bbb12ba5f9cbba13478c9d447a9bfbe7dd7ced24c26454b49522bd9c5e5444'

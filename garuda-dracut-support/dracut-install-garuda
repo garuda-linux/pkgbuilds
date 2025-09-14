@@ -7,6 +7,14 @@ lines=()
 status=0
 all=false
 initramfs_error_file="/var/lib/garuda/initramfs_error"
+key_path="/var/lib/garuda/secureboot/keys"
+
+sign_kernel() {
+	if [ -f "/etc/garuda/secureboot/enabled" ]; then
+		sbsign --key "${key_path}/MOK.key" --cert "${key_path}/MOK.crt" --output "$1" "$1" >/dev/null ||
+			(echo -e "\033[1;31mFailed to sign kernel: $1\033[0m" && return 1)
+	fi
+}
 
 # This function implements a workaround for a bug in grub/btrfs where the vmlinuz file can not be read.
 # The workaround is to copy the vmlinuz file with a method that prevents reflinks completely.
@@ -34,11 +42,13 @@ install_kernel() {
 		chmod 0644 "${vmlinuz_dest}"
 		# Compare files to double check the integrity
 		if cmp -s "${vmlinuz_file}" "${vmlinuz_dest}"; then
+			sign_kernel "${vmlinuz_dest}" || { echo -e "\033[1;31mSigning the kernel failed: ${vmlinuz_dest}\033[0m"; return 1; }
 			return 0
 		fi
 	fi
 	echo -e "\033[1;31mSafe kernel copy failed: ${vmlinuz_file} -> ${vmlinuz_dest}\033[0m"
 	if install -Dm0644 "${vmlinuz_file}" "${vmlinuz_dest}"; then
+		sign_kernel "${vmlinuz_dest}" || { echo -e "\033[1;31mSigning the kernel failed: ${vmlinuz_dest}\033[0m"; return 1; }
 		echo -e "\033[1;33mWarning: Kernel copy with fallback method succeeded: ${vmlinuz_file} -> ${vmlinuz_dest}\033[0m"
 		return 0
 	fi

@@ -1,0 +1,5 @@
+pre_remove() {
+    if [ -f /etc/garuda/secureboot/enabled ]; then
+        rm /etc/garuda/secureboot/enabled
+    fi
+}

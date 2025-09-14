@@ -84,14 +84,41 @@ Grub-update() {
 		local should_act_safe=true
 		local did_update=false
 		local fallback_is_same=false
+		local secureboot_enabled=false
+		if [ -f "/etc/garuda/secureboot/enabled" ]; then
+			secureboot_enabled=true
+		fi
 
 		# We can assume it's safe to update this bootloader if it exists, because this is supposed to be ours. The user will know about it at the end of the update and right here too.
 		if [ -f "/boot/efi/EFI/Garuda/grubx64.efi" ]; then
-			cmp -s "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi" && fallback_is_same=true
+			update-grub
 			echo -e "\033[1;34m\n\nThe GRUB bootloader at EFI/Garuda is being updated!\n\n\033[0m"
-			grub-install --no-nvram --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Garuda" && did_update=true
+			if [ "$secureboot_enabled" == "true" ]; then
+				cmp -s "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/grubx64.efi" && fallback_is_same=true
+
+				grub_modules="$(awk '/insmod ([^ ]+)$/ {print $2}' /boot/grub/grub.cfg)"
+				grub_default_modules=(all_video boot btrfs cat chain configfile ext2 echo efifwsetup font gettext gfxmenu gfxterm gfxterm_background halt help keystatus loadenv loopback linux ls lsefi lsefimmap lsefisystab memdisk minicmd normal ntfs password_pbkdf2 png probe reboot regexp search search_fs_uuid search_fs_file search_label sleep smbios test true video)
+				declare -A grub_installed_modules
+				for mod in $grub_modules "${grub_default_modules[@]}"; do
+					if [ -f "/usr/lib/grub/x86_64-efi/${mod}.mod" ]; then
+						grub_installed_modules["$mod"]=1
+					fi
+				done
+				key_path="/var/lib/garuda/secureboot/keys"
+				grub-install --no-nvram --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Garuda" --modules "${!grub_installed_modules[*]}" --sbat /usr/share/grub/sbat.csv && \
+					echo -e "\033[1;34mSigning the GRUB bootloader for secure boot...\033[0m" && \
+					sbsign --key "${key_path}/MOK.key" --cert "${key_path}/MOK.crt" --output "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Garuda/grubx64.efi" && \
+					did_update=true
+			else
+				cmp -s "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi" && fallback_is_same=true
+				grub-install --no-nvram --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id="Garuda" && did_update=true
+			fi
 			if [ "$fallback_is_same" == "true" ] && [ "$did_update" == "true" ]; then
-				cp "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi"
+				if [ "$secureboot_enabled" == "true" ]; then
+					cp "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/grubx64.efi"
+				else
+					cp "/boot/efi/EFI/Garuda/grubx64.efi" "/boot/efi/EFI/Boot/bootx64.efi"
+				fi
 			fi
 		fi
 
@@ -99,18 +126,11 @@ Grub-update() {
 			should_act_safe=false
 		fi
 
-		if [ "$should_act_safe" == "true" ]; then
-			rm /etc/grub.d/30_uefi-firmware
-		fi
-
-		if [ "$did_update" == "true" ]; then
-			update-grub
-		fi
-
 		if [ "$did_update" != "true" ]; then
-			garudalib_add_update_notice "The GRUB bootloader could not be updated automatically safely. Steps to prevent any major issues caused by this have been taken automatically, but if possible, you should update your bootloader using 'grub-install'."
+			garudalib_add_update_notice "The GRUB bootloader could not be updated automatically safely."
+			exit 1
 		elif [ "$should_act_safe" == "true" ]; then
-			garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda was updated, but it seems like you are not using the Garuda Linux bootloader by default. If you are using 'rEFInd' bootloader, you can safely ignore this. Otherwise, please change your EFI boot priorities to prioritize the \"Garuda\" bootloader. Running 'grub-install' will do this automatically."
+			garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda was updated, but it seems like you are not using the Garuda Linux bootloader by default. If you are using 'rEFInd' bootloader, you can safely ignore this. Otherwise, please change your EFI boot priorities to prioritize the \"Garuda\" bootloader. https://wiki.garudalinux.org/en/why-garuda-bootloader"
 		else
 			garudalib_add_update_notice "The GRUB bootloader at /EFI/Garuda has been updated/reinstalled using 'grub-install'. If this looks correct, no further action has to be taken."
 		fi

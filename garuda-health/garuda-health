@@ -1168,13 +1168,15 @@ def check_kernels_in_boot() -> HealthCheck:
         missing_kernels = []
         invalid_kernels = []
 
+        secureboot_enabled = os.path.exists("/etc/garuda/secureboot/enabled")
+
         for kernel, data in cache.cached_kernels.items():
             kernel_boot_path = boot_path / ("vmlinuz-" + kernel)
             initramfs_boot_path = boot_path / ("initramfs-" + kernel + ".img")
             kernel_modules_dir, kernel_version = data
             if kernel_boot_path.exists() and initramfs_boot_path.exists():
                 any_kernel_installed = True
-                if filecmp.cmp(kernel_boot_path, kernel_modules_dir / "vmlinuz", shallow=False):
+                if secureboot_enabled or filecmp.cmp(kernel_boot_path, kernel_modules_dir / "vmlinuz", shallow=False):
                     any_kernel_valid = True
                 else:
                     invalid_kernels.append(kernel)
