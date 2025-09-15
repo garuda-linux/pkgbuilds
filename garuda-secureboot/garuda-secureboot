@@ -74,12 +74,13 @@ def efibootmgr_parse() -> EfibootmgrOutput:
     for line in lines:
         line = line.strip()
         if line.startswith("BootCurrent:"):
-            current = line.split(":")[1].strip()
+            match = re.match(r'BootCurrent:\s*([0-9a-fA-F]{4})', line)
+            if match:
+                current = int(match.group(1), 16)
         elif line.startswith("Boot"):
             match = re.match(r'Boot([0-9a-fA-F]{4})\*?\s+(.+)\t[^ ]+', line)
             if match:
-                num_hex = match.group(1)
-                num = int(num_hex, 16)
+                num = int(match.group(1), 16)
                 label = match.group(2).strip()
                 entries[num] = EfibootmgrEntry(label)
 
@@ -193,6 +194,13 @@ def enable_secure_boot() -> bool:
         print(f"{COLORS['CRITICAL']}Failed to reinstall kernels: {output.stderr}{COLORS['RESET']}")
         sys.exit(1)
 
+    print(f"{COLORS['INFO']}:: Installing shim bootloader...{COLORS['RESET']}")
+    shutil.copy("/usr/share/shim-signed/shimx64.efi", efi_garuda / shim_path)
+    shutil.copy("/usr/share/shim-signed/mmx64.efi", efi_garuda / mmx_path)
+    if fallback_matches:
+        shutil.copy(efi_garuda / shim_path, boot_efi / "boot" / "bootx64.efi")
+        shutil.copy(efi_garuda / mmx_path, boot_efi / "boot" / "mmx64.efi")
+
     # Delete old bootloader from efibootmgr
     print(f"{COLORS['INFO']}:: Updating UEFI boot entries...{COLORS['RESET']}")
     to_delete = [num for num, entry in efibootmgr.entries.items() if entry.label.lower() == "garuda"]
@@ -209,14 +217,7 @@ def enable_secure_boot() -> bool:
         print(f"{COLORS['CRITICAL']}Failed to create new Garuda boot entry: {output.stderr}{COLORS['RESET']}")
         sys.exit(1)
 
-    print(f"{COLORS['INFO']}:: Installing shim bootloader...{COLORS['RESET']}")
-    shutil.copy("/usr/share/shim-signed/shimx64.efi", efi_garuda / shim_path)
-    shutil.copy("/usr/share/shim-signed/mmx64.efi", efi_garuda / mmx_path)
-    if fallback_matches:
-        shutil.copy(efi_garuda / shim_path, boot_efi / "boot" / "bootx64.efi")
-        shutil.copy(efi_garuda / mmx_path, boot_efi / "boot" / "mmx64.efi")
-
-    print(f"{COLORS['GREEN']}:: SecureBoot support has been enabled. Reboot, enable secureboot in the system firmware settings and complete the MOK enrollment to finalize the process.{COLORS['RESET']}")
+    print(f"{COLORS['GREEN']}:: SecureBoot support has been enabled. Reboot, enable SecureBoot in the system firmware settings and complete the MOK enrollment to finalize the process.{COLORS['RESET']}")
 
     return True
 
