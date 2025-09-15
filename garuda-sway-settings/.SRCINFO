@@ -1,6 +1,6 @@
 pkgbase = garuda-sway-settings
 	pkgdesc = Garuda Linux Sway settings
-	pkgver = 1.1.53
+	pkgver = 1.1.55
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings
 	install = garuda-sway-settings.install
@@ -17,7 +17,7 @@ pkgbase = garuda-sway-settings
 	optdepends = tela-circle-icon-theme-nord: default icon theme
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/117b1afc08e3b67d4323d19ca7788c0ecd3e7004/garuda-sway-settings-117b1afc08e3b67d4323d19ca7788c0ecd3e7004.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-sway-settings/-/archive/e63d68f4109b151eaf698b9298674e511f6a7579/garuda-sway-settings-e63d68f4109b151eaf698b9298674e511f6a7579.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-sway-settings
