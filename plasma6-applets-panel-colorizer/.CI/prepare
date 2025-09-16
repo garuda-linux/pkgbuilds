@@ -1,3 +1,0 @@
-# remove "|| exit" constructs
-sed -E -e 's& ?\|\|.*$&&' -i PKGBUILD
-cp .CI/0001-fix-Fix-some-log-spam.patch .
