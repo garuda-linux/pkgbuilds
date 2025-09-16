@@ -105,7 +105,7 @@ if systemd-detect-virt -q; then
 fi
 
 # Detect all GPU devices
-gpu_devices="$(lspci -nn -d *:*:03xx)"
+gpu_devices="$(lspci -nn -d '*:*:03xx')"
 
 # Any GPU devices found?
 if [[ -n "$gpu_devices" ]]; then
@@ -129,7 +129,7 @@ if [[ -n "$gpu_devices" ]]; then
             # Detect nvidia
             if [[ "$vendor_id" == "10de" ]]; then
                 # Detect if family is between (and including) volta and maxwell
-                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}[A-Z]?$ ]]; then
+                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}[A-Z]*$ ]]; then
                     family="${BASH_REMATCH[1]}"
                     case "$family" in
                         "GT" | "GF" | "GK")
