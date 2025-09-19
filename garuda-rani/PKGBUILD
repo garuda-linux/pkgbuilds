@@ -1,15 +1,15 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-rani
-pkgver="3.1.5"
-_commit='e5fbf9264b7832abf09ab5d2e015b3bee1a8745a'
-pkgrel=3
-_electronversion=36
+pkgver="3.2.0"
+_commit='ba3d582fcd538c628076e07c8a4131ddef3f442d'
+pkgrel=1
+_electronversion=38
 pkgdesc="Garuda's Reliable Assistant for Native Installations"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/rani"
 license=('GPL-3.0-or-later')
-depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0' 'garuda-update')
+depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0')
 makedepends=('git' 'base-devel' 'nodejs-lts-jod' 'pnpm')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
