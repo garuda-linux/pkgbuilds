@@ -98,13 +98,11 @@ def get_efibootmgr_params() -> str:
 
     device = result.stdout.strip()
     # Extract disk and partition, handling both /dev/sda1 and /dev/nvme0n1p1 formats
-    match = re.match(r'/dev/(\w+(?:n\d+)?)(p?\d+)', device)
+    match = re.match(r'^(/dev/.+?)p?(\d+)$', device)
     if not match:
         raise ValueError(f"Invalid device: {device}")
 
-    disk = f"/dev/{match.group(1)}"
-    part = match.group(2).lstrip('p')  # Remove 'p' prefix if present (for NVMe)
-    return f"-d {disk} -p {part}"
+    return f"-d {match.group(1)} -p {match.group(2)}"
 
 def mokutil_enroll(key_path: Path) -> bool:
     """

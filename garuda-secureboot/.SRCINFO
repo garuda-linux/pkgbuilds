@@ -1,12 +1,12 @@
 pkgbase = garuda-secureboot
 	pkgdesc = Configuration tool for enabling secure boot on Garuda Linux
-	pkgver = 1.0.1
+	pkgver = 1.0.2
 	pkgrel = 1
 	install = garuda-secureboot.install
 	arch = any
 	license = GPL-3.0-or-later
 	source = garuda-secureboot
-	sha512sums = 060c11e3bf78e45e3162581ab52b9836df6b3d287a044683e3af9c9dbde4f5350df3a109ed3ff200072f295c6aef1cab3f80e835a11ffd4a5dd1f3b5dc28a69d
+	sha512sums = e23e8fd8f30b216dfc3c2773698c99258ae9ea88a5e19c425bb8136775273417ab9f45a8119e08e5bdfd86c542588a8740083102295afcfc8ba363587290d856
 
 pkgname = garuda-secureboot
 	depends = python
