@@ -26,7 +26,7 @@ rmdir "$MNT_DIR"
 
 echo -e "\033[1;33m-->\033[1;34m Mounting nix subvolume\033[0m"
 mkdir -p /nix
-echo "UUID=$BTRFS_UUID /nix btrfs subvol=@nix,nodatacow 0 0" >> /etc/fstab
+echo "UUID=$BTRFS_UUID /nix btrfs subvol=@nix,nodatacow,x-initrd.mount 0 0" >> /etc/fstab
 mount -a
 
 if [ ! -e "/nix/var/nix/profiles/default" ]; then
