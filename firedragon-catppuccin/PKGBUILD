@@ -3,7 +3,7 @@
 # Co-Maintainer: stefanwimmer128 <info at stefanwimmer128 dot xyz>
 
 # Three-stage profile-guided optimization
-: ${_build_pgo:=true}
+: ${_build_pgo:=false}
 
 # Profile with xvfb-run, if possible
 : ${_build_pgo_xvfb:=false}
