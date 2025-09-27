@@ -161,6 +161,17 @@ apply_migrations() {
 			garudalib_add_update_notice "The file "${flag_file}" was created automatically to prevent crashes on certain hardware during system updates. The file can safely be deleted if running a udevadm trigger after updates to systemd/udev files is desired."
 		fi
 	fi
+
+	# Re-enable wayland support for GDM
+	if [[ $(vercmp 3.2.0-1 $1) -gt 0 ]]; then
+		local gdm_conf_file="/etc/gdm/custom.conf"
+		if [ -f "${gdm_conf_file}" ]; then
+			if grep -q '^WaylandEnable=false[[:space:]]*' "${gdm_conf_file}"; then
+				sed -i 's_^WaylandEnable=false[[:space:]]*_# Modified by garuda-migrations: WaylandEnable=false\n#WaylandEnable=false_' "${gdm_conf_file}"
+				garudalib_add_update_notice "Wayland support for GDM was re-enabled automatically by changing the setting "WaylandEnable" to default in \"${gdm_conf_file}\"."
+			fi
+		fi
+	fi
 }
 
 # $1 Previous version

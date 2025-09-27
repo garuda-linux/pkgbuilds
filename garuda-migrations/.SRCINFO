@@ -1,6 +1,6 @@
 pkgbase = garuda-migrations
 	pkgdesc = Automatically applies system configuration changes
-	pkgver = 3.1.0
+	pkgver = 3.2.0
 	pkgrel = 1
 	arch = any
 	license = GPL
@@ -10,7 +10,7 @@ pkgbase = garuda-migrations
 	depends = garuda-libs>=1.1.0
 	source = garuda-migrations-runner
 	source = garuda-migrations.hook
-	sha256sums = 7ca66a86df7cc1b60671153076947bc9a2d2d684ca2afa8baa9c90a5081bd096
+	sha256sums = 017e4c9b010d112f11ccc20693b70e9717582cd12e9a4261342bbcfa6ba5c931
 	sha256sums = 6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65
 
 pkgname = garuda-migrations
