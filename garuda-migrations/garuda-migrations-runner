@@ -172,6 +172,29 @@ apply_migrations() {
 			fi
 		fi
 	fi
+
+	# Add "systemd" to nsswitch.conf if not present
+	if [[ $(vercmp 3.3.0-1 $1) -gt 0 ]] && ( [ "$IS_NEW_INSTALL" == "false" ] || [ ! -f /usr/lib/garuda/garuda-release ] ); then
+		gawk -i inplace '
+	  BEGIN {
+		set=0
+	  }
+	  # Match any of "passwd", "group", "shadow", "gshadow" at the start of the line
+	  /^(passwd|group|shadow|gshadow):/ {
+		# Check if "systemd" is present
+		if ($0 !~ /systemd( |$)/) {
+			# Add systemd at the end of the line
+			$0 = $0" systemd"
+			set=1
+		}
+	  }
+	  ENDFILE {
+		if (!set) {
+		  exit 1
+		}
+	  }
+	  1' /etc/nsswitch.conf && garudalib_add_update_notice 'The "systemd" module was added to /etc/nsswitch.conf automatically to improve compatibility with GNOME.' || true
+	fi
 }
 
 # $1 Previous version
