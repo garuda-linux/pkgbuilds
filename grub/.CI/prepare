@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+cp .CI/0005-Fix-get_active_pcr_banks-regression.patch .

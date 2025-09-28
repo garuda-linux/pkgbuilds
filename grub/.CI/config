@@ -1,0 +1,2 @@
+CI_PACKAGE_BUMP=2:2.12.r359.g19c698d12-1/1
+CI_PKGBUILD_SOURCE=https://gitlab.archlinux.org/archlinux/packaging/packages/grub.git

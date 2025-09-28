@@ -1,0 +1,1 @@
+efi/tpm: call get_active_pcr_banks() only with TCG2 1.1 or newer
