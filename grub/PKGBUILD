@@ -31,7 +31,7 @@ conflicts=(
 replaces=(
   grub-common
   grub-bios
-  grub-emu 
+  grub-emu
   grub-efi-x86_64
 )
 provides=(
@@ -90,15 +90,15 @@ source=(
   sbat.csv
 )
 b2sums=('a6cec7271c3ea54a99f02ee6bc0a5825c8be657af68ba9a32b39a5fe8bcb571fb1ba39210426f6bf6a48d913e6e00df37dc2123ea1b39330f4c47bd9dbac9ae3'
-        'SKIP'
-        'a57d4d749f88af67c4e59eb8f95e0350f395e950db1670667be15adae2e22471af44e4f2a2dd2375b63dc4a37660812ee1a1fb2ef80cfdda51f74dda17ad14d5'
-        'SKIP'
-        '992c71790785304c28fbaf0dba21dab3e283b199509f0e7e1aa0df08126da75e15b6626c3638279ff2ecaa59b925096d7dbd67d6a53cebd0ce4326ff3719d25b'
-        'b4cd9ac976a579eca19d54c0b31c8d6324525fe5a0b9f5405deb63845367ac1adaa80ece4c166dfd5304608c41aa44b4f64efe235c03f437523b993be06e06e3'
-        'a7820bfe9bddc34af49de63222b3d2a9788367083e29db13b33120269adbfa1619ac421d8597f662f756592889f5cc5538544a17d9936d1420bd5742282c710c'
-        '7f41bb41548acae5283969f04ef5311d55de5343ee95ffcc903751d5e25cf5b187c8940de010dd53123086e76e147ba770173b03c36da97a413e9853c1a42ffe'
-        '5e42db2161e8f594b82005b26e590a20a0e8d32b01119bdd7b1a7f7c4b0f3360e8730a3ecdd5912a4dc7af5bd9aed1c3e780965ad6747d831b470158da19388d'
-        'ce9b3904ce4bd00463c226ab1c97d3af94c6151c408bcd6483a0dd07ae4c343ee135907ad887c1d93525ec95d87409ef703ac7278698d49e99342332e483c436')
+  'SKIP'
+  'a57d4d749f88af67c4e59eb8f95e0350f395e950db1670667be15adae2e22471af44e4f2a2dd2375b63dc4a37660812ee1a1fb2ef80cfdda51f74dda17ad14d5'
+  'SKIP'
+  '992c71790785304c28fbaf0dba21dab3e283b199509f0e7e1aa0df08126da75e15b6626c3638279ff2ecaa59b925096d7dbd67d6a53cebd0ce4326ff3719d25b'
+  'b4cd9ac976a579eca19d54c0b31c8d6324525fe5a0b9f5405deb63845367ac1adaa80ece4c166dfd5304608c41aa44b4f64efe235c03f437523b993be06e06e3'
+  'a7820bfe9bddc34af49de63222b3d2a9788367083e29db13b33120269adbfa1619ac421d8597f662f756592889f5cc5538544a17d9936d1420bd5742282c710c'
+  '7f41bb41548acae5283969f04ef5311d55de5343ee95ffcc903751d5e25cf5b187c8940de010dd53123086e76e147ba770173b03c36da97a413e9853c1a42ffe'
+  '5e42db2161e8f594b82005b26e590a20a0e8d32b01119bdd7b1a7f7c4b0f3360e8730a3ecdd5912a4dc7af5bd9aed1c3e780965ad6747d831b470158da19388d'
+  'ce9b3904ce4bd00463c226ab1c97d3af94c6151c408bcd6483a0dd07ae4c343ee135907ad887c1d93525ec95d87409ef703ac7278698d49e99342332e483c436')
 _backports=(
   # current git master for loads of security fixes
   # https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00024.html
@@ -192,7 +192,7 @@ build() {
     [[ "${i}" == "i386-efi" ]] && _configure_options+=(--disable-efiemu --with-platform="efi" --target="i386")
     [[ "${i}" == "x86_64-efi" ]] && _configure_options+=(--with-platform="efi" --target="x86_64")
     ./configure PACKAGE_VERSION="${epoch}:${pkgver}-${pkgrel}" \
-                ${_configure_options[@]}
+      ${_configure_options[@]}
     if [[ "${i}" == "x86_64-efi" ]]; then
       echo "Build language and doc files only for most common variant..."
       # language directory does not like -j option, build it first with -j1
