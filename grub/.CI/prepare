@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 
 cp .CI/0005-Fix-get_active_pcr_banks-regression.patch .
+sed -i '/  patch -Np1 -i "${srcdir}\/0004-po-Update-Translations-to-Build-with-Gettext-0.26.patch"/a   patch -Np1 -i "${srcdir}\/0005-Fix-get_active_pcr_banks-regression.patch"' PKGBUILD

@@ -1,11 +1,15 @@
 source+=("0005-Fix-get_active_pcr_banks-regression.patch")
-b2sums+=('9d29bdf6b1d90b73c2caac09977dc1cb04f62cb5d5c26449c3f9157371105ece043c172616ec82c1bc4aa1fae3917eaba2d4711b4a9640db28842fbdb79f2a46')
+b2sums+=('6384b44304b4ddea2fe018a36f02feb67389f48e19c3a8ff2b85d21bb128fa9d31a517f96b2511fe3fa92e5d464b2c842d8cc40ffcdbbf9ae1491cc67c9e9000')
+
+source[0]=grub::git+https://github.com/rhboot/grub2.git#tag=grub-${_pkgver}
+source[1]=git+https://github.com/coreutils/gnulib.git
+
+makedepends+=(less)
 
 unset validpgpkeys
 
 eval _orig_"$(declare -f prepare)"
 prepare() {
+  export GIT_PAGER=cat
   (_orig_prepare)
-  echo "Patch to fix issues on old UEFIs"
-  patch -Np1 -i "${srcdir}/0005-Fix-get_active_pcr_banks-regression.patch"
 }
