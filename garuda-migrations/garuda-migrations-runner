@@ -195,6 +195,15 @@ apply_migrations() {
 	  }
 	  1' /etc/nsswitch.conf && garudalib_add_update_notice 'The "systemd" module was added to /etc/nsswitch.conf automatically to improve compatibility with GNOME.' || true
 	fi
+
+	# Remove old garuda grub.d drop in support from /etc/default/grub
+	if [[ $(vercmp 3.4.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f /etc/default/grub ]; then
+		local filename="/etc/default/grub"
+		if grep -q '${garuda_grub_d}' $filename; then
+			sed -rzi 's|# This config file imports drop-in files from /etc/default/grub\.d/\.\nfor garuda_grub_d in \$\{sysconfdir\}/default/grub\.d/\*\.cfg ; do if \[ -e "\$\{garuda_grub_d\}" \]; then source "\$\{garuda_grub_d\}"; fi; done\n?||g' /etc/default/grub
+			garudalib_add_update_notice '/etc/default/grub was automatically edited to remove unnecessary logic related to drop in files from /etc/default/grub.d/. This is handled in the "grub" package instead.' || true
+		fi
+	fi
 }
 
 # $1 Previous version
