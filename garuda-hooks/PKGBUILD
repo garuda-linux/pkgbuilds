@@ -3,7 +3,7 @@
 
 pkgname=garuda-hooks
 pkgdesc="Additions and enhancements for Garuda Linux"
-pkgver=2.15.0
+pkgver=2.15.1
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -20,7 +20,7 @@ source=(01-snapshot-reject.hook
   update-grub.hook
   grub-install.hook
   orphans.hook
-  grub-config.hook
+  grub-btrfs-config.hook
   pacnew-check.hook
   90-mkinitcpio-install.hook
   zzz_post.hook
@@ -29,13 +29,13 @@ source=(01-snapshot-reject.hook
 sha256sums=('096f1e934c2e8786040f9f9b28af6a8363ab8eea616794b341db6c569e37f084'
             '6ab585a480a47d7fa29fe72a2d40cb7ef8bce1dbc461ab073c8a4752420ba04f'
             '375e6b9dde28e248a3e9294ff1d5e15f1aef2063a45d2250469bc7ef2d972e6d'
-            'f1fcfc5298288f2b840335a1130bdeb78c1520973b3b244a9b3ba8b1ef565d3f'
+            '4e2f44a11c9634b25b865732b64f9ceaa7cad2e81d844523f417edd9096defcf'
             '3ac110495379bb1cd1977a721277e8bf7eff8d9b1b86016dac55be9ed2b9cd41'
             '7afd242365880d29ea337a70d36860c757ea1913bf57ae24b0c6b32562cb714e'
             '87bbb12ba5f9cbba13478c9d447a9bfbe7dd7ced24c26454b49522bd9c5e5444'
             '12a795a9dc8661289fb6893a6f3ce7fc9b4d9a42e57f5583753a8591deedbbd7'
             'a17c8b58f7f6923988782bd62bfb2d41e719828c981ea4944545301bb7581681'
-            '1e9d012075d407afc8a7ee5edc1167fd0b779e4ef023afa6c6eac594abd3a4ee'
+            '88b11963b98e65bd6147687f45ee30b27380dc9d0b5aaaabd1d3965134d851e0'
             'd15df26aeea230c3b73a5550e94996b4e25bd5e070924e36eaaa469653a22281'
             'be83d8a5814e5093e0841285998df587dd8ee1f6e4517219c5f9e775bc561f5f'
             'f309b472a841bb6ba0d96428d267e440ddb566af8f7f6437344f1b13042c00ca'
@@ -70,7 +70,7 @@ package() {
   install -Dm644 update-grub.hook "${pkgdir}"/usr/share/libalpm/hooks/99-update-grub.hook
   install -Dm644 grub-install.hook "${pkgdir}"/usr/share/libalpm/hooks/99-grub-install.hook
   install -Dm644 orphans.hook "${pkgdir}"/usr/share/libalpm/hooks/99-orphans.hook
-  install -Dm644 grub-config.hook "${pkgdir}"/usr/share/libalpm/hooks/20-grub-config.hook
+  install -Dm644 grub-btrfs-config.hook "${pkgdir}"/usr/share/libalpm/hooks/20-grub-btrfs-config.hook
   install -Dm644 filesystem.hook "${pkgdir}"/usr/share/libalpm/hooks/20-os-release.hook
   install -Dm644 pacnew-check.hook "${pkgdir}"/usr/share/libalpm/hooks/99-pacnew-check.hook
   install -Dm644 zzz_post.hook "${pkgdir}"/usr/share/libalpm/hooks/zzz_post.hook

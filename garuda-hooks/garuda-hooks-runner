@@ -137,15 +137,7 @@ Grub-update() {
 	fi
 }
 
-Grub-config() {
-	local filename="/etc/default/grub"
-	grep -q '${garuda_grub_d}' $filename
-	if [ $? == 1 ]; then
-		gawk -i inplace 'ENDFILE {
-        print "\n# This config file imports drop-in files from /etc/default/grub.d/.\nfor garuda_grub_d in ${sysconfdir}/default/grub.d/*.cfg ; do if [ -e \"${garuda_grub_d}\" ]; then source \"${garuda_grub_d}\"; fi; done"
-      }
-      1' $filename
-	fi
+Grub-btrfs-config() {
 	local filename="/etc/default/grub-btrfs/config"
 	if [ -f "${filename}" ]; then
 		grep -q 'garuda_grub_btrfs_d' $filename
@@ -185,7 +177,7 @@ Main() {
 	snapshot) Snapshot ;;
 	filesystem) Filesystem ;;
 	lsb-release) Lsb_release ;;
-	grub-config) Grub-config ;;
+	grub-btrfs-config) Grub-btrfs-config ;;
 	post) Post ;;
 	post_back) Post_background ;;
 	grub-update) Grub-update ;;
@@ -193,7 +185,7 @@ Main() {
 	"")
 		Filesystem
 		Lsb_release
-		Grub-config
+		Grub-btrfs-config
 		;;
 	esac
 }

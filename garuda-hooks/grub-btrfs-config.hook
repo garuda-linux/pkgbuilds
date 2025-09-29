@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = grub-btrfs
+
+[Action]
+Description = Enabling drop-ins for grub-btrfs
+When = PostTransaction
+Exec = /usr/share/libalpm/scripts/garuda-hooks-runner grub-btrfs-config
