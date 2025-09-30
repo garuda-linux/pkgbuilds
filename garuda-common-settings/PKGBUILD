@@ -4,7 +4,7 @@
 pkgname=garuda-common-settings
 pkgver="2.9.0"
 _commit='b1db243ea81019b87cd9393de186eba1c73239a0'
-pkgrel=2
+pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -32,7 +32,8 @@ package() {
     'garuda-wallpapers'
     'zram-generator'
     'systemd-oomd-defaults'
-    'noto-color-emoji-fontconfig')
+    'noto-color-emoji-fontconfig'
+    'privatebin-cli')
 
   install -d "$pkgdir"/etc
   cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
