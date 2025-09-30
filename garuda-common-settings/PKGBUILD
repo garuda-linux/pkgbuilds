@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver="2.9.1"
-_commit='a854bc40b9d9606fa3e157aa486b7e52c0c074bd'
+pkgver="2.9.2"
+_commit='25ebd0b5de4d693929fb75b9d3a7160c5091b960'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
