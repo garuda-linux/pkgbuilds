@@ -204,6 +204,14 @@ apply_migrations() {
 			garudalib_add_update_notice '/etc/default/grub was automatically edited to remove unnecessary logic related to drop in files from /etc/default/grub.d/. This is handled in the "grub" package instead.' || true
 		fi
 	fi
+
+	# If Sweet6 and sddm are installed, switch to the Sweet6 sddm theme
+	if [[ $(vercmp 3.4.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f /etc/sddm.conf ] && [ -f /usr/share/sddm/themes/Sweet6/profile.conf ]; then
+		if grep -q '^Current=Sweet$' /etc/sddm.conf; then
+			sed -i 's/^Current=Sweet$/Current=Sweet6 # Modified by garuda-migrations: Sweet -> Sweet6/' /etc/sddm.conf
+			garudalib_add_update_notice 'The SDDM theme was automatically changed from "Sweet" to "Sweet6" because plasma-framework5 was removed from the repositories.' || true
+		fi
+	fi
 }
 
 # $1 Previous version
