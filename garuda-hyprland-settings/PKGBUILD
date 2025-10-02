@@ -5,7 +5,7 @@
 pkgname=garuda-hyprland-settings
 pkgver="0.4.169"
 _commit='be7af1b6868db9f552f7aa43cc9eba5e866b09ad'
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -13,10 +13,12 @@ makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/${_commit}/garuda-hyprland-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
 pkgdesc='Garuda Linux Hyprland settings'
+# qt5-declarative is needed for "support" for the sddm theme. Temporary.
 depends=('beautyline'
   'garuda-common-settings'
   'gtk-engine-murrine'
   'plasma5-themes-sweet-full-git'
+  'qt5-declarative'
   'waybar'
   'hyprland'
   'kvantum-qt5'
