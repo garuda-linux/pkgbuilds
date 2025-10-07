@@ -1,4 +1,0 @@
-[grub-btrfs]
-source = "git"
-git = "https://github.com/Antynea/grub-btrfs.git"
-prefix = "v"
