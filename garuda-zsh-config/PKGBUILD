@@ -2,27 +2,26 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-zsh-config
-pkgver=1.1.10
+pkgver=1.1.11
 pkgrel=1
 pkgdesc="Zsh configuration for Garuda Linux"
 arch=(any)
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 conflicts=('grml-zsh-config' 'manjaro-zsh-config')
-depends=('find-the-command-git'
-	'fzf'
-	'garuda-starship-prompt'
-	'mcfly'
-	'ugrep'
-	'zsh'
-	'zsh-autosuggestions'
-	'zsh-completions'
-	'zsh-history-substring-search'
-	'zsh-syntax-highlighting')
+depends=('fzf'
+  'garuda-starship-prompt'
+  'mcfly'
+  'ugrep'
+  'zsh'
+  'zsh-autosuggestions'
+  'zsh-completions'
+  'zsh-history-substring-search'
+  'zsh-syntax-highlighting')
 makedepends=('git')
 source=('zshrc')
-sha256sums=('c0fa3e027fe752b55052909c2bf929094c1dc81854521abe5f69104a0370cd8e')
+sha256sums=('7f7ba0ce00c97febe1d2beb9193da806acc2652554b12e1522beb55533ac11a2')
 
 package() {
-	install -D -m644 zshrc "$pkgdir/etc/skel/.zshrc"
+  install -D -m644 zshrc "$pkgdir/etc/skel/.zshrc"
 }

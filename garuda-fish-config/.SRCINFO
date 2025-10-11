@@ -1,6 +1,6 @@
 pkgbase = garuda-fish-config
 	pkgdesc = Fish configuration of Garuda Linux
-	pkgver = 1.5.24
+	pkgver = 1.5.25
 	pkgrel = 1
 	url = https://garudalinux.org
 	arch = any
@@ -9,9 +9,7 @@ pkgbase = garuda-fish-config
 	depends = bat
 	depends = eza
 	depends = expac
-	depends = find-the-command-git
 	depends = fish
-	depends = fish-autopair
 	depends = fzf
 	depends = garuda-starship-prompt
 	depends = pkgfile
@@ -22,7 +20,7 @@ pkgbase = garuda-fish-config
 	source = garuda-update.fish
 	source = https://raw.githubusercontent.com/franciscolourenco/done/1.19.2/conf.d/done.fish
 	sha256sums = 6f7ffc81204fa908a324d0030d211e522ee0b0eee5be34b67ae885de4c02ffe7
-	sha256sums = 289cfe490e088eb386b14474f7c6d5d15b261f57728a47c071207af651201d7a
+	sha256sums = 857fabcaefbfe793d182aa8529c8dc0519b9cfd196bba5065eb85534b3ef87b5
 	sha256sums = 054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462
 	sha256sums = 10bac59fa5bd3e9d76d562bc7e8c7c4b35024c72af8575ba7e9f10f42d08708d
 

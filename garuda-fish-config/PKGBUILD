@@ -2,40 +2,39 @@
 # Contributor: Librewish librewish@gmail.com
 
 pkgname=garuda-fish-config
-pkgver=1.5.24
-pkgrel=2
+pkgver=1.5.25
+pkgrel=1
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
 url="https://garudalinux.org"
 license=('MIT')
 depends=('bat'
-	'eza'
-	'expac'
-	'find-the-command-git'
-	'fish'
-	'fzf'
-	'garuda-starship-prompt'
-	'pkgfile'
-	'tealdeer'
-	'ugrep')
+  'eza'
+  'expac'
+  'fish'
+  'fzf'
+  'garuda-starship-prompt'
+  'pkgfile'
+  'tealdeer'
+  'ugrep')
 makedepends=('git')
 source=("garuda-fish-completions-update.service"
-	"config.fish"
-	"garuda-update.fish"
-	"https://raw.githubusercontent.com/franciscolourenco/done/1.19.2/conf.d/done.fish")
+  "config.fish"
+  "garuda-update.fish"
+  "https://raw.githubusercontent.com/franciscolourenco/done/1.19.2/conf.d/done.fish")
 sha256sums=('6f7ffc81204fa908a324d0030d211e522ee0b0eee5be34b67ae885de4c02ffe7'
-            '289cfe490e088eb386b14474f7c6d5d15b261f57728a47c071207af651201d7a'
-            '054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462'
-            '10bac59fa5bd3e9d76d562bc7e8c7c4b35024c72af8575ba7e9f10f42d08708d')
+  '857fabcaefbfe793d182aa8529c8dc0519b9cfd196bba5065eb85534b3ef87b5'
+  '054fb02422a08c63c4fc1a9b59ec1e90775b214a7edf53f003aec27b6c686462'
+  '10bac59fa5bd3e9d76d562bc7e8c7c4b35024c72af8575ba7e9f10f42d08708d')
 
 package() {
-	cd "$srcdir" || exit
-	install -D -m644 config.fish "$pkgdir"/etc/skel/.config/fish/config.fish
-	install -Dm0644 garuda-update.fish "$pkgdir/usr/share/fish/vendor_conf.d/garuda-update.fish"
-	install -Dm0644 garuda-fish-completions-update.service "$pkgdir/usr/lib/systemd/user/garuda-fish-completions-update.service"
-	install -D -m644 done.fish "$pkgdir"/etc/skel/.config/fish/conf.d/done.fish
+  cd "$srcdir" || exit
+  install -D -m644 config.fish "$pkgdir"/etc/skel/.config/fish/config.fish
+  install -Dm0644 garuda-update.fish "$pkgdir/usr/share/fish/vendor_conf.d/garuda-update.fish"
+  install -Dm0644 garuda-fish-completions-update.service "$pkgdir/usr/lib/systemd/user/garuda-fish-completions-update.service"
+  install -D -m644 done.fish "$pkgdir"/etc/skel/.config/fish/conf.d/done.fish
 
-	# Workaround for mcfly complaining about missing history
-	mkdir -p "$pkgdir"/etc/skel/.local/share/fish
-	touch "$pkgdir"/etc/skel/.local/share/fish/fish_history
+  # Workaround for mcfly complaining about missing history
+  mkdir -p "$pkgdir"/etc/skel/.local/share/fish
+  touch "$pkgdir"/etc/skel/.local/share/fish/fish_history
 }

@@ -17,11 +17,6 @@ if [ -x /usr/bin/starship ]; then
 	unset -f __main
 fi
 
-# Advanced command-not-found hook
-if [[ -f /usr/share/doc/find-the-command/ftc.bash ]]; then
-  source /usr/share/doc/find-the-command/ftc.bash
-fi
-
 
 ## Useful aliases
 

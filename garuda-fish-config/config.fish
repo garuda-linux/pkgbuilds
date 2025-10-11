@@ -11,11 +11,6 @@ set -xU MANROFFOPT "-c"
 # Hint to exit PKGBUILD review in Paru
 set -x PARU_PAGER "less -P \"Press 'q' to exit the PKGBUILD review.\""
 
-## Export variable need for qt-theme
-if type "qtile" >> /dev/null 2>&1
-   set -x QT_QPA_PLATFORMTHEME "qt5ct"
-end
-
 # Set settings for https://github.com/franciscolourenco/done
 set -U __done_min_cmd_duration 10000
 set -U __done_notification_urgency_level low
@@ -44,9 +39,6 @@ end
 if status --is-interactive
    source ("/usr/bin/starship" init fish --print-full-init | psub)
 end
-
-## Advanced command-not-found hook
-source /usr/share/doc/find-the-command/ftc.fish
 
 ## Functions
 # Functions needed for !! and !$ https://github.com/oh-my-fish/plugin-bang-bang
@@ -109,7 +101,6 @@ function cleanup
 end
 
 ## Useful aliases
-
 # Replace ls with eza
 alias ls 'eza -al --color=always --group-directories-first --icons' # preferred listing
 alias lsz 'eza -al --color=always --total-size --group-directories-first --icons' # include file size
@@ -123,7 +114,6 @@ alias cat 'bat --style header --style snip --style changes --style header'
 if not test -x /usr/bin/yay; and test -x /usr/bin/paru
     alias yay 'paru'
 end
-
 
 # Common use
 alias .. 'cd ..'
