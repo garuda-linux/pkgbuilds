@@ -2,8 +2,8 @@
 # Co-Maintainer: FGD
 
 pkgname=garuda-dr460nized
-pkgver="4.6.1"
-_commit='0edde63874218746bbab9f091aeb46126a0aa09f'
+pkgver="4.6.2"
+_commit='01b35a44e5ef50254ccfc6bd4cfdf3c57d3d69ad'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
