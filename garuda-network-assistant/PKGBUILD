@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-network-assistant
-pkgver="1.2.1"
-_commit='c231ab10923dba10655fe771795768547b131290'
+pkgver="1.2.2"
+_commit='846c5fea1b2340db8d6d5e3078779e242338e522'
 pkgrel=2
 pkgdesc="A Boot options utility for Garuda Linux"
 arch=('any')

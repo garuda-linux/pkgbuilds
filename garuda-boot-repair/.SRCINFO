@@ -1,6 +1,6 @@
 pkgbase = garuda-boot-repair
 	pkgdesc = A Grub repair utility for Garuda Linux
-	pkgver = 1.1.1
+	pkgver = 1.1.2
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-boot-repair
 	arch = any
@@ -11,7 +11,7 @@ pkgbase = garuda-boot-repair
 	depends = xdg-utils
 	depends = grub
 	depends = polkit
-	source = https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/87f2de729189382d5529a4e42854bdcc1fc88545/garuda-boot-repair-87f2de729189382d5529a4e42854bdcc1fc88545.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/garuda-boot-repair/-/archive/026dbe2733d3daaa1baae944c26075a595dd7900/garuda-boot-repair-026dbe2733d3daaa1baae944c26075a595dd7900.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-boot-repair

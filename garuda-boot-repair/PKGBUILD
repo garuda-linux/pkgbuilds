@@ -2,8 +2,8 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-boot-repair
-pkgver="1.1.1"
-_commit='87f2de729189382d5529a4e42854bdcc1fc88545'
+pkgver="1.1.2"
+_commit='026dbe2733d3daaa1baae944c26075a595dd7900'
 pkgrel=2
 pkgdesc="A Grub repair utility for Garuda Linux"
 arch=('any')

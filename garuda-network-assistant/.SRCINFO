@@ -1,6 +1,6 @@
 pkgbase = garuda-network-assistant
 	pkgdesc = A Boot options utility for Garuda Linux
-	pkgver = 1.2.1
+	pkgver = 1.2.2
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-network-assistant
 	arch = any
@@ -15,7 +15,7 @@ pkgbase = garuda-network-assistant
 	depends = linux-wifi-hotspot
 	depends = traceroute
 	depends = wireless_tools
-	source = https://gitlab.com/garuda-linux/applications/garuda-network-assistant/-/archive/c231ab10923dba10655fe771795768547b131290/garuda-network-assistant-c231ab10923dba10655fe771795768547b131290.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/garuda-network-assistant/-/archive/846c5fea1b2340db8d6d5e3078779e242338e522/garuda-network-assistant-846c5fea1b2340db8d6d5e3078779e242338e522.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-network-assistant
