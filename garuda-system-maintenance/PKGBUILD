@@ -1,8 +1,8 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=garuda-system-maintenance
-pkgver="3.0.2"
-_commit='7cf4dd87a2f36593f5c6ed5ebca0f2f3a9b6ed45'
+pkgver="3.0.3"
+_commit='bd0df4caecc0b5b71de4430d791450498badb636'
 pkgrel=1
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
