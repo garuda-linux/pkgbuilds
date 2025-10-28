@@ -149,7 +149,7 @@ fi
 
 # Parse CLI options
 PARAMETERS=("$@")
-PARSED_OPTIONS=$(getopt --options="a" --longoptions="aur,skip-mirrorlist,no-space-check,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
+PARSED_OPTIONS=$(getopt --options="ah" --longoptions="help,aur,skip-mirrorlist,no-space-check,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
   echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
@@ -157,6 +157,9 @@ fi
 eval set -- "$PARSED_OPTIONS"
 while true; do
   case "$1" in
+  -h | --help)
+    source /usr/lib/garuda/garuda-update/help
+    ;;
   -a | --aur)
     UPDATE_AUR=1
     shift

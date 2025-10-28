@@ -11,12 +11,6 @@ variable conflictsfile_set [expr [info exists ::env(AUTOPACMAN_CONFLICTSFILE)] &
 # [package to be replaced]: [package to be replaced with]
 array set auto_replace_conflicts {
     python-xdg python-pyxdg
-    sweet-kde-git sweet-theme-full-git
-    sweet-cursor-theme-git sweet-theme-full-git
-    kvantum-theme-sweet-git sweet-theme-full-git
-    sweet-gtk-theme-dark sweet-theme-full-git
-    plasma5-theme-sweet-git sweet-theme-full-git
-    xcursor-sweet sweet-theme-full-git
     exe-thumbnailer icoextract
     pipewire-media-session wireplumber
     ipw2100-fw garuda-common-settings

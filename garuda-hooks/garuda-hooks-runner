@@ -59,7 +59,7 @@ Post_background() {
   if(begin) {
     print
   }
-}' | grep -vE 'garuda-update|garuda-hotfixes|.*-keyring') ]]; then
+}' | grep -vE 'garuda-update|.*-keyring') ]]; then
 		# Is the system fully up-to-date? If not, this is a partial upgrade.
 		if [ -z "$(pacman -Qu | grep -vE '\[ignored\]$')" ]; then
 			rm -f /var/lib/garuda/partial_upgrade

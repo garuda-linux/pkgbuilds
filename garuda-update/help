@@ -29,8 +29,8 @@ What does it do?
 	- A self-update is performed to ensure the latest fixes are downloaded.
 	- The mirrorlist is automatically refreshed using rate-mirrors
 	- The archlinux and chaotic keyrings are updated
-	- The garuda-hotfixes package is updated before any other system packages are updated to fix any important issues.
 	- Package related hotfixes such as conflicts and other issues are automatically resolved after they have been approved by the developers.
+	- A secondary Copy-on-Write (CoW) aware disk space check is executed to account for btrfs snapshots preventing disk space from being freed.
 	- The system update is applied. Common pacman prompts are automatically answered by “auto-pacman”. The user is asked to answer with “y” if they want to apply the update.
 	- Common post-update tasks are executed. The mlocate database is updated, fish completions and micro plugins are updated.
 	- If needed, a changelog showing major configuration changes is shown.

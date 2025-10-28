@@ -46,16 +46,7 @@ update_keyring_packages() {
 	return 0
 }
 
-update_hotfix_package() {
-	if [ -n "$($PACMAN -Qu garuda-hotfixes 2>&1)" ]; then
-		echo -e "\n\033[1;33m-->\033[1;34m Applying garuda-hotfixes before starting full system update..\033[0m"
-		SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN -S --needed --noconfirm garuda-hotfixes || return 0
-	fi
-}
-
 # Various hotfixes for the update process that do not involve modifying the pacman command itself (use package-replaces for that)
-# This kind of competes with the garuda-hotfixes package, but I much prefer to have things modifiying the pacman database in an unsupported way not running while pacman itself is running.
-# (garuda-hotfixes is run in a post_upgrade scriptlet)
 update_hotfixes() {
 	set -euo pipefail
 	local packages
@@ -167,7 +158,6 @@ pre-update-routines() {
 
 	local exit_code=0
 	update_keyring_packages || exit_code=2
-	update_hotfix_package
 	update_hotfixes || exit_code=1
 
 	return $exit_code
