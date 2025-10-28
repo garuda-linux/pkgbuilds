@@ -1,6 +1,6 @@
 pkgbase = garuda-system-maintenance
 	pkgdesc = Automated Garuda system maintenance tool
-	pkgver = 3.0.3
+	pkgver = 3.1.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/garuda-system-maintenance
 	arch = x86_64
@@ -16,7 +16,7 @@ pkgbase = garuda-system-maintenance
 	depends = snapper-tools
 	replaces = garuda-settings-manager-knotifier-git
 	replaces = garuda-settings-manager-notifier-git
-	source = https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/archive/bd0df4caecc0b5b71de4430d791450498badb636/garuda-system-maintenance-bd0df4caecc0b5b71de4430d791450498badb636.tar.gz
+	source = https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/archive/0bb1ee7ba071b446bae95cfcb256df96a434e5ae/garuda-system-maintenance-0bb1ee7ba071b446bae95cfcb256df96a434e5ae.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-system-maintenance
