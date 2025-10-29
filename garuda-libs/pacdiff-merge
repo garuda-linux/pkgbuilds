@@ -7,7 +7,7 @@ REQUIRED_CMDS=(pacdiff sudo snapper "$MERGE_TOOL")
 
 function check_can_write {
     local target_file="$1"
-    if lsattr "$target_file" 2>/dev/null | grep -q '^-.*i'; then
+    if lsattr "$target_file" 2>/dev/null | grep -q '^.\{4\}i'; then
         echo "Error: $target_file is immutable (chattr +i). Remove immutable flag with: sudo chattr -i $target_file"
         return 1
     fi
