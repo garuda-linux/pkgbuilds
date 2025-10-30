@@ -105,31 +105,34 @@ if systemd-detect-virt -q; then
 fi
 
 # Detect all GPU devices
-gpu_devices="$(lspci -nn -d '*:*:03xx')"
+gpu_devices="$(lspci -mmnn -d '*:*:03xx')"
 
 # Any GPU devices found?
 if [[ -n "$gpu_devices" ]]; then
     # 00:02.0 VGA compatible controller [0300]: Intel Corporation Alder Lake-P GT2 [Iris Xe Graphics] [8086:46a6] (rev 0c)
     # 01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] [10de:24a0] (rev a1)
     # ${BASH_REMATCH[1]} == pci id
-    # ${BASH_REMATCH[2]} == manufacturer name/family
-    # ${BASH_REMATCH[3]} == model name
-    # ${BASH_REMATCH[4]} == vendor id
-    regex='^([0-9:\.]+)\s+[0-9a-zA-Z ]+ controller \[03..\]:\s+(.*?)\s+\[([^]]+)\]\s+\[([0-9a-f]{4}):([0-9a-f]{4})\]'
+    # ${BASH_REMATCH[2]} == manufacturer name
+    # ${BASH_REMATCH[3]} == vendor id
+    # ${BASH_REMATCH[4]} == model name
+    # ${BASH_REMATCH[6]} == model name 2
+    # ${BASH_REMATCH[7]} == model id
+    regex='^([^ ]+) "[^"]+\[03..\]" "([^[]+) \[([0-9a-f]{4})\]" "([^[]+)( \[([^]]+)\])? \[([0-9a-f]{4})\]"'
 
     while read -r line; do
         if [[ $line =~ $regex ]]; then
             pci_id="${BASH_REMATCH[1]}"
             manufacturer="${BASH_REMATCH[2]}"
-            model="${BASH_REMATCH[3]}"
-            vendor_id="${BASH_REMATCH[4]}"
+            vendor_id="${BASH_REMATCH[3]}"
+            model_1=${BASH_REMATCH[4]}
+            model_2="${BASH_REMATCH[6]}"
 
-            print_log "\033[1;32mDetected GPU: Product: $manufacturer $model, PCI ID: $pci_id, Vendor ID: $vendor_id\033[0m"
+            print_log "\033[1;32mDetected GPU: Product: $manufacturer $model_1 $model_2, PCI ID: $pci_id, Vendor ID: $vendor_id\033[0m"
 
             # Detect nvidia
             if [[ "$vendor_id" == "10de" ]]; then
                 # Detect if family is between (and including) volta and maxwell
-                if [[ "$manufacturer" =~ ^NVIDIA\ Corporation\ ([A-Z]{2})[0-9]{3}[A-Z]*$ ]]; then
+                if [[ "$model_1" =~ ^([A-Z]{2}) ]]; then
                     family="${BASH_REMATCH[1]}"
                     case "$family" in
                         "GT" | "GF" | "GK")
