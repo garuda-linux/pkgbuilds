@@ -347,7 +347,7 @@ def _fix_install_packages(issue: Issue) -> Tuple[bool, str]:
     else:
         return False, f"Failed to install packages. Exit code: {result}"
 
-fix_install_packages = Fixer(fix_function=_fix_install_packages, priority=7, excludes=["install"], actions=["install"])
+fix_install_packages = Fixer(fix_function=_fix_install_packages, priority=7)
 
 def _fix_update_system(issue: Issue) -> Tuple[bool, str]:
     """
@@ -454,6 +454,39 @@ def _fix_dkms_rebuild(issue: Issue) -> Tuple[bool, str]:
 # Needs to execute before dracut to prevent depline issues
 fix_dkms_rebuild = Fixer(fix_function=_fix_dkms_rebuild, priority=2, excludes=["dkms"], actions=["dkms"])
 
+def _fix_remove_packages(issue: Issue) -> Tuple[bool, str]:
+    """
+    Install missing packages using pacman.
+
+    :param issue: The Issue object containing details about the missing packages.
+    :return: A tuple of (success_boolean, status_message).
+    """
+    packages = issue.details.get("packages")
+    if not packages:
+        return False, "No packages provided to install."
+
+    if "steam-native-runtime" in packages:
+        steam_explicit = run_shell_command("pacman -Qqe steam")
+        if steam_explicit.exit_code != 0:
+            result = run_interactive_command(f"sudo pacman -D --asexplicit steam", require_consent=True)
+            if result == 0:
+                print("Set package 'steam' as explicitly installed.")
+            elif result == 130:
+                return False, "Fix cancelled by user."
+            else:
+                return False, f"Failed to remove packages. Exit code: {result}"
+
+    package_list = " ".join(packages)
+    result = run_interactive_command(f"sudo pacman -Rs {package_list}", require_consent=True)
+    if result == 0:
+        return True, f"Removed packages: {package_list} successfully."
+    elif result == 130:
+        return False, "Fix cancelled by user."
+    else:
+        return False, f"Failed to remove packages. Exit code: {result}"
+
+fix_remove_packages = Fixer(fix_function=_fix_remove_packages, priority=7)
+
 # -- Check Implementations --
 
 def check_for_packages(severity: Severity, package_names: list[str], package_names_providable: list[str], text: str) -> Optional[HealthCheckResult]:
@@ -516,6 +549,25 @@ def check_for_optional_packages() -> HealthCheck:
             Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
         )
     return HealthCheck(check, optional_packages)
+
+def check_for_deprecated_packages() -> HealthCheck:
+    """
+    Check if the system is using EFI and if the correct efi bootloader is in use.
+    """
+    deprecated_packages = ["garuda-hotfixes", "steam-native-runtime"]
+    def check() -> HealthCheckResult:
+        found = [pkg for pkg in deprecated_packages if ((pkg_info := cache.get(pkg)).installed and not pkg_info.provided)]
+        if found:
+          return HealthCheckResult(
+            Severity.LOW,
+            Issue(
+                f"Deprecated/Outdated/Removed packages should be removed: {', '.join(found)}",
+                fix=fix_remove_packages,
+                details={"packages": found}
+            )
+        )
+        return HealthCheckResult(Severity.NO_ISSUE)
+    return HealthCheck(check, deprecated_packages)
 
 def check_pacman_conf() -> HealthCheck:
     """
@@ -1247,6 +1299,7 @@ checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
     check_for_optional_packages(),
+    check_for_deprecated_packages(),
     check_pacman_conf(),
     check_nvidia_drivers(),
     check_nvidia_kernel_module(),
