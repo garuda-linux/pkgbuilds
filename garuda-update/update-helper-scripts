@@ -2,7 +2,7 @@
 # shellcheck disable=SC2317
 set -e
 
-CURRENT_INTERVENTION_SEQUENCE=1
+CURRENT_INTERVENTION_SEQUENCE=2
 INTERVENTION_SEQUENCE_FILE="/etc/garuda/garuda-update/intervention_sequence"
 
 # Hacky way to check if the package is installed
@@ -49,7 +49,7 @@ update_keyring_packages() {
 # Various hotfixes for the update process that do not involve modifying the pacman command itself (use package-replaces for that)
 update_hotfixes() {
 	set -euo pipefail
-	local packages
+	local packages sequence
 	sequence="$(get_intervention_sequence)"
 
 	if (( sequence < 1 )); then
@@ -163,6 +163,43 @@ pre-update-routines() {
 	return $exit_code
 }
 
+post-update-routines() {
+	set -euo pipefail
+	local sequence
+	sequence="$(get_intervention_sequence)"
+
+	if (( sequence < 2 )); then
+		if $PACMAN -Qq garuda-hotfixes >/dev/null 2>&1; then
+			SNAP_PAC_SKIP=y SKIP_AUTOSNAP='' $PACMAN -R --noconfirm garuda-hotfixes
+		fi
+	fi
+
+	update-intervention-sequence
+}
+
+end-routines() {
+	set -euo pipefail
+	# Update plocate index in the background
+	if [ -x /usr/bin/locate ]; then
+		systemctl start plocate-updatedb.service --no-block
+	fi
+
+	# Update fish completions
+	if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ -n "$SUDO_USER" ]; then
+		systemctl --user -M "$SUDO_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+	fi
+
+	# Rebuild bat cache
+	if [ -f /usr/lib/systemd/user/garuda-bat-cache-rebuild.service ] && [ -n "$SUDO_USER" ]; then
+		systemctl --user -M "$SUDO_USER@.host" start garuda-bat-cache-rebuild.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+	fi
+
+	# Update micro plugins
+	if [ -x /usr/bin/micro ] && [ -n "$SUDO_USER" ]; then
+		systemd-run --user -M "$SUDO_USER@.host" --no-block -G -q micro -plugin update
+	fi
+}
+
 migrate-garuda-repo() {
 	# Add garuda repo if it doesn't exist
 	gawk -i inplace 'BEGIN {
@@ -234,7 +271,7 @@ update-intervention-sequence() {
 	echo "# DO NOT MODIFY THIS FILE
 # This file is used by garuda-update to determine which intervention steps (fixes) have already been completed.
 # You have nothing to gain by modifying this file
-INTERVENTION_SEQUENCE=1" > "$INTERVENTION_SEQUENCE_FILE"
+INTERVENTION_SEQUENCE=${CURRENT_INTERVENTION_SEQUENCE}" > "$INTERVENTION_SEQUENCE_FILE"
 }
 
 "$@"

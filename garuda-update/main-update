@@ -224,7 +224,7 @@ fi
 
 do_update
 
-/usr/lib/garuda/garuda-update/update-helper-scripts update-intervention-sequence
+/usr/lib/garuda/garuda-update/update-helper-scripts post-update-routines
 
 if [[ -v UPDATE_AUR ]] && [[ -z "$GARUDA_UPDATE_RANI" ]]; then
   # Check for AUR helper
@@ -245,25 +245,7 @@ if [[ -v UPDATE_AUR ]] && [[ -v GARUDA_UPDATE_RANI ]]; then
   echo -e "\n\033[1;33m-->\033[1;34m Skipping AUR update. Running those via Rani is explicitly not supported. Instead, use the terminal and review updates manually.\033[0m"
 fi
 
-# Update plocate index in the background
-if [ -x /usr/bin/locate ]; then
-  systemctl start plocate-updatedb.service --no-block
-fi
-
-# Update fish completions
-if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ -n "$SUDO_USER" ]; then
-  systemctl --user -M "$SUDO_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
-fi
-
-# Rebuild bat cache
-if [ -f /usr/lib/systemd/user/garuda-bat-cache-rebuild.service ] && [ -n "$SUDO_USER" ]; then
-  systemctl --user -M "$SUDO_USER@.host" start garuda-bat-cache-rebuild.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
-fi
-
-# Update micro plugins
-if [ -x /usr/bin/micro ] && [ -n "$SUDO_USER" ]; then
-  systemd-run --user -M "$SUDO_USER@.host" --no-block -G -q micro -plugin update
-fi
+/usr/lib/garuda/garuda-update/update-helper-scripts end-routines
 
 echo -e "\n\033[1;32mSystem updated! 🐧\n\033[0m"
 show_changelog && HAD_CHANGELOG=1 || true
