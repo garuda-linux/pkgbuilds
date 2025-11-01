@@ -339,7 +339,7 @@ index 000000000..49dff73e4
 +
 +        # create snapper config
 +        if exists(join(self.root, "usr/bin/snapper")):
-+            target_env_call(["snapper", "-c", "root" "create-config", "/"])
++            target_env_call(["snapper", "-c", "root", "create-config", "/"])
 +            target_env_call(["btrfs", "subvolume", "create", "/.snapshots"])
 +        
 +        target_env_call(["dracut-rebuild"])
