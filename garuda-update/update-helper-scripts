@@ -184,19 +184,30 @@ end-routines() {
 		systemctl start plocate-updatedb.service --no-block
 	fi
 
-	# Update fish completions
-	if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ] && [ -n "$SUDO_USER" ]; then
-		systemctl --user -M "$SUDO_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+	local TARGET_UID=""
+	if [ -v SUDO_UID ]; then
+		TARGET_UID="$SUDO_UID"
+	elif [ -v PKEXEC_UID ]; then
+		TARGET_UID="$PKEXEC_UID"
 	fi
 
-	# Rebuild bat cache
-	if [ -f /usr/lib/systemd/user/garuda-bat-cache-rebuild.service ] && [ -n "$SUDO_USER" ]; then
-		systemctl --user -M "$SUDO_USER@.host" start garuda-bat-cache-rebuild.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
-	fi
+	if [ -n "$TARGET_UID" ]; then
+		local TARGET_USER
+		TARGET_USER="$(id -nu "$TARGET_UID")"
+		# Update fish completions
+		if [ -f /usr/lib/systemd/user/garuda-fish-completions-update.service ]; then
+			systemctl --user -M "$TARGET_USER@.host" start garuda-fish-completions-update.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+		fi
 
-	# Update micro plugins
-	if [ -x /usr/bin/micro ] && [ -n "$SUDO_USER" ]; then
-		systemd-run --user -M "$SUDO_USER@.host" --no-block -G -q micro -plugin update
+		# Rebuild bat cache
+		if [ -f /usr/lib/systemd/user/garuda-bat-cache-rebuild.service ]; then
+			systemctl --user -M "$TARGET_USER@.host" start garuda-bat-cache-rebuild.service --no-block 2>&1 | awk '/Transport endpoint is not connected$/ { exit 0; } 1'
+		fi
+
+		# Update micro plugins
+		if [ -x /usr/bin/micro ]; then
+			systemd-run --user -M "$TARGET_USER@.host" --no-block -G -q micro -plugin update
+		fi
 	fi
 }
 
