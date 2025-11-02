@@ -239,7 +239,7 @@ new file mode 100644
 index 000000000..70fe962b2
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,140 @@
+@@ -0,0 +1,141 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -266,7 +266,7 @@ index 000000000..70fe962b2
 +
 +from shutil import copy2, copytree
 +from os.path import join, exists
-+from os import rename
++from os import rename, makedirs
 +from libcalamares.utils import target_env_call, target_env_process_output
 +
 +
@@ -347,7 +347,7 @@ index 000000000..70fe962b2
 +
 +        # create snapper config
 +        if exists(join(self.root, "usr/bin/snapper")):
-+            target_env_call(["snapper", "-c", "root", "create-config", "/"])
++            target_env_call(["snapper", "--no-dbus", "-c", "root", "create-config", "/"])
 +            if libcalamares.globalstorage.contains("garudaInplaceSnapshots"):
 +                btrfs_root = libcalamares.globalstorage.value("garudaInplaceBtrfsRoot")
 +                snapshots_location = libcalamares.globalstorage.value("garudaInplaceSnapshots")
@@ -364,6 +364,7 @@ index 000000000..70fe962b2
 +            destination_dir = join(btrfs_root, "@home", desktop_dir.lstrip('/home/'), "Old_Home_Files")
 +            old_home_dir = join(btrfs_root, old_home)
 +            # Copy files with reflink from old home to desktop
++            makedirs(destination_dir, exist_ok=True)
 +            subprocess.call(["cp", "-a", "--reflink=auto", old_home_dir + "/.", destination_dir])
 +            # Set ownership to user
 +            target_env_call(["chown", "-R", f"{username}:{username}", destination_dir])
