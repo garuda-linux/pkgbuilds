@@ -239,7 +239,7 @@ new file mode 100644
 index 000000000..70fe962b2
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,142 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -357,20 +357,21 @@ index 000000000..70fe962b2
 +
 +        # Move home files from old home to new home (into a subfolder)
 +        if libcalamares.globalstorage.contains("garudaInplaceHome"):
-+            old_home = libcalamares.globalstorage.value("garudaInplaceHome")
++            subvol_old_home = libcalamares.globalstorage.value("garudaInplaceHome")
 +            username = libcalamares.globalstorage.value("username")
-+            desktop_dir = self.find_xdg_directory(username, "DESKTOP")
++            chroot_desktop_path = self.find_xdg_directory(username, "DESKTOP")
 +            btrfs_root = libcalamares.globalstorage.value("garudaInplaceBtrfsRoot")
-+            destination_dir = join(btrfs_root, "@home", desktop_dir.lstrip('/home/'), "Old_Home_Files")
-+            old_home_dir = join(btrfs_root, old_home)
++            chroot_destination_path = join(chroot_desktop_path, "Old_Home_Files")
++            btrfsroot_destination_path = join(btrfs_root, "@home", chroot_destination_path.lstrip('/home/'))
++            btrfsroot_old_home_path = join(btrfs_root, subvol_old_home)
 +            # Copy files with reflink from old home to desktop
-+            makedirs(destination_dir, exist_ok=True)
-+            subprocess.call(["cp", "-a", "--reflink=auto", old_home_dir + "/.", destination_dir])
++            makedirs(btrfsroot_destination_path, exist_ok=True)
++            subprocess.call(["cp", "-a", "--reflink=auto", btrfsroot_old_home_path + "/.", btrfsroot_destination_path])
 +            # Set ownership to user
-+            target_env_call(["chown", "-R", f"{username}:{username}", destination_dir])
-+            if exists(join(destination_dir, "pre-reset-packages-backup.txt")):
-+                subprocess.call(["mv", join(destination_dir, "pre-reset-packages-backup.txt"),
-+                                 join(self.root, desktop_dir.lstrip('/'), "pre-reset-packages-backup.txt")])
++            target_env_call(["chown", "-R", f"{username}:{username}", chroot_destination_path])
++            if exists(join(btrfsroot_destination_path, "pre-reset-packages-backup.txt")):
++                target_env_call(["mv", join(chroot_destination_path, "pre-reset-packages-backup.txt"),
++                                 join(chroot_desktop_path, "pre-reset-packages-backup.txt")])
 +
 +        return None
 +
