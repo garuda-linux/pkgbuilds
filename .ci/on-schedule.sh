@@ -522,7 +522,7 @@ for package in "${PACKAGES[@]}"; do
     declare -A VARIABLES=()
     UTIL_READ_MANAGED_PACAKGE "$package" VARIABLES || true
 
-    if [[ -v VARIABLES[CI_HUMAN_REVIEW] ]] && [ "${VARIABLES[CI_HUMAN_REVIEW]}" == "true" ]; then
+    if [ -v CI_HUMAN_REVIEW ] && [ "$CI_HUMAN_REVIEW" == "true" ]; then
         check_maintainer_trust "$package" VARIABLES
     fi
 
