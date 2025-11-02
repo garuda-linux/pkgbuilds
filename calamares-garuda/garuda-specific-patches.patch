@@ -318,7 +318,7 @@ index 000000000..70fe962b2
 +
 +    def find_xdg_directory(self, user, type):
 +        output = []
-+        target_env_process_output(["sudo", "-u", user, "xdg-user-dir", type], output)
++        target_env_process_output(["su", "-lT", user, "xdg-user-dir", type], output)
 +        return output[0].strip()
 +
 +    def run(self):
@@ -364,9 +364,9 @@ index 000000000..70fe962b2
 +            destination_dir = join(btrfs_root, "@home", desktop_dir.lstrip('/home/'), "Old_Home_Files")
 +            old_home_dir = join(btrfs_root, old_home)
 +            # Copy files with reflink from old home to desktop
-+            subprocess.call(["cp", "-a", "--reflink=auto", old_home + "/.", destination_dir])
++            subprocess.call(["cp", "-a", "--reflink=auto", old_home_dir + "/.", destination_dir])
 +            # Set ownership to user
-+            subprocess.call(["chown", "-R", f"{username}:{username}", destination_dir])
++            target_env_call(["chown", "-R", f"{username}:{username}", destination_dir])
 +            if exists(join(destination_dir, "pre-reset-packages-backup.txt")):
 +                subprocess.call(["mv", join(destination_dir, "pre-reset-packages-backup.txt"),
 +                                 join(self.root, desktop_dir.lstrip('/'), "pre-reset-packages-backup.txt")])
@@ -447,7 +447,7 @@ new file mode 100644
 index 000000000..f854dc02b
 --- /dev/null
 +++ b/src/modules/inplace/main.py
-@@ -0,0 +1,50 @@
+@@ -0,0 +1,46 @@
 +#!/usr/bin/env python3
 +import libcalamares
 +import datetime
@@ -473,16 +473,12 @@ index 000000000..f854dc02b
 +def pretty_name():
 +    return "Preparing In-Place Reinstallation"
 +def run():
-+    libcalamares.utils.warning("a")
 +    mounts = libcalamares.job.configuration["mounts"]
-+    libcalamares.utils.warning("b")
 +    # Write mounts to the global storage directly
 +    libcalamares.globalstorage.insert("partitions", mounts)
-+    libcalamares.utils.warning("c")
 +    
 +    # Mount the root partition now
 +    mount_point = tempfile.mkdtemp(prefix="calamares-inplace-")
-+    libcalamares.utils.warning("d")
 +    mount_btrfs_root(mounts, mount_point)
 +        
 +    subvolume_basename = '_backup_' + datetime.datetime.now().strftime("%Y%d%m%H%M%S")

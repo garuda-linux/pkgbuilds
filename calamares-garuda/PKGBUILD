@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.4.0.r6.g78d4208a0
 _commit=78d4208a03b0abdfb68e94c9c08a28f37a473ee6
-pkgrel=9
+pkgrel=10
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 license=(GPL)
@@ -27,7 +27,7 @@ source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
 sha256sums=('03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67'
             'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
             'b019ab30907724f4f56ec56d41bd22794a88081fc0f1608d8cd65c4929a9c1e6'
-            '9afd7f88dc66e3e0383fdc70ee3530f651fbe2392c238c3349879efc8d341033')
+            'f97e3d33fa5f4e65f1600fc499c5717a8793e7b34ef62a12169f88652c46ac61')
 
 pkgver() {
   cd "$srcdir/calamares" || exit
