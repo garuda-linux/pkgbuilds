@@ -239,7 +239,7 @@ new file mode 100644
 index 000000000..70fe962b2
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,137 @@
+@@ -0,0 +1,140 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -349,8 +349,9 @@ index 000000000..70fe962b2
 +        if exists(join(self.root, "usr/bin/snapper")):
 +            target_env_call(["snapper", "-c", "root", "create-config", "/"])
 +            if libcalamares.globalstorage.contains("garudaInplaceSnapshots"):
++                btrfs_root = libcalamares.globalstorage.value("garudaInplaceBtrfsRoot")
 +                snapshots_location = libcalamares.globalstorage.value("garudaInplaceSnapshots")
-+                rename(snapshots_location, join(self.root, ".snapshots"))
++                rename(join(btrfs_root, snapshots_location), join(btrfs_root, "@", ".snapshots"))
 +            else:
 +                target_env_call(["btrfs", "subvolume", "create", "/.snapshots"])
 +
@@ -359,7 +360,9 @@ index 000000000..70fe962b2
 +            old_home = libcalamares.globalstorage.value("garudaInplaceHome")
 +            username = libcalamares.globalstorage.value("username")
 +            desktop_dir = self.find_xdg_directory(username, "DESKTOP")
-+            destination_dir = join(self.root, desktop_dir.lstrip('/'), "Old_Home_Files")
++            btrfs_root = libcalamares.globalstorage.value("garudaInplaceBtrfsRoot")
++            destination_dir = join(btrfs_root, "@home", desktop_dir.lstrip('/home/'), "Old_Home_Files")
++            old_home_dir = join(btrfs_root, old_home)
 +            # Copy files with reflink from old home to desktop
 +            subprocess.call(["cp", "-a", "--reflink=auto", old_home + "/.", destination_dir])
 +            # Set ownership to user
@@ -444,7 +447,7 @@ new file mode 100644
 index 000000000..f854dc02b
 --- /dev/null
 +++ b/src/modules/inplace/main.py
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,50 @@
 +#!/usr/bin/env python3
 +import libcalamares
 +import datetime
@@ -492,6 +495,7 @@ index 000000000..f854dc02b
 +
 +    libcalamares.globalstorage.insert("firmwareType", "efi")
 +    libcalamares.globalstorage.insert("efiSystemPartition", "/boot/efi")
++    libcalamares.globalstorage.insert("garudaInplaceBtrfsRoot", mount_point)
 +    libcalamares.globalstorage.insert("garudaInplaceHome", f"@home{subvolume_basename}")
 +    libcalamares.globalstorage.insert("garudaInplaceSnapshots", f"@{subvolume_basename}/.snapshots")
 \ No newline at end of file
