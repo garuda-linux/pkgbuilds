@@ -1,7 +1,7 @@
 From d69d5b3933481354c38f07d2faba117033946f92 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:08 +0100
-Subject: [PATCH 1/7] Add ghtcfg module for hardware configuration
+Subject: [PATCH 1/6] Add ghtcfg module for hardware configuration
 
 ---
  src/modules/ghtcfg/ghtcfg.conf |  19 ++++++
@@ -171,7 +171,7 @@ index 000000000..dfc0b2cde
 From ec2821b02336667c56f3c3004da8d57744a4470b Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:26 +0100
-Subject: [PATCH 2/7] grubcfg: Adjust parameters when using plymouth
+Subject: [PATCH 2/6] grubcfg: Adjust parameters when using plymouth
 
 ---
  src/modules/grubcfg/main.py | 2 +-
@@ -197,7 +197,7 @@ index 346a267cd..77eb0caf0 100644
 From b4cc7a5b2e8e9de1b4f4d61cec7e142a88b108f9 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:39 +0100
-Subject: [PATCH 3/7] partition: Change cursor color
+Subject: [PATCH 3/6] partition: Change cursor color
 
 ---
  src/modules/partition/gui/PartitionLabelsView.cpp | 2 +-
@@ -220,26 +220,26 @@ index b9e315edb..e14066c0a 100644
 2.51.0
 
 
-From c6c6b3776ff97d4baf7af2753eee80472535bb42 Mon Sep 17 00:00:00 2001
+From 9ae99e3376c18bc09cbc80e5614132b3faac0fd5 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:42:30 +0100
-Subject: [PATCH 4/7] Add postcfg module
+Subject: [PATCH 4/6] Add postcfg module
 
 ---
- src/modules/postcfg/main.py      | 113 +++++++++++++++++++++++++++++++
+ src/modules/postcfg/main.py      | 132 +++++++++++++++++++++++++++++++
  src/modules/postcfg/module.desc  |   6 ++
- src/modules/postcfg/postcfg.conf |   4 ++
- 3 files changed, 123 insertions(+)
+ src/modules/postcfg/postcfg.conf |   4 +
+ 3 files changed, 142 insertions(+)
  create mode 100644 src/modules/postcfg/main.py
  create mode 100644 src/modules/postcfg/module.desc
  create mode 100644 src/modules/postcfg/postcfg.conf
 
 diff --git a/src/modules/postcfg/main.py b/src/modules/postcfg/main.py
 new file mode 100644
-index 000000000..49dff73e4
+index 000000000..57fba8bc6
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,113 @@
+@@ -0,0 +1,132 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -264,10 +264,10 @@ index 000000000..49dff73e4
 +import libcalamares
 +import subprocess
 +
-+from shutil import copy2
-+from distutils.dir_util import copy_tree
++from shutil import copy2, copytree
 +from os.path import join, exists
-+from libcalamares.utils import target_env_call
++from os import rename
++from libcalamares.utils import target_env_call, target_env_process_output
 +
 +
 +class ConfigController:
@@ -298,7 +298,7 @@ index 000000000..49dff73e4
 +
 +    def copy_folder(self, source, target):
 +        if exists("/" + source):
-+            copy_tree("/" + source, join(self.root, target))
++            copytree("/" + source, join(self.root, target), symlinks=True, dirs_exist_ok=True)
 +
 +    def remove_pkg(self, pkg, path):
 +        if exists(join(self.root, path)):
@@ -316,6 +316,11 @@ index 000000000..49dff73e4
 +    def mkdir(self, dir):
 +        subprocess.call(["mkdir", "-p", join(self.root, dir)])
 +
++    def find_xdg_directory(self, user, type):
++        output = []
++        target_env_process_output(["sudo", "-u", user, "xdg-user-dir", type], output)
++        return output[0].strip()
++
 +    def run(self):
 +        self.init_keyring()
 +        self.populate_keyring()
@@ -326,9 +331,9 @@ index 000000000..49dff73e4
 +            self.remove_pkg("intel-ucode", "boot/intel-ucode.img")
 +        elif cpu_ucode == "GenuineIntel":
 +            self.remove_pkg("amd-ucode", "boot/amd-ucode.img")
-+
-+        # Copy skel to root
-+        self.copy_folder('etc/skel', 'root')
++        else:
++            # Since no microcode packages were removed, dracut needs to be manually triggered
++            target_env_call(["dracut-rebuild"])
 +
 +        # Workaround for pacman-key bug
 +        # FS#45351 https://bugs.archlinux.org/task/45351
@@ -337,12 +342,26 @@ index 000000000..49dff73e4
 +        # the target partition.
 +        self.terminate('gpg-agent')
 +
++        # Copy skel to root
++        self.copy_folder('etc/skel', 'root')
++
 +        # create snapper config
 +        if exists(join(self.root, "usr/bin/snapper")):
 +            target_env_call(["snapper", "-c", "root", "create-config", "/"])
-+            target_env_call(["btrfs", "subvolume", "create", "/.snapshots"])
-+        
-+        target_env_call(["dracut-rebuild"])
++            if libcalamares.globalstorage.contains("garudaInplaceSnapshots"):
++                snapshots_location = libcalamares.globalstorage.value("garudaInplaceSnapshots")
++                rename(snapshots_location, join(self.root, ".snapshots"))
++            else:
++                target_env_call(["btrfs", "subvolume", "create", "/.snapshots"])
++
++        # Move home files from old home to new home (into a subfolder)
++        if libcalamares.globalstorage.contains("garudaInplaceHome"):
++            old_home = libcalamares.globalstorage.value("garudaInplaceHome")
++            username = libcalamares.globalstorage.value("username")
++            desktop_dir = self.find_xdg_directory(username, "DESKTOP")
++            destination_dir = join(self.root, desktop_dir.lstrip('/'), "Old_Home_Files")
++            # Copy files with reflink from old home to desktop
++            subprocess.call(["cp", "-a", "--reflink=auto", old_home + "/.", destination_dir])
 +
 +        return None
 +
@@ -379,10 +398,10 @@ index 000000000..7ad198f95
 2.51.0
 
 
-From ccb8ee3e279234e20e51a072527b8cba15141283 Mon Sep 17 00:00:00 2001
+From 8520a92b78c57f0a1bd79a97274a83ec9c57cb63 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:45:54 +0100
-Subject: [PATCH 5/7] bootloader: Remove dependency on partition  module
+Subject: [PATCH 5/6] bootloader: Remove dependency on partition  module
 
 ---
  src/modules/bootloader/module.desc | 3 ---
@@ -403,68 +422,24 @@ index 44a1c0ee5..622f0b7d1 100644
 2.51.0
 
 
-From c31c916ba8fe4c51ce915a1751febc6c358366e1 Mon Sep 17 00:00:00 2001
-From: TNE <tne@garudalinux.org>
-Date: Sat, 1 Nov 2025 14:49:57 +0100
-Subject: [PATCH 6/7] Add inplacehome module
-
----
- src/modules/inplacehome/main.py     | 9 +++++++++
- src/modules/inplacehome/module.desc | 5 +++++
- 2 files changed, 14 insertions(+)
- create mode 100644 src/modules/inplacehome/main.py
- create mode 100644 src/modules/inplacehome/module.desc
-
-diff --git a/src/modules/inplacehome/main.py b/src/modules/inplacehome/main.py
-new file mode 100644
-index 000000000..f9dc9daa0
---- /dev/null
-+++ b/src/modules/inplacehome/main.py
-@@ -0,0 +1,9 @@
-+#!/usr/bin/env python3
-+import libcalamares
-+
-+def pretty_name():
-+    return "Configuring home subvolume"
-+def run():
-+    btrfs_subvolumes = libcalamares.globalstorage.value("btrfsSubvolumes")
-+    btrfs_subvolumes.append({'mountPoint': '/home', 'subvolume': '/@home'})
-+    libcalamares.globalstorage.insert("btrfsSubvolumes", btrfs_subvolumes)
-\ No newline at end of file
-diff --git a/src/modules/inplacehome/module.desc b/src/modules/inplacehome/module.desc
-new file mode 100644
-index 000000000..deb89741e
---- /dev/null
-+++ b/src/modules/inplacehome/module.desc
-@@ -0,0 +1,5 @@
-+---
-+type: "job"
-+interface: "python"
-+name: "inplacehome"
-+script: "main.py"
-\ No newline at end of file
--- 
-2.51.0
-
-
-From a5acf5d03349fe5c58b69e4a9803a35584eca894 Mon Sep 17 00:00:00 2001
+From 3310c1920b2338b9f86a0097138728933e794e91 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:50:04 +0100
-Subject: [PATCH 7/7] Add inplace module
+Subject: [PATCH 6/6] Add inplace module
 
 ---
- src/modules/inplace/main.py     | 43 +++++++++++++++++++++++++++++++++
+ src/modules/inplace/main.py     | 49 +++++++++++++++++++++++++++++++++
  src/modules/inplace/module.desc |  5 ++++
- 2 files changed, 48 insertions(+)
+ 2 files changed, 54 insertions(+)
  create mode 100644 src/modules/inplace/main.py
  create mode 100644 src/modules/inplace/module.desc
 
 diff --git a/src/modules/inplace/main.py b/src/modules/inplace/main.py
 new file mode 100644
-index 000000000..08d6d4e6e
+index 000000000..f854dc02b
 --- /dev/null
 +++ b/src/modules/inplace/main.py
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,49 @@
 +#!/usr/bin/env python3
 +import libcalamares
 +import datetime
@@ -483,7 +458,8 @@ index 000000000..08d6d4e6e
 +    '@srv': '/srv',
 +    '@cache': '/var/cache',
 +    '@log': '/var/log',
-+    '@tmp': '/var/tmp'
++    '@tmp': '/var/tmp',
++    '@home': '/home',
 +}
 +
 +def pretty_name():
@@ -508,6 +484,11 @@ index 000000000..08d6d4e6e
 +        subvol_path = os.path.join(mount_point, subvol_name)
 +        original_subvol_path = os.path.join(mount_point, subvol)
 +        os.rename(original_subvol_path, subvol_path)
++
++    libcalamares.globalstorage.insert("firmwareType", "efi")
++    libcalamares.globalstorage.insert("efiSystemPartition", "/boot/efi")
++    libcalamares.globalstorage.insert("garudaInplaceHome", f"@home{subvolume_basename}")
++    libcalamares.globalstorage.insert("garudaInplaceSnapshots", f"@{subvolume_basename}/.snapshots")
 \ No newline at end of file
 diff --git a/src/modules/inplace/module.desc b/src/modules/inplace/module.desc
 new file mode 100644
