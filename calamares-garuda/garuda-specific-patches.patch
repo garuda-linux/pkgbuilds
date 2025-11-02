@@ -220,26 +220,26 @@ index b9e315edb..e14066c0a 100644
 2.51.0
 
 
-From 9ae99e3376c18bc09cbc80e5614132b3faac0fd5 Mon Sep 17 00:00:00 2001
+From 4057b37caa060ca450f1859e473cff8964bf7618 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:42:30 +0100
 Subject: [PATCH 4/6] Add postcfg module
 
 ---
- src/modules/postcfg/main.py      | 132 +++++++++++++++++++++++++++++++
+ src/modules/postcfg/main.py      | 137 +++++++++++++++++++++++++++++++
  src/modules/postcfg/module.desc  |   6 ++
  src/modules/postcfg/postcfg.conf |   4 +
- 3 files changed, 142 insertions(+)
+ 3 files changed, 147 insertions(+)
  create mode 100644 src/modules/postcfg/main.py
  create mode 100644 src/modules/postcfg/module.desc
  create mode 100644 src/modules/postcfg/postcfg.conf
 
 diff --git a/src/modules/postcfg/main.py b/src/modules/postcfg/main.py
 new file mode 100644
-index 000000000..57fba8bc6
+index 000000000..70fe962b2
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
-@@ -0,0 +1,132 @@
+@@ -0,0 +1,137 @@
 +#!/usr/bin/env python3
 +# -*- coding: utf-8 -*-
 +#
@@ -362,6 +362,11 @@ index 000000000..57fba8bc6
 +            destination_dir = join(self.root, desktop_dir.lstrip('/'), "Old_Home_Files")
 +            # Copy files with reflink from old home to desktop
 +            subprocess.call(["cp", "-a", "--reflink=auto", old_home + "/.", destination_dir])
++            # Set ownership to user
++            subprocess.call(["chown", "-R", f"{username}:{username}", destination_dir])
++            if exists(join(destination_dir, "pre-reset-packages-backup.txt")):
++                subprocess.call(["mv", join(destination_dir, "pre-reset-packages-backup.txt"),
++                                 join(self.root, desktop_dir.lstrip('/'), "pre-reset-packages-backup.txt")])
 +
 +        return None
 +
@@ -398,7 +403,7 @@ index 000000000..7ad198f95
 2.51.0
 
 
-From 8520a92b78c57f0a1bd79a97274a83ec9c57cb63 Mon Sep 17 00:00:00 2001
+From 833f42dd3adcd52cbf07d4170a4dbb0e8e44bb66 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:45:54 +0100
 Subject: [PATCH 5/6] bootloader: Remove dependency on partition  module
@@ -422,7 +427,7 @@ index 44a1c0ee5..622f0b7d1 100644
 2.51.0
 
 
-From 3310c1920b2338b9f86a0097138728933e794e91 Mon Sep 17 00:00:00 2001
+From dde339a54c3059a4ddbdbacecaf86e0fff2b3183 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:50:04 +0100
 Subject: [PATCH 6/6] Add inplace module
