@@ -1,0 +1,76 @@
+From 7b4f97f0488b29a5db7d55692fc2c70a52f540a1 Mon Sep 17 00:00:00 2001
+From: TNE <tne@garudalinux.org>
+Date: Sun, 2 Feb 2025 07:32:47 +0100
+Subject: [PATCH] Garuda hardcoded FS whitelist
+
+---
+ src/modules/partition/gui/CreatePartitionDialog.cpp       | 3 ++-
+ src/modules/partition/gui/EditExistingPartitionDialog.cpp | 3 ++-
+ src/modules/partition/gui/PartitionDialogHelpers.cpp      | 7 +++++++
+ src/modules/partition/gui/PartitionDialogHelpers.h        | 2 ++
+ 4 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/modules/partition/gui/CreatePartitionDialog.cpp b/src/modules/partition/gui/CreatePartitionDialog.cpp
+index 213f5c793..03e2c713b 100644
+--- a/src/modules/partition/gui/CreatePartitionDialog.cpp
++++ b/src/modules/partition/gui/CreatePartitionDialog.cpp
+@@ -100,8 +100,9 @@ CreatePartitionDialog::CreatePartitionDialog( PartitionCoreModule* core,
+     int defaultFsIndex = -1;
+     int fsCounter = 0;
+     QStringList fsNames;
+-    for ( auto fs : FileSystemFactory::map() )
++    for ( auto allowed_fs : garuda_allowed_fs )
+     {
++        auto fs = FileSystemFactory::map()[ allowed_fs ];
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+              || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
+diff --git a/src/modules/partition/gui/EditExistingPartitionDialog.cpp b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+index 2b9b9405b..0532c7feb 100644
+--- a/src/modules/partition/gui/EditExistingPartitionDialog.cpp
++++ b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+@@ -116,8 +116,9 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( PartitionCoreModule* c
+ 
+     // File system
+     QStringList fsNames;
+-    for ( auto fs : FileSystemFactory::map() )
++    for ( auto allowed_fs : garuda_allowed_fs )
+     {
++        auto fs = FileSystemFactory::map()[ allowed_fs ];
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+              || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
+diff --git a/src/modules/partition/gui/PartitionDialogHelpers.cpp b/src/modules/partition/gui/PartitionDialogHelpers.cpp
+index db1943a23..65c083b36 100644
+--- a/src/modules/partition/gui/PartitionDialogHelpers.cpp
++++ b/src/modules/partition/gui/PartitionDialogHelpers.cpp
+@@ -27,6 +27,13 @@
+ #include <QListWidget>
+ #include <QPushButton>
+ 
++QSet< FileSystem::Type > garuda_allowed_fs( {
++    FileSystem::Btrfs,
++    FileSystem::Fat32,
++    FileSystem::LinuxSwap,
++    FileSystem::Unformatted,
++    FileSystem::Zfs } );
++
+ QStringList
+ standardMountPoints()
+ {
+diff --git a/src/modules/partition/gui/PartitionDialogHelpers.h b/src/modules/partition/gui/PartitionDialogHelpers.h
+index 4f77c3a71..29795f713 100644
+--- a/src/modules/partition/gui/PartitionDialogHelpers.h
++++ b/src/modules/partition/gui/PartitionDialogHelpers.h
+@@ -30,6 +30,8 @@ static QSet< FileSystem::Type > s_unmountableFS( { FileSystem::Unformatted,
+                                                    FileSystem::Unknown,
+                                                    FileSystem::Lvm2_PV } );
+ 
++extern QSet< FileSystem::Type > garuda_allowed_fs;
++
+ /**
+  * Returns a list of standard mount points (e.g. /, /usr, ...).
+  * This also includes the EFI mount point if that is necessary
+-- 
+2.47.0
+
