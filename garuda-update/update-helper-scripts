@@ -2,7 +2,7 @@
 # shellcheck disable=SC2317
 set -e
 
-CURRENT_INTERVENTION_SEQUENCE=2
+CURRENT_INTERVENTION_SEQUENCE=3
 INTERVENTION_SEQUENCE_FILE="/etc/garuda/garuda-update/intervention_sequence"
 
 # Hacky way to check if the package is installed
@@ -145,6 +145,12 @@ package-replaces() {
 		# Replace gnu-netcat with openbsd-netcat
 		if [[ "$packages" =~ (^| )gnu-netcat($| ) ]]; then
 			echo openbsd-netcat
+		fi
+	fi
+	if (( sequence < 3 )); then
+		packages="$($PACMAN -Qq "proton-ge-custom" 2>/dev/null | xargs || true)"
+		if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
+			echo proton-ge-custom-bin
 		fi
 	fi
 }

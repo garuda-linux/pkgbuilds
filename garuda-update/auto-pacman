@@ -34,6 +34,7 @@ array set auto_replace_conflicts {
     alpm_octopi_utils octopi
     scenefx swayfx
     gnu-netcat openbsd-netcat
+    proton-ge-custom proton-ge-custom-bin
 }
 
 if { $::conflictsfile_set } {
