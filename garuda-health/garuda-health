@@ -456,9 +456,9 @@ fix_dkms_rebuild = Fixer(fix_function=_fix_dkms_rebuild, priority=2, excludes=["
 
 def _fix_remove_packages(issue: Issue) -> Tuple[bool, str]:
     """
-    Install missing packages using pacman.
+    Remove deprecated or unwanted packages using pacman.
 
-    :param issue: The Issue object containing details about the missing packages.
+    :param issue: The Issue object containing details about the packages to remove.
     :return: A tuple of (success_boolean, status_message).
     """
     packages = issue.details.get("packages")
@@ -1295,6 +1295,27 @@ def check_efi_bootmgr() -> HealthCheck:
         return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, [])
 
+def check_for_packagekit() -> HealthCheck:
+    """
+    Check if PackageKit is installed, and if it is, warn the user and suggest its removal.
+    """
+    def check() -> HealthCheckResult:
+        pending_removals = []
+        for pkg_name in ["packagekit", "packagekit-qt6"]:
+            pkg = cache.get(pkg_name)
+            if pkg.installed and not pkg.provided:
+                pending_removals.append(pkg_name)
+        if pending_removals:
+            return HealthCheckResult(
+                Severity.LOW,
+                Issue(
+                    "PackageKit is currently installed. PackageKit (Discover, Gnome Software) is not a supported method to manage packages on Garuda Linux. https://wiki.garudalinux.org/avoid-packagekit",
+                    fix=fix_remove_packages,
+                    details={"packages": pending_removals}
+                )
+            )
+    return HealthCheck(check, ["packagekit", "packagekit-qt6"])
+
 checks: list[HealthCheck] = [
     check_for_core_packages(),
     check_for_important_packages(),
@@ -1323,6 +1344,7 @@ checks: list[HealthCheck] = [
     check_snapper_config(),
     check_kernels_in_boot(),
     check_efi_bootmgr(),
+    check_for_packagekit(),
 ]
 
 # -- Main Execution Logic --
