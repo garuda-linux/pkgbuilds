@@ -1315,6 +1315,7 @@ def check_for_packagekit() -> HealthCheck:
                     details={"packages": pending_removals}
                 )
             )
+        return HealthCheckResult(Severity.NO_ISSUE)
     return HealthCheck(check, packages)
 
 checks: list[HealthCheck] = [
