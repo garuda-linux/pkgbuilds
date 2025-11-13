@@ -1299,9 +1299,10 @@ def check_for_packagekit() -> HealthCheck:
     """
     Check if PackageKit is installed, and if it is, warn the user and suggest its removal.
     """
+    packages = ["packagekit", "packagekit-qt6", "packagekit-qt5", "gnome-packagekit"]
     def check() -> HealthCheckResult:
         pending_removals = []
-        for pkg_name in ["packagekit", "packagekit-qt6"]:
+        for pkg_name in packages:
             pkg = cache.get(pkg_name)
             if pkg.installed and not pkg.provided:
                 pending_removals.append(pkg_name)
@@ -1309,12 +1310,12 @@ def check_for_packagekit() -> HealthCheck:
             return HealthCheckResult(
                 Severity.LOW,
                 Issue(
-                    "PackageKit is currently installed. PackageKit (Discover, Gnome Software) is not a supported method to manage packages on Garuda Linux. https://wiki.garudalinux.org/avoid-packagekit",
+                    "PackageKit is currently installed. PackageKit (Discover, GNOME Software) is not a supported method to manage packages on Garuda Linux. https://wiki.garudalinux.org/avoid-packagekit",
                     fix=fix_remove_packages,
                     details={"packages": pending_removals}
                 )
             )
-    return HealthCheck(check, ["packagekit", "packagekit-qt6"])
+    return HealthCheck(check, packages)
 
 checks: list[HealthCheck] = [
     check_for_core_packages(),
