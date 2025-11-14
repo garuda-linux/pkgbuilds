@@ -224,6 +224,12 @@ apply_user_migrations() {
 			-e 's/fastfetch --load-config dr460nized/fastfetch --config dr460nized.jsonc/g' \
 			".config/fish/config.fish" 2>/dev/null || true
 	fi
+
+  if [[ $(vercmp 3.5.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/fish/config.fish" ]; then
+		# https://forum.garudalinux.org/t/fish-4-2-0-update-breaks-fish-update-completions/46558
+		sed -i -e "s/^alias cat 'bat --style header --style snip --style changes --style header'$/abbr cat 'bat --style header,snip,changes'/g" \
+			".config/fish/config.fish" 2>/dev/null || true
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"
