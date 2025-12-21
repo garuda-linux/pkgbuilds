@@ -147,12 +147,17 @@ package-replaces() {
 			echo openbsd-netcat
 		fi
 	fi
-	if (( sequence < 3 )); then
-		packages="$($PACMAN -Qq "proton-ge-custom" 2>/dev/null | xargs || true)"
+	# TODO: Once we have enough checks to be worth doing an intervention sequence bump (to 4): Uncomment this
+	# if (( sequence < 4 )); then
+		packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed 2>/dev/null | xargs || true)"
 		if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
 			echo proton-ge-custom-bin
 		fi
-	fi
+		if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-closed($| ) ]]; then
+			echo --ignore
+			echo nvidia-open-dkms
+		fi
+	# fi
 }
 
 # Exit codes:

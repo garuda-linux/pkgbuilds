@@ -35,6 +35,11 @@ array set auto_replace_conflicts {
     scenefx swayfx
     gnu-netcat openbsd-netcat
     proton-ge-custom proton-ge-custom-bin
+    nvidia-utils nvidia-580xx-utils
+    opencl-nvidia opencl-nvidia-580xx
+    lib32-nvidia-utils lib32-nvidia-580xx-utils
+    lib32-opencl-nvidia lib32-opencl-nvidia-580xx
+    nvidia-dkms nvidia-580xx-dkms
 }
 
 if { $::conflictsfile_set } {

@@ -1,14 +1,15 @@
 # Maintainer: TNE <tne at garudalinux org>
 
 pkgbase=garuda-hardware-profiles
+
+_NVIDIA_PKGNAMES=(garuda-hardware-profile-nvidia
+                  garuda-hardware-profile-nvidia-580xx)
 pkgname=(garuda-hardware-profile-standard
          garuda-hardware-profile-standard-x11
-         garuda-hardware-profile-nvidia
-         garuda-hardware-profile-nvidia-closed
-         garuda-hardware-profile-nvidia-prime
-         garuda-hardware-profile-nvidia-prime-closed
-         garuda-hardware-profile-vm)
-pkgver=1.1.3
+         garuda-hardware-profile-vm
+         "${_NVIDIA_PKGNAMES[@]}")
+
+pkgver=2.0.0
 pkgrel=1
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
@@ -46,6 +47,20 @@ package_garuda-hardware-profile-standard-x11() {
   provides=("garuda-video-linux-config")
 }
 
+package_garuda-hardware-profile-vm() {
+  pkgdesc="Garuda Linux hardware profile for virtual machines"
+  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
+  # Replace MHWD legacy
+  replaces=("garuda-virtualmachine-guest-config")
+  install=garuda-hardware-profile-vm.install
+
+  install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
+  install -Dm644 garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/garuda-virtualbox-live.service
+  install -d "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/
+  ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualmachine-guest-config.target
+  ln -s /usr/lib/systemd/system/garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualbox-live.service
+}
+
 _nvidia_shared() {
   cd "$srcdir"
 
@@ -62,45 +77,21 @@ _nvidia_shared() {
 package_garuda-hardware-profile-nvidia() {
   pkgdesc="Garuda Linux hardware profile with nvidia drivers"
   depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-open-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia-closed garuda-hardware-profile-nvidia-prime-closed nvidia)
-  provides=("GARUDA-HARDWARE-PROFILE-NVIDIA")
-
-  _nvidia_shared
-}
-
-package_garuda-hardware-profile-nvidia-closed() {
-  pkgdesc="Garuda Linux hardware profile with legacy closed source nvidia kernel drivers"
-  depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-dkms nvidia-prime)
-  conflicts=(garuda-hardware-profile-nvidia garuda-hardware-profile-nvidia-prime nvidia-open)
-  # Replace MHWD legacy
-  replaces=("garuda-nvidia-config")
+  conflicts=("GARUDA-HARDWARE-PROFILE-NVIDIA")
+  # Replace MHWD legacy, replace legacy -prime package
+  replaces=("garuda-nvidia-config" "garuda-nvidia-prime-config" "garuda-hardware-profile-nvidia-prime")
   provides=("garuda-nvidia-config" "GARUDA-HARDWARE-PROFILE-NVIDIA")
 
   _nvidia_shared
 }
 
-package_garuda-hardware-profile-nvidia-prime() {
-  pkgdesc="Garuda Linux hardware profile with nvidia prime support (virtual package)"
-  depends=(garuda-hardware-profile-nvidia)
-}
+package_garuda-hardware-profile-nvidia-580xx() {
+  pkgdesc="Garuda Linux hardware profile with nvidia 580xx drivers"
+  depends=(garuda-hardware-profile-standard egl-wayland nvidia-580xx-utils opencl-nvidia-580xx lib32-nvidia-580xx-utils lib32-opencl-nvidia-580xx nvidia-580xx-dkms nvidia-prime)
+  conflicts=("GARUDA-HARDWARE-PROFILE-NVIDIA")
+  # Replaces -closed legacy package
+  replaces=("garuda-hardware-profile-nvidia-closed" "garuda-hardware-profile-nvidia-prime-closed")
+  provides=("GARUDA-HARDWARE-PROFILE-NVIDIA")
 
-package_garuda-hardware-profile-nvidia-prime-closed() {
-  pkgdesc="Garuda Linux hardware profile with nvidia prime support (virtual package)"
-  depends=(garuda-hardware-profile-nvidia-closed)
-  # Replace MHWD legacy
-  replaces=("garuda-nvidia-prime-config")
-}
-
-package_garuda-hardware-profile-vm() {
-  pkgdesc="Garuda Linux hardware profile for virtual machines"
-  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
-  # Replace MHWD legacy
-  replaces=("garuda-virtualmachine-guest-config")
-  install=garuda-hardware-profile-vm.install
-
-  install -Dm644 garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/garuda-virtualmachine-guest-config.target
-  install -Dm644 garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/garuda-virtualbox-live.service
-  install -d "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/
-  ln -s /usr/lib/systemd/system/garuda-virtualmachine-guest-config.target "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualmachine-guest-config.target
-  ln -s /usr/lib/systemd/system/garuda-virtualbox-live.service "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-virtualbox-live.service
+  _nvidia_shared
 }

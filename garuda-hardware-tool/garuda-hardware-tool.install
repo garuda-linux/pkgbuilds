@@ -1,0 +1,9 @@
+
+post_upgrade() {
+  if (( $(vercmp $2 1.2.0-2) < 0)); then
+    # shellcheck source=/dev/null
+    source /usr/lib/garuda/garuda.shlib
+
+    garudalib_add_update_notice "garuda-hardware-tool has been updated with support for legacy (NVIDIA 1000 series or older (GTX 1060, GTX 1080, etc.)) NVIDIA drivers. If you have recently removed \"garuda-hardware-profiles-nvidia-closed\" due to a conflict, consider running \"sudo garuda-hardware-tool --nonfree\" to install the appropriate NVIDIA driver."
+  fi
+}

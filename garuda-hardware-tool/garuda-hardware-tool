@@ -97,7 +97,7 @@ fi
 
 VIRT=false
 NVIDIA=false
-NVIDIA_CLOSED=false
+NVIDIA_LEGACY=false
 
 # Check if virtual machine is in use
 if systemd-detect-virt -q; then
@@ -138,7 +138,7 @@ if [[ -n "$gpu_devices" ]]; then
                         "GT" | "GF" | "GK")
                             ;; # Older than Maxwell, no support
                         "GV" | "GP" | "GM")
-                            NVIDIA_CLOSED=true
+                            NVIDIA_LEGACY=true
                             ;;
                         *)
                             NVIDIA=true
@@ -157,14 +157,17 @@ if [[ "$VIRT" == true ]]; then
 fi
 
 if [[ "$NONFREE" == "1" ]]; then
-    if [[ "$NVIDIA_CLOSED" == true ]]; then
-        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia-closed\033[0m\033[1;32m.\033[0m"
-        packages+=("garuda-hardware-profile-nvidia-closed")
-    elif [[ "$NVIDIA" == true ]]; then
-        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34mgaruda-hardware-profile-nvidia\033[0m\033[1;32m.\033[0m"
-        packages+=("garuda-hardware-profile-nvidia")
+    if [[ "$NVIDIA" == true ]]; then
+        NVIDIA_PACKAGE="garuda-hardware-profile-nvidia"
+        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34m${NVIDIA_PACKAGE}\033[0m\033[1;32m.\033[0m"
+        packages+=("${NVIDIA_PACKAGE}")
     fi
-elif [[ "$NVIDIA" == true ]] || [[ "$NVIDIA_CLOSED" == true ]]; then
+    elif [[ "$NVIDIA_LEGACY" == true ]]; then
+        LEGACY_NVIDIA_PACKAGE="garuda-hardware-profile-nvidia-580xx"
+        print_log "\033[1;32mNVIDIA GPU detected, added: \033[1;34m${LEGACY_NVIDIA_PACKAGE}\033[0m\033[1;32m.\033[0m"
+        packages+=("${LEGACY_NVIDIA_PACKAGE}")
+    fi
+elif [[ "$NVIDIA" == true ]] || [[ "$NVIDIA_LEGACY" == true ]]; then
     print_log "\033[1;31mNVIDIA GPU detected, but --free specified. Skipping NVIDIA driver installation.\033[0m"
 fi
 
