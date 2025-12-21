@@ -10,7 +10,7 @@ pkgname=(garuda-hardware-profile-standard
          "${_NVIDIA_PKGNAMES[@]}")
 
 pkgver=2.0.0
-pkgrel=1
+pkgrel=3
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
