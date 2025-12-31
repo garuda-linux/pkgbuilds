@@ -1,8 +1,8 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
-	pkgver = 3.4.0.r6.g78d4208a0
-	pkgrel = 5
-	url = https://https://calamares.codeberg.page
+	pkgver = 3.4.1.r26.g3f6cd831f
+	pkgrel = 1
+	url = https://calamares.codeberg.page
 	arch = i686
 	arch = x86_64
 	license = LGPL
@@ -32,13 +32,13 @@ pkgbase = calamares-garuda
 	conflicts = calamares
 	conflicts = calamares-dev
 	replaces = calamares-dev
-	source = git+https://codeberg.org/Calamares/calamares.git#commit=78d4208a03b0abdfb68e94c9c08a28f37a473ee6
+	source = git+https://codeberg.org/Calamares/calamares.git#commit=3f6cd831f5e71eb3b0e1e8b60d0afe1ec989eff1
 	source = 0001-welcome-Add-efi-check.patch
-	source = 0001-bootloader-Correct-a-logic-error-preventing-installa.patch
 	source = garuda-specific-patches.patch
-	sha256sums = 03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67
+	source = garuda-fswhitelist.patch
+	sha256sums = 781462670ee2c37b5ef025784c86fa69349f13a3f6ca5a8a3d4782d45f82968f
 	sha256sums = f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a
-	sha256sums = b019ab30907724f4f56ec56d41bd22794a88081fc0f1608d8cd65c4929a9c1e6
-	sha256sums = 4e74007a55d122c99e05887c1996adf3450fbeb471ce1c85d81f7aabfd09eefe
+	sha256sums = 6d083b69cf7a0ffdb45e6bc53b26218523494619216a8d1f734469739576ebce
+	sha256sums = 5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32
 
 pkgname = calamares-garuda

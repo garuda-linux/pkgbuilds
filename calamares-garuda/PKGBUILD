@@ -4,13 +4,12 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.4.0.r6.g78d4208a0
-_commit=78d4208a03b0abdfb68e94c9c08a28f37a473ee6
-pkgrel=13
+pkgver=3.4.1.r26.g3f6cd831f
+_commit=3f6cd831f5e71eb3b0e1e8b60d0afe1ec989eff1
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
-license=(GPL)
-url="https://https://calamares.codeberg.page"
+url="https://calamares.codeberg.page"
 license=('LGPL')
 conflicts=('calamares' 'calamares-dev')
 provides=('calamares' 'calamares-dev')
@@ -22,12 +21,10 @@ makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
 source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   0001-welcome-Add-efi-check.patch
-  0001-bootloader-Correct-a-logic-error-preventing-installa.patch
   garuda-specific-patches.patch
   garuda-fswhitelist.patch)
-sha256sums=('03a3f78232308d7522a8391b77c996d64a36278a8c06750bc25aa26d2ea64f67'
+sha256sums=('781462670ee2c37b5ef025784c86fa69349f13a3f6ca5a8a3d4782d45f82968f'
             'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
-            'b019ab30907724f4f56ec56d41bd22794a88081fc0f1608d8cd65c4929a9c1e6'
             '6d083b69cf7a0ffdb45e6bc53b26218523494619216a8d1f734469739576ebce'
             '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32')
 
