@@ -6,7 +6,7 @@
 pkgname=calamares-garuda
 pkgver=3.4.1.r26.g3f6cd831f
 _commit=3f6cd831f5e71eb3b0e1e8b60d0afe1ec989eff1
-pkgrel=1
+pkgrel=2
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 url="https://calamares.codeberg.page"
