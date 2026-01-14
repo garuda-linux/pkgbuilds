@@ -3,14 +3,14 @@
 pkgname=garuda-health
 pkgdesc="The Garuda Linux health checker command"
 pkgver=1.10.2
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL-3.0-or-later')
 source=("garuda-health")
 sha512sums=('be6b1d0930d1ea938b505d5da1ffd12b0adfa61c69e460ad2547e9297ea74840950a21cf67be4db39e86efc4b38e150deba8d1f06dacb9fb9537f41d53c273d3')
 
 package() {
-  depends=('garuda-update' 'pacman')
+  depends=('garuda-update' 'pacman' 'python')
   optdepends=('smartmontools: for SMART disk health checks')
 
   install -Dm755 garuda-health "$pkgdir"/usr/bin/garuda-health

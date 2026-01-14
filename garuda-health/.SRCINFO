@@ -1,7 +1,7 @@
 pkgbase = garuda-health
 	pkgdesc = The Garuda Linux health checker command
 	pkgver = 1.10.2
-	pkgrel = 1
+	pkgrel = 2
 	arch = any
 	license = GPL-3.0-or-later
 	source = garuda-health
@@ -10,4 +10,5 @@ pkgbase = garuda-health
 pkgname = garuda-health
 	depends = garuda-update
 	depends = pacman
+	depends = python
 	optdepends = smartmontools: for SMART disk health checks
