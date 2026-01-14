@@ -31,12 +31,12 @@ apply_migrations() {
 	echo "$2" >/etc/garuda/migrations/applied_version
 
 	# Uninstall sddm DPI fix
-	if [[ $(vercmp 1.1.0-1 $1) -gt 0 ]]; then
+	if [[ $(vercmp 1.1.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		rm -f /etc/sddm.conf.d/01-garuda-fix-dpi.conf
 	fi
 
 	# Update updatedb.conf with some sane snapper defaults
-	if [[ $(vercmp 1.2.0-1 $1) -gt 0 ]]; then
+	if [[ $(vercmp 1.2.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		sed -e 's_^PRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp"_# Modified by Garuda Linux to exclude snapshots\nPRUNEPATHS = "/afs /media /mnt /net /sfs /tmp /udev /var/cache /var/lib/pacman/local /var/lock /var/run /var/spool /var/tmp /.snapshots"_' -i /etc/updatedb.conf
 	fi
 
@@ -45,17 +45,13 @@ apply_migrations() {
 		sed -re 's/(^HOOKS=\([^)]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
 	fi
 
-	if [[ $(vercmp 1.4.0-1 $1) -gt 0 ]]; then
-		gawk -i inplace -v new_install="$IS_NEW_INSTALL" '/^deny/ {
+	if [[ $(vercmp 1.4.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+        gawk -i inplace '/^deny/ {
             set=1
           }
           ENDFILE {
             if (!set) {
-              if (new_install != "true") {
                 print "deny = 10 # Modified by Garuda Linux"
-              } else {
-                print "deny = 10"
-              }
             }
           }
           1' /etc/security/faillock.conf
@@ -63,13 +59,11 @@ apply_migrations() {
 	fi
 
 	# Enable grub recovery
-	if [[ $(vercmp 2.1.0-1 $1) -gt 0 ]]; then
-		gawk -i inplace -v new_install="$IS_NEW_INSTALL" -F "=" '/^GRUB_DISABLE_RECOVERY=.*$/ {
+	if [[ $(vercmp 2.1.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		gawk -i inplace -F "=" '/^GRUB_DISABLE_RECOVERY=.*$/ {
             if ($2 == "true") {
               set=1
-              if (new_install != "true") {
-                print "# Modified by garuda-migrations: GRUB_DISABLE_RECOVERY=default"
-              }
+              print "# Modified by garuda-migrations: GRUB_DISABLE_RECOVERY=default"
               print "#"$0
               next
             } else {
@@ -110,7 +104,7 @@ apply_migrations() {
 	fi
 
 	# Remove plymouth from grub
-	if [[ $(vercmp 2.4.1-1 $1) -gt 0 ]] && grub_has_splash; then
+	if [[ $(vercmp 2.4.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && grub_has_splash; then
 		gawk -i inplace '
       /^GRUB_CMDLINE_LINUX_DEFAULT=.*/ {
         if (gsub(/ ?splash/, "") > 0) {
@@ -163,7 +157,7 @@ apply_migrations() {
 	fi
 
 	# Re-enable wayland support for GDM
-	if [[ $(vercmp 3.2.0-1 $1) -gt 0 ]]; then
+	if [[ $(vercmp 3.2.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		local gdm_conf_file="/etc/gdm/custom.conf"
 		if [ -f "${gdm_conf_file}" ]; then
 			if grep -q '^WaylandEnable=false[[:space:]]*' "${gdm_conf_file}"; then
@@ -174,7 +168,7 @@ apply_migrations() {
 	fi
 
 	# Add "systemd" to nsswitch.conf if not present
-	if [[ $(vercmp 3.3.0-1 $1) -gt 0 ]] && ( [ "$IS_NEW_INSTALL" == "false" ] || [ ! -f /usr/lib/garuda/garuda-release ] ); then
+	if [[ $(vercmp 3.3.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		gawk -i inplace '
 	  BEGIN {
 		set=0
@@ -211,6 +205,10 @@ apply_migrations() {
 			sed -i 's/^Current=Sweet$/Current=Sweet6 # Modified by garuda-migrations: Sweet -> Sweet6/' /etc/sddm.conf
 			garudalib_add_update_notice 'The SDDM theme was automatically changed from "Sweet" to "Sweet6" because plasma-framework5 was removed from the repositories.' || true
 		fi
+	fi
+
+	if [[ $(vercmp 3.5.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		echo "1" >/etc/garuda/migrations/has_legacy_patches
 	fi
 }
 

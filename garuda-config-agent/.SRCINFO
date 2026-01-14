@@ -1,0 +1,17 @@
+pkgbase = garuda-config-agent
+	pkgdesc = Applies and manages system configuration changes
+	pkgver = 0.1.0
+	pkgrel = 1
+	arch = any
+	license = GPL-3.0-or-later
+	source = garuda-config-agent.py
+	source = garuda-config-agent-pre.hook
+	source = garuda-config-agent-post.hook
+	sha512sums = f60efa7861c795079bfcb8b070b15fd47405cd11b2a3329e88f03049f6bc87699ad0a012291dd8d069c7f4f562e4d0ce56fcc49ecffff8e0ed43e1ba2edc54e7
+	sha512sums = 2f4c48ff13cb079a5210e9cc343e31fbdabe816efe5322db54d9a71eb31681a3ff5af33eab3a63eb6c9bea3896b582b88bc12c6517427b41c01181f2c3066824
+	sha512sums = 15c26b74bdbf32ef31e6e7435aa77e210e5dbc0f38e1d35d08ad10c5f9d0103f25bac7f40ba72b311eaa071dd456230b1e38e7d86ddd3b65c2bc3ac4efefe725
+
+pkgname = garuda-config-agent
+	depends = python
+	depends = sqlite
+	depends = python-yaml
