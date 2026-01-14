@@ -287,11 +287,21 @@ def post(configs, connection, new_only):
 
         if has_pacnew:
             current_pacnew_hash = sha256sum(pacnew_file)
-            if current_pacnew_hash != db_pacnew_hash and current_pacnew_hash is not None:
+            pacnew_modified = (current_pacnew_hash != db_pacnew_hash and current_pacnew_hash is not None)
+            if pacnew_modified or max_order > db_order:
                 print(f"Pacnew file detected for {target_file}. Applying pipeline...")
 
-                # Pacnew files always get the full pipeline applied
-                apply_pipeline(pacnew_file, pipeline, -1)
+                # NEW Pacnew files always get the full pipeline applied
+                if pacnew_modified:
+                    apply_pipeline(pacnew_file, pipeline, -1)
+                else:
+                    apply_pipeline(pacnew_file, pipeline, db_order)
+
+                current_pacnew_hash = sha256sum(pacnew_file)
+
+                cursor.execute('''
+                    UPDATE configs SET pacnew_hash=? WHERE target_file=?
+                ''', (current_pacnew_hash, target_file))
 
                 # If the main config file is still original, we move the pacnew to main
                 if is_original == 1:
@@ -329,7 +339,7 @@ if __name__ == "__main__":
     connection = connect_db()
 
     if len(sys.argv) < 2:
-        print("Usage: garuda-config-agent.py [pre|post]", file=sys.stderr)
+        print("Usage: garuda-config-agent.py [pre|post|postinst]", file=sys.stderr)
         sys.exit(1)
 
     mode = sys.argv[1]
