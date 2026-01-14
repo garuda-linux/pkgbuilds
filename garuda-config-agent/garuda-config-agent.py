@@ -343,7 +343,7 @@ if __name__ == "__main__":
     connection = connect_db()
 
     if len(sys.argv) < 2:
-        print("Usage: garuda-config-agent.py [pre|post|postinst]", file=sys.stderr)
+        print("Usage: garuda-config-agent.py [pre|post|postinst|markoriginal]", file=sys.stderr)
         sys.exit(1)
 
     mode = sys.argv[1]
@@ -354,5 +354,10 @@ if __name__ == "__main__":
             post(configs, connection, False)
         elif mode == 'postinst':
             post(configs, connection, True)
+        elif mode == 'markoriginal':
+            # Mark all files as original. This is used during the ISO file creation
+            cursor = connection.cursor()
+            cursor.execute('UPDATE configs SET is_original=1')
+            connection.commit()
     finally:
         connection.close()
