@@ -55,13 +55,16 @@ def parse_configs(directory):
                     isBackupFile = data.get('isBackupFile', True)
                     # Default to -1 (no patches applied) if not specified
                     legacyPatchLevel = data.get('legacyPatchLevel', -1)
+                    # Whether or not to auto-merge pacnew files if they are marked "original"
+                    autoMerge = data.get('autoMerge', True)
 
                     parsed_configs[target_file] = {
                         "max_order": max_order,
                         "pipeline": pipeline,
                         "isBackupFile": isBackupFile,
                         "legacyPatchLevel": legacyPatchLevel,
-                        "source_file": filepath
+                        "source_file": filepath,
+                        "autoMerge": autoMerge
                     }
             except Exception as e:
                 print(f"Error parsing {filename}: {e}", file=sys.stderr)
@@ -249,6 +252,7 @@ def post(configs, connection, new_only):
         pipeline = config['pipeline']
         max_order = config['max_order']
         isBackupFile = config['isBackupFile']
+        autoMerge = config['autoMerge']
 
         needs_commit = False
 
@@ -312,7 +316,7 @@ def post(configs, connection, new_only):
                 needs_commit = True
 
                 # If the main config file is still original, we move the pacnew to main
-                if is_original == 1:
+                if is_original == 1 and autoMerge:
                     os.replace(pacnew_file, target_file)
                     print(f"Replaced original {target_file} with pacnew.")
 
