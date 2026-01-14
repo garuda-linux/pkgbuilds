@@ -250,6 +250,8 @@ def post(configs, connection, new_only):
         max_order = config['max_order']
         isBackupFile = config['isBackupFile']
 
+        needs_commit = False
+
         if target_file in new_files:
             if not os.path.exists(target_file):
                 print(f"Error: New file {target_file} does not exist.", file=sys.stderr)
@@ -284,6 +286,7 @@ def post(configs, connection, new_only):
                 VALUES (?, ?, NULL, ?, false)
             ''', (target_file, legacyPatchLevel, config_hash))
             row = (legacyPatchLevel, None, config_hash, 0)
+            needs_commit = True
 
         db_order, db_pacnew_hash, db_main_hash, is_original = row
         pacnew_file = target_file + ".pacnew"
@@ -306,6 +309,7 @@ def post(configs, connection, new_only):
                 cursor.execute('''
                     UPDATE configs SET pacnew_hash=? WHERE target_file=?
                 ''', (current_pacnew_hash, target_file))
+                needs_commit = True
 
                 # If the main config file is still original, we move the pacnew to main
                 if is_original == 1:
@@ -329,13 +333,13 @@ def post(configs, connection, new_only):
 
         # Run pipeline if we need to reset or have new steps
         if start_order == -1 or max_order > db_order:
-            if not apply_pipeline(target_file, pipeline, start_order):
-                continue # Skip DB update on failure
-
-            config_hash = sha256sum(target_file)
-            cursor.execute('''
-                UPDATE configs SET "order"=?, main_hash=? WHERE target_file=?
-            ''', (max_order, config_hash, target_file))
+            if apply_pipeline(target_file, pipeline, start_order):
+                config_hash = sha256sum(target_file)
+                cursor.execute('''
+                    UPDATE configs SET "order"=?, main_hash=? WHERE target_file=?
+                ''', (max_order, config_hash, target_file))
+                needs_commit = True
+        if needs_commit:
             connection.commit()
 
 if __name__ == "__main__":
