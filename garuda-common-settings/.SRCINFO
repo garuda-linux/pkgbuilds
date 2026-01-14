@@ -1,6 +1,6 @@
 pkgbase = garuda-common-settings
 	pkgdesc = Garuda Linux common settings
-	pkgver = 2.12.1
+	pkgver = 2.12.2
 	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings
 	install = garuda-common-settings.install
@@ -18,7 +18,7 @@ pkgbase = garuda-common-settings
 	backup = etc/sudoers.d/editor
 	backup = etc/sudoers.d/insults
 	backup = etc/sudoers.d/pwfeedback
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/298a082209f427133bc4303c6f4bb9fd3ee7b840/garuda-common-settings-298a082209f427133bc4303c6f4bb9fd3ee7b840.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/83e0524b925c4b0ec708bfa3d02a67c3c94d924d/garuda-common-settings-83e0524b925c4b0ec708bfa3d02a67c3c94d924d.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-common-settings
