@@ -114,8 +114,8 @@ def sha256sum(filename):
     except (OSError, ValueError):
         return None
 
-def read_new_files(cursor):
-    cursor.execute('SELECT value FROM metadata WHERE key=?', ('new_files',))
+def read_existing_files(cursor):
+    cursor.execute('SELECT value FROM metadata WHERE key=?', ('existing_files',))
     row = cursor.fetchone()
     if row:
         return json.loads(row[0])
@@ -194,12 +194,13 @@ def apply_pipeline(target_file, pipeline, previous_order):
 def pre(configs, connection):
     modified_files = read_stdin()
     cursor = connection.cursor()
-    new_files = []
+    existing_files = []
 
     for target_file in modified_files:
         if not os.path.exists(target_file):
-            new_files.append(target_file)
             continue
+
+        existing_files.append(target_file)
 
         if target_file not in configs:
             continue
@@ -222,15 +223,19 @@ def pre(configs, connection):
         INSERT INTO metadata (key, value)
         VALUES (?, ?)
         ON CONFLICT(key) DO UPDATE SET value=excluded.value
-    ''', ('new_files', json.dumps(new_files)))
+    ''', ('existing_files', json.dumps(existing_files)))
 
     connection.commit()
 
-def post(configs, connection):
-    modified_files = read_stdin()
-    expand_modified_files(modified_files, configs)
+def post(configs, connection, new_only):
     cursor = connection.cursor()
-    new_files = read_new_files(cursor)
+
+    modified_files = read_stdin()
+    new_files = set()
+    if new_only:
+        existing_files = read_existing_files(cursor)
+        new_files = set(modified_files).difference(set(existing_files))
+    expand_modified_files(modified_files, configs)
 
     for target_file in modified_files:
         if target_file not in configs or not os.path.exists(target_file):
@@ -332,6 +337,8 @@ if __name__ == "__main__":
         if mode == 'pre':
             pre(configs, connection)
         elif mode == 'post':
-            post(configs, connection)
+            post(configs, connection, False)
+        elif mode == 'postinst':
+            post(configs, connection, True)
     finally:
         connection.close()

@@ -1,10 +1,10 @@
 [Trigger]
 Type = Path
-Operation = Upgrade
+Operation = Install
 Target = etc/*
 
 [Action]
 Description = Updating configurations with garuda-config-agent...
 When = PostTransaction
-Exec = /usr/share/libalpm/scripts/garuda-config-agent post
+Exec = /usr/share/libalpm/scripts/garuda-config-agent postinst
 NeedsTargets

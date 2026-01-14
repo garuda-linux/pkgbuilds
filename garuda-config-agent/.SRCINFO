@@ -1,15 +1,17 @@
 pkgbase = garuda-config-agent
 	pkgdesc = Applies and manages system configuration changes
-	pkgver = 0.1.0
-	pkgrel = 1
+	pkgver = 0.1.1
+	pkgrel = 2
 	arch = any
 	license = GPL-3.0-or-later
 	source = garuda-config-agent.py
 	source = garuda-config-agent-pre.hook
 	source = garuda-config-agent-post.hook
-	sha512sums = f60efa7861c795079bfcb8b070b15fd47405cd11b2a3329e88f03049f6bc87699ad0a012291dd8d069c7f4f562e4d0ce56fcc49ecffff8e0ed43e1ba2edc54e7
-	sha512sums = 2f4c48ff13cb079a5210e9cc343e31fbdabe816efe5322db54d9a71eb31681a3ff5af33eab3a63eb6c9bea3896b582b88bc12c6517427b41c01181f2c3066824
-	sha512sums = 15c26b74bdbf32ef31e6e7435aa77e210e5dbc0f38e1d35d08ad10c5f9d0103f25bac7f40ba72b311eaa071dd456230b1e38e7d86ddd3b65c2bc3ac4efefe725
+	source = garuda-config-agent-postinst.hook
+	sha512sums = 26a5f7b168c37efc6464dd94b23971339c16184f300ea7b1b6f2226e1fb7ad82e80b454939a962e2ca689e0ad837f1f6e618acd0f0815a003f8b96e01e26328d
+	sha512sums = 977ca967bb59da7b83c97de6fc93701207dc3e54471f0ce047e98d93f12103244a92c481dcbd2a8425fb993023b4595da51145a6c2ef0cbe298124b452053c90
+	sha512sums = a285b5a2c7ede2105e6b509a91221602e117e03991b3c08407ee5ff526769687549b02b05be02a70f55db0d68cb59a75ba885dcb6b7f9bf2508f2da4a0ab1452
+	sha512sums = f8dba371b75e4e2e4432a8e53a938cb9bd115739c37e6ec2cab45dde4dfe1552a11e3b126d0cb010f8ad17fea10444a2ede4bf9b18c28faa0ca3a837a8238766
 
 pkgname = garuda-config-agent
 	depends = python
