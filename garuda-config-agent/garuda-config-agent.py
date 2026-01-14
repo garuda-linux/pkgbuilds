@@ -212,11 +212,15 @@ def pre(configs, connection):
 
         cursor.execute('''
             UPDATE configs SET
+                is_original = (
+                    (is_original AND main_hash = ?)
+                    OR
+                    (pacnew_hash IS NOT NULL AND pacnew_hash = ?)
+                ),
                 pacnew_hash=?,
-                is_original = (is_original AND main_hash = ?),
                 main_hash=?
             WHERE target_file=?
-        ''', (pacnew_hash, config_hash, config_hash, target_file))
+        ''', (config_hash, config_hash, pacnew_hash, config_hash, target_file))
 
     # Handle new files list
     cursor.execute('''
@@ -310,14 +314,14 @@ def post(configs, connection, new_only):
 
                     config_hash = sha256sum(target_file)
                     cursor.execute('''
-                        UPDATE configs SET main_hash=?, "order"=? WHERE target_file=?
+                        UPDATE configs SET main_hash=?, "order"=?, pacnew_hash=NULL WHERE target_file=?
                     ''', (config_hash, max_order, target_file))
                     connection.commit()
                     continue
 
         config_hash = sha256sum(target_file)
 
-        # If backup file changed externally, force re-run (-1)
+        # If "no backup" file changed externally, force re-run (-1)
         start_order = db_order
         if not isBackupFile and config_hash != db_main_hash and not has_pacnew:
              print(f"External change detected on non-backup file {target_file}. Re-applying...")
