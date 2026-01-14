@@ -85,6 +85,11 @@ update_hotfixes() {
 			fi
 		fi
 	fi
+	packages="$($PACMAN -Qq "garuda-hardware-profile-nvidia-prime-closed" 2>/dev/null | xargs || true)"
+	if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-prime-closed($| ) ]]; then
+		SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN -D --asexplicit garuda-hardware-profile-nvidia-closed
+		SNAP_PAC_SKIP=y SKIP_AUTOSNAP= $PACMAN -R --noconfirm garuda-hardware-profile-nvidia-prime-closed
+	fi
 }
 
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
