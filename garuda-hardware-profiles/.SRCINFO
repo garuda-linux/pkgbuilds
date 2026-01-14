@@ -1,7 +1,7 @@
 pkgbase = garuda-hardware-profiles
 	pkgdesc = Garuda Linux hardware profiles
 	pkgver = 2.0.1
-	pkgrel = 1
+	pkgrel = 2
 	arch = any
 	license = GPL-3.0-or-later
 	source = nvidia-modules-load.conf
@@ -66,35 +66,15 @@ pkgname = garuda-hardware-profile-nvidia
 	pkgdesc = Garuda Linux hardware profile with nvidia drivers
 	depends = garuda-hardware-profile-standard
 	depends = egl-wayland
-	depends = nvidia-utils
-	depends = opencl-nvidia
-	depends = lib32-nvidia-utils
-	depends = lib32-opencl-nvidia
-	depends = nvidia-open-dkms
+	depends = nvidia-utils>=590
+	depends = opencl-nvidia>=590
+	depends = lib32-nvidia-utils>=590
+	depends = lib32-opencl-nvidia>=590
+	depends = nvidia-open-dkms>=590
 	depends = nvidia-prime
 	provides = garuda-nvidia-config
 	provides = GARUDA-HARDWARE-PROFILE-NVIDIA
 	conflicts = GARUDA-HARDWARE-PROFILE-NVIDIA
-	conflicts = nvidia-utils-580xx
-	conflicts = opencl-nvidia-580xx
-	conflicts = lib32-nvidia-utils-580xx
-	conflicts = lib32-opencl-nvidia-580xx
-	conflicts = nvidia-580xx-dkms
-	conflicts = nvidia-utils-550xx
-	conflicts = opencl-nvidia-550xx
-	conflicts = lib32-nvidia-utils-550xx
-	conflicts = lib32-opencl-nvidia-550xx
-	conflicts = nvidia-550xx-dkms
-	conflicts = nvidia-utils-470xx
-	conflicts = opencl-nvidia-470xx
-	conflicts = lib32-nvidia-utils-470xx
-	conflicts = lib32-opencl-nvidia-470xx
-	conflicts = nvidia-470xx-dkms
-	conflicts = nvidia-utils-340xx
-	conflicts = opencl-nvidia-340xx
-	conflicts = lib32-nvidia-utils-340xx
-	conflicts = lib32-opencl-nvidia-340xx
-	conflicts = nvidia-340xx-dkms
 	replaces = garuda-nvidia-config
 	replaces = garuda-nvidia-prime-config
 	replaces = garuda-hardware-profile-nvidia-prime

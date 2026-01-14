@@ -10,7 +10,7 @@ pkgname=(garuda-hardware-profile-standard
          "${_NVIDIA_PKGNAMES[@]}")
 
 pkgver=2.0.1
-pkgrel=1
+pkgrel=3
 pkgdesc="Garuda Linux hardware profiles"
 arch=(any)
 license=(GPL-3.0-or-later)
@@ -74,18 +74,10 @@ _nvidia_shared() {
   ln -s /usr/lib/systemd/system/garuda-nvidia-live.service "$pkgdir"/usr/lib/systemd/system/ght-live.target.wants/garuda-nvidia-live.service
 }
 
-_generate_conflicts() {
-  local versions=("580" "550" "470" "340")
-  for ver in "${versions[@]}"; do
-    conflicts+=("nvidia-utils-${ver}xx" "opencl-nvidia-${ver}xx" "lib32-nvidia-utils-${ver}xx" "lib32-opencl-nvidia-${ver}xx" "nvidia-${ver}xx-dkms")
-  done
-  echo "${conflicts[@]}"
-}
-
 package_garuda-hardware-profile-nvidia() {
   pkgdesc="Garuda Linux hardware profile with nvidia drivers"
-  depends=(garuda-hardware-profile-standard egl-wayland nvidia-utils opencl-nvidia lib32-nvidia-utils lib32-opencl-nvidia nvidia-open-dkms nvidia-prime)
-  conflicts=("GARUDA-HARDWARE-PROFILE-NVIDIA" $(_generate_conflicts))
+  depends=("garuda-hardware-profile-standard" "egl-wayland" "nvidia-utils>=590" "opencl-nvidia>=590" "lib32-nvidia-utils>=590" "lib32-opencl-nvidia>=590" "nvidia-open-dkms>=590" "nvidia-prime")
+  conflicts=("GARUDA-HARDWARE-PROFILE-NVIDIA")
   # Replace MHWD legacy, replace legacy -prime package
   replaces=("garuda-nvidia-config" "garuda-nvidia-prime-config" "garuda-hardware-profile-nvidia-prime")
   provides=("garuda-nvidia-config" "GARUDA-HARDWARE-PROFILE-NVIDIA")
