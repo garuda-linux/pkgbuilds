@@ -207,8 +207,9 @@ apply_migrations() {
 		fi
 	fi
 
-	if [[ $(vercmp 3.5.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+	if [[ $(vercmp 3.5.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		echo "1" >/etc/garuda/migrations/has_legacy_patches
+		garudalib_add_update_notice 'Garuda Linux default settings overrides will now be applied to .pacnew files; New settings overrides are now applied to system files through a new system. (No action needed) (Extra info: https://forum.garudalinux.org/t/47103)' || true
 	fi
 }
 
