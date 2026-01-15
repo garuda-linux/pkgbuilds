@@ -2,7 +2,7 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver="2.12.3"
+pkgver="2.12.2"
 _commit='83e0524b925c4b0ec708bfa3d02a67c3c94d924d'
 pkgrel=1
 arch=('any')
