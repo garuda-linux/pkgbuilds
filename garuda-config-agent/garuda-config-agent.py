@@ -49,7 +49,7 @@ def parse_configs(directory):
                     pipeline.sort(key=lambda x: x.get('order', 0))
 
                     if target_file in parsed_configs:
-                        print(f"Warning: Duplicate targetFile {target_file} found in {filename}. Skipping.", file=sys.stderr)
+                        print(f"Warning: Duplicate targetFile {target_file} found in {filename} and {parsed_configs[target_file]['source_file']}. Skipping.", file=sys.stderr)
                         continue
 
                     isBackupFile = data.get('isBackupFile', True)
@@ -128,7 +128,6 @@ def expand_modified_files(modified_files, configs):
     additional_targets = set()
     for target_file, config in configs.items():
         if config['source_file'] in modified_files:
-            print(f"Config file {config['source_file']} modified; adding target {target_file}")
             additional_targets.add(target_file)
     modified_files.update(additional_targets)
 
@@ -143,6 +142,11 @@ def apply_pipeline(target_file, pipeline, previous_order):
     except Exception as e:
         print(f"Error: Reading {target_file}: {e}", file=sys.stderr)
         return False
+
+    if previous_order == -1:
+        print(f"[{target_file}] Applying full pipeline...")
+    else:
+        print(f"[{target_file}] Applying pipeline incrementally from {previous_order}...")
 
     original_content = content
 
@@ -166,7 +170,7 @@ def apply_pipeline(target_file, pipeline, previous_order):
         match step_type:
             case 'revert':
                 if previous_order == -1:
-                    print(f"[{order}] Revert skipped (Brand new state).")
+                    print(f"--> [{order}] Revert skipped for full application.")
                     continue
             case 'operation':
                 pass
@@ -175,7 +179,7 @@ def apply_pipeline(target_file, pipeline, previous_order):
                 return False
 
         try:
-            print(f"[{order}] Applying {step_type}...")
+            print(f"--> [{order}] Applying {step_type}...")
             content = re.sub(pattern, substitution, content, flags=re.MULTILINE)
         except re.error as e:
             print(f"Error: Regex error in {target_file} (Order {order}): {e}", file=sys.stderr)
@@ -185,7 +189,7 @@ def apply_pipeline(target_file, pipeline, previous_order):
         try:
             with open(target_file, 'w', encoding='utf-8') as f:
                 f.write(content)
-            print(f"Updated {target_file}")
+            print(f"[{target_file}] Pipeline applied successfully.")
             return True
         except Exception as e:
             print(f"Error: Writing {target_file}: {e}", file=sys.stderr)
@@ -260,7 +264,6 @@ def post(configs, connection, new_only):
             if not os.path.exists(target_file):
                 print(f"Error: New file {target_file} does not exist.", file=sys.stderr)
                 continue
-            print(f"Applying pipeline for new file {target_file}...")
             new_order = max_order
 
             # If application fails, set order to -1 so we retry next time
@@ -300,8 +303,6 @@ def post(configs, connection, new_only):
             current_pacnew_hash = sha256sum(pacnew_file)
             pacnew_modified = (current_pacnew_hash != db_pacnew_hash and current_pacnew_hash is not None)
             if pacnew_modified or max_order > db_order:
-                print(f"Pacnew file detected for {target_file}. Applying pipeline...")
-
                 # NEW Pacnew files always get the full pipeline applied
                 if pacnew_modified:
                     apply_pipeline(pacnew_file, pipeline, -1)
@@ -318,7 +319,7 @@ def post(configs, connection, new_only):
                 # If the main config file is still original, we move the pacnew to main
                 if is_original == 1 and autoMerge:
                     os.replace(pacnew_file, target_file)
-                    print(f"Replaced original {target_file} with pacnew.")
+                    print(f"[{target_file}] Replaced original file with .pacnew")
 
                     config_hash = sha256sum(target_file)
                     cursor.execute('''
@@ -332,7 +333,7 @@ def post(configs, connection, new_only):
         # If "no backup" file changed externally, force re-run (-1)
         start_order = db_order
         if not isBackupFile and config_hash != db_main_hash and not has_pacnew:
-             print(f"External change detected on non-backup file {target_file}. Re-applying...")
+             print(f"[{target_file}] Non-backup file changed externally; forcing re-application of pipeline.")
              start_order = -1
 
         # Run pipeline if we need to reset or have new steps

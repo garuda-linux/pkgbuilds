@@ -2,7 +2,7 @@
 
 pkgname=garuda-config-agent
 pkgdesc="Applies and manages system configuration changes"
-pkgver=0.2.3
+pkgver=1.0.0
 pkgrel=1
 arch=('any')
 license=('GPL-3.0-or-later')
@@ -10,7 +10,7 @@ source=("garuda-config-agent.py"
         "garuda-config-agent-pre.hook"
         "garuda-config-agent-post.hook"
         "garuda-config-agent-postinst.hook")
-sha512sums=('74043b69c819105d39c042b4b9bb31e88a242fe49b1b7d50fe1f724af92e3b4056c2f9493ecca316871b0838386eeebf0132dd2a060bed80997ebd5efdb22fcd'
+sha512sums=('79ad96ca17667595527dd20b79866430a339e2d4ad63f3ec5b27dd6e4b4303eabfe040f529eacfd31b92055e40091596147331b14eb2a81d148a0093224e6e4c'
             '977ca967bb59da7b83c97de6fc93701207dc3e54471f0ce047e98d93f12103244a92c481dcbd2a8425fb993023b4595da51145a6c2ef0cbe298124b452053c90'
             'a285b5a2c7ede2105e6b509a91221602e117e03991b3c08407ee5ff526769687549b02b05be02a70f55db0d68cb59a75ba885dcb6b7f9bf2508f2da4a0ab1452'
             'f8dba371b75e4e2e4432a8e53a938cb9bd115739c37e6ec2cab45dde4dfe1552a11e3b126d0cb010f8ad17fea10444a2ede4bf9b18c28faa0ca3a837a8238766')
