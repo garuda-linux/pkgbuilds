@@ -530,7 +530,7 @@ def check_for_important_packages() -> HealthCheck:
 
     :return: A HealthCheckResult if an important package is missing .
     """
-    important_packages = ["garuda-common-settings", "garuda-update", "garuda-libs"]
+    important_packages = ["garuda-common-settings", "garuda-update", "garuda-libs", "garuda-config-agent"]
     def check() -> HealthCheckResult:
         return check_for_packages(
             Severity.HIGH, important_packages, [], "Important garuda linux packages are missing"
@@ -552,7 +552,7 @@ def check_for_optional_packages() -> HealthCheck:
 
 def check_for_deprecated_packages() -> HealthCheck:
     """
-    Check if the system is using EFI and if the correct efi bootloader is in use.
+    Check if any deprecated packages are installed
     """
     deprecated_packages = ["garuda-hotfixes", "steam-native-runtime"]
     def check() -> HealthCheckResult:
