@@ -94,14 +94,6 @@ update_hotfixes() {
 
 # Anything printed by this script into stdout will be added as a pacman parameter to pacman -Syu
 package-replaces() {
-	# --ignore all foreign packages
-	# https://forum.garudalinux.org/t/change-proposal-updates-should-ignore-aur-packages/47112
-	ignored_packages="$(paste -sd, <(pacman -Qmq))"
-	if [ -n "$ignored_packages" ]; then
-		echo "--ignore"
-		echo "$ignored_packages"
-	fi
-
 	local sequence
 	local packages
 	sequence="$(get_intervention_sequence)"
