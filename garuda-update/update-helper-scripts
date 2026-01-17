@@ -162,6 +162,11 @@ package-replaces() {
 			echo --ignore
 			echo nvidia-open-dkms
 		fi
+
+		# Check for missing certs
+		if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
+			echo ca-certificates-mozilla
+		fi
 	# fi
 }
 
