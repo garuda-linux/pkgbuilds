@@ -40,6 +40,7 @@ array set auto_replace_conflicts {
     lib32-nvidia-utils lib32-nvidia-580xx-utils
     lib32-opencl-nvidia lib32-opencl-nvidia-580xx
     nvidia-dkms nvidia-580xx-dkms
+    kwin-effects-forceblur {garuda-dr460nized garuda-mokka}
 }
 
 if { $::conflictsfile_set } {

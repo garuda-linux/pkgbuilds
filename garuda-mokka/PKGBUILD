@@ -5,7 +5,7 @@
 pkgname=garuda-mokka
 pkgver="1.2.4"
 _commit='f4d8061b70b6017f8fefec0e6b962030c798ec76'
-pkgrel=5
+pkgrel=6
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/${pkgname}"
 license=('GPL')
@@ -33,7 +33,8 @@ install=${pkgname}.install
 provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings'
   'plasma5-themes-sweet-full-git'
-  'plasma5-themes-sweet-kde-git')
+  'plasma5-themes-sweet-kde-git'
+  'kwin-effects-forceblur')
 
 prepare() {
   mkdir -p ./out ./work
@@ -105,7 +106,7 @@ package() {
     'inter-font'
     'ttf-jetbrains-mono-nerd'
     'kvantum'
-    'kwin-effects-forceblur'
+    'kwin-effects-better-blur-dx'
     'kwin-effect-rounded-corners-git'
     'plasma-applet-window-buttons'
     'plasma-systemmonitor'

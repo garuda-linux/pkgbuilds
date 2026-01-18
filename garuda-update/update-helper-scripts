@@ -1,5 +1,5 @@
 #!/bin/bash
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2329
 set -e
 
 CURRENT_INTERVENTION_SEQUENCE=3
@@ -154,7 +154,7 @@ package-replaces() {
 	fi
 	# TODO: Once we have enough checks to be worth doing an intervention sequence bump (to 4): Uncomment this
 	# if (( sequence < 4 )); then
-		packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed 2>/dev/null | xargs || true)"
+		packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed plasma-x11-session kwin-effects-forceblur 2>/dev/null | xargs || true)"
 		if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
 			echo proton-ge-custom-bin
 		fi
@@ -166,6 +166,12 @@ package-replaces() {
 		# Check for missing certs
 		if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
 			echo ca-certificates-mozilla
+		fi
+
+		# If plasma-x11-session exists AND kwin-effects-forceblur is present, additionally add kwin-effects-better-blur-dx-x11
+    # Wayland package will be migrated via depends already
+		if [[ "$packages" =~ (^| )plasma-x11-session($| ) ]] && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
+			echo kwin-effects-better-blur-dx-x11
 		fi
 	# fi
 }

@@ -211,6 +211,10 @@ apply_migrations() {
 		echo "1" >/etc/garuda/migrations/has_legacy_patches
 		garudalib_add_update_notice 'Garuda Linux default settings overrides will now be applied to .pacnew files; New settings overrides are now applied to system files through a new system. (No action needed) (Extra info: https://forum.garudalinux.org/t/47103)' || true
 	fi
+
+	if [[ $(vercmp 3.6.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		garudalib_add_update_notice "KWin blur settings were refreshed for Garuda Dr460nized/Mokka profiles; the old blurplus effect was removed and better-blur-dx settings were reapplied." || true
+	fi
 }
 
 # $1 Previous version
@@ -228,6 +232,60 @@ apply_user_migrations() {
 		# https://forum.garudalinux.org/t/fish-4-2-0-update-breaks-fish-update-completions/46558
 		sed -i -e "s/^alias cat 'bat --style header --style snip --style changes --style header'$/abbr cat 'bat --style header,snip,changes'/g" \
 			".config/fish/config.fish" 2>/dev/null || true
+	fi
+
+	if [[ $(vercmp 3.6.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/kwinrc" ]; then
+		if pacman -Qq garuda-dr460nized &>/dev/null || pacman -Qq garuda-mokka &>/dev/null; then
+			local enabled="true"
+			if grep -qE '^\s*blurEnabled\s*=\s*false' ".config/kwinrc"; then
+				# Force enable if built-in blur is explicitly disabled
+				enabled="true"
+			elif ! grep -qE '^\s*\[Effect-(blurplus|better-blur-dx)\]' ".config/kwinrc"; then
+				enabled="false"
+			elif sed -n '/^\s*\[Effect-\(blurplus\|better-blur-dx\)\]/,/^\s*\[/p' ".config/kwinrc" | grep -qE '^\s*Enabled\s*=\s*false'; then
+				enabled="false"
+			fi
+
+			# Remove [Effect-blurplus] and [Effect-better-blur-dx] to ensure fresh settings
+			# This deletes the header and all settings until the next section header
+			sed -i '/^\s*\[Effect-blurplus\]/,/^\s*\[/ { /^\s*\[Effect-blurplus\]/d; /^\s*\[/b; d }' ".config/kwinrc" 2>/dev/null || true
+			sed -i '/^\s*\[Effect-better-blur-dx\]/,/^\s*\[/ { /^\s*\[Effect-better-blur-dx\]/d; /^\s*\[/b; d }' ".config/kwinrc" 2>/dev/null || true
+
+			local blur_docks="false"
+			if pacman -Qq garuda-dr460nized &>/dev/null; then
+				blur_docks="true"
+			fi
+
+			# Ensure better_blur_dxEnabled=true if blurEnabled=false in [Plugins]
+			if grep -qE '^\s*blurEnabled\s*=\s*false' ".config/kwinrc"; then
+				if grep -qE '^\s*\[Plugins\]' ".config/kwinrc"; then
+					if grep -q 'better_blur_dxEnabled' ".config/kwinrc"; then
+						sed -i 's/^\s*better_blur_dxEnabled\s*=.*/better_blur_dxEnabled=true/' ".config/kwinrc" 2>/dev/null || true
+					else
+						sed -i '/^\s*\[Plugins\]/a better_blur_dxEnabled=true' ".config/kwinrc" 2>/dev/null || true
+					fi
+				else
+					# If [Plugins] doesn't exist, we add it at the top of the file to avoid appending to the very end
+					# which might be less desirable for core sections.
+					sed -i '1i [Plugins]\nbetter_blur_dxEnabled=true\n' ".config/kwinrc" 2>/dev/null || true
+				fi
+			fi
+
+			cat >>".config/kwinrc" <<EOF
+
+[Effect-better-blur-dx]
+BlurDecorations=true
+BlurDocks=$blur_docks
+BlurMatching=false
+BlurMenus=true
+BlurNonMatching=true
+CornerRadius=20
+Enabled=$enabled
+NoiseStrength=0
+Saturation=100
+WindowClasses=xwaylandvideobridge\\nvlc
+EOF
+		fi
 	fi
 }
 

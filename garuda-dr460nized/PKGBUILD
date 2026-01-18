@@ -4,7 +4,7 @@
 pkgname=garuda-dr460nized
 pkgver="4.6.2"
 _commit='01b35a44e5ef50254ccfc6bd4cfdf3c57d3d69ad'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -15,7 +15,7 @@ sha256sums=('SKIP'
 pkgdesc='Dr460nized settings'
 install=$pkgname.install
 provides=('garuda-desktop-settings')
-conflicts=('garuda-desktop-settings' 'plasma5-applets-window-appmenu' 'plasma5-applets-window-buttons' 'plasma5-applets-window-title' 'plasma5-applets-betterinlineclock-git' 'plasma5-wallpapers-blurredwallpaper')
+conflicts=('garuda-desktop-settings' 'plasma5-applets-window-appmenu' 'plasma5-applets-window-buttons' 'plasma5-applets-window-title' 'plasma5-applets-betterinlineclock-git' 'plasma5-wallpapers-blurredwallpaper' 'kwin-effects-forceblur')
 replaces=('garuda-dr460nized-next')
 
 package() {
@@ -34,6 +34,7 @@ package() {
     'garuda-wallpapers'
     'kvantum'
     'kvantum-qt5'
+    'kwin-effects-better-blur-dx'
     'plasma-applet-window-buttons'
     'plasma-systemmonitor'
     'plasma5-themes-sweet-full-git'
