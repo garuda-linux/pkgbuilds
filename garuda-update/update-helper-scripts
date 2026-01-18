@@ -153,27 +153,32 @@ package-replaces() {
 		fi
 	fi
 	# TODO: Once we have enough checks to be worth doing an intervention sequence bump (to 4): Uncomment this
-	# if (( sequence < 4 )); then
-		packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed plasma-x11-session kwin-effects-forceblur 2>/dev/null | xargs || true)"
-		if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
-			echo proton-ge-custom-bin
-		fi
-		if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-closed($| ) ]]; then
-			echo --ignore
-			echo nvidia-open-dkms
-		fi
+  # if (( sequence < 4 )); then
+    packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed plasma-x11-session kwin-effects-forceblur garuda-dr460nized garuda-mokka 2>/dev/null | xargs  true)"
+    if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
+      echo proton-ge-custom-bin
+    fi
+    if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-closed($| ) ]]; then
+      echo --ignore
+      echo nvidia-open-dkms
+    fi
 
-		# Check for missing certs
-		if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
-			echo ca-certificates-mozilla
-		fi
+    # Check for missing certs
+    if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
+      echo ca-certificates-mozilla
+    fi
 
-		# If plasma-x11-session exists AND kwin-effects-forceblur is present, additionally add kwin-effects-better-blur-dx-x11
-    # Wayland package will be migrated via depends already
-		if [[ "$packages" =~ (^| )plasma-x11-session($| ) ]] && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
-			echo kwin-effects-better-blur-dx-x11
-		fi
-	# fi
+    # If using dr460nized and mokka and legacy foreblur is still installed, signal to pacman that it should be removed.
+    if ( [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]]  [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] ) && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
+      echo --ignore
+      echo kwin-effects-forceblur
+
+      # If plasma-x11-session exists AND kwin-effects-forceblur is present, additionally add kwin-effects-better-blur-dx-x11
+      if [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
+        echo kwin-effects-better-blur-dx-x11
+      fi
+    fi
+  # fi
 }
 
 # Exit codes:
