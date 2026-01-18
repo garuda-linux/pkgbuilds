@@ -169,7 +169,7 @@ package-replaces() {
     fi
 
     # If using dr460nized and mokka and legacy foreblur is still installed, signal to pacman that it should be removed.
-    if ( [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] || [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] ) && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
+    if ( [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] || [[ "$packages" =~ (^| )garuda-mokka($| ) ]] ) && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
       echo --ignore
       echo kwin-effects-forceblur
 
