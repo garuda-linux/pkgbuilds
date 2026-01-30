@@ -1,6 +1,6 @@
 pkgbase = garuda-dr460nized
 	pkgdesc = Dr460nized settings
-	pkgver = 4.6.4
+	pkgver = 4.6.5
 	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
 	install = garuda-dr460nized.install
@@ -15,7 +15,7 @@ pkgbase = garuda-dr460nized
 	conflicts = plasma5-wallpapers-blurredwallpaper
 	conflicts = kwin-effects-forceblur
 	replaces = garuda-dr460nized-next
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/120c30830a19a2b6ada0966a0ba6472eb4bc23c8/garuda-dr460nized-120c30830a19a2b6ada0966a0ba6472eb4bc23c8.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/3ef26752965681097cd73c5a530cd563aba7b0f4/garuda-dr460nized-3ef26752965681097cd73c5a530cd563aba7b0f4.tar.gz
 	source = dr460nized-patch.hook
 	sha256sums = SKIP
 	sha256sums = 4121188ba1198f415f151a293a808c507c53128daa4165eb628e4b0e794a0c5f
