@@ -33,6 +33,13 @@ deleted = "x"
 diverged = "⇕⇡${ahead_count}⇣${behind_count}"
 style = "white"
 
+# Display last commit ID and current Tag version
+[git_commit]
+tag_symbol = '  '
+tag_disabled = false
+only_detached = false # If false, it shows the tag even if you are on a branch
+style = "bold blue"
+
 # Last param in the first line/row
 [cmd_duration]
 disabled = false

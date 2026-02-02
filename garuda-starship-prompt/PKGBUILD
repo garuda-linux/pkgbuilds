@@ -2,7 +2,7 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-starship-prompt
-pkgver=1.0.3
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="Starship terminal prompt preset for Garuda Linux"
 arch=(any)
@@ -11,7 +11,7 @@ license=('MIT')
 depends=('starship')
 makedepends=('git')
 source=('starship.toml')
-sha256sums=('8ca9603c6a4f73a54eb431edb609ce9634cc7f949da5efa63ab75472cf45e74b')
+sha256sums=('1e0f834130db67b1335e9724a8a783c5a6c9f30074dcd8eb82672e0bda0dbcd5')
 
 package() {
 	install -D -m644 starship.toml "$pkgdir/etc/skel/.config/starship.toml"
