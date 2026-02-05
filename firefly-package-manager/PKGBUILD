@@ -1,14 +1,14 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=firefly-package-manager
-pkgver="0.1.0"
-_commit='79e980d4df8979cec3ba8ac585a41d10696a7626'
+pkgver="0.2.0"
+_commit='d8353a31fbef63fc27434960f4bfde3e3c6e9976'
 pkgrel=1
 pkgdesc="Garuda Linux GUI package manager"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
 license=('GPL')
-depends=('qt6-base' 'pacman' 'garuda-update')
+depends=('qt6-base' 'pacman' 'pacman-contrib' 'garuda-update' 'gawk')
 makedepends=('qt6-tools' 'cmake' 'git')
 source=("https://gitlab.com/garuda-linux/applications/firefly/-/archive/${_commit}/firefly-${_commit}.tar.gz")
 sha256sums=('SKIP')
