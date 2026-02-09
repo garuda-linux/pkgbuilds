@@ -215,6 +215,13 @@ apply_migrations() {
 	if [[ $(vercmp 3.6.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		garudalib_add_update_notice "KWin blur settings were refreshed for Garuda Dr460nized/Mokka profiles; the old blurplus effect was removed and better-blur-dx settings were reapplied." || true
 	fi
+
+	if [[ $(vercmp 3.6.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		if grep -qE '^IgnorePkg.*\bddcutil\b' /etc/pacman.conf; then
+			garudalib_add_update_notice "\"ddcutil\" was removed from the IgnorePkg list in /etc/pacman.conf because the package was reverted in the repositories." || true
+			sed -i '/^IgnorePkg/s/\s*\bddcutil\b//g' /etc/pacman.conf
+		fi
+	fi
 }
 
 # $1 Previous version
