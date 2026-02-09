@@ -240,7 +240,7 @@ if [[ -v UPDATE_AUR ]] && [[ -z "$GARUDA_UPDATE_RANI" ]]; then
   $INT
 fi
 
-if [[ -v UPDATE_AUR ]] && [[ -v GARUDA_UPDATE_RANI ]]; then
+if [[ -v UPDATE_AUR ]] && [[ -v GARUDA_UPDATE_RANI ]] && [[ -v FIREFLY_PACKAGE_MANAGER ]]; then
   # In this case we must not attempt running the update. There is no way to confirm/review updates as of today.
   echo -e "\n\033[1;33m-->\033[1;34m Skipping AUR update. Running those via Rani is explicitly not supported. Instead, use the terminal and review updates manually.\033[0m"
 fi
