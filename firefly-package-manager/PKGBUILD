@@ -1,8 +1,8 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=firefly-package-manager
-pkgver="0.8.0"
-_commit='5442abb0a7cda263932a36b31f875a637346dd0c'
+pkgver="0.8.1"
+_commit='5c286d1aad12b7d398ecd031c6f4ca3c8503120c'
 pkgrel=1
 pkgdesc="Garuda Linux GUI package manager"
 arch=('x86_64')
