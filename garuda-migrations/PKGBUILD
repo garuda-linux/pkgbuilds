@@ -3,7 +3,7 @@
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
 pkgver=3.6.1
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL')
 depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
