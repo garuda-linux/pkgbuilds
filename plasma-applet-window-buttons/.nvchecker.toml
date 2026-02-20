@@ -1,0 +1,5 @@
+[plasma-applet-window-buttons]
+source = 'github'
+github = 'moodyhunter/applet-window-buttons6'
+use_max_tag = true
+prefix = 'v'

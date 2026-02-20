@@ -1,0 +1,46 @@
+# Maintainer: Antonio Rojas <arojas@archlinux.org>
+
+pkgname=plasma-applet-window-buttons
+pkgver=0.14.0
+pkgrel=2.1
+pkgdesc='Plasma applet in order to show window buttons in your panels'
+arch=(x86_64)
+url='https://github.com/moodyhunter/applet-window-buttons6'
+license=(GPL-2.0-or-later
+         LGPL-2.1-or-later)
+depends=(gcc-libs
+         glibc
+         kcolorscheme
+         kconfig
+         kcoreaddons
+         kdecoration
+         ki18n
+         kirigami
+         kitemmodels
+         ksvg
+         libplasma
+         plasma-workspace
+         qt6-base
+         qt6-declarative)
+makedepends=(extra-cmake-modules
+             git)
+conflicts=(plasma5-applets-window-buttons)
+replaces=(plasma5-applets-window-buttons)
+source=(git+https://github.com/moodyhunter/applet-window-buttons6#tag=v$pkgver
+  31.patch)
+sha256sums=('4efb6c3dfcb5f25e68395da61c19e4c5cd6dd7c641fb512d6c8aff29b93dc2e1'
+            'e279fc611a1cf3ec37378863fca9d30469a5617a6d02b2cb19635720b7ee3147')
+
+prepare() {
+  cd "$srcdir/applet-window-buttons6"
+  patch -p1 -i "$srcdir/31.patch"
+}
+
+build() {
+  cmake -B build -S applet-window-buttons6
+  cmake --build build
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}
