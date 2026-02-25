@@ -158,6 +158,7 @@ eval set -- "$PARSED_OPTIONS"
 while true; do
   case "$1" in
   -h | --help)
+    # shellcheck source=help
     source /usr/lib/garuda/garuda-update/help
     ;;
   -a | --aur)

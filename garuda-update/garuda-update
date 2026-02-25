@@ -61,6 +61,7 @@ self_update() {
 	fi
 	if [ "$DATABASE_UPDATED" != "true" ]; then
 		SELF_UPDATE_FAIL=1
+		return
 	fi
 	$INT
 	if $PACMAN -Qu garuda-update &>/dev/null; then
@@ -86,6 +87,8 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ "$1" == "help" ]; then
 fi
 
 # Elevate once and stop asking for the password constantly
+# It would be possible to add systemd-inhibit here, but that would prevent a self-update from removing the inhibit in the future in case there is an issue.
+# The performance impact of not immediately using systemd-inhibit is negligible.
 if [[ $EUID -ne 0 ]]; then
 	exec sudo --preserve-env="SKIP_MIRRORLIST,UPDATE_AUR,PACMAN_EXE,GARUDA_SNAPSHOT_PACMAN,PACMAN_EXTRA_OPTS" /usr/bin/garuda-update "$@"
 	exit 1
@@ -109,11 +112,18 @@ if [ -n "$GARUDA_UPDATE_SELFUPDATE" ]; then
 	DATABASE_UPDATED=true
 fi
 
-self_update "$@"
+if [ ! -v GARUDA_SLEEP_INHIBIT ]; then
+	self_update "$@"
 
-if [ -v SELF_UPDATE_FAIL ]; then
-	emergency_hotfix
+	if [ -v SELF_UPDATE_FAIL ]; then
+		emergency_hotfix "$@"
+	fi
+
+	if [ -x /usr/bin/systemd-inhibit ]; then
+		GARUDA_SLEEP_INHIBIT=1 exec systemd-inhibit --who="Garuda Update" --why="Performing a system update with garuda-update" \
+			/usr/bin/garuda-update "$@"
+	fi
 fi
 
-# shellcheck source=./main-update
+# shellcheck source=main-update
 source /usr/lib/garuda/garuda-update/main-update
