@@ -2,8 +2,8 @@
 # Contributor: Ramon Buldó <rbuldo@gmail.com>
 
 pkgname=garuda-browser-settings
-pkgver="1.2.4"
-_commit='ef128dceff40ab8a9fc67e0a7880158634177365'
+pkgver="1.2.5"
+_commit='16ac4d80af1e2239905c91066cb7268e408ab3ae'
 pkgrel=1
 pkgdesc="Garuda Linux settings browser defaults"
 arch=('any')
@@ -14,44 +14,44 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-bro
 sha256sums=('SKIP')
 
 package() {
-	cd "$srcdir/$pkgname-$_commit" || exit
-	mkdir -p "$pkgdir"/usr/lib/{chrome,chromium,brave,{firedragon,firefox,firefox-developer-edition,librewolf,palemoon,thunderbird}/distribution}
+  cd "$srcdir/$pkgname-$_commit" || exit
+  mkdir -p "$pkgdir"/usr/lib/{chrome,chromium,brave,{firedragon,firefox,firefox-developer-edition,librewolf,palemoon,thunderbird}/distribution}
 
-	for i in chrome chromium brave; do
-		cp chrome/* "$pkgdir"/usr/lib/$i
-	done
+  for i in chrome chromium brave; do
+    cp chrome/* "$pkgdir"/usr/lib/$i
+  done
 
-	cp palemoon/* "$pkgdir"/usr/lib/palemoon/distribution
+  cp palemoon/* "$pkgdir"/usr/lib/palemoon/distribution
 
-	install -dm755 "$pkgdir"/etc/skel/.config/falkon/profiles
-	cp -r falkon/* "$pkgdir"/etc/skel/.config/falkon/profiles
+  install -dm755 "$pkgdir"/etc/skel/.config/falkon/profiles
+  cp -r falkon/* "$pkgdir"/etc/skel/.config/falkon/profiles
 
-	install -Dm644 firedragon/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firedragon.ini
-	install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox.ini
-	install -Dm644 librewolf/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-librewolf.ini
-	install -Dm644 thunderbird/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-thunderbird.ini
-	install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox-developer-edition.ini
-	sed -i 's/Firefox/Firefox Developer Edition/;s/firefox/firefox-developer-edition/' "$pkgdir"/etc/garuda-settings/garuda-firefox-developer-edition.ini
-	install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox-kde.ini
-	sed -i 's/Firefox/Firefox KDE Edition/' "$pkgdir"/etc/garuda-settings/garuda-firefox-kde.ini
-	mkdir -p "$pkgdir"/usr/lib/{firefox,firefox-developer-edition,librewolf}/browser/defaults/preferences
+  install -Dm644 firedragon/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firedragon.ini
+  install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox.ini
+  install -Dm644 librewolf/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-librewolf.ini
+  install -Dm644 thunderbird/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-thunderbird.ini
+  install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox-developer-edition.ini
+  sed -i 's/Firefox/Firefox Developer Edition/;s/firefox/firefox-developer-edition/' "$pkgdir"/etc/garuda-settings/garuda-firefox-developer-edition.ini
+  install -Dm644 firefox/distribution.ini "$pkgdir"/etc/garuda-settings/garuda-firefox-kde.ini
+  sed -i 's/Firefox/Firefox KDE Edition/' "$pkgdir"/etc/garuda-settings/garuda-firefox-kde.ini
+  mkdir -p "$pkgdir"/usr/lib/{firefox,firefox-developer-edition,librewolf}/browser/defaults/preferences
 
-	install -Dm644 firefox/all-companyname.js "$pkgdir"/usr/lib/firefox/browser/defaults/preferences/all-companyname.js
-	install -Dm644 firefox/all-companyname.js "$pkgdir"/usr/lib/firefox-developer-edition/browser/defaults/preferences/all-companyname.js
-	install -Dm644 librewolf/all-companyname.js "$pkgdir"/usr/lib/librewolf/browser/defaults/preferences/all-companyname.js
+  install -Dm644 firefox/all-companyname.js "$pkgdir"/usr/lib/firefox/browser/defaults/preferences/all-companyname.js
+  install -Dm644 firefox/all-companyname.js "$pkgdir"/usr/lib/firefox-developer-edition/browser/defaults/preferences/all-companyname.js
+  install -Dm644 librewolf/all-companyname.js "$pkgdir"/usr/lib/librewolf/browser/defaults/preferences/all-companyname.js
 
-	install -Dm644 firedragon-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-pre.hook
-	install -Dm644 firedragon-post.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-post.hook
-	install -Dm644 firefox-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-pre.hook
-	install -Dm644 firefox-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-post.hook
-	install -Dm644 firefox-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-pre.hook
-	sed -i 's/firefox/firefox-developer-edition/g' "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-pre.hook
-	install -Dm644 firefox-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-post.hook
-	sed -i 's/firefox/firefox-developer-edition/g' "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-post.hook
-	install -Dm644 firefox-kde-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-kde-pre.hook
-	install -Dm644 firefox-kde-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-kde-post.hook
-	install -Dm644 librewolf-pre.hook "$pkgdir"/usr/share/libalpm/hooks/librewolf-pre.hook
-	install -Dm644 librewolf-post.hook "$pkgdir"/usr/share/libalpm/hooks/librewolf-post.hook
-	install -Dm644 thunderbird-pre.hook "$pkgdir"/usr/share/libalpm/hooks/thunderbird-pre.hook
-	install -Dm644 thunderbird-post.hook "$pkgdir"/usr/share/libalpm/hooks/thunderbird-post.hook
+  install -Dm644 firedragon-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-pre.hook
+  install -Dm644 firedragon-post.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-post.hook
+  install -Dm644 firefox-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-pre.hook
+  install -Dm644 firefox-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-post.hook
+  install -Dm644 firefox-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-pre.hook
+  sed -i 's/firefox/firefox-developer-edition/g' "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-pre.hook
+  install -Dm644 firefox-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-post.hook
+  sed -i 's/firefox/firefox-developer-edition/g' "$pkgdir"/usr/share/libalpm/hooks/firefox-dev-post.hook
+  install -Dm644 firefox-kde-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-kde-pre.hook
+  install -Dm644 firefox-kde-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-kde-post.hook
+  install -Dm644 librewolf-pre.hook "$pkgdir"/usr/share/libalpm/hooks/librewolf-pre.hook
+  install -Dm644 librewolf-post.hook "$pkgdir"/usr/share/libalpm/hooks/librewolf-post.hook
+  install -Dm644 thunderbird-pre.hook "$pkgdir"/usr/share/libalpm/hooks/thunderbird-pre.hook
+  install -Dm644 thunderbird-post.hook "$pkgdir"/usr/share/libalpm/hooks/thunderbird-post.hook
 }
