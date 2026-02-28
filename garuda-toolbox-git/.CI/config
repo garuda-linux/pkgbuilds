@@ -1,2 +1,2 @@
-CI_MANAGE_AUR=true
+CI_MANAGE_AUR=false
 CI_PKGBUILD_SOURCE=custom
