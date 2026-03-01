@@ -40,7 +40,6 @@ package() {
   install -Dm644 firefox/all-companyname.js "$pkgdir"/usr/lib/firefox-developer-edition/browser/defaults/preferences/all-companyname.js
   install -Dm644 librewolf/all-companyname.js "$pkgdir"/usr/lib/librewolf/browser/defaults/preferences/all-companyname.js
 
-  install -Dm644 firedragon-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-pre.hook
   install -Dm644 firedragon-post.hook "$pkgdir"/usr/share/libalpm/hooks/firedragon-post.hook
   install -Dm644 firefox-pre.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-pre.hook
   install -Dm644 firefox-post.hook "$pkgdir"/usr/share/libalpm/hooks/firefox-post.hook
