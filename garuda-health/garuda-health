@@ -543,7 +543,7 @@ def check_for_optional_packages() -> HealthCheck:
 
     :return: A HealthCheckResult if an optional package is missing .
     """
-    optional_packages = ["garuda-rani", "garuda-hardware-tool", "garuda-system-maintenance"]
+    optional_packages = ["garuda-toolbox", "garuda-hardware-tool", "garuda-system-maintenance"]
     def check() -> HealthCheckResult:
         return check_for_packages(
             Severity.INFO, [], optional_packages, "Optional garuda linux utilities are missing"
