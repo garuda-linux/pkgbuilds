@@ -7,7 +7,7 @@ _electronversion=39
 _pkgname=garuda-toolbox
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
-url="https://gitlab.com/garuda-linux/applications/rani.git#branch=feat/appstream-rebrand-misc"
+url="https://gitlab.com/garuda-linux/applications/toolbox"
 license=('GPL-3.0-or-later')
 depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0' 'archlinux-appstream-data')
 makedepends=('git' 'base-devel' 'nodejs-lts-krypton' 'pnpm')
@@ -20,7 +20,7 @@ provides=('garuda-toolbox')
 conflicts=('garuda-toolbox')
 replaces=('garuda-rani-git')
 options=('!strip' '!emptydirs' '!debug')
-source=("toolbox::git+$url")
+source=("toolbox::git+$url.git")
 sha256sums=('SKIP')
 
 pkgver() {

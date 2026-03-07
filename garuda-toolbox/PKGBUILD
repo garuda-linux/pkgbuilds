@@ -1,15 +1,15 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
-pkgname=garuda-rani
-pkgver="3.5.2"
-_commit='48d0ff31088d3803a178f0fc55a08747b8625ae2'
+pkgname=garuda-toolbox
+pkgver="4.0.0"
+_commit='380212a858d8533f2e511ff6e5078878a8724571'
 pkgrel=1
 _electronversion=39
-pkgdesc="Garuda's Reliable Assistant for Native Installations"
+pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
-url="https://gitlab.com/garuda-linux/applications/rani"
+url="https://gitlab.com/garuda-linux/applications/toolbox"
 license=('GPL-3.0-or-later')
-depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0')
+depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0' 'archlinux-appstream-data')
 makedepends=('git' 'base-devel' 'nodejs-lts-krypton' 'pnpm')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
@@ -17,13 +17,14 @@ optdepends=('paru: show pending AUR updates'
   'reflector-simple: update Arch mirrorlists interactively'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 options=('!strip' '!emptydirs' '!debug')
-source=("git+$url.git#commit=$_commit")
+source=("toolbox::git+$url.git#commit=$_commit")
 sha256sums=('SKIP')
 # Replaces all of garuda-settings-manager
-replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git')
+replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani')
+provides=('garuda-rani')
 
 prepare() {
-  cd rani || exit
+  cd toolbox || exit
 
   sed -i -e "
         s/@electronversion@/${_electronversion}/g
@@ -31,7 +32,7 @@ prepare() {
         s/@runname@/app.asar/g
         s/@cfgdirname@/${pkgname}/g
         s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto/g
-    " "${srcdir}/rani/assets/garuda-rani.sh"
+    " "${srcdir}/toolbox/assets/garuda-toolbox.sh"
 
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export SYSTEM_ELECTRON_VERSION="$(electron${_electronversion} -v | sed 's/v//g')"
@@ -44,7 +45,7 @@ prepare() {
 }
 
 build() {
-  cd rani || exit
+  cd toolbox || exit
   local electronDist="/usr/lib/electron${_electronversion}"
 
   NODE_ENV=production pnpm run build
@@ -55,10 +56,10 @@ build() {
 }
 
 package() {
-  install -Dm755 "${srcdir}/rani/assets/garuda-rani.sh" "${pkgdir}/usr/bin/${pkgname}"
-  install -Dm644 "${srcdir}/rani/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
-  install -Dm644 "${srcdir}/rani/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
-  install -Dm644 "${srcdir}/rani/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${pkgname}.svg"
-  install -Dm644 "${srcdir}/rani/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
+  install -Dm755 "${srcdir}/toolbox/assets/garuda-toolbox.sh" "${pkgdir}/usr/bin/${pkgname}"
+  install -Dm644 "${srcdir}/toolbox/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
+  install -Dm644 "${srcdir}/toolbox/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
+  install -Dm644 "${srcdir}/toolbox/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${pkgname}.svg"
+  install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
 }
