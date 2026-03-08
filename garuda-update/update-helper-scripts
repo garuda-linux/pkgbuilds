@@ -99,7 +99,7 @@ package-replaces() {
 	sequence="$(get_intervention_sequence)"
 
 	if (( sequence < 1 )); then
-		packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session "linux-firmware<20250613.12fe085f-5" garuda-rani-git garuda-settings-manager gnu-netcat 2>/dev/null | xargs || true)"
+		packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session "linux-firmware<20250613.12fe085f-5" garuda-toolbox-git garuda-settings-manager gnu-netcat 2>/dev/null | xargs || true)"
 		# We replace python-xdg with python-pyxdg from extra
 		# This is not done automatically for some reason
 		if [[ "$packages" =~ (^| )python-xdg($| ) ]]; then
@@ -142,10 +142,10 @@ package-replaces() {
 		if [[ "$packages" =~ (^| )kwin-x11($| ) ]] && [[ "$packages" =~ (^| )plasma-desktop($| ) ]] && ! [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
 			echo plasma-x11-session
 		fi
-		# garuda-rani has replaces=(garuda-settings-manager). If garuda-rani-git is installed and has an update pending, the conflict prompt can not be shown
-		if [[ "$packages" =~ (^| )garuda-rani-git($| ) ]] && [[ "$packages" =~ (^| )garuda-settings-manager($| ) ]]; then
+		# garuda-toolbox has replaces=(garuda-settings-manager). If garuda-toolbox-git is installed and has an update pending, the conflict prompt can not be shown
+		if [[ "$packages" =~ (^| )garuda-toolbox-git($| ) ]] && [[ "$packages" =~ (^| )garuda-settings-manager($| ) ]]; then
 			echo --ignore
-			echo garuda-rani-git
+			echo garuda-toolbox-git
 		fi
 		# Replace gnu-netcat with openbsd-netcat
 		if [[ "$packages" =~ (^| )gnu-netcat($| ) ]]; then
