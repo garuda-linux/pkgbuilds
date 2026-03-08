@@ -108,7 +108,7 @@ fi
 export PACMAN
 
 DATABASE_UPDATED=false
-if [ -n "$GARUDA_UPDATE_SELFUPDATE" ]; then
+if [ -n "$GARUDA_UPDATE_SELFUPDATE" ] || [ -n "$GARUDA_SLEEP_INHIBIT" ]; then
 	DATABASE_UPDATED=true
 fi
 
@@ -120,7 +120,7 @@ if [ ! -v GARUDA_SLEEP_INHIBIT ]; then
 	fi
 
 	if [ -x /usr/bin/systemd-inhibit ]; then
-		GARUDA_SLEEP_INHIBIT=1 exec systemd-inhibit --who="Garuda Update" --why="Performing a system update with garuda-update" \
+		GARUDA_SLEEP_INHIBIT="$VERSION_FLAG" exec systemd-inhibit --who="Garuda Update" --why="Performing a system update with garuda-update" \
 			/usr/bin/garuda-update "$@"
 	fi
 fi
