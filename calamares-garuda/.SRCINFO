@@ -1,6 +1,6 @@
 pkgbase = calamares-garuda
 	pkgdesc = Distribution-independent installer framework
-	pkgver = 3.4.1.r26.g3f6cd831f
+	pkgver = 3.4.1.r44.ge64b96978
 	pkgrel = 1
 	url = https://calamares.codeberg.page
 	arch = i686
@@ -32,11 +32,11 @@ pkgbase = calamares-garuda
 	conflicts = calamares
 	conflicts = calamares-dev
 	replaces = calamares-dev
-	source = git+https://codeberg.org/Calamares/calamares.git#commit=3f6cd831f5e71eb3b0e1e8b60d0afe1ec989eff1
+	source = git+https://codeberg.org/Calamares/calamares.git#commit=e64b969789de65184932840fadf9c09c1be6420c
 	source = 0001-welcome-Add-efi-check.patch
 	source = garuda-specific-patches.patch
 	source = garuda-fswhitelist.patch
-	sha256sums = 781462670ee2c37b5ef025784c86fa69349f13a3f6ca5a8a3d4782d45f82968f
+	sha256sums = aae3fe376a64eb5bf7f546023cbdb1d2e9817ce28da0014c112b3f8dab986bab
 	sha256sums = f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a
 	sha256sums = 6d083b69cf7a0ffdb45e6bc53b26218523494619216a8d1f734469739576ebce
 	sha256sums = 5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32
