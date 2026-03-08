@@ -1,6 +1,6 @@
 pkgbase = garuda-hyprland-settings
 	pkgdesc = Garuda Linux Hyprland settings
-	pkgver = 0.5.105
+	pkgver = 0.5.106
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings
 	install = garuda-hyprland-settings.install
@@ -19,7 +19,7 @@ pkgbase = garuda-hyprland-settings
 	depends = qt5ct
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/da6c0b606639677ad23fd2341baed1edee0bd0b5/garuda-hyprland-settings-da6c0b606639677ad23fd2341baed1edee0bd0b5.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/e307ebd206de16b091cf8bd3c2669eda5893e30a/garuda-hyprland-settings-e307ebd206de16b091cf8bd3c2669eda5893e30a.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-hyprland-settings
