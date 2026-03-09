@@ -29,4 +29,5 @@ package() {
 
   install -d "$pkgdir"/usr
   cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
 }
