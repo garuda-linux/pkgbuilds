@@ -35,16 +35,22 @@ def parse_configs(directory):
                         continue
 
                     target_file = data['targetFile']
-                    if not "pipeline" in data:
+                    autoDelete = data.get('autoDelete', False)
+
+                    if not "pipeline" in data and not autoDelete:
                         print(f"Skipping {filename}: Missing 'pipeline'", file=sys.stderr)
                         continue
+
                     pipeline = data.get('pipeline', [])
 
                     orders = [step.get('order', 0) for step in pipeline]
+                    max_order = -1
                     if not orders:
-                        print(f"Skipping {filename}: Empty pipeline", file=sys.stderr)
-                        continue
-                    max_order = max(orders)
+                        if not autoDelete:
+                            print(f"Skipping {filename}: Empty pipeline", file=sys.stderr)
+                            continue
+                    else:
+                        max_order = max(orders)
 
                     pipeline.sort(key=lambda x: x.get('order', 0))
 
@@ -58,13 +64,17 @@ def parse_configs(directory):
                     # Whether or not to auto-merge pacnew files if they are marked "original"
                     autoMerge = data.get('autoMerge', True)
 
+                    if autoMerge and autoDelete:
+                        print(f"Warning: {filename} has both autoMerge and autoDelete enabled. autoDelete will take precedence.", file=sys.stderr)
+
                     parsed_configs[target_file] = {
                         "max_order": max_order,
                         "pipeline": pipeline,
                         "isBackupFile": isBackupFile,
                         "legacyPatchLevel": legacyPatchLevel,
                         "source_file": filepath,
-                        "autoMerge": autoMerge
+                        "autoMerge": autoMerge,
+                        "autoDelete": autoDelete
                     }
             except Exception as e:
                 print(f"Error parsing {filename}: {e}", file=sys.stderr)
@@ -159,9 +169,14 @@ def apply_pipeline(target_file, pipeline, previous_order):
         if order <= previous_order:
             continue
 
+        # Type = operation/revert
         step_type = step.get('type')
+        # Pattern: The regex pattern to match
         pattern = step.get('pattern')
+        # Substitution: The replacement string
         substitution = step.get('substitution')
+        # Optional check pattern. If true, we do not apply the operation
+        check = step.get('check')
 
         if not step_type or pattern is None or substitution is None:
             print(f"Error: Step {order} in {target_file} missing required fields", file=sys.stderr)
@@ -179,6 +194,9 @@ def apply_pipeline(target_file, pipeline, previous_order):
                 return False
 
         try:
+            if check and re.search(check, content, flags=re.MULTILINE):
+                print(f"--> [{order}] Precondition not met or already applied, skipping {step_type}.")
+                continue
             print(f"--> [{order}] Applying {step_type}...")
             content = re.sub(pattern, substitution, content, flags=re.MULTILINE)
         except re.error as e:
@@ -257,6 +275,7 @@ def post(configs, connection, new_only):
         max_order = config['max_order']
         isBackupFile = config['isBackupFile']
         autoMerge = config['autoMerge']
+        autoDelete = config['autoDelete']
 
         needs_commit = False
 
@@ -300,33 +319,45 @@ def post(configs, connection, new_only):
         has_pacnew = os.path.exists(pacnew_file)
 
         if has_pacnew:
-            current_pacnew_hash = sha256sum(pacnew_file)
-            pacnew_modified = (current_pacnew_hash != db_pacnew_hash and current_pacnew_hash is not None)
-            if pacnew_modified or max_order > db_order:
-                # NEW Pacnew files always get the full pipeline applied
-                if pacnew_modified:
-                    apply_pipeline(pacnew_file, pipeline, -1)
-                else:
-                    apply_pipeline(pacnew_file, pipeline, db_order)
-
-                current_pacnew_hash = sha256sum(pacnew_file)
-
+            if autoDelete:
+                print(f"[{target_file}] Deleting .pacnew automatically.")
+                try:
+                    os.remove(pacnew_file)
+                except Exception as e:
+                    print(f"Error: Deleting {pacnew_file}: {e}", file=sys.stderr)
                 cursor.execute('''
-                    UPDATE configs SET pacnew_hash=? WHERE target_file=?
-                ''', (current_pacnew_hash, target_file))
+                    UPDATE configs SET pacnew_hash=NULL WHERE target_file=?
+                ''', (target_file,))
                 needs_commit = True
+                has_pacnew = False
+            else:
+                current_pacnew_hash = sha256sum(pacnew_file)
+                pacnew_modified = (current_pacnew_hash != db_pacnew_hash and current_pacnew_hash is not None)
+                if pacnew_modified or max_order > db_order:
+                    # NEW Pacnew files always get the full pipeline applied
+                    if pacnew_modified:
+                        apply_pipeline(pacnew_file, pipeline, -1)
+                    else:
+                        apply_pipeline(pacnew_file, pipeline, db_order)
 
-                # If the main config file is still original, we move the pacnew to main
-                if is_original == 1 and autoMerge:
-                    os.replace(pacnew_file, target_file)
-                    print(f"[{target_file}] Replaced original file with .pacnew")
+                    current_pacnew_hash = sha256sum(pacnew_file)
 
-                    config_hash = sha256sum(target_file)
                     cursor.execute('''
-                        UPDATE configs SET main_hash=?, "order"=?, pacnew_hash=NULL WHERE target_file=?
-                    ''', (config_hash, max_order, target_file))
-                    connection.commit()
-                    continue
+                        UPDATE configs SET pacnew_hash=? WHERE target_file=?
+                    ''', (current_pacnew_hash, target_file))
+                    needs_commit = True
+
+                    # If the main config file is still original, we move the pacnew to main
+                    if is_original == 1 and autoMerge:
+                        os.replace(pacnew_file, target_file)
+                        print(f"[{target_file}] Replaced original file with .pacnew")
+
+                        config_hash = sha256sum(target_file)
+                        cursor.execute('''
+                            UPDATE configs SET main_hash=?, "order"=?, pacnew_hash=NULL WHERE target_file=?
+                        ''', (config_hash, max_order, target_file))
+                        connection.commit()
+                        continue
 
         config_hash = sha256sum(target_file)
 
