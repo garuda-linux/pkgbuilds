@@ -3,7 +3,7 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=5.6.2
+pkgver=5.6.3
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -21,7 +21,7 @@ sha512sums=('294a3a2a97928634540a35cfe294985ae27ad8a779faaee60410fca4d171ed6ddd0
             '57dd38a8b97c7cfa55291772de662459341e8c5203a58ae648affa2e9f4f5266ffad018de6a68dce556fdcf0dc0a3f5d402bf29d657c72eac8bc9a6cd5bad78e'
             '62067eb31900bd38f2b0a1b079b6ad64f3f482ce8969101cedd0dd369c0de8da8f1b4952d91144852e92675091726d730903718f941da36667684513e8e2d495'
             'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de'
-            '626dbcad987991bc0f4456b290c862ca9b627c943d4ae41ce48cb53c6724d5f985cb7354de3b327c077f37cb8f23086276aa75ce246df515538bfbcc8d1a4c26'
+            'e7fd267bd7eecc0bae744e7c5ad153113fdbdcea263acf65d5b6ac6f57773f68691632b2d095876afafebde88f14feb072d08944dccb9de8ae60eb023520f5f3'
             '313de02248c290271faee67acb695affb8a70787983fdf895daedd124d4336069c9f99c907e2322ca394e861d0e55d52a68a01dc3f7e1b98e2d5ed16732de7f0')
 install=garuda-update.install
 
