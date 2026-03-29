@@ -1,6 +1,6 @@
 pkgbase = firedragon-next-bin
 	pkgdesc = Upcoming FireDragon v13
-	pkgver = 13.0.0_rc.2
+	pkgver = 13.0.0_rc.3
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/firedragon/firedragon13
 	arch = x86_64
@@ -44,14 +44,14 @@ pkgbase = firedragon-next-bin
 	optdepends = xdg-desktop-portal: Screensharing with Wayland
 	provides = firedragon
 	conflicts = firedragon
-	noextract = firedragon-v13.0.0-rc.2.linux-x64.tar.xz
-	noextract = firedragon-v13.0.0-rc.2.linux-arm64.tar.xz
+	noextract = firedragon-v13.0.0-rc.3.linux-x64.tar.xz
+	noextract = firedragon-v13.0.0-rc.3.linux-arm64.tar.xz
 	options = !emptydirs
-	source = firedragon::git+https://gitlab.com/garuda-linux/firedragon/firedragon13.git#tag=v13.0.0-rc.2
-	sha256sums = 10fc09bb3f258d0dcdef71df16fcffe050ba73f841412f37d17c216648f39088
-	source_x86_64 = firedragon-v13.0.0-rc.2.linux-x64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.2/downloads/firedragon.linux-x64.tar.xz
-	sha256sums_x86_64 = 43e22b1e93480205a1466fdb360564d543d815a06e865cf4ba46793b93fa6486
-	source_aarch64 = firedragon-v13.0.0-rc.2.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.2/downloads/firedragon.linux-arm64.tar.xz
-	sha256sums_aarch64 = 280a5c5c85365aaadc63e6cd611ad2a2b0eb59f36f208ad6939176f0efd4ce65
+	source = firedragon::git+https://gitlab.com/garuda-linux/firedragon/firedragon13.git#tag=v13.0.0-rc.3
+	sha256sums = fd3865a4bea813bd06806571d8e8f7548e77da051769c37944cf58836e2590e7
+	source_x86_64 = firedragon-v13.0.0-rc.3.linux-x64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.3/downloads/firedragon.linux-x64.tar.xz
+	sha256sums_x86_64 = 45c3c7198674600d7c18bf12fe6fc02d83ba058fb8f69d5021d8b7d7a3d9e384
+	source_aarch64 = firedragon-v13.0.0-rc.3.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.3/downloads/firedragon.linux-arm64.tar.xz
+	sha256sums_aarch64 = 42f9e461845d6a2691bfbbae1a9a9b386304f8b0d61dd0ada4a7754795fae030
 
 pkgname = firedragon-next-bin
