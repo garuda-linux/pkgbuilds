@@ -3,13 +3,13 @@
 pkgname=garuda-toolbox
 pkgver="5.0.0"
 _commit='d493e71a9562c6aef144cbb0919a32c43d903992'
-pkgrel=1
+pkgrel=2
 _electronversion=39
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/toolbox"
 license=('GPL-3.0-or-later')
-depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0' 'archlinux-appstream-data')
+depends=('bash' 'curl' "electron${_electronversion}" 'pacman-contrib' 'garuda-libs>=1.6.0' 'archlinux-appstream-data' 'util-linux')
 makedepends=('git' 'base-devel' 'nodejs-lts-krypton' 'pnpm')
 optdepends=('paru: show pending AUR updates'
   'meld: compare pacdiff files via a GUI on GTK systems'
@@ -57,9 +57,11 @@ build() {
 
 package() {
   install -Dm755 "${srcdir}/toolbox/assets/garuda-toolbox.sh" "${pkgdir}/usr/bin/${pkgname}"
+  install -Dm755 "${srcdir}/toolbox/assets/garuda-toolbox-pty-wrapper" "${pkgdir}/usr/libexec/garuda-toolbox-pty-wrapper"
   install -Dm644 "${srcdir}/toolbox/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
   install -Dm644 "${srcdir}/toolbox/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
   install -Dm644 "${srcdir}/toolbox/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
   install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${pkgname}.svg"
   install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
+  install -Dm644 "${srcdir}/toolbox/assets/org.garudalinux.toolbox.policy" "${pkgdir}/usr/share/polkit-1/actions/org.garudalinux.toolbox.policy"
 }
