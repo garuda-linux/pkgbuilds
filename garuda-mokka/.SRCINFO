@@ -1,6 +1,6 @@
 pkgbase = garuda-mokka
 	pkgdesc = Garuda Mokka desktop settings and presets
-	pkgver = 1.4.4
+	pkgver = 1.4.5
 	pkgrel = 6
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka
 	install = garuda-mokka.install
@@ -15,7 +15,7 @@ pkgbase = garuda-mokka
 	conflicts = plasma5-themes-sweet-full-git
 	conflicts = plasma5-themes-sweet-kde-git
 	conflicts = kwin-effects-forceblur
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/268ae7252d79bd35be08e5ba1443f5368b1c74aa/garuda-mokka-268ae7252d79bd35be08e5ba1443f5368b1c74aa.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/105954d6d6e250c733ccda08375c0e066b2f420e/garuda-mokka-105954d6d6e250c733ccda08375c0e066b2f420e.tar.gz
 	source = git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
 	source = git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
 	source = git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
