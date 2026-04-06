@@ -2,15 +2,19 @@
 
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
-pkgver=3.7.2
+pkgver=4.0.0
 pkgrel=1
 arch=('any')
 license=('GPL')
 depends=('coreutils' 'sed' 'awk' 'garuda-libs>=1.1.0')
 source=(garuda-migrations-runner
-  garuda-migrations.hook)
-sha256sums=('a92fd3061154b85498a82e02f4782695c49e982d63a9b39f0720bd00378a9c5c'
-            '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65')
+  garuda-migrations-runner-post
+  garuda-migrations.hook
+  garuda-migrations-post.hook)
+sha256sums=('a1a3358f4504ba81b0601b4dc08a11837a7368cf250aed3a7c2824eb309a49c7'
+            '3409042c917607bf60ae4383096dbd9c5f0d2df7cac4314e25572d79036ee0fb'
+            '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65'
+            '2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832')
 
 package() {
   install -d "$pkgdir"/usr/share/garuda/migrations
@@ -20,6 +24,8 @@ package() {
   cd "$srcdir" || exit
   install -d "$pkgdir"/usr/share/libalpm/hooks
   install -Dm644 garuda-migrations.hook "$pkgdir"/usr/share/libalpm/hooks/00-garuda-migrations.hook
+  install -Dm644 garuda-migrations-post.hook "$pkgdir"/usr/share/libalpm/hooks/95-garuda-migrations.hook
   install -d "$pkgdir"/usr/share/libalpm/scripts
   install -Dm755 garuda-migrations-runner "$pkgdir"/usr/share/libalpm/scripts/garuda-migrations-runner
+  install -Dm755 garuda-migrations-runner-post "$pkgdir"/usr/share/libalpm/scripts/garuda-migrations-runner-post
 }

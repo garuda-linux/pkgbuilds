@@ -1,6 +1,6 @@
 pkgbase = garuda-mokka
 	pkgdesc = Garuda Mokka desktop settings and presets
-	pkgver = 1.4.7
+	pkgver = 1.4.8
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka
 	install = garuda-mokka.install
@@ -45,6 +45,7 @@ pkgname = garuda-mokka
 	depends = kwin-effects-better-blur-dx
 	depends = kwin-effect-rounded-corners-git
 	depends = plasma-applet-window-buttons
+	depends = plasma-login-manager
 	depends = plasma-systemmonitor
 	depends = plasma6-applets-window-title
 	depends = plasma6-applets-panel-colorizer

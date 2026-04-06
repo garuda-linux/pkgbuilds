@@ -1,0 +1,97 @@
+#!/bin/bash
+# Run garuda hooks related commands.
+
+source /usr/lib/garuda/garuda.shlib
+
+if [ ! -e /usr/share/garuda/migrations/current_version ]; then
+	exit 1
+fi
+
+IS_NEW_INSTALL=false
+pending_version=$(</usr/share/garuda/migrations/current_version)
+
+if [ -e /etc/garuda/migrations/applied_version ]; then
+	applied_version=$(</etc/garuda/migrations/applied_version)
+else
+	IS_NEW_INSTALL=true
+	applied_version=0.0.0
+fi
+
+ISO_TIMESTAMP=$(grep -Po '^TIMESTAMP="?\K[^"]*' "/usr/lib/garuda/garuda-release" 2>/dev/null)
+ISO_CODENAME=$(grep -Po '^CODENAME="?\K[^"]*' "/usr/lib/garuda/garuda-release" 2>/dev/null)
+
+# $1 Previous version
+# $2 Current version
+apply_migrations() {
+	echo "$2" >/etc/garuda/migrations/applied_version
+
+    # Migrate to Plasmalogin
+	if [[ $(vercmp 4.0.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] &&
+    systemctl is-enabled --quiet sddm.service >/dev/null 2>&1; then
+		if [ -f "/etc/plasmalogin.conf" ]; then
+			garudalib_add_update_notice "Plasmalogin migration was skipped because /etc/plasmalogin.conf already exists. Existing login manager configuration was kept." || true
+		elif [ -f "/usr/lib/systemd/system/plasmalogin.service" ] &&
+      pacman -Qq plasma-login-manager &>/dev/null &&
+      (pacman -Qq garuda-mokka &>/dev/null || pacman -Qq garuda-dr460nized &>/dev/null); then
+			local source_wallpaper="/usr/share/wallpapers/garuda-mokka/City-horizon Mocha.jpg"
+			local plasmalogin_root="/var/lib/plasmalogin"
+			local wallpaper_dir="${plasmalogin_root}/wallpapers"
+			local target_filename="City-horizon Mocha.jpg"
+			local profile_name="Garuda Mokka"
+
+			if pacman -Qq garuda-dr460nized &>/dev/null; then
+				source_wallpaper="/usr/share/wallpapers/garuda-wallpapers/Malefor.jpg"
+				target_filename="Malefor.jpg"
+				profile_name="Garuda Dr460nized"
+			fi
+
+			local target_wallpaper="${wallpaper_dir}/${target_filename}"
+			local target_config_dir="${plasmalogin_root}/.config"
+			local source_user_home=""
+
+			install -d -m 0755 "${wallpaper_dir}"
+			install -d -m 0755 "${target_config_dir}"
+
+			# Prefer invoking user; fallback to first regular account with a valid home.
+			if [ -n "${SUDO_UID:-}" ]; then
+				source_user_home="$(getent passwd "${SUDO_UID}" | cut -d: -f6)"
+			elif [ -n "${PKEXEC_UID:-}" ]; then
+				source_user_home="$(getent passwd "${PKEXEC_UID}" | cut -d: -f6)"
+			fi
+			if [ -z "${source_user_home}" ]; then
+				while IFS=: read -r _ _ uid _ _ home shell; do
+					if [ "${uid}" -ge 1000 ] && [ "${uid}" -ne 65534 ] && [ -d "${home}" ] && [ "${home}" != "/" ] && [ -x "${shell}" ] && [ "${shell}" != "/usr/bin/nologin" ] && [ "${shell}" != "/bin/false" ]; then
+						source_user_home="${home}"
+						break
+					fi
+				done < <(getent passwd)
+			fi
+
+			if [ -n "${source_user_home}" ] && [ -d "${source_user_home}/.config" ]; then
+				for item in breezerc gtkrc gtkrc-2.0 kcminputrc kdedefaults kdeglobals kglobalshortcutsrc kwinoutputconfig.json kwinrc plasma-localerc plasmarc Trolltech.conf fontconfig; do
+					if [ -e "${source_user_home}/.config/${item}" ]; then
+						cp -a "${source_user_home}/.config/${item}" "${target_config_dir}/"
+					fi
+				done
+			fi
+
+			if [ -f "${source_wallpaper}" ]; then
+				install -m 0644 "${source_wallpaper}" "${target_wallpaper}"
+			fi
+
+			chown -R plasmalogin:plasmalogin "${plasmalogin_root}" || true
+
+			cat >/etc/plasmalogin.conf <<EOF
+[Greeter][Wallpaper][org.kde.image][General]
+Image=file:///var/lib/plasmalogin/wallpapers/${target_filename}
+EOF
+
+			systemctl disable sddm.service >/dev/null 2>&1 || true
+			systemctl enable plasmalogin.service >/dev/null 2>&1 || true
+
+			garudalib_add_update_notice "Display Manager migration: Plasmalogin Manager was configured for ${profile_name}, therefore SDDM was disabled, and Plasmalogin was enabled. Please reboot to apply the new Login Manager." || true
+		fi
+	fi
+}
+
+apply_migrations "$applied_version" "$pending_version"

@@ -31,8 +31,6 @@ grub_has_splash() {
 # $1 Previous version
 # $2 Current version
 apply_migrations() {
-	echo "$2" >/etc/garuda/migrations/applied_version
-
 	# Uninstall sddm DPI fix
 	if [[ $(vercmp 1.1.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		rm -f /etc/sddm.conf.d/01-garuda-fix-dpi.conf
