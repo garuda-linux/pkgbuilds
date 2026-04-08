@@ -188,7 +188,9 @@ END
 
 package() {
   cd $_pkgname-v$_pkgver
-  DESTDIR="$pkgdir" ./mach install
+
+  mkdir -p "$pkgdir/usr/lib"
+  tar -xvf obj/dist/"$(cat obj/dist/package_name.txt)" -C "$pkgdir/usr/lib"
 
   local appdir="$pkgdir/usr/lib/$_pkgname"
 
