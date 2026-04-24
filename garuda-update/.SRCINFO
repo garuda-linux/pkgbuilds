@@ -1,6 +1,6 @@
 pkgbase = garuda-update
 	pkgdesc = The Garuda Linux update command, in a separate package to allow separate updating
-	pkgver = 5.6.3
+	pkgver = 5.6.4
 	pkgrel = 1
 	install = garuda-update.install
 	arch = any
@@ -23,7 +23,7 @@ pkgbase = garuda-update
 	sha512sums = 57dd38a8b97c7cfa55291772de662459341e8c5203a58ae648affa2e9f4f5266ffad018de6a68dce556fdcf0dc0a3f5d402bf29d657c72eac8bc9a6cd5bad78e
 	sha512sums = 62067eb31900bd38f2b0a1b079b6ad64f3f482ce8969101cedd0dd369c0de8da8f1b4952d91144852e92675091726d730903718f941da36667684513e8e2d495
 	sha512sums = fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de
-	sha512sums = e7fd267bd7eecc0bae744e7c5ad153113fdbdcea263acf65d5b6ac6f57773f68691632b2d095876afafebde88f14feb072d08944dccb9de8ae60eb023520f5f3
+	sha512sums = c8bad2a99ba05e6536a29394afa37a834ffefb0f5818ae63ac05c72003997c3cb3126136727aa329939cfb60bb1db91c05322f747e646b2773cd9bce13108e8d
 	sha512sums = 313de02248c290271faee67acb695affb8a70787983fdf895daedd124d4336069c9f99c907e2322ca394e861d0e55d52a68a01dc3f7e1b98e2d5ed16732de7f0
 
 pkgname = garuda-update
