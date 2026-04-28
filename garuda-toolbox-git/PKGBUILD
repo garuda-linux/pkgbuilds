@@ -3,7 +3,7 @@
 pkgname=garuda-toolbox-git
 pkgver=4.0.1.r15.g6e78199
 pkgrel=1
-_electronversion=39
+_electronversion=41
 _pkgname=garuda-toolbox
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
