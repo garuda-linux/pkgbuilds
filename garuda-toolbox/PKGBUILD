@@ -1,9 +1,9 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-toolbox
-pkgver="5.2.2"
-pkgrel=2
-_commit='46b6f310732f8c42c829a7b145e8b06993a436cb'
+pkgver="5.2.3"
+pkgrel=1
+_commit='937a7463665f720824a3f065ff2bd7b7b3b9c383'
 _electronversion=41
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
