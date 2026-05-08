@@ -1,7 +1,7 @@
 pkgbase = wine-meta
 	pkgdesc = Meta-package for WINE support
 	pkgver = 1
-	pkgrel = 6
+	pkgrel = 7
 	url = https://wiki.archlinux.org/index.php/wine
 	arch = any
 	license = GPL
@@ -55,7 +55,6 @@ pkgname = wine-meta
 	depends = gtk3
 	depends = lib32-gtk3
 	depends = gst-plugins-base-libs
-	depends = lib32-gst-plugins-base-libs
 	depends = sdl2
 	depends = lib32-sdl2
 	depends = vkd3d
