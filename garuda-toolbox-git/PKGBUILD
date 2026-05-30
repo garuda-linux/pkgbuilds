@@ -45,11 +45,12 @@ prepare() {
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export SYSTEM_ELECTRON_VERSION="$(electron${_electronversion} -v | sed 's/v//g')"
   export ELECTRON_OVERRIDE_DIST_PATH="/usr/lib/electron${_electronversion}"
+  export CI=true
 
   HOME="${srcdir}/.electron-gyp"
   mkdir -p "${srcdir}/.electron-gyp"
   sed -i "s/\"electron\": \"[^\"]*\"/\"electron\": \"${SYSTEM_ELECTRON_VERSION}\"/g" package.json
-  NODE_ENV=development pnpm -r install --shamefully-hoist
+  NODE_ENV=development pnpm -r install --frozen-lockfile --force
 }
 
 build() {
