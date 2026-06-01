@@ -907,15 +907,24 @@ def check_pending_reboot() -> HealthCheck:
     def check() -> HealthCheckResult:
         # Check if last update is newer than the last reboot
         last_update_file = "/var/lib/garuda/last_update"
-        last_reboot_benchmark = "/proc"
 
         if not os.path.exists(last_update_file):
             return HealthCheckResult(Severity.NOT_APPLICABLE)
 
         last_update_time = os.path.getmtime(last_update_file)
-        last_reboot_time = os.path.getctime(last_reboot_benchmark)
 
-        if last_update_time > last_reboot_time:
+        try:
+            with open("/proc/stat") as f:
+                for line in f:
+                    if line.startswith("btime "):
+                        last_boot_time = int(line.split()[1])
+                        break
+                else:
+                    return HealthCheckResult(Severity.NOT_APPLICABLE)
+        except (OSError, ValueError):
+            return HealthCheckResult(Severity.NOT_APPLICABLE)
+
+        if last_update_time > last_boot_time:
             return HealthCheckResult(
                 Severity.INFO,
                 Issue(
