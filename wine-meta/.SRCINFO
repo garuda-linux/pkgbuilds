@@ -1,7 +1,7 @@
 pkgbase = wine-meta
 	pkgdesc = Meta-package for WINE support
 	pkgver = 1
-	pkgrel = 7
+	pkgrel = 8
 	url = https://wiki.archlinux.org/index.php/wine
 	arch = any
 	license = GPL
@@ -12,7 +12,6 @@ pkgname = wine-meta
 	depends = icoextract
 	depends = wine-gecko
 	depends = wine-mono
-	depends = wine-nine
 	depends = wine-installer
 	depends = winetricks
 	depends = wineasio
