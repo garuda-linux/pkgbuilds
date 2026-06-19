@@ -2,39 +2,34 @@
 
 pkgname=plasma-applet-window-buttons
 pkgver=0.14.0
-pkgrel=3
+pkgrel=4
+_commit=9b1112474dca0390408ccd0a0bbda5fa18161633
 pkgdesc='Plasma applet in order to show window buttons in your panels'
 arch=(x86_64)
-url='https://github.com/moodyhunter/applet-window-buttons6'
+url='https://github.com/optionmishra/applet-window-buttons6'
 license=(GPL-2.0-or-later
-         LGPL-2.1-or-later)
-depends=(gcc-libs
-         glibc
-         kcolorscheme
-         kconfig
-         kcoreaddons
-         kdecoration
-         ki18n
-         kirigami
-         kitemmodels
-         ksvg
-         libplasma
-         plasma-workspace
-         qt6-base
-         qt6-declarative)
+  LGPL-2.1-or-later)
+depends=(gettext
+  glibc
+  kcolorscheme
+  kconfig
+  kcoreaddons
+  kdecoration
+  ki18n
+  kirigami
+  kitemmodels
+  ksvg
+  libplasma
+  libstdc++
+  plasma-workspace
+  qt6-base
+  qt6-declarative)
 makedepends=(extra-cmake-modules
-             git)
+  git)
 conflicts=(plasma5-applets-window-buttons)
 replaces=(plasma5-applets-window-buttons)
-source=(git+https://github.com/moodyhunter/applet-window-buttons6#tag=v$pkgver
-  31.patch)
-sha256sums=('4efb6c3dfcb5f25e68395da61c19e4c5cd6dd7c641fb512d6c8aff29b93dc2e1'
-            '8aa7927690eb91377ac4fe2f9c528ceeae6b8f612e48088e7ec2511a490f77e0')
-
-prepare() {
-  cd "$srcdir/applet-window-buttons6"
-  patch -p1 -i "$srcdir/31.patch"
-}
+source=("git+https://github.com/optionmishra/applet-window-buttons6.git#commit=$_commit")
+sha256sums=('27c67af84367c78da8e31b83e6690c24b2d85238be7390c02aab7394c0c162a1')
 
 build() {
   cmake -B build -S applet-window-buttons6
