@@ -1,0 +1,24 @@
+name="garuda-bgrt"
+
+post_install() {
+  echo ":: Set plymouth theme $name"
+  sed -i -e "s,.*Theme=.*,Theme=$name," /etc/plymouth/plymouthd.conf
+  plymouth-set-default-theme $name
+  dracut-rebuild
+  echo "Done"
+}
+
+post_upgrade() {
+  grep "Theme=$name" /etc/plymouth/plymouthd.conf && plymouth-set-default-theme -R "$name"
+}
+
+pre_remove() {
+  grep "Theme=$name" /etc/plymouth/plymouthd.conf && cat <<_EOF
+
+==> WARNING: You have removed your current plymouth-theme.
+==> Set a different theme with:
+==> sudo plymouth-set-default-theme -R <theme-name>
+==> or remove Plymouth properly!
+
+_EOF
+}

@@ -1,0 +1,13 @@
+pkgbase = plymouth-theme-garuda-bgrt
+	pkgdesc = Plymouth theme using the UEFI logo with branding for Garuda Linux
+	pkgver = 1.0.0
+	pkgrel = 1
+	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda-bgrt
+	install = plymouth-theme-garuda-bgrt.install
+	arch = any
+	license = GPL
+	makedepends = git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda-bgrt/-/archive/1.0.0/plymouth-theme-garuda-bgrt-1.0.0.tar.gz
+	sha256sums = 7c0f80ba2ad45b2ad522ba60de3d42f840069d2a5b4ee40158dfc4e236395b90
+
+pkgname = plymouth-theme-garuda-bgrt
