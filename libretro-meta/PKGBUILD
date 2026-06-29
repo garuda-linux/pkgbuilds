@@ -3,7 +3,7 @@
 
 pkgname=libretro-meta
 pkgver=1
-pkgrel=10
+pkgrel=11
 arch=('any')
 url="libretro.org"
 license=('GPL')
@@ -19,7 +19,6 @@ package() {
     "libretro-blastem"
     "libretro-bsnes"
     "libretro-bsnes-hd"
-    "libretro-bsnes2014"
     "libretro-core-info"
     "libretro-desmume"
     "libretro-dolphin"
