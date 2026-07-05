@@ -3,9 +3,9 @@
 
 pkgname=garuda-sway-settings
 pkgdesc='Garuda Linux Sway settings'
-pkgver="1.1.57"
-_commit='cbddd3d5cb75a629254491fc0259e4e7cca0951c'
+pkgver="1.1.58"
 pkgrel=1
+_commit='1b71c258b4686a22ab8c5c17d2db47831113ae19'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
