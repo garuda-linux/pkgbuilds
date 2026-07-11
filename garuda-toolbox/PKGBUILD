@@ -2,9 +2,9 @@
 
 pkgname=garuda-toolbox
 pkgver="5.3.2"
-pkgrel=1
+pkgrel=2
 _commit='f56d3e21e8993fcebc50eec216ebe27edf5552ae'
-_electronversion=42
+_electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
 url="https://gitlab.com/garuda-linux/applications/toolbox"

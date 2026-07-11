@@ -11,7 +11,7 @@ pkgbase = garuda-toolbox-git
 	makedepends = pnpm
 	depends = bash
 	depends = curl
-	depends = electron42
+	depends = electron43
 	depends = pacman-contrib
 	depends = garuda-libs>=1.6.0
 	depends = archlinux-appstream-data

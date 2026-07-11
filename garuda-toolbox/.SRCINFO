@@ -1,7 +1,7 @@
 pkgbase = garuda-toolbox
 	pkgdesc = Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system
 	pkgver = 5.3.2
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/applications/toolbox
 	arch = any
 	license = GPL-3.0-or-later
@@ -11,7 +11,7 @@ pkgbase = garuda-toolbox
 	makedepends = pnpm
 	depends = bash
 	depends = curl
-	depends = electron42
+	depends = electron43
 	depends = pacman-contrib
 	depends = garuda-libs>=1.6.0
 	depends = archlinux-appstream-data
@@ -34,7 +34,7 @@ pkgbase = garuda-toolbox
 	options = !strip
 	options = !emptydirs
 	options = !debug
-	source = toolbox::git+https://gitlab.com/garuda-linux/applications/toolbox.git#commit=e5662429afa7d6979b5cbbe3cda30ab7dc28e91b
+	source = toolbox::git+https://gitlab.com/garuda-linux/applications/toolbox.git#commit=f56d3e21e8993fcebc50eec216ebe27edf5552ae
 	sha256sums = SKIP
 
 pkgname = garuda-toolbox
