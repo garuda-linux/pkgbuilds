@@ -1,4 +1,4 @@
-From d69d5b3933481354c38f07d2faba117033946f92 Mon Sep 17 00:00:00 2001
+From 018e6020c5ea85b4fd99495a27a3be92b2da7b2d Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:08 +0100
 Subject: [PATCH 1/6] Add ghtcfg module for hardware configuration
@@ -165,10 +165,10 @@ index 000000000..dfc0b2cde
 +interface:  "python"
 +script:     "main.py"   #assumed relative to the current directory
 -- 
-2.51.0
+2.54.0
 
 
-From ec2821b02336667c56f3c3004da8d57744a4470b Mon Sep 17 00:00:00 2001
+From 5d3fb6d6406351e8cbfefe927b0788267071c096 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:26 +0100
 Subject: [PATCH 2/6] grubcfg: Adjust parameters when using plymouth
@@ -191,10 +191,10 @@ index 346a267cd..77eb0caf0 100644
      cryptdevice_params = []
  
 -- 
-2.51.0
+2.54.0
 
 
-From b4cc7a5b2e8e9de1b4f4d61cec7e142a88b108f9 Mon Sep 17 00:00:00 2001
+From a80b325eba2fa367634b69454e55a298d878d897 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:38:39 +0100
 Subject: [PATCH 3/6] partition: Change cursor color
@@ -217,26 +217,26 @@ index b9e315edb..e14066c0a 100644
      int width = 0;
      for ( const QString& textLine : text )
 -- 
-2.51.0
+2.54.0
 
 
-From 4057b37caa060ca450f1859e473cff8964bf7618 Mon Sep 17 00:00:00 2001
+From 9e995020f8d8b7fe0b46e07369e33cc7bfc23f2a Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:42:30 +0100
 Subject: [PATCH 4/6] Add postcfg module
 
 ---
- src/modules/postcfg/main.py      | 137 +++++++++++++++++++++++++++++++
+ src/modules/postcfg/main.py      | 142 +++++++++++++++++++++++++++++++
  src/modules/postcfg/module.desc  |   6 ++
  src/modules/postcfg/postcfg.conf |   4 +
- 3 files changed, 147 insertions(+)
+ 3 files changed, 152 insertions(+)
  create mode 100644 src/modules/postcfg/main.py
  create mode 100644 src/modules/postcfg/module.desc
  create mode 100644 src/modules/postcfg/postcfg.conf
 
 diff --git a/src/modules/postcfg/main.py b/src/modules/postcfg/main.py
 new file mode 100644
-index 000000000..70fe962b2
+index 000000000..af088a823
 --- /dev/null
 +++ b/src/modules/postcfg/main.py
 @@ -0,0 +1,142 @@
@@ -405,13 +405,13 @@ index 000000000..7ad198f95
 +    - archlinux
 +    - chaotic
 -- 
-2.51.0
+2.54.0
 
 
-From 833f42dd3adcd52cbf07d4170a4dbb0e8e44bb66 Mon Sep 17 00:00:00 2001
+From 16a544eb94818b26ed5efd1a8d2f1e819a2912a3 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:45:54 +0100
-Subject: [PATCH 5/6] bootloader: Remove dependency on partition  module
+Subject: [PATCH 5/6] bootloader: Remove dependency on partition module
 
 ---
  src/modules/bootloader/module.desc | 3 ---
@@ -429,24 +429,24 @@ index 44a1c0ee5..622f0b7d1 100644
 -# global key, which is used to decide how to install.
 -requiredModules: [ "partition" ]
 -- 
-2.51.0
+2.54.0
 
 
-From dde339a54c3059a4ddbdbacecaf86e0fff2b3183 Mon Sep 17 00:00:00 2001
+From 69f57ebb12b6ef56687073cdfd06522afddd1b80 Mon Sep 17 00:00:00 2001
 From: TNE <tne@garudalinux.org>
 Date: Sat, 1 Nov 2025 14:50:04 +0100
 Subject: [PATCH 6/6] Add inplace module
 
 ---
- src/modules/inplace/main.py     | 49 +++++++++++++++++++++++++++++++++
+ src/modules/inplace/main.py     | 46 +++++++++++++++++++++++++++++++++
  src/modules/inplace/module.desc |  5 ++++
- 2 files changed, 54 insertions(+)
+ 2 files changed, 51 insertions(+)
  create mode 100644 src/modules/inplace/main.py
  create mode 100644 src/modules/inplace/module.desc
 
 diff --git a/src/modules/inplace/main.py b/src/modules/inplace/main.py
 new file mode 100644
-index 000000000..f854dc02b
+index 000000000..362db4658
 --- /dev/null
 +++ b/src/modules/inplace/main.py
 @@ -0,0 +1,46 @@
@@ -510,5 +510,5 @@ index 000000000..1d1a901e2
 +script: "main.py"
 \ No newline at end of file
 -- 
-2.51.0
+2.54.0
 
