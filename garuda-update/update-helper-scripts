@@ -2,8 +2,9 @@
 # shellcheck disable=SC2317,SC2329
 set -e
 
-CURRENT_INTERVENTION_SEQUENCE=3
+CURRENT_INTERVENTION_SEQUENCE=4
 INTERVENTION_SEQUENCE_FILE="/etc/garuda/garuda-update/intervention_sequence"
+MARK_AS_DEPS_FILE="/var/lib/garuda/tmp/garuda-update_mark-asdeps"
 
 # Hacky way to check if the package is installed
 package-exists-fast() {
@@ -98,6 +99,11 @@ package-replaces() {
 	local packages
 	sequence="$(get_intervention_sequence)"
 
+	# Always delete the mark-asdeps file
+	if [[ -f "$MARK_AS_DEPS_FILE" ]]; then
+		rm -f "$MARK_AS_DEPS_FILE"
+	fi
+
 	if (( sequence < 1 )); then
 		packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session "linux-firmware<20250613.12fe085f-5" garuda-toolbox-git garuda-settings-manager gnu-netcat 2>/dev/null | xargs || true)"
 		# We replace python-xdg with python-pyxdg from extra
@@ -152,33 +158,43 @@ package-replaces() {
 			echo openbsd-netcat
 		fi
 	fi
-	# TODO: Once we have enough checks to be worth doing an intervention sequence bump (to 4): Uncomment this
-  # if (( sequence < 4 )); then
-    packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed plasma-x11-session kwin-effects-forceblur garuda-dr460nized garuda-mokka 2>/dev/null | xargs || true)"
-    if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
-      echo proton-ge-custom-bin
-    fi
-    if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-closed($| ) ]]; then
-      echo --ignore
-      echo nvidia-open-dkms
-    fi
+    if (( sequence < 4 )); then
+		packages="$($PACMAN -Qq proton-ge-custom garuda-hardware-profile-nvidia-closed plasma-x11-session kwin-effects-forceblur garuda-dr460nized garuda-mokka spectacle 2>/dev/null | xargs || true)"
+		if [[ "$packages" =~ (^| )proton-ge-custom($| ) ]]; then
+			echo proton-ge-custom-bin
+		fi
+		if [[ "$packages" =~ (^| )garuda-hardware-profile-nvidia-closed($| ) ]]; then
+			echo --ignore
+			echo nvidia-open-dkms
+		fi
 
-    # Check for missing certs
-    if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
-      echo ca-certificates-mozilla
-    fi
+		# Check for missing certs
+		if [[ ! -f /usr/share/ca-certificates/trust-source/mozilla.trust.p11-kit ]]; then
+			echo ca-certificates-mozilla
+		fi
 
-    # If using dr460nized and mokka and legacy foreblur is still installed, signal to pacman that it should be removed.
-    if ( [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] || [[ "$packages" =~ (^| )garuda-mokka($| ) ]] ) && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
-      echo --ignore
-      echo kwin-effects-forceblur
+		# If using dr460nized and mokka and legacy foreblur is still installed, signal to pacman that it should be removed.
+		if ( [[ "$packages" =~ (^| )garuda-dr460nized($| ) ]] || [[ "$packages" =~ (^| )garuda-mokka($| ) ]] ) && [[ "$packages" =~ (^| )kwin-effects-forceblur($| ) ]]; then
+			echo --ignore
+			echo kwin-effects-forceblur
 
-      # If plasma-x11-session exists AND kwin-effects-forceblur is present, additionally add kwin-effects-better-blur-dx-x11
-      if [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
-        echo kwin-effects-better-blur-dx-x11
-      fi
+			# If plasma-x11-session exists AND kwin-effects-forceblur is present, additionally add kwin-effects-better-blur-dx-x11
+			if [[ "$packages" =~ (^| )plasma-x11-session($| ) ]]; then
+				echo kwin-effects-better-blur-dx-x11
+			fi
+		fi
+
+		# If no tessdata installed, but spectacle is installed, add the english tessdata package
+		if [[ "$packages" =~ (^| )spectacle($| ) ]] && ! pacman -Qq tessdata >/dev/null 2>&1; then
+			echo tesseract-data-eng
+			# As dependency only to allow for clean removal
+			echo "tesseract-data-eng" >> "$MARK_AS_DEPS_FILE"
+		fi
     fi
-  # fi
+	# TODO: Once we have enough checks to be worth doing an intervention sequence bump (to 5): Uncomment this
+	#if (( sequence < 5 )); then
+		#packages="$($PACMAN -Qq sample_text 2>/dev/null | xargs || true)"
+	#fi
 }
 
 # Exit codes:
@@ -199,6 +215,16 @@ post-update-routines() {
 	set -euo pipefail
 	local sequence
 	sequence="$(get_intervention_sequence)"
+
+    # Always check if we have to mark any packages as deps
+    if [[ -f "$MARK_AS_DEPS_FILE" ]]; then
+		while read -r pkg; do
+			if $PACMAN -Qq "$pkg" >/dev/null 2>&1; then
+				$PACMAN -D --asdeps "$pkg" || true
+			fi
+		done < "$MARK_AS_DEPS_FILE"
+		rm -f "$MARK_AS_DEPS_FILE"
+	fi
 
 	if (( sequence < 2 )); then
 		if $PACMAN -Qq garuda-hotfixes >/dev/null 2>&1; then
