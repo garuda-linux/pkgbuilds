@@ -4,7 +4,8 @@ set -e
 
 CURRENT_INTERVENTION_SEQUENCE=4
 INTERVENTION_SEQUENCE_FILE="/etc/garuda/garuda-update/intervention_sequence"
-MARK_AS_DEPS_FILE="/var/lib/garuda/tmp/garuda-update_mark-asdeps"
+GARUDA_TMP_DIR="/var/lib/garuda/tmp"
+MARK_AS_DEPS_FILE="$GARUDA_TMP_DIR/garuda-update_mark-asdeps"
 
 # Hacky way to check if the package is installed
 package-exists-fast() {
@@ -103,6 +104,7 @@ package-replaces() {
 	if [[ -f "$MARK_AS_DEPS_FILE" ]]; then
 		rm -f "$MARK_AS_DEPS_FILE"
 	fi
+	mkdir -p "$GARUDA_TMP_DIR"
 
 	if (( sequence < 1 )); then
 		packages="$($PACMAN -Qq python-xdg garuda-dr460nized garuda-xfce-kwin-settings garuda-lxqt-kwin-settings garuda-wayfire-settings sweet-kde-git sweet-cursor-theme-git pipewire-media-session pipewire-support qemu-base virt-manager-meta libretro-meta libretro-mame-git jack2 pipewire-jack libpipewire-0.3.so=0-64 jre-openjdk-headless jre-openjdk jdk-openjdk pinta dotnet-runtime-7.0 kwin-x11 plasma-desktop plasma-x11-session "linux-firmware<20250613.12fe085f-5" garuda-toolbox-git garuda-settings-manager gnu-netcat 2>/dev/null | xargs || true)"
