@@ -309,10 +309,27 @@ EOF
 	fi
 
 	if [[ $(vercmp 3.7.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ "$ISO_TIMESTAMP" == "260308" ] && pacman -Qq garuda-dr460nized &>/dev/null; then
-		file=".config/kwinrc"
+		local file=".config/kwinrc"
 		if grep -q "^blurEnabled=false" "$file" 2>/dev/null && ! grep -q "^better_blur_dxEnabled" "$file" 2>/dev/null; then
 			sed -i 's/^forceblurEnabled=true/better_blur_dxEnabled=true/' "$file" 2>/dev/null || true
 		fi
+	fi
+
+	if [[ $(vercmp 3.7.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		local awk='/^[[:blank:]]*alias l[.a-z]*[ =]\047eza / {
+						orig = $0
+						gsub(/[[:space:]]+--(color=always|icons)/, "")
+
+						if (orig != $0) {
+							changed = 1
+						}
+					}
+					{ print }
+					END { exit (changed ? 0 : 1) }'
+		gawk -i inplace "$awk" '.config/fish/config.fish' 2>/dev/null && \
+			garudalib_add_update_notice "A user fish configuration file was updated to remove the --color and --icons flags from eza aliases. This was done to add support for updated eza flag syntax." || true
+		gawk -i inplace "$awk" '.bashrc' 2>/dev/null && \
+			garudalib_add_update_notice "A user bash configuration file was updated to remove the --color and --icons flags from eza aliases. This was done to add support for updated eza flag syntax." || true
 	fi
 }
 

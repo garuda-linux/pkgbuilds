@@ -1,6 +1,6 @@
 pkgbase = garuda-bash-config
 	pkgdesc = Bash configuration for Garuda Linux
-	pkgver = 1.0.8
+	pkgver = 1.0.9
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-bash-config
 	arch = any
@@ -12,7 +12,7 @@ pkgbase = garuda-bash-config
 	depends = ugrep
 	source = bashrc
 	source = bashrc-setup.desktop
-	sha256sums = d49774a138a7ca4370e087165b5e25a80e14901d203996203c85b82c5866eea4
+	sha256sums = 390fcb4fdd548ad53044dc60fced704950a6c1419a22ece60b9f48d5fd73784d
 	sha256sums = 8eed6302b7a8674b3a1784c599a7d7ae73e76ea8992ec324f62ec6b45f469cd5
 
 pkgname = garuda-bash-config
