@@ -104,7 +104,11 @@ end
 function __garuda_fastfetch
     ## Run fastfetch if session is interactive
     if status --is-interactive && type -q fastfetch
-      fastfetch --config neofetch.jsonc
+      if test -f /usr/share/fastfetch/presets/mokka.jsonc
+        fastfetch --config mokka.jsonc
+      else
+        fastfetch --config neofetch.jsonc
+      end
     end
 end
 
