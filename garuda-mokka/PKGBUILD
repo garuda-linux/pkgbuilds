@@ -3,7 +3,7 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver="1.4.8"
+pkgver="1.4.7"
 pkgrel=1
 _commit='13ed708c19f5492837602af30527c664843a7049'
 arch=('any')
