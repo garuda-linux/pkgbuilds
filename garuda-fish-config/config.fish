@@ -100,6 +100,19 @@ function cleanup
     end
 end
 
+# Fastfetch
+function __garuda_fastfetch
+    ## Run fastfetch if session is interactive
+    if status --is-interactive && type -q fastfetch
+      fastfetch --config neofetch.jsonc
+    end
+end
+
+# Git GUI typo correction
+function gitg
+    git gui
+end
+
 ## Useful aliases
 # Replace ls with eza
 alias ls 'eza -al --group-directories-first' # preferred listing
@@ -110,7 +123,7 @@ alias lt 'eza -aT --group-directories-first' # tree listing
 alias l. 'eza -ald --group-directories-first .*' # show only dotfiles
 
 # Replace some more things with better alternatives
-abbr cat 'bat --style header,snip,changes'
+alias cat 'bat --style header,snip,changes'
 if not test -x /usr/bin/yay; and test -x /usr/bin/paru
     alias yay 'paru'
 end
@@ -159,8 +172,3 @@ alias jctl 'journalctl -p 3 -xb'
 
 # Recent installed packages
 alias rip 'expac --timefmt="%Y-%m-%d %T" "%l\t%n %v" | sort | tail -200 | nl'
-
-## Run fastfetch if session is interactive
-if status --is-interactive && type -q fastfetch
-   fastfetch --config neofetch.jsonc
-end

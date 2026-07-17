@@ -315,6 +315,24 @@ EOF
 		fi
 	fi
 
+	# The order is "wrong" on purpose. We would rather convert to the new file than update the existing one.
+	if [[ $(vercmp 3.7.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
+		if [ -f ".bashrc" ]; then
+			local HASH=$(md5sum ".bashrc" | awk '{print $1}')
+			if [[ "$HASH" =~ (6c43a65dd8dc2ced6597d479d1b25842|4743c6738b37a164eb1b9a8061aa9441|b08858c01163dae868e3eefe730d8454) ]]; then
+				cp -f /etc/skel/.bashrc_garuda ".bashrc" || true
+				garudalib_add_update_notice "A user bash configuration file was updated. It now loads from /usr/share/garuda/garuda-bash-config/bashrc, allowing for easier future updates. No customizations were lost." || true
+			fi
+		fi
+		if [ -f ".config/fish/config.fish" ]; then
+			local HASH=$(md5sum ".config/fish/config.fish" | awk '{print $1}')
+			if [[ "$HASH" =~ (c1b5a9e0eaad55f3bda1c1b2bd26cd44|9460545cfac065db320d0edc65c05fc4|15eab8d078ad02efc294e9c43f729167|44b4c4abdd1c06b6263f1e93cc591a47|bca429ed8916d9e893797ca75e6a8ac8) ]]; then
+				cp -f /etc/skel/.config/fish/config.fish ".config/fish/config.fish" || true
+				garudalib_add_update_notice "A user fish configuration file was updated. It now loads from /usr/share/garuda/garuda-fish-config/config.fish, allowing for easier future updates. No customizations were lost." || true
+			fi
+		fi
+	fi
+
 	if [[ $(vercmp 3.7.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ]; then
 		local awk='/^[[:blank:]]*alias l[.a-z]*[ =]\047eza / {
 						orig = $0
@@ -330,6 +348,11 @@ EOF
 			garudalib_add_update_notice "A user fish configuration file was updated to remove the --color and --icons flags from eza aliases. This was done to add support for updated eza flag syntax." || true
 		gawk -i inplace "$awk" '.bashrc' 2>/dev/null && \
 			garudalib_add_update_notice "A user bash configuration file was updated to remove the --color and --icons flags from eza aliases. This was done to add support for updated eza flag syntax." || true
+	fi
+
+	if [[ $(vercmp 3.7.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/fish/conf.d/done.fish" ] && [ -f "/usr/share/fish/vendor_conf.d/done.fish" ]; then
+		rm ".config/fish/conf.d/done.fish"
+		garudalib_add_update_notice "A user's ~/.config/fish/conf.d/done.fish file was removed because it is now located at /usr/share/fish/vendor_conf.d/done.fish." || true
 	fi
 }
 
