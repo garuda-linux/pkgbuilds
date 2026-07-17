@@ -11,7 +11,7 @@ source=(garuda-migrations-runner
   garuda-migrations-runner-post
   garuda-migrations.hook
   garuda-migrations-post.hook)
-sha256sums=('a1a3358f4504ba81b0601b4dc08a11837a7368cf250aed3a7c2824eb309a49c7'
+sha256sums=('8bec104ece75c97c8a8743bdd4c774f143c7ef2046e35e44779bba41f9864246'
             '3409042c917607bf60ae4383096dbd9c5f0d2df7cac4314e25572d79036ee0fb'
             '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65'
             '2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832')
