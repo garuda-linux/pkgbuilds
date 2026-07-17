@@ -2,7 +2,7 @@
 
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
-pkgver=4.0.0
+pkgver=4.0.1
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -12,7 +12,7 @@ source=(garuda-migrations-runner
   garuda-migrations.hook
   garuda-migrations-post.hook)
 sha256sums=('8bec104ece75c97c8a8743bdd4c774f143c7ef2046e35e44779bba41f9864246'
-            '3409042c917607bf60ae4383096dbd9c5f0d2df7cac4314e25572d79036ee0fb'
+            '125b2df3bd480d7c221e8e148d58a8405ba09f046816074b80f33d84371b328c'
             '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65'
             '2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832')
 
