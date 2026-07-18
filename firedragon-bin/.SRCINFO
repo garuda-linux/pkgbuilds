@@ -1,4 +1,4 @@
-pkgbase = firedragon-next-bin
+pkgbase = firedragon-bin
 	pkgdesc = FireDragon is a cross-platform, feature-rich and privacy-focused web browser
 	pkgver = 13.0.0_rc.27
 	pkgrel = 1
@@ -54,4 +54,4 @@ pkgbase = firedragon-next-bin
 	source_aarch64 = firedragon-v13.0.0-rc.27.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.27/downloads/firedragon.linux-arm64.tar.xz
 	sha256sums_aarch64 = 0996252027b9b07a909c11840b13b84d0f708d678730268108ed2c430a2edb45
 
-pkgname = firedragon-next-bin
+pkgname = firedragon-bin

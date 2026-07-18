@@ -7,7 +7,7 @@ _branding=dr460nized
 __pkgname=$_pkgname
 _rdns=org.garudalinux.$__pkgname
 
-pkgname=$__pkgname-next-bin
+pkgname=$__pkgname-bin
 pkgver=${_pkgver//-/_}
 pkgrel=1
 pkgdesc="FireDragon is a cross-platform, feature-rich and privacy-focused web browser"
