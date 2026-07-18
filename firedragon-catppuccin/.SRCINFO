@@ -66,6 +66,7 @@ pkgbase = firedragon-catppuccin
 	optdepends = xdg-desktop-portal: Screensharing with Wayland
 	provides = firedragon
 	conflicts = firedragon
+	replaces = firedragon-catppuccin-next
 	noextract = firefox-153-patches-01.tar.xz
 	options = !emptydirs
 	options = !lto
