@@ -1,4 +1,4 @@
-pkgbase = firedragon-catppuccin-next-bin
+pkgbase = firedragon-catppuccin-bin
 	pkgdesc = FireDragon is a cross-platform, feature-rich and privacy-focused web browser
 	pkgver = 13.0.0_rc.27
 	pkgrel = 1
@@ -54,4 +54,4 @@ pkgbase = firedragon-catppuccin-next-bin
 	source_aarch64 = firedragon-catppuccin-v13.0.0-rc.27.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.27/downloads/firedragon-catppuccin.linux-arm64.tar.xz
 	sha256sums_aarch64 = cf2c01cd55a7b6e477730ad317045044cb646eeb2212d169ca50595fd01d72b3
 
-pkgname = firedragon-catppuccin-next-bin
+pkgname = firedragon-catppuccin-bin
