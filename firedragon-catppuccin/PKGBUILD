@@ -8,7 +8,7 @@ _branding=catppuccin
 _gentoo=firefox-153-patches-01.tar.xz
 _gentoo_exclude=(0015-bgo-940031-wasm-support.patch)
 
-pkgname=$__pkgname-next
+pkgname=$__pkgname
 pkgver=${_pkgver//-/_}
 pkgrel=1
 pkgdesc="FireDragon is a cross-platform, feature-rich and privacy-focused web browser"
