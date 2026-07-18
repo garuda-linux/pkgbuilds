@@ -300,8 +300,8 @@ log "$ACCENTNAME($ACCENT) accent color was selected."
 LCFLAVOUR=$(printf '%s' "$FLAVOURNAME" | tr '[:upper:]' '[:lower:]')
 LCACCENT=$(printf '%s' "$ACCENTNAME" | tr '[:upper:]' '[:lower:]')
 CURSORVERSION="v2.0.0"
-CURSORACCENT="catppuccin-$LCFLAVOUR-$LCACCENT-cursors"
-CURSORDARK="catppuccin-$LCFLAVOUR-dark-cursors"
+CURSORACCENT="Catppuccin-$FLAVOURNAME-$ACCENTNAME-Cursors"
+CURSORDARK="Catppuccin-$FLAVOURNAME-Dark-Cursors"
 CURSORTHEME=$CURSORACCENT
 
 if [ "$LOCAL_CURSOR" -eq 1 ]; then
@@ -391,11 +391,6 @@ check_command_exists "sed"
 check_command_exists "tar"
 case "$DEBUGMODE" in
     global) check_command_exists "kpackagetool6" ;;
-    "" | auto)
-        check_command_exists "kpackagetool6"
-        check_command_exists "kwriteconfig6"
-        check_command_exists "plasma-apply-lookandfeel"
-        ;;
     *) ;;
 esac
 
@@ -485,18 +480,6 @@ InstallGlobalTheme() {
 EOF
         sleep 1
     fi
-    log "Installing Global Theme.."
-    (
-        cd ./dist || exit
-        tar -czf "$GLOBALTHEMENAME".tar.gz "$GLOBALTHEMENAME"
-        if [ "$QUIET" -eq 1 ]; then
-            kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1 ||
-                kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1
-        else
-            kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz ||
-                kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz
-        fi
-    )
 
     mkdir -p "$LOOKANDFEELDIR/$GLOBALTHEMENAME"
     cp -r ./dist/"$GLOBALTHEMENAME"/* "$LOOKANDFEELDIR/$GLOBALTHEMENAME"/
@@ -531,8 +514,8 @@ GetCursor() {
     done
     (
         cd ./dist || exit
-        unzip -q "$CURSORACCENT".zip
-        unzip -q "$CURSORDARK".zip
+        unzip -q -o "$CURSORACCENT".zip
+        unzip -q -o "$CURSORDARK".zip
     )
 }
 
@@ -546,8 +529,12 @@ InstallCursor() {
         fi
     else
         GetCursor
+        LOWER_ACCENT=$(printf '%s' "$CURSORACCENT" | tr '[:upper:]' '[:lower:]')
+        LOWER_DARK=$(printf '%s' "$CURSORDARK" | tr '[:upper:]' '[:lower:]')
         rm -rf "${CURSORDIR:?}/$CURSORACCENT"
         rm -rf "${CURSORDIR:?}/$CURSORDARK"
+        [ -d "./dist/$LOWER_ACCENT" ] && mv "./dist/$LOWER_ACCENT" "./dist/$CURSORACCENT"
+        [ -d "./dist/$LOWER_DARK" ] && mv "./dist/$LOWER_DARK" "./dist/$CURSORDARK"
         mv ./dist/"$CURSORACCENT" "$CURSORDIR"
         mv ./dist/"$CURSORDARK" "$CURSORDIR"
     fi
@@ -619,25 +606,13 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
         read -r CONFIRMATION || true
     fi
 
-    if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ] || [ "$CONFIRMATION" = "" ]; then
-        # KWin's BorderSizeAuto=true overrides the look-and-feel BorderSize=None, so the
-        # global theme alone can't set it. Write it directly for borderless windows.
-        kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key BorderSizeAuto false
-        plasma-apply-lookandfeel -a "$GLOBALTHEMENAME"
-        if [ "$DEBUGMODE" != "auto" ]; then
+    if [ "$DEBUGMODE" != "auto" ]; then
+        if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ] || [ "$CONFIRMATION" = "" ]; then
             [ "$QUIET" -eq 1 ] || clear_screen
+        else
+            log "You can apply theme at any time using system settings"
+            [ "$QUIET" -eq 1 ] || sleep 1
         fi
-        # Some legacy apps still look in ~/.icons
-        if [ "$QUIET" -ne 1 ]; then
-            cat <<EOF
-The cursors will fully apply once you log out
-You may want to run the following in your terminal if you notice any inconsistencies for the cursor theme:
-ln -s ~/.local/share/icons/ ~/.icons
-EOF
-        fi
-    else
-        log "You can apply theme at any time using system settings"
-        [ "$QUIET" -eq 1 ] || sleep 1
     fi
 else
     log "Exiting.."
