@@ -26,7 +26,7 @@ apply_migrations() {
 	echo "$2" >/etc/garuda/migrations/applied_version
 
     # Migrate to Plasmalogin
-	if [[ $(vercmp 4.0.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] &&
+	if [[ $(vercmp 4.0.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] &&
     systemctl is-enabled --quiet sddm.service >/dev/null 2>&1; then
 		if [ -f "/etc/plasmalogin.conf" ]; then
 			garudalib_add_update_notice "Plasmalogin migration was skipped because /etc/plasmalogin.conf already exists. Existing login manager configuration was kept." || true
@@ -68,7 +68,7 @@ apply_migrations() {
 			fi
 
 			if [ -n "${source_user_home}" ] && [ -d "${source_user_home}/.config" ]; then
-				for item in breezerc gtkrc gtkrc-2.0 kcminputrc kdedefaults kdeglobals kglobalshortcutsrc kwinoutputconfig.json kwinrc plasma-localerc plasmarc Trolltech.conf fontconfig; do
+				for item in breezerc gtkrc gtkrc-2.0 kcminputrc kdedefaults kdeglobals kglobalshortcutsrc kwinoutputconfig.json kwinrc kxkbrc plasma-localerc plasmarc Trolltech.conf fontconfig; do
 					if [ -e "${source_user_home}/.config/${item}" ]; then
 						cp -a "${source_user_home}/.config/${item}" "${target_config_dir}/"
 					fi
