@@ -58,6 +58,7 @@ optdepends=(
 )
 provides=($_pkgname)
 conflicts=($_pkgname)
+replaces=($__pkgname-next-bin)
 options=(
   !emptydirs
 )

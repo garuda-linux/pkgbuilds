@@ -44,6 +44,7 @@ pkgbase = firedragon-bin
 	optdepends = xdg-desktop-portal: Screensharing with Wayland
 	provides = firedragon
 	conflicts = firedragon
+	replaces = firedragon-next-bin
 	noextract = firedragon-v13.0.0-rc.27.linux-x64.tar.xz
 	noextract = firedragon-v13.0.0-rc.27.linux-arm64.tar.xz
 	options = !emptydirs
