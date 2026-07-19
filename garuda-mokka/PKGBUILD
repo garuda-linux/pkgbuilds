@@ -5,7 +5,7 @@
 pkgname=garuda-mokka
 pkgver="1.4.8"
 pkgrel=1
-_commit='aeff6d8f6f386e0986dcf095a1852472aeee7ccc'
+_commit='c6341fe9e3c661da5c61db0aa2836908ad892631'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/${pkgname}"
 license=('GPL')
