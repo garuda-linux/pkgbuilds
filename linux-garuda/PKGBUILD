@@ -1,0 +1,87 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+# Contributor: CachyOS maintainers
+
+pkgbase="linux-garuda"
+pkgver="7.1.4"
+pkgrel=2
+_fullver="${pkgver}-${pkgrel}"
+pkgdesc='Linux EEVDF + LTO + AutoFDO + Propeller Cachy Sauce Kernel by CachyOS with other patches and improvements.'
+arch=('x86_64')
+url="https://gitlab.com/garuda-linux/applications/linux-garuda"
+license=('GPL-2.0-only')
+options=('!strip' '!debug' '!lto')
+makedepends=('curl' 'jq' 'zstd' 'tar')
+
+_release_url="https://gitlab.com/api/v4/projects/garuda-linux%2Fapplications%2Flinux-garuda/releases"
+
+prepare() {
+  echo "Fetching release information for ${_fullver}..."
+
+  if ! curl -f "${_release_url}/${_fullver}" > /dev/null 2>&1; then
+    echo "ERROR: Release ${_fullver} not found"
+    echo "Available releases:"
+    curl -s "${_release_url}" | jq -r '.[].tag_name' 2> /dev/null || echo "Could not fetch releases"
+    exit 1
+  fi
+
+  echo "Available assets in release ${_fullver}:"
+  curl -s "${_release_url}/${_fullver}" | jq -r '.assets.links[].name' 2> /dev/null | head -10
+
+  _kernel_url=$(curl -s "${_release_url}/${_fullver}" \
+    | jq -r '.assets.links[] | select(.name == "linux-garuda-'"${_fullver}"'-x86_64.pkg.tar.zst") | .url')
+
+  _headers_url=$(curl -s "${_release_url}/${_fullver}" \
+    | jq -r '.assets.links[] | select(.name == "linux-garuda-headers-'"${_fullver}"'-x86_64.pkg.tar.zst") | .url')
+
+  if [ -z "$_kernel_url" ] || [ -z "$_headers_url" ]; then
+    echo "ERROR: Could not find release assets for version ${_fullver}"
+    exit 1
+  fi
+
+  echo "Downloading packages..."
+  curl -L -o "linux-garuda-${_fullver}-x86_64.pkg.tar.zst" "$_kernel_url"
+  curl -L -o "linux-garuda-headers-${_fullver}-x86_64.pkg.tar.zst" "$_headers_url"
+}
+
+_package() {
+  pkgdesc="The $pkgdesc kernel and modules"
+  depends=('coreutils' 'kmod' 'initramfs')
+  optdepends=('wireless-regdb: to set the correct wireless channels of your country'
+    'linux-firmware: firmware images needed for some devices'
+    'modprobed-db: Keeps track of EVERY kernel module that has ever been probed - useful for those of us who make localmodconfig'
+    'scx-scheds: to use sched-ext schedulers')
+  provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE KSMBD-MODULE V4L2LOOPBACK-MODULE NTSYNC-MODULE VHBA-MODULE ADIOS-MODULE)
+
+  mkdir -p "${pkgdir}"
+  tar -xpf "linux-garuda-${_fullver}-x86_64.pkg.tar.zst" -C "${pkgdir}"
+
+  find "${pkgdir}" -maxdepth 1 -name ".*" ! -name "." -delete
+}
+
+_package-headers() {
+  pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
+  depends=(binutils
+    glibc
+    libelf
+    libgcc
+    openssl
+    pahole
+    xxhash
+    zlib
+    zstd
+    "${pkgbase}")
+  provides=(LINUX-HEADERS)
+
+  mkdir -p "${pkgdir}"
+  tar -xpf "linux-garuda-headers-${_fullver}-x86_64.pkg.tar.zst" -C "${pkgdir}"
+
+  find "${pkgdir}" -maxdepth 1 -name ".*" ! -name "." -delete
+}
+
+pkgname=("${pkgbase}" "${pkgbase}-headers")
+for _p in "${pkgname[@]}"; do
+  eval "package_$_p() {
+    $(declare -f "_package${_p#$pkgbase}")
+    _package${_p#$pkgbase}
+    }"
+done
