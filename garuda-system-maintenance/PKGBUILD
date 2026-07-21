@@ -3,7 +3,7 @@
 pkgname=garuda-system-maintenance
 pkgver="3.1.0"
 _commit='0bb1ee7ba071b446bae95cfcb256df96a434e5ae'
-pkgrel=2
+pkgrel=4
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
@@ -32,8 +32,4 @@ package() {
   install -Dm0644 $pkgname-settings.desktop "$pkgdir/usr/share/applications/$pkgname-settings.desktop"
   install -Dm0644 $pkgname.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname.svg"
   install -Dm0644 $pkgname-alert.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/$pkgname-alert.svg"
-
-  # Fix permissions
-  chmod -R 750 "$pkgdir"/usr/share/polkit-1/rules.d/
-  chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d/
 }

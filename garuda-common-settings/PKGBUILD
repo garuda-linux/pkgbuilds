@@ -4,7 +4,7 @@
 pkgname=garuda-common-settings
 pkgver="2.12.6"
 _commit='cf8c8e18242efc5aa694e4979d5e6068037cc0ec'
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -43,6 +43,4 @@ package() {
 
   # Fix permissions
   chmod -R 750 "$pkgdir"/etc/sudoers.d/
-  chmod -R 755 "$pkgdir"/usr/share/polkit-1/rules.d/
-  chown -R root:polkitd "$pkgdir"/usr/share/polkit-1/rules.d
 }
