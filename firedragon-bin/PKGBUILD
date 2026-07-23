@@ -10,6 +10,7 @@ _rdns=org.garudalinux.$__pkgname
 pkgname=$__pkgname-bin
 pkgver=${_pkgver//-/_}
 pkgrel=1
+epoch=1
 pkgdesc="FireDragon is a cross-platform, feature-rich and privacy-focused web browser"
 url="https://gitlab.com/garuda-linux/firedragon/firedragon13"
 arch=(x86_64 aarch64)
