@@ -81,6 +81,7 @@ optdepends=(
 )
 provides=($_pkgname)
 conflicts=($_pkgname)
+replaces=($__pkgname-next)
 options=(
   !emptydirs
   !lto
