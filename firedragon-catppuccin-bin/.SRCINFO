@@ -2,6 +2,7 @@ pkgbase = firedragon-catppuccin-bin
 	pkgdesc = FireDragon is a cross-platform, feature-rich and privacy-focused web browser
 	pkgver = 13.0.0_rc.27
 	pkgrel = 1
+	epoch = 1
 	url = https://gitlab.com/garuda-linux/firedragon/firedragon13
 	arch = x86_64
 	arch = aarch64
