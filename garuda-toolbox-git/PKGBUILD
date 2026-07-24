@@ -39,7 +39,7 @@ prepare() {
         s/@appname@/${_pkgname}/g
         s/@runname@/app.asar/g
         s/@cfgdirname@/${_pkgname}/g
-        s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto/g
+        s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto --disable-vulkan/g
     " "${srcdir}/toolbox/assets/garuda-toolbox.sh"
 
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
