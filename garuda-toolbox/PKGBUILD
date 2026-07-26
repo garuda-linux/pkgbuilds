@@ -2,7 +2,7 @@
 
 pkgname=garuda-toolbox
 pkgver=6.0.0
-pkgrel=1
+pkgrel=2
 _commit='ae63cf612f4a34f3f547e49f1b91eaf41d6a0a42'
 _electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
@@ -31,7 +31,7 @@ prepare() {
         s/@appname@/${pkgname}/g
         s/@runname@/app.asar/g
         s/@cfgdirname@/${pkgname}/g
-        s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto/g
+        s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto --disable-vulkan/g
     " "${srcdir}/toolbox/assets/garuda-toolbox.sh"
 
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
