@@ -63,6 +63,7 @@ replaces=($__pkgname-next-bin)
 options=(
   !emptydirs
 )
+install=$_pkgname.install
 noextract=(
   $__pkgname-v$_pkgver.linux-x64.tar.xz
   $__pkgname-v$_pkgver.linux-arm64.tar.xz
