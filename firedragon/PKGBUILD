@@ -88,6 +88,7 @@ options=(
   !lto
   !makeflags
 )
+install=$_pkgname.install
 noextract=($_gentoo)
 source=(
   $_pkgname-v$_pkgver.source.tar.xz::$url/-/releases/v$_pkgver/downloads/$_pkgname.source.tar.xz

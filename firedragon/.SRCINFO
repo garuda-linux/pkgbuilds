@@ -4,6 +4,7 @@ pkgbase = firedragon
 	pkgrel = 1
 	epoch = 2
 	url = https://gitlab.com/garuda-linux/firedragon/firedragon13
+	install = firedragon.install
 	arch = x86_64
 	arch = aarch64
 	license = MPL-2.0
