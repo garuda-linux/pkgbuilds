@@ -1,6 +1,6 @@
 pkgbase = firedragon-bin
 	pkgdesc = FireDragon is a cross-platform, feature-rich and privacy-focused web browser
-	pkgver = 13.0.0_rc.27
+	pkgver = 13.0.0
 	pkgrel = 1
 	epoch = 1
 	url = https://gitlab.com/garuda-linux/firedragon/firedragon13
@@ -46,14 +46,14 @@ pkgbase = firedragon-bin
 	provides = firedragon
 	conflicts = firedragon
 	replaces = firedragon-next-bin
-	noextract = firedragon-v13.0.0-rc.27.linux-x64.tar.xz
-	noextract = firedragon-v13.0.0-rc.27.linux-arm64.tar.xz
+	noextract = firedragon-v13.0.0.linux-x64.tar.xz
+	noextract = firedragon-v13.0.0.linux-arm64.tar.xz
 	options = !emptydirs
-	source = firedragon::git+https://gitlab.com/garuda-linux/firedragon/firedragon13.git#tag=v13.0.0-rc.27
-	sha256sums = 396b5c0efa08d7db207e4c9827d4e591ca3d854c13fb9aeb2916ed33b9f50747
-	source_x86_64 = firedragon-v13.0.0-rc.27.linux-x64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.27/downloads/firedragon.linux-x64.tar.xz
-	sha256sums_x86_64 = e26f26750ab3ab1c2242518717c11642a5f7ae85afb5c8f95ed6329085641369
-	source_aarch64 = firedragon-v13.0.0-rc.27.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0-rc.27/downloads/firedragon.linux-arm64.tar.xz
-	sha256sums_aarch64 = 0996252027b9b07a909c11840b13b84d0f708d678730268108ed2c430a2edb45
+	source = firedragon::git+https://gitlab.com/garuda-linux/firedragon/firedragon13.git#tag=v13.0.0
+	sha256sums = bf06162c2fc6f62f932e98895648dec8d1b3138d03983347d1704607a2324199
+	source_x86_64 = firedragon-v13.0.0.linux-x64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0/downloads/firedragon.linux-x64.tar.xz
+	sha256sums_x86_64 = 4d865d586e1c3dcdec2d1e34c3683d30d713559119fbd644ea8192728287c0c9
+	source_aarch64 = firedragon-v13.0.0.linux-arm64.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.0.0/downloads/firedragon.linux-arm64.tar.xz
+	sha256sums_aarch64 = 376ebd9793b0faff5469da2ac152cae940057dfe6523c42f0026172b81c1fae2
 
 pkgname = firedragon-bin
