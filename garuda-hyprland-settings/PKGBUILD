@@ -3,9 +3,9 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver="0.5.110"
+pkgver=0.5.111
 pkgrel=1
-_commit='c7333c216effa8843d8387b1562181a327f13223'
+_commit='4c085b3ad64a200a0ab39eaacd12f0f74b49737e'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
