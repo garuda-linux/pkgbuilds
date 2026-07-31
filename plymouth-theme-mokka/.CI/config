@@ -1,0 +1,2 @@
+CI_FORCE_VCS=true
+CI_PKGBUILD_SOURCE=custom

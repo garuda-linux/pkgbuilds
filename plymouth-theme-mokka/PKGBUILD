@@ -1,0 +1,23 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname="plymouth-theme-mokka"
+pkgdesc="Plymouth theme for Garuda Mokka"
+pkgver=r22.e46024d
+pkgrel=1
+arch=("any")
+url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
+license=("GPL")
+makedepends=("git")
+source=("git+$url.git")
+sha256sums=("SKIP")
+install="$pkgname".install
+
+pkgver() {
+	cd "$srcdir/$pkgname" || exit
+	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+package() {
+	install -d "$pkgdir/usr/share/plymouth/themes/mokka"
+	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
+}
