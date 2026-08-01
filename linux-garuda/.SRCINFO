@@ -1,11 +1,14 @@
 pkgbase = linux-garuda
 	pkgdesc = Linux EEVDF + LTO + AutoFDO + Propeller Cachy Sauce Kernel by CachyOS with other patches and improvements.
-	pkgver = 7.1.4
+	pkgver = 7.1.5
 	pkgrel = 2
-	url = https://gitlab.com/garuda-linux/packages/linux-garuda
+	url = https://gitlab.com/garuda-linux/applications/linux-garuda
 	arch = x86_64
 	license = GPL-2.0-only
 	makedepends = curl
+	makedepends = jq
+	makedepends = zstd
+	makedepends = tar
 	options = !strip
 	options = !debug
 	options = !lto
@@ -26,6 +29,8 @@ pkgname = linux-garuda
 	provides = NTSYNC-MODULE
 	provides = VHBA-MODULE
 	provides = ADIOS-MODULE
+	provides = linux-garuda-lto=7.1.5-2
+	replaces = linux-garuda-lto
 
 pkgname = linux-garuda-headers
 	pkgdesc = Headers and scripts for building modules for the Linux EEVDF + LTO + AutoFDO + Propeller Cachy Sauce Kernel by CachyOS with other patches and improvements. kernel
@@ -39,4 +44,9 @@ pkgname = linux-garuda-headers
 	depends = zlib
 	depends = zstd
 	depends = linux-garuda
+	depends = clang
+	depends = llvm
+	depends = lld
 	provides = LINUX-HEADERS
+	provides = linux-garuda-lto-headers=7.1.5-2
+	replaces = linux-garuda-lto-headers
