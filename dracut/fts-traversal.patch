@@ -1,0 +1,42 @@
+From 40e7af014b47ab91ef559610af3cb3f8dbf0fbb9 Mon Sep 17 00:00:00 2001
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+Date: Wed, 15 Apr 2026 10:21:07 -0700
+Subject: [PATCH] fix(dracut-install): remove FTS_NOSTAT in install_modules()
+ fts traversal
+
+install_modules() uses FTS_NOSTAT when traversing kernel module
+directories.  With FTS_NOSTAT, fts may skip stat() and report regular
+files as FTS_NSOK instead of FTS_F.  However, the fts_info check only
+accepts FTS_F and FTS_SL, causing all .ko files found this way to be
+silently skipped.
+
+This was previously masked by glibc's fts implementation which ignored
+FTS_NOSTAT when FTS_LOGICAL was also set, always calling stat and
+returning FTS_F.  A recent glibc change (commit 99303f3871, "io: Use
+gnulib fts implementation") now honors FTS_NOSTAT regardless, exposing
+this bug.
+
+The result is that all '=directory' pattern module installs (=drivers,
+=crypto, =fs, etc.) find zero modules, producing an initramfs with only
+explicitly-named modules (~40 instead of ~500+), which typically fails
+to boot.
+
+Fix it by removing FTS_NOSTAT so that fts always stats files and
+reliably reports actual file types.
+---
+ src/install/dracut-install.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/install/dracut-install.c b/src/install/dracut-install.c
+index efa64306ec..ac70b8dd77 100644
+--- a/src/install/dracut-install.c
++++ b/src/install/dracut-install.c
+@@ -2708,7 +2708,7 @@ static int install_modules(int argc, char **argv)
+ 
+                         {
+                                 char *paths[] = { path1, path2, path3, NULL };
+-                                fts = fts_open(paths, FTS_COMFOLLOW | FTS_NOCHDIR | FTS_NOSTAT | FTS_LOGICAL, NULL);
++                                fts = fts_open(paths, FTS_COMFOLLOW | FTS_NOCHDIR | FTS_LOGICAL, NULL);
+                         }
+ 
+                         for (FTSENT *ftsent = fts_read(fts); ftsent != NULL; ftsent = fts_read(fts)) {
