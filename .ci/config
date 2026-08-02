@@ -8,3 +8,4 @@ REDIS_SSH_HOST=aerialis.garudalinux.org
 REDIS_SSH_PORT=270
 REDIS_SSH_USER=package-deployer
 REPO_NAME=garuda
+TEMPLATE_ENABLE_UPDATES=false
