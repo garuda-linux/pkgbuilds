@@ -16,23 +16,23 @@ pkgbase = garuda-mokka
 	conflicts = plasma5-themes-sweet-kde-git
 	conflicts = kwin-effects-forceblur
 	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/2b1c2c9fd183635a698c35055e9cfeed63efb519/garuda-mokka-2b1c2c9fd183635a698c35055e9cfeed63efb519.tar.gz
-	source = git+https://github.com/catppuccin/kde.git#commit=0909503d388578953142509052b8402a7ef43da5
-	source = git+https://github.com/catppuccin/micro.git#commit=2802b32308e5b1a827689c095f11ae604bbc85e6
+	source = git+https://github.com/catppuccin/kde.git#commit=da69a64d239731fa344cc22ba14f3651dde540ac
+	source = git+https://github.com/catppuccin/micro.git#commit=015a2bb208f61a2d5a33121de2644bf4a059436b
 	source = git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
-	source = git+https://github.com/catppuccin/fish.git#commit=cc8e4d8fffbdaab07b3979131030b234596f18da
 	source = git+https://github.com/catppuccin/konsole#commit=3b64040e3f4ae5afb2347e7be8a38bc3cd8c73a8
-	source = git+https://github.com/catppuccin/bat.git#commit=699f60fc8ec434574ca7451b444b880430319941
-	source = git+https://github.com/catppuccin/grub.git#commit=2a5c8be8185dae49dd22030df45860df8c796312
-	source = git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=559faed6062b6c891c9d1f0c778e66841209fb27
+	source = git+https://github.com/catppuccin/bat.git#commit=6810349b28055dce54076712fc05fc68da4b8ec0
+	source = git+https://github.com/catppuccin/grub.git#commit=0a37ab19f654e77129b409fed371891c01ffd0b9
+	source = git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=fd805dbeeacb12f7971b98408c415c3f472e5aef
+	source = install.sh
 	sha256sums = SKIP
-	sha256sums = 57887bc078a1728c15c1d226ebd5902be813d96b0f23f5a346be5bc68d68b320
-	sha256sums = da7ddf15703372a3432fe3c3fe8265d462ee97fcc0f4b681c61790c2e8d0340f
+	sha256sums = 914beff2114add4050422c1f5fd8b6e520b70d17ce408cf7dd0846a8af363b05
+	sha256sums = 0fd3d84a7f6cb994eb025676f9204e1137a028d555031ceae0a02a0ba47bb7f7
 	sha256sums = 11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3
-	sha256sums = eaf82aaafdc83c6569a6805fa5727d18a22dcacc08668a29499c4d263900ec65
 	sha256sums = 9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4
-	sha256sums = d83bf03ebacf325d234ff6c7330c279d59580e9eed06f5edc1a292be09d928e5
-	sha256sums = 524c66178ba7d3988f0b3f9f0bedb2f9f0cb720bda8083a3f33b258b25e54b82
-	sha256sums = 00874e98c0f1c82039b6a0e96ff1cf0bda814b303d0f872a8694367cae5e9249
+	sha256sums = 0f86844bae7efaeeafdfb306378a3eeaf4f39d23f660b676a6ad550e9f095b78
+	sha256sums = b0f4b2c475ae519db65cbe3f62048e7bcd06ff31d40cf6a1bff886ddb4344275
+	sha256sums = 705b5f7fa694a755f330f5c2d5aa7f50634fa4a9423eda645305f2e04692c0d1
+	sha256sums = a6931fd907955997f80a56ea436b83a81d7da1839840f96bce90f849ddc976af
 
 pkgname = garuda-mokka
 	depends = garuda-common-settings
