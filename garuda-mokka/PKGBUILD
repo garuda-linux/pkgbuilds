@@ -3,9 +3,9 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver=2.0.0
+pkgver=2.0.1
 pkgrel=1
-_commit='2b1c2c9fd183635a698c35055e9cfeed63efb519'
+_commit='2089c0850116900c621471d74730f7fa58268402'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/${pkgname}"
 license=('GPL')
@@ -20,14 +20,14 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mok
   install.sh
 )
 sha256sums=('SKIP'
-            '914beff2114add4050422c1f5fd8b6e520b70d17ce408cf7dd0846a8af363b05'
-            '0fd3d84a7f6cb994eb025676f9204e1137a028d555031ceae0a02a0ba47bb7f7'
-            '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
-            '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
-            '0f86844bae7efaeeafdfb306378a3eeaf4f39d23f660b676a6ad550e9f095b78'
-            'b0f4b2c475ae519db65cbe3f62048e7bcd06ff31d40cf6a1bff886ddb4344275'
-            '705b5f7fa694a755f330f5c2d5aa7f50634fa4a9423eda645305f2e04692c0d1'
-            'a6931fd907955997f80a56ea436b83a81d7da1839840f96bce90f849ddc976af')
+  '914beff2114add4050422c1f5fd8b6e520b70d17ce408cf7dd0846a8af363b05'
+  '0fd3d84a7f6cb994eb025676f9204e1137a028d555031ceae0a02a0ba47bb7f7'
+  '11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3'
+  '9d33648bffaa549068547a755b84fb84a6b0c73d741b0a13195c19a18f5288c4'
+  '0f86844bae7efaeeafdfb306378a3eeaf4f39d23f660b676a6ad550e9f095b78'
+  'b0f4b2c475ae519db65cbe3f62048e7bcd06ff31d40cf6a1bff886ddb4344275'
+  '705b5f7fa694a755f330f5c2d5aa7f50634fa4a9423eda645305f2e04692c0d1'
+  'a6931fd907955997f80a56ea436b83a81d7da1839840f96bce90f849ddc976af')
 pkgdesc='Garuda Mokka desktop settings and presets'
 makedepends=(git unzip wget sassc)
 install=${pkgname}.install
