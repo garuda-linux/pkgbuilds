@@ -105,7 +105,6 @@ package() {
     'inter-font'
     'ttf-jetbrains-mono-nerd'
     'kvantum'
-    'kwin-effects-better-blur-dx'
     'kwin-effect-rounded-corners-git'
     'plasma-applet-window-buttons'
     'plasma-login-manager'
