@@ -1,6 +1,6 @@
 pkgbase = garuda-toolbox
 	pkgdesc = Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system
-	pkgver = 6.0.0
+	pkgver = 6.1.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/applications/toolbox
 	arch = any
