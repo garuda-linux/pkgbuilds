@@ -1,7 +1,7 @@
 # Maintainer: Stefan Wimmer <info@stefanwimmer128.xyz>
 
 _pkgname=firedragon
-_pkgver=13.1.0
+_pkgver=13.1.1
 _branding=dr460nized
 
 __pkgname=$_pkgname
@@ -77,9 +77,9 @@ source_x86_64=(
 source_aarch64=(
   $__pkgname-v$_pkgver.linux-arm64.tar.xz::$url/-/releases/v$_pkgver/downloads/$__pkgname.linux-arm64.tar.xz
 )
-sha256sums=('67f7325388e11af9543d1df54ddd49fa65a916ac98bfdbaf2e5c605bcb5dff01')
-sha256sums_x86_64=('bf731923434930fd3428b13236a29d3caf6e2ffe24409d598290449ae3fb7881')
-sha256sums_aarch64=('bce9638e46dfa8ad6735f3b4f3fc0b082ef739ff82b88ce9794aeea838ca1170')
+sha256sums=('e669e53d0d543d9b0bea1852235b8d3ee901c5039a29182d3a16deb9336dbb78')
+sha256sums_x86_64=('532c0a17af09c3f76788ca599c41f35cf03397856de6e7836e55e298c13a842e')
+sha256sums_aarch64=('b85511caf6b05b00029e4b50b5ca9f7b5f08ff99981de087548d32f057f2d755')
 
 package() {
   mkdir -p "$pkgdir/usr/lib"
