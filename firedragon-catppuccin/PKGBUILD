@@ -3,7 +3,7 @@
 _pkgname=firedragon
 __pkgname=$_pkgname-catppuccin
 _rdns=org.garudalinux.$__pkgname
-_pkgver=13.1.0
+_pkgver=13.1.1
 _branding=catppuccin
 _gentoo=firefox-153-patches-01.tar.xz
 _gentoo_exclude=(0015-bgo-940031-wasm-support.patch)
@@ -94,7 +94,7 @@ source=(
   $_pkgname-v$_pkgver.source.tar.xz::$url/-/releases/v$_pkgver/downloads/$_pkgname.source.tar.xz
   https://dev.gentoo.org/~juippis/mozilla/patchsets/$_gentoo
 )
-sha256sums=('19d808f5a32747b8da2c2f295951133172f76d71143c4320c8d1cbbd3fb020ff'
+sha256sums=('180bc4c433ac508dd84342ca1862e7fc0007eea696b9370cfb225480ce8dbba3'
             '9dc3e9423eea9b8bf16cd7cc2545a539717e9b32c1e4242a332988ff0add923e')
 
 prepare() {
