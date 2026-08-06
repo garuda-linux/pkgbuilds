@@ -17,14 +17,14 @@ optdepends=('paru: show pending AUR updates'
   'reflector-simple: update Arch mirrorlists interactively'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 options=('!strip' '!emptydirs' '!debug')
-source=("toolbox::git+$url.git#commit=$_commit")
+source=("https://gitlab.com/garuda-linux/applications/toolbox/-/archive/${_commit}/toolbox-${_commit}.tar.gz")
 sha256sums=('SKIP')
 # Replaces all of garuda-settings-manager
 replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani')
 provides=('garuda-rani')
 
 prepare() {
-  cd toolbox || exit
+  cd toolbox-$_commit || exit
 
   sed -i -e "
         s/@electronversion@/${_electronversion}/g
@@ -32,7 +32,7 @@ prepare() {
         s/@runname@/app.asar/g
         s/@cfgdirname@/${pkgname}/g
         s/@options@/env ELECTRON_OZONE_PLATFORM_HINT=auto --disable-vulkan/g
-    " "${srcdir}/toolbox/assets/garuda-toolbox.sh"
+    " "${srcdir}/toolbox-$_commit/assets/garuda-toolbox.sh"
 
   export ELECTRON_SKIP_BINARY_DOWNLOAD=1
   export SYSTEM_ELECTRON_VERSION="$(electron${_electronversion} -v | sed 's/v//g')"
@@ -46,7 +46,7 @@ prepare() {
 }
 
 build() {
-  cd toolbox || exit
+  cd toolbox-$_commit || exit
   local electronDist="/usr/lib/electron${_electronversion}"
 
   NODE_ENV=production pnpm run build
@@ -57,12 +57,12 @@ build() {
 }
 
 package() {
-  install -Dm755 "${srcdir}/toolbox/assets/garuda-toolbox.sh" "${pkgdir}/usr/bin/${pkgname}"
-  install -Dm755 "${srcdir}/toolbox/assets/garuda-toolbox-pty-wrapper" "${pkgdir}/usr/libexec/garuda-toolbox-pty-wrapper"
-  install -Dm644 "${srcdir}/toolbox/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
-  install -Dm644 "${srcdir}/toolbox/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
-  install -Dm644 "${srcdir}/toolbox/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
-  install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${pkgname}.svg"
-  install -Dm644 "${srcdir}/toolbox/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
-  install -Dm644 "${srcdir}/toolbox/assets/org.garudalinux.toolbox.policy" "${pkgdir}/usr/share/polkit-1/actions/org.garudalinux.toolbox.policy"
+  install -Dm755 "${srcdir}/toolbox-$_commit/assets/garuda-toolbox.sh" "${pkgdir}/usr/bin/${pkgname}"
+  install -Dm755 "${srcdir}/toolbox-$_commit/assets/garuda-toolbox-pty-wrapper" "${pkgdir}/usr/libexec/garuda-toolbox-pty-wrapper"
+  install -Dm644 "${srcdir}/toolbox-$_commit/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
+  install -Dm644 "${srcdir}/toolbox-$_commit/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
+  install -Dm644 "${srcdir}/toolbox-$_commit/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -Dm644 "${srcdir}/toolbox-$_commit/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/${pkgname}.svg"
+  install -Dm644 "${srcdir}/toolbox-$_commit/assets/images/garuda-purple.svg" "${pkgdir}/usr/share/icons/hicolor/scalable/apps/${pkgname}.svg"
+  install -Dm644 "${srcdir}/toolbox-$_commit/assets/org.garudalinux.toolbox.policy" "${pkgdir}/usr/share/polkit-1/actions/org.garudalinux.toolbox.policy"
 }

@@ -6,27 +6,23 @@
 # Contributor: Matti Hyttinen <matti@manjaro.org>
 
 pkgname=('grub-theme-garuda-dr460nized')
-pkgver=r2.49d1e5e
+pkgver=1.0.0
 pkgrel=1
-
+_commit='c0fcfad612f84e782d97a9a72879c1870aa74336'
 pkgdesc='Garuda Dr460nized grub theme'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda-dr460nized"
 license=('GPL')
-makedepends=('git')
-source=("grub-theme::git+$url.git")
+
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda-dr460nized/-/archive/${_commit}/grub-theme-garuda-dr460nized-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "${srcdir}"/grub-theme || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
 	depends=('grub')
 	install=garuda-theme.install
 	provides=('grub-theme-garuda-custom')
-	cd grub-theme/garuda-live || exit
+	cd grub-theme-garuda-dr460nized-$_commit/garuda-live || exit
 	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt #remove welcome message
 	find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda-dr460nized/{} \;
 }

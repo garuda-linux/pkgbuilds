@@ -2,22 +2,18 @@
 
 pkgname="plymouth-theme-mokka"
 pkgdesc="Plymouth theme for Garuda Mokka"
-pkgver=r22.e46024d
+pkgver=1.0.0
 pkgrel=1
+_commit='e46024d1d8923a037e97373245007e864199716e'
 arch=("any")
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=("GPL")
-makedepends=("git")
-source=("git+$url.git")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-mokka/-/archive/${_commit}/plymouth-theme-mokka-${_commit}.tar.gz")
 sha256sums=("SKIP")
 install="$pkgname".install
 
-pkgver() {
-	cd "$srcdir/$pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
 	install -d "$pkgdir/usr/share/plymouth/themes/mokka"
-	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

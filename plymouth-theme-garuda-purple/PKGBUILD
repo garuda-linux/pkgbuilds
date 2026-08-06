@@ -2,22 +2,18 @@
 
 pkgname="plymouth-theme-garuda-purple"
 pkgdesc="The default Plymouth theme for Garuda Linux - purple version"
-pkgver=r2.7389d96
+pkgver=1.0.0
 pkgrel=1
+_commit='5e40449084e6ac4402829ac100ba95a8648c8336'
 arch=("any")
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=("GPL")
-makedepends=("git")
-source=("git+$url.git")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda-purple/-/archive/${_commit}/plymouth-theme-garuda-purple-${_commit}.tar.gz")
 sha256sums=("SKIP")
 install="$pkgname".install
 
-pkgver() {
-	cd "$srcdir/$pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
 	install -d "$pkgdir/usr/share/plymouth/themes/garuda-purple"
-	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

@@ -2,22 +2,18 @@
 
 pkgname="calamares-branding-garuda"
 pkgdesc="Garuda branding for the Calamares installer"
-pkgver=r49.ddc718d
+pkgver=1.0.0
 pkgrel=1
+_commit='d759eb251f5fdbb714f8122cb97dba708a7e514f'
 arch=("any")
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=("GPL")
-makedepends=("git")
-source=("git+$url.git")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/calamares-branding-garuda/-/archive/${_commit}/calamares-branding-garuda-${_commit}.tar.gz")
 sha256sums=("SKIP")
 
-pkgver() {
-	cd "$srcdir/$pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
 
 	install -d "$pkgdir/usr/share/calamares/branding/garuda"
-	cp -rf "$srcdir/$pkgname/usr" "$pkgdir"
+	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

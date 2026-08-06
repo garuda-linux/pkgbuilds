@@ -1,24 +1,21 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-wallpapers-2022
-pkgver=r6.c246b87
+pkgver=1.0.0
 pkgrel=1
+_commit='e764a724be19dd81a376e0395dd2d1035e8c52b4'
 pkgdesc="Garuda's wallpaper collection, 2022 edition"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022"
 license=('GPLv3')
-makedepends=('git')
+
 depends=()
-source=("git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022.git")
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022/-/archive/${_commit}/garuda-wallpapers-2022-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "$srcdir/garuda-wallpapers-2022" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
-	cd "${pkgname}" || exit
+	cd "${pkgname}-$_commit" || exit
 	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }

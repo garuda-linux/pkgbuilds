@@ -10,23 +10,20 @@ pkgname=('garuda-live-base'
 	'garuda-live-systemd'
 	'garuda-live-skel'
 	'garuda-live-portable-efi')
-pkgver=r3.19f1cf0
+pkgver=1.0.0
 pkgrel=1
+_commit='52c76218eecb2c767a238adc71fd21f96075d486'
 pkgdesc='garuda Linux live session'
 arch=('any')
 url="https://gitlab.com/garuda-linux/tools/garuda-tools-livecd"
 license=('GPL')
-makedepends=('git')
-source=("git+$url.git")
+
+source=("https://gitlab.com/garuda-linux/tools/garuda-tools-livecd/-/archive/${_commit}/garuda-tools-livecd-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "${srcdir}"/garuda-tools-livecd || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 build() {
-	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc
 }
 
@@ -36,7 +33,7 @@ package_garuda-live-base() {
 	conflicts=('garuda-livecd-base')
 	replaces=('garuda-livecd-base')
 
-	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_base
 }
 
@@ -46,14 +43,14 @@ package_garuda-live-systemd() {
 	conflicts=('garuda-livecd-systemd')
 	# 	replaces=('garuda-livecd-systemd')
 
-	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_sd
 }
 
 package_garuda-live-skel() {
 	pkgdesc='Garuda Linux live session autostart items'
 
-	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_xdg
 }
 
@@ -61,6 +58,6 @@ package_garuda-live-portable-efi() {
 	pkgdesc='Garuda Linux live session portable EFI settings'
 	depends=('grub')
 
-	cd "${srcdir}"/${_repo} || exit #-${pkgver}
+	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
 	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_portable_efi
 }

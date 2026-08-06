@@ -2,21 +2,18 @@
 
 pkgname=garuda-icons
 pkgdesc="Base icons for Garuda Linux"
-pkgver=r29.5730a02
+pkgver=1.0.0
 pkgrel=1
+_commit='17e1dfa085c19bead800469f3c7b291a681039f1'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=('GPL')
-makedepends=('git')
-source=("git+$url.git")
+
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-icons/-/archive/${_commit}/garuda-icons-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "$srcdir/$pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
 	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname/usr "$pkgdir"
+	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }

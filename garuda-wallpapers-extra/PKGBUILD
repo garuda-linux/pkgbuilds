@@ -1,23 +1,20 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-wallpapers-extra
-pkgver=r3.eb2d0fd
+pkgver=1.0.0
 pkgrel=1
+_commit='054d4ebec5876d014e25da7c3b8954b38ca3a9b7'
 pkgdesc="Garuda's extra wallpaper collection"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
 license=('GPLv3')
-makedepends=('git')
-source=("git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname.git")
+
+source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-extra/-/archive/${_commit}/garuda-wallpapers-extra-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-pkgver() {
-	cd "$srcdir/$pkgname" || exit
-	printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
-}
 
 package() {
-	cd "${pkgname}" || exit
+	cd "${pkgname}-$_commit" || exit
 	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }
