@@ -34,7 +34,6 @@ package() {
     'garuda-wallpapers'
     'kvantum'
     'kvantum-qt5'
-    'kwin-effects-better-blur-dx'
     'plasma-applet-window-buttons'
     'plasma-login-manager'
     'plasma-systemmonitor'
