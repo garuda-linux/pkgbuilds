@@ -1,7 +1,9 @@
 #!/bin/bash
 
 mkinitcpio_has_grub_btrfs_overlayfs_hook() {
-	grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf
+	if [ -f /etc/mkinitcpio.conf ]; then
+		grep -qe "^HOOKS=.*grub-btrfs-overlayfs" /etc/mkinitcpio.conf
+	fi
 }
 
 post_install() {
@@ -9,8 +11,10 @@ post_install() {
 	if [ -e /etc/lsb-release ]; then
 		echo "Using default grub snapshot submenu name"
 	else
-		sed -i /etc/default/grub-btrfs/config \
-			-e "s,.*GRUB_BTRFS_SUBMENUNAME=.*,GRUB_BTRFS_SUBMENUNAME=\"$(sed '/^NAME=/!d;s/NAME=//;s/"//gm' /etc/os-release) snapshots\","
+		if [ -f /etc/default/grub-btrfs/config ]; then
+			sed -i /etc/default/grub-btrfs/config \
+				-e "s,.*GRUB_BTRFS_SUBMENUNAME=.*,GRUB_BTRFS_SUBMENUNAME=\"$(sed '/^NAME=/!d;s/NAME=//;s/"//gm' /etc/os-release) snapshots\","
+		fi
 		echo "Generating grub snapshot submenu name from /etc/os-release values"
 	fi
 
@@ -28,7 +32,9 @@ post_install() {
 	/usr/bin/snapper create-config --template garuda /
 
 	if ! mkinitcpio_has_grub_btrfs_overlayfs_hook; then
-		sed -re 's/(^HOOKS=[\"|(][^")]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
+		if [ -f /etc/mkinitcpio.conf ]; then
+			sed -re 's/(^HOOKS=[\"|(][^")]+)/\1 grub-btrfs-overlayfs/gi' -i /etc/mkinitcpio.conf
+		fi
 	fi
 }
 
@@ -36,7 +42,9 @@ pre_remove() {
 	echo "Deleting snapper config for root"
 	/usr/bin/snapper delete-config
 	if mkinitcpio_has_grub_btrfs_overlayfs_hook; then
-		sed -re 's/(^HOOKS=["(].*) grub-btrfs-overlayfs/\1/g' -i /etc/mkinitcpio.conf
+		if [ -f /etc/mkinitcpio.conf ]; then
+			sed -re 's/(^HOOKS=["(].*) grub-btrfs-overlayfs/\1/g' -i /etc/mkinitcpio.conf
+		fi
 	fi
 	echo "Disabling related snapper and grub-btrfs services"
 	/usr/bin/systemctl disable --now grub-btrfs-snapper.path

@@ -8,7 +8,7 @@
 pkgbase=grub-theme-garuda
 pkgname=('grub-theme-garuda-live-common' 'grub-theme-garuda-live' 'grub-theme-garuda')
 pkgver=1.0.0
-pkgrel=2
+pkgrel=3
 _commit='3227828e441b2d4b30e553b0a939f5ed3acb8528'
 pkgdesc='Garuda Linux GRUB theme'
 arch=('any')
@@ -18,25 +18,24 @@ license=('GPL')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda/-/archive/${_commit}/grub-theme-garuda-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-
 package_grub-theme-garuda-live-common() {
-	depends=('grub')
+  depends=('grub')
 
-	cd grub-theme-garuda-$_commit || exit
-	make PREFIX=/usr DESTDIR="${pkgdir}" install_common
+  cd grub-theme-garuda-$_commit || exit
+  make PREFIX=/usr DESTDIR="${pkgdir}" install_common
 }
 package_grub-theme-garuda-live() {
-	depends=('grub-theme-garuda-live-common')
+  depends=('grub-theme-garuda-live-common')
 
-	cd grub-theme-garuda-$_commit || exit
-	make PREFIX=/usr DESTDIR="${pkgdir}" install_garuda
+  cd grub-theme-garuda-$_commit || exit
+  make PREFIX=/usr DESTDIR="${pkgdir}" install_garuda
 }
 
 package_grub-theme-garuda() {
-	depends=('grub')
-	install=garuda-theme.install
+  depends=('grub')
+  install=garuda-theme.install
 
-	cd grub-theme-garuda-$_commit/garuda-live || exit
-	sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt
-	find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda/{} \;
+  cd grub-theme-garuda-$_commit/garuda-live || exit
+  sed -i -e 's,.*text = "Welcome to Garuda".*,#text = "Welcome to Garuda",' theme.txt
+  find . -type f -exec install -D -m644 {} "${pkgdir}"/usr/share/grub/themes/garuda/{} \;
 }

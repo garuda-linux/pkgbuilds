@@ -12,6 +12,6 @@ sha256sums=('SKIP')
 pkgdesc='Garuda BlackArch settings'
 
 package() {
-	install -d "$pkgdir/usr"
-	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
+  install -d "$pkgdir/usr"
+  cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

@@ -13,12 +13,11 @@ license=('GPLv3')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-backgrounds/-/archive/${_commit}/garuda-backgrounds-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-
 package() {
-	cd "${pkgname}-$_commit" || exit
-	install -d "${pkgdir}/usr/share/backgrounds/${pkgname}"
-	cp "${srcdir}/${pkgname}-$_commit/src/${pkgname}"/*.{png,jpg} "${pkgdir}/usr/share/backgrounds/${pkgname}"
+  cd "${pkgname}-$_commit" || exit
+  install -d "${pkgdir}/usr/share/backgrounds/${pkgname}"
+  cp "${srcdir}/${pkgname}-$_commit/src/${pkgname}"/*.{png,jpg} "${pkgdir}/usr/share/backgrounds/${pkgname}"
 
-	install -d "${pkgdir}/usr/share/gnome-background-properties"
-	cp "${srcdir}/${pkgname}-$_commit/src/${pkgname}/${pkgname}.xml" "${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml"
+  install -d "${pkgdir}/usr/share/gnome-background-properties"
+  cp "${srcdir}/${pkgname}-$_commit/src/${pkgname}/${pkgname}.xml" "${pkgdir}/usr/share/gnome-background-properties/garuda-backgrounds.xml"
 }

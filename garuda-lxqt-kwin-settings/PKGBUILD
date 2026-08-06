@@ -6,17 +6,17 @@ pkgname='garuda-lxqt-kwin-settings'
 pkgdesc='Garuda Linux LXQt-Kwin settings'
 pkgver="1.1.7"
 _commit='0e146de439edaa0f15e28c997b5cc867610d78be'
-pkgrel=5
+pkgrel=6
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 depends=('beautyline'
-	'garuda-common-settings'
-	'kvantum'
-	'lxqt-kwin-desktop-git'
-	'ttf-firacode-nerd'
-	'plasma5-themes-sweet-full-git'
-	'ttf-fira-sans')
+  'garuda-common-settings'
+  'kvantum'
+  'lxqt-kwin-desktop-git'
+  'ttf-firacode-nerd'
+  'plasma5-themes-sweet-full-git'
+  'ttf-fira-sans')
 makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-lxqt-kwin-settings/-/archive/${_commit}/garuda-lxqt-kwin-settings-${_commit}.tar.gz")
 sha256sums=('SKIP')
@@ -25,8 +25,8 @@ provides=('garuda-desktop-settings')
 conflicts=('garuda-desktop-settings')
 
 package() {
-	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/"$pkgname"-$_commit/etc "$pkgdir"
-	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/"$pkgname"-$_commit/usr "$pkgdir"
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/"$pkgname"-$_commit/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/"$pkgname"-$_commit/usr "$pkgdir"
 }

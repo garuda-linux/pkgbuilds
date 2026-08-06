@@ -1,7 +1,7 @@
 pkgbase = garuda-mokka
 	pkgdesc = Garuda Mokka desktop settings and presets
 	pkgver = 2.0.3
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka
 	install = garuda-mokka.install
 	arch = any
@@ -42,7 +42,6 @@ pkgname = garuda-mokka
 	depends = inter-font
 	depends = ttf-jetbrains-mono-nerd
 	depends = kvantum
-	depends = kwin-effects-better-blur-dx
 	depends = kwin-effect-rounded-corners-git
 	depends = plasma-applet-window-buttons
 	depends = plasma-login-manager

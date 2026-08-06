@@ -1,7 +1,7 @@
 pkgbase = garuda-mate-settings
 	pkgdesc = Garuda Linux Mate settings
 	pkgver = 1.5.3
-	pkgrel = 3
+	pkgrel = 4
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mate-settings
 	install = garuda-mate-settings.install
 	arch = any

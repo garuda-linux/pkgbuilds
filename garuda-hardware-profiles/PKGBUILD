@@ -3,11 +3,11 @@
 pkgbase=garuda-hardware-profiles
 
 _NVIDIA_PKGNAMES=(garuda-hardware-profile-nvidia
-                  garuda-hardware-profile-nvidia-580xx)
+  garuda-hardware-profile-nvidia-580xx)
 pkgname=(garuda-hardware-profile-standard
-         garuda-hardware-profile-standard-x11
-         garuda-hardware-profile-vm
-         "${_NVIDIA_PKGNAMES[@]}")
+  garuda-hardware-profile-standard-x11
+  garuda-hardware-profile-vm
+  "${_NVIDIA_PKGNAMES[@]}")
 
 pkgver=2.0.1
 pkgrel=3
@@ -24,12 +24,12 @@ source=(
   garuda-virtualbox-live.service
 )
 sha256sums=('9135036c0fb97eb630e9452c75a77927f01aedf1e7359f29019acc8b4c22cf6d'
-            'ee3d6dabac95eeaf9f97aa16bef05dde84fca5bb1f7351591c70f9448f988cb9'
-            'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
-            '2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
-            'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
-            '4b5e1fde346918258576bef9f87d06a2ddc75b99f734c2a638114c93add2e470'
-            '345689cad75fc5cd4189b12ebee06eea61cb24acb0c56747bf7c0b10e4230e3a')
+  'ee3d6dabac95eeaf9f97aa16bef05dde84fca5bb1f7351591c70f9448f988cb9'
+  'b44093d0a19f8fc16977abb6eae2bfe9a55af68f2d8804c65cb60a65ca130844'
+  '2126cc483912ef916ea2bb4f4a33a65d067c515398b71741bb21561f47975e6e'
+  'a6589345fac5cccea3a7830d68c83704b32ebc0f28720431e34656cae9589480'
+  '4b5e1fde346918258576bef9f87d06a2ddc75b99f734c2a638114c93add2e470'
+  '345689cad75fc5cd4189b12ebee06eea61cb24acb0c56747bf7c0b10e4230e3a')
 
 package_garuda-hardware-profile-standard() {
   pkgdesc="Garuda Linux hardware profile with opensource drivers"
@@ -49,7 +49,7 @@ package_garuda-hardware-profile-standard-x11() {
 
 package_garuda-hardware-profile-vm() {
   pkgdesc="Garuda Linux hardware profile for virtual machines"
-  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils'  'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
+  depends=('garuda-hardware-profile-standard' 'xf86-video-fbdev' 'virtualbox-guest-utils' 'open-vm-tools' 'xf86-input-vmmouse' 'spice-vdagent' 'qemu-guest-agent' 'gtkmm3')
   # Replace MHWD legacy
   replaces=("garuda-virtualmachine-guest-config")
   install=garuda-hardware-profile-vm.install

@@ -1,12 +1,11 @@
 pkgbase = garuda-wallpapers
 	pkgdesc = Garuda's default wallpaper collection
-	pkgver = r89.931d2e5
+	pkgver = 1.0.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers
 	arch = any
 	license = GPLv3
-	makedepends = git
-	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers.git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers/-/archive/63c2ebeb2d3daee8a4db87e4251209dd7ac0b707/garuda-wallpapers-63c2ebeb2d3daee8a4db87e4251209dd7ac0b707.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-wallpapers

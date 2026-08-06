@@ -1,13 +1,12 @@
 pkgbase = plymouth-theme-garuda
 	pkgdesc = The default Plymouth theme for Garuda Linux
-	pkgver = r8.b9b7fd8
-	pkgrel = 1
+	pkgver = 1.0.0
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda
 	install = plymouth-theme-garuda.install
 	arch = any
 	license = GPL
-	makedepends = git
-	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda.git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-garuda/-/archive/0ced58741d7cb7182ed6dd9d79393b55aaa98ce6/plymouth-theme-garuda-0ced58741d7cb7182ed6dd9d79393b55aaa98ce6.tar.gz
 	sha256sums = SKIP
 
 pkgname = plymouth-theme-garuda

@@ -3,7 +3,7 @@
 pkgname="plymouth-theme-dr460nized"
 pkgdesc="Plymouth theme for Garuda dr460nized"
 pkgver=1.0.0
-pkgrel=1
+pkgrel=2
 _commit='f7f946a2c7c8facd3e012ec84b34e15e1292388b'
 arch=("any")
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
@@ -12,8 +12,7 @@ source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-th
 sha256sums=("SKIP")
 install="$pkgname".install
 
-
 package() {
-	install -d "$pkgdir/usr/share/plymouth/themes/dr460nized"
-	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
+  install -d "$pkgdir/usr/share/plymouth/themes/dr460nized"
+  cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }

@@ -3,7 +3,7 @@
 
 pkgname=libretro-meta
 pkgver=1
-pkgrel=11
+pkgrel=12
 arch=('any')
 url="libretro.org"
 license=('GPL')

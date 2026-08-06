@@ -5,7 +5,7 @@ pkgname=garuda-qtile-settings
 pkgdesc='Garuda Linux Qtile settings'
 pkgver="3.2.4"
 _commit='30c7f6ca8677041180ddc77f293fa6dbadc7b4b6'
-pkgrel=1
+pkgrel=2
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
@@ -17,8 +17,8 @@ conflicts=('garuda-desktop-settings')
 install=$pkgname.install
 
 package() {
-	install -d "$pkgdir"/etc
-	cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
-	install -d "$pkgdir"/usr
-	cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
+  install -d "$pkgdir"/etc
+  cp -rf "$srcdir"/$pkgname-$_commit/etc "$pkgdir"
+  install -d "$pkgdir"/usr
+  cp -rf "$srcdir"/$pkgname-$_commit/usr "$pkgdir"
 }

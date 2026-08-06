@@ -1,12 +1,11 @@
 pkgbase = garuda-wallpapers-2022
 	pkgdesc = Garuda's wallpaper collection, 2022 edition
-	pkgver = r6.c246b87
+	pkgver = 1.0.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022
 	arch = any
 	license = GPLv3
-	makedepends = git
-	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022.git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2022/-/archive/e764a724be19dd81a376e0395dd2d1035e8c52b4/garuda-wallpapers-2022-e764a724be19dd81a376e0395dd2d1035e8c52b4.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-wallpapers-2022

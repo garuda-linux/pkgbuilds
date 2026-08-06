@@ -12,9 +12,8 @@ license=('GPLv3')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-extra/-/archive/${_commit}/garuda-wallpapers-extra-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-
 package() {
-	cd "${pkgname}-$_commit" || exit
-	install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
-	cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
+  cd "${pkgname}-$_commit" || exit
+  install -d "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
+  cp -r src/garuda-wallpapers/* "${pkgdir}/usr/share/wallpapers/garuda-wallpapers"
 }

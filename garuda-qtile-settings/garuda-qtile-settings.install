@@ -19,7 +19,7 @@ update_gtk() {
 
 # Post installation
 post_install() {
-	rm /usr/share/xsessions/plasma.desktop
+	rm -f /usr/share/xsessions/plasma.desktop
 	post_upgrade
 }
 

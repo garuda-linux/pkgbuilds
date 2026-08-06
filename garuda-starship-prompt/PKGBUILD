@@ -14,5 +14,5 @@ source=('starship.toml')
 sha256sums=('1e0f834130db67b1335e9724a8a783c5a6c9f30074dcd8eb82672e0bda0dbcd5')
 
 package() {
-	install -D -m644 starship.toml "$pkgdir/etc/skel/.config/starship.toml"
+  install -D -m644 starship.toml "$pkgdir/etc/skel/.config/starship.toml"
 }

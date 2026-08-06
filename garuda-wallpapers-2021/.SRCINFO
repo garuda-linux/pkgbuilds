@@ -1,12 +1,11 @@
 pkgbase = garuda-wallpapers-2021
 	pkgdesc = Garuda's wallpaper collection, 2021 edition
-	pkgver = r1
+	pkgver = 1.0.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021
 	arch = any
 	license = GPLv3
-	makedepends = git
-	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021.git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/garuda-wallpapers-2021/-/archive/af472c2c94ffd42ef64089f04afe2581112e86a7/garuda-wallpapers-2021-af472c2c94ffd42ef64089f04afe2581112e86a7.tar.gz
 	sha256sums = SKIP
 
 pkgname = garuda-wallpapers-2021

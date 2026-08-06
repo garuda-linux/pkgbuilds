@@ -9,11 +9,11 @@ license=('GPL')
 depends=('coreutils' 'curl' 'wget')
 source=("garuda-nix-subsystem" "updater" "installer")
 sha512sums=('69f9d1cb2abf9d64a37c942cfd00c881bdd3c9f3ec63430ea8cf2376ba42dbda4f33c4df3dd10ee39cc4c53109f9009efc642388551825e40440e6e9d2d934b1'
-            'fe56eabebfbb120811483c84a9d88c29a34eea364f8b0f6f897933df0596f781672c51fe1e4e905f5c61ea9f170d66324ca7ffbe9a454bc8dbf796a67322a39d'
-            'e5fc53c3ca11f596951e7e6e6c14d570255630ea6eb88f177f2bebc79f2ac78f8a165d8cf80d2db4b24eb5998349e9a836a80d94d46fc10a70c86e1fbd5b1941')
+  'fe56eabebfbb120811483c84a9d88c29a34eea364f8b0f6f897933df0596f781672c51fe1e4e905f5c61ea9f170d66324ca7ffbe9a454bc8dbf796a67322a39d'
+  'e5fc53c3ca11f596951e7e6e6c14d570255630ea6eb88f177f2bebc79f2ac78f8a165d8cf80d2db4b24eb5998349e9a836a80d94d46fc10a70c86e1fbd5b1941')
 
 package() {
-	install -Dm755 updater "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/updater
-	install -Dm755 installer "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/installer
-	install -Dm755 garuda-nix-subsystem "$pkgdir"/usr/bin/garuda-nix-subsystem
+  install -Dm755 updater "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/updater
+  install -Dm755 installer "$pkgdir"/usr/lib/garuda/garuda-nix-subsystem/installer
+  install -Dm755 garuda-nix-subsystem "$pkgdir"/usr/bin/garuda-nix-subsystem
 }

@@ -1,13 +1,12 @@
 pkgbase = plymouth-theme-mokka
 	pkgdesc = Plymouth theme for Garuda Mokka
-	pkgver = r11.b061160
-	pkgrel = 1
+	pkgver = 1.0.0
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-mokka
 	install = plymouth-theme-mokka.install
 	arch = any
 	license = GPL
-	makedepends = git
-	source = git+https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-mokka.git
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/plymouth-theme-mokka/-/archive/e46024d1d8923a037e97373245007e864199716e/plymouth-theme-mokka-e46024d1d8923a037e97373245007e864199716e.tar.gz
 	sha256sums = SKIP
 
 pkgname = plymouth-theme-mokka

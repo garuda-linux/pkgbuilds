@@ -91,7 +91,7 @@ package() {
 
   local appdir="$pkgdir/usr/lib/$_pkgname"
 
-  install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" <<END
+  install -Dvm644 /dev/stdin "$appdir/browser/defaults/preferences/vendor.js" << END
 // Use LANG environment variable to choose locale
 pref("intl.locale.requested", "");
 
@@ -108,7 +108,7 @@ pref("extensions.autoDisableScopes", 11);
 pref("browser.gnome-search-provider.enabled", true);
 END
 
-  install -Dvm644 /dev/stdin "$appdir/distribution/distribution.ini" <<END
+  install -Dvm644 /dev/stdin "$appdir/distribution/distribution.ini" << END
 [Global]
 id=${pkgname}
 version=${pkgver}-${pkgrel}
@@ -131,7 +131,7 @@ END
   install -Dvm644 $_pkgname/assets/$_rdns.metainfo.xml -t "$pkgdir/usr/share/metainfo"
 
   # Install a wrapper to avoid confusion about binary path
-  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$_pkgname" <<END
+  install -Dvm755 /dev/stdin "$pkgdir/usr/bin/$_pkgname" << END
 #!/bin/sh
 exec /usr/lib/$_pkgname/$_pkgname "\$@"
 END
@@ -146,7 +146,7 @@ END
   fi
 
   # Register GNOME search provider
-  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini" <<END
+  install -Dvm644 /dev/stdin "$pkgdir/usr/share/gnome-shell/search-providers/$_pkgname.search-provider.ini" << END
 [Shell Search Provider]
 DesktopId=$_pkgname.desktop
 BusName=org.mozilla.${_pkgname//-/_}.SearchProvider

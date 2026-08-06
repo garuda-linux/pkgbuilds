@@ -1,7 +1,7 @@
 pkgbase = garuda-qtile-settings
 	pkgdesc = Garuda Linux Qtile settings
 	pkgver = 3.2.4
-	pkgrel = 1
+	pkgrel = 2
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-qtile-settings
 	install = garuda-qtile-settings.install
 	arch = any

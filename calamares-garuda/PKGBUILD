@@ -30,12 +30,12 @@ source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   # CachyOS keyboard patch
   https://github.com/CachyOS/cachyos-calamares/commit/5afd22bd00176b00ff6d4a4a08855f1cabf6c820.patch)
 sha256sums=('c06dd6c394438a3a49570297fb28ef3cc615eb0b2171e978deaeeeb7e86db90d'
-            'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
-            'e7946ac97d88138267e2d5d65178d53e7ae16617fba87005710060da905a8465'
-            '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
-            '6eee897e6f2c4a55daaaa02db1e939b4c48adb95405ffe9c113142fecc73c5b8'
-            '83634ef721534e3091f6cf89262e1e07861978fdd4dc28ab44df26d1f11aefa3'
-            '5eb259b63fc964910b7575464b4f5e8deaafb67d0501c2f93e47777edc0984a0')
+  'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
+  'e7946ac97d88138267e2d5d65178d53e7ae16617fba87005710060da905a8465'
+  '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
+  '6eee897e6f2c4a55daaaa02db1e939b4c48adb95405ffe9c113142fecc73c5b8'
+  '83634ef721534e3091f6cf89262e1e07861978fdd4dc28ab44df26d1f11aefa3'
+  '5eb259b63fc964910b7575464b4f5e8deaafb67d0501c2f93e47777edc0984a0')
 
 pkgver() {
   cd "$srcdir/calamares" || exit

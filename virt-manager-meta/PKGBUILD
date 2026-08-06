@@ -13,16 +13,16 @@ source=(firewall.conf)
 sha256sums=('82aa0099d874a5581dd6c05c268c6ab34dc64525cbf7df341a587099abde26a9')
 
 package() {
-	depends=("bridge-utils"
-		"dnsmasq"
-		"iptables-nft"
-		"edk2-ovmf"
-		"libvirt"
-		"netcat"
-		"qemu-desktop"
-		"radvd"
-		"virt-viewer"
-		"virt-manager")
-	install -d "$pkgdir/usr/lib/systemd/system/libvirt.service.d/"
-	install -Dm0644 firewall.conf "$pkgdir/usr/lib/systemd/system/libvirt.service.d/firewall.conf"
+  depends=("bridge-utils"
+    "dnsmasq"
+    "iptables-nft"
+    "edk2-ovmf"
+    "libvirt"
+    "netcat"
+    "qemu-desktop"
+    "radvd"
+    "virt-viewer"
+    "virt-manager")
+  install -d "$pkgdir/usr/lib/systemd/system/libvirt.service.d/"
+  install -Dm0644 firewall.conf "$pkgdir/usr/lib/systemd/system/libvirt.service.d/firewall.conf"
 }

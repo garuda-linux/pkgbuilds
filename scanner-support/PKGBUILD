@@ -9,9 +9,9 @@ url="https://wiki.archlinux.org/index.php/SANE"
 license=('GPL')
 pkgdesc="Meta-package for scanner support"
 depends=("colord-sane"
-	"ipp-usb"
-	"sane"
-	"sane-airscan")
+  "ipp-usb"
+  "sane"
+  "sane-airscan")
 optdepends=('simple-scan: GTK3 frontend for scanner'
-	'skanlite: Image scanning application for KDE')
+  'skanlite: Image scanning application for KDE')
 install="$pkgname".install

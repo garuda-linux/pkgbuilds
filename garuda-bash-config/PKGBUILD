@@ -15,8 +15,8 @@ depends=('bash'
 makedepends=('git')
 source=('bashrc' 'bashrc-setup.desktop' 'stub')
 sha256sums=('0523954b293c137e0d60c9b32afd7f4981167538ccf7c39dc0d6654d1f482179'
-            '8eed6302b7a8674b3a1784c599a7d7ae73e76ea8992ec324f62ec6b45f469cd5'
-            '5c69f8a2f7be29be7605716a2d9f1121120dae0c157feb0874042e4f1e55fc0e')
+  '8eed6302b7a8674b3a1784c599a7d7ae73e76ea8992ec324f62ec6b45f469cd5'
+  '5c69f8a2f7be29be7605716a2d9f1121120dae0c157feb0874042e4f1e55fc0e')
 
 package() {
   install -D -m644 stub "$pkgdir/etc/skel/.bashrc_garuda"

@@ -1,7 +1,7 @@
 pkgbase = libretro-meta
 	pkgdesc = Meta-package for all supported Libretro emulators
 	pkgver = 1
-	pkgrel = 11
+	pkgrel = 12
 	url = libretro.org
 	install = libretro.install
 	arch = any

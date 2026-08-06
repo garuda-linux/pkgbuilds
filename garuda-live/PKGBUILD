@@ -7,9 +7,9 @@ _repo=garuda-tools-livecd
 
 pkgbase=garuda-live
 pkgname=('garuda-live-base'
-	'garuda-live-systemd'
-	'garuda-live-skel'
-	'garuda-live-portable-efi')
+  'garuda-live-systemd'
+  'garuda-live-skel'
+  'garuda-live-portable-efi')
 pkgver=1.0.0
 pkgrel=1
 _commit='52c76218eecb2c767a238adc71fd21f96075d486'
@@ -21,43 +21,42 @@ license=('GPL')
 source=("https://gitlab.com/garuda-linux/tools/garuda-tools-livecd/-/archive/${_commit}/garuda-tools-livecd-${_commit}.tar.gz")
 sha256sums=('SKIP')
 
-
 build() {
-	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc
+  cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
+  make PREFIX=/usr SYSCONFDIR=/etc
 }
 
 package_garuda-live-base() {
-	pkgdesc='Garuda Linux live base scripts'
-	depends=('garuda-tools-base>=0.13')
-	conflicts=('garuda-livecd-base')
-	replaces=('garuda-livecd-base')
+  pkgdesc='Garuda Linux live base scripts'
+  depends=('garuda-tools-base>=0.13')
+  conflicts=('garuda-livecd-base')
+  replaces=('garuda-livecd-base')
 
-	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_base
+  cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
+  make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_base
 }
 
 package_garuda-live-systemd() {
-	pkgdesc='Garuda Linux live Systemd units'
-	depends=('systemd' 'garuda-live-base' 'reflector')
-	conflicts=('garuda-livecd-systemd')
-	# 	replaces=('garuda-livecd-systemd')
+  pkgdesc='Garuda Linux live Systemd units'
+  depends=('systemd' 'garuda-live-base' 'reflector')
+  conflicts=('garuda-livecd-systemd')
+  # 	replaces=('garuda-livecd-systemd')
 
-	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_sd
+  cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
+  make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_sd
 }
 
 package_garuda-live-skel() {
-	pkgdesc='Garuda Linux live session autostart items'
+  pkgdesc='Garuda Linux live session autostart items'
 
-	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_xdg
+  cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
+  make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_xdg
 }
 
 package_garuda-live-portable-efi() {
-	pkgdesc='Garuda Linux live session portable EFI settings'
-	depends=('grub')
+  pkgdesc='Garuda Linux live session portable EFI settings'
+  depends=('grub')
 
-	cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
-	make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_portable_efi
+  cd "${srcdir}"/${_repo}-$_commit || exit #-${pkgver}
+  make PREFIX=/usr SYSCONFDIR=/etc DESTDIR="${pkgdir}" install_portable_efi
 }

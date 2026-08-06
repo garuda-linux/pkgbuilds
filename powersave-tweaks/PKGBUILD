@@ -16,6 +16,6 @@ depends=('hdparm')
 conflicts=('performanace-tweaks')
 
 package() {
-	install -d "$pkgdir/usr/lib"
-	cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
+  install -d "$pkgdir/usr/lib"
+  cp -rf "$srcdir/$pkgname-$_commit/usr" "$pkgdir"
 }
