@@ -13,7 +13,7 @@ pkgbase = garuda-migrations
 	source = garuda-migrations.hook
 	source = garuda-migrations-post.hook
 	sha256sums = 8bec104ece75c97c8a8743bdd4c774f143c7ef2046e35e44779bba41f9864246
-	sha256sums = 2f08544c37047803713071d7c4c2d5faf1a58081a0aa3896a5c5871fdaab8f99
+	sha256sums = 1f35481b37a25d938a7a3f95d60a9d8acd5a49111465da0184e3a1f906ddcafb
 	sha256sums = 6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65
 	sha256sums = 2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832
 

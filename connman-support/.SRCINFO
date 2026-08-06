@@ -9,7 +9,6 @@ pkgbase = connman-support
 	depends = connman
 	depends = gpsd
 	depends = iwd
-	depends = mmsd
 	depends = mobile-broadband-provider-info
 	depends = neard
 	depends = ofono
