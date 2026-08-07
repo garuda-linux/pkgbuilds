@@ -4,9 +4,9 @@
 
 pkgname=garuda-i3-settings
 pkgdesc='Garuda Linux i3 settings'
-pkgver=1.2.15
+pkgver=1.2.16
 pkgrel=1
-_commit='4ce7085c93498768374c9ae72ce19c8640fa7dbd'
+_commit='03d5ed3cc6325951cc031dd50ff1fbc87641d5dd'
 arch=('any')
 depends=('garuda-common-settings')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
