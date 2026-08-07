@@ -1,29 +1,29 @@
 name="mokka"
 
 post_install() {
-	echo "Set plymouth theme $name"
-	if [ -f /etc/plymouth/plymouthd.conf ]; then
-		sed -i -e "s,.*Theme=.*,Theme=$name," /etc/plymouth/plymouthd.conf
-	fi
-	plymouth-set-default-theme -R $name
-	echo "Done"
+  if [ -f /etc/plymouth/plymouthd.conf ]; then
+    echo ":: Set plymouth theme $name"
+    plymouth-set-default-theme "$name"
+    dracut-rebuild
+    echo ":: Done setting plymouth theme"
+  fi
 }
 
 post_upgrade() {
-	if [ -f /etc/plymouth/plymouthd.conf ]; then
-		grep "Theme=$name" /etc/plymouth/plymouthd.conf && plymouth-set-default-theme -R "$name"
-	fi
+  if [ -f /etc/plymouth/plymouthd.conf ]; then
+    grep -q "Theme=$name" /etc/plymouth/plymouthd.conf && dracut-rebuild
+  fi
 }
 
 pre_remove() {
-	if [ -f /etc/plymouth/plymouthd.conf ]; then
-		grep "Theme=$name" /etc/plymouth/plymouthd.conf && cat <<_EOF
-  
+  if [ -f /etc/plymouth/plymouthd.conf ]; then
+    grep -q "Theme=$name" /etc/plymouth/plymouthd.conf && cat <<_EOF
+
 ==> WARNING: You have removed your current plymouth-theme.
 ==> Set a different theme with:
-==> sudo plymouth-set-default-theme -R <theme-name>
+==> sudo plymouth-set-default-theme <theme-name> && sudo dracut-rebuild
 ==> or remove Plymouth properly!
 
 _EOF
-fi
+  fi
 }
