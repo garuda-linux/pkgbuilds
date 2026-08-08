@@ -1,7 +1,7 @@
 pkgbase = garuda-fish-config
 	pkgdesc = Fish configuration of Garuda Linux
 	pkgver = 2.0.1
-	pkgrel = 2
+	pkgrel = 3
 	url = https://garudalinux.org
 	arch = any
 	license = MIT

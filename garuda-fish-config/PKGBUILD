@@ -3,7 +3,7 @@
 
 pkgname=garuda-fish-config
 pkgver=2.0.1
-pkgrel=2
+pkgrel=3
 pkgdesc="Fish configuration of Garuda Linux"
 arch=(any)
 url="https://garudalinux.org"
@@ -36,8 +36,4 @@ package() {
   install -Dm0644 garuda-update.fish "$pkgdir/usr/share/fish/vendor_conf.d/garuda-update.fish"
   install -Dm0644 done.fish "$pkgdir/usr/share/fish/vendor_conf.d/done.fish"
   install -Dm0644 garuda-fish-completions-update.service "$pkgdir/usr/lib/systemd/user/garuda-fish-completions-update.service"
-
-  # Workaround for mcfly complaining about missing history
-  mkdir -p "$pkgdir"/etc/skel/.local/share/fish
-  touch "$pkgdir"/etc/skel/.local/share/fish/fish_history
 }
