@@ -2,7 +2,7 @@
 
 pkgname=garuda-toolbox
 pkgver=6.1.0
-pkgrel=1
+pkgrel=2
 _commit='f1ae6e34e63a3147b581ec9754866dd7e5e1d42f'
 _electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
@@ -20,7 +20,8 @@ options=('!strip' '!emptydirs' '!debug')
 source=("https://gitlab.com/garuda-linux/applications/toolbox/-/archive/${_commit}/toolbox-${_commit}.tar.gz")
 sha256sums=('SKIP')
 # Replaces all of garuda-settings-manager
-replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani')
+replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani'
+  'garuda-boot-options' 'garuda-boot-repair' 'garuda-assistant' 'garuda-welcome' 'garuda-gamer')
 provides=('garuda-rani')
 
 prepare() {
