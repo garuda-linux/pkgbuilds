@@ -3,7 +3,7 @@
 _pkgname=firedragon
 __pkgname=$_pkgname
 _rdns=org.garudalinux.$__pkgname
-_pkgver=13.1.1
+_pkgver=13.1.2
 _branding=dr460nized
 _gentoo=firefox-153-patches-01.tar.xz
 _gentoo_exclude=(0015-bgo-940031-wasm-support.patch)
@@ -95,7 +95,7 @@ source=(
   https://dev.gentoo.org/~juippis/mozilla/patchsets/$_gentoo
   https://github.com/mozilla-firefox/firefox/commit/df4c67dc9015f789b258e112450397049ca4337d.patch
 )
-sha256sums=('180bc4c433ac508dd84342ca1862e7fc0007eea696b9370cfb225480ce8dbba3'
+sha256sums=('cbf9c5eba7f44fda72d7b3fb8ff8324b43f1bc5eb2b1aab632f79aa7e32f91c2'
             '9dc3e9423eea9b8bf16cd7cc2545a539717e9b32c1e4242a332988ff0add923e'
             '8b75279f790be3613234194fc683a7f0482a9aaa7f64328fee5526ea8ffb6342')
 
