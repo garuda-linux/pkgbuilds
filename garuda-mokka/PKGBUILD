@@ -3,9 +3,9 @@
 # shellcheck disable=SC2034,2154,2164
 
 pkgname=garuda-mokka
-pkgver=2.0.6
+pkgver=2.0.7
 pkgrel=1
-_commit='4a8ea2a332ccadcb3ac59b1fafaef70642ac3210'
+_commit='227de2336f99416c99bb7d421b5d22752694abb3'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/${pkgname}"
 license=('GPL')
