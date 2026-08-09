@@ -75,7 +75,9 @@ pkgbase = firedragon
 	options = !makeflags
 	source = firedragon-v13.1.1.source.tar.xz::https://gitlab.com/garuda-linux/firedragon/firedragon13/-/releases/v13.1.1/downloads/firedragon.source.tar.xz
 	source = https://dev.gentoo.org/~juippis/mozilla/patchsets/firefox-153-patches-01.tar.xz
+	source = https://github.com/mozilla-firefox/firefox/commit/df4c67dc9015f789b258e112450397049ca4337d.patch
 	sha256sums = 180bc4c433ac508dd84342ca1862e7fc0007eea696b9370cfb225480ce8dbba3
 	sha256sums = 9dc3e9423eea9b8bf16cd7cc2545a539717e9b32c1e4242a332988ff0add923e
+	sha256sums = 8b75279f790be3613234194fc683a7f0482a9aaa7f64328fee5526ea8ffb6342
 
 pkgname = firedragon
