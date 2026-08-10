@@ -4,7 +4,7 @@
 
 pkgname=garuda-hyprland-settings
 pkgver=0.5.114
-pkgrel=1
+pkgrel=2
 _commit='61c1318a4a4b8c907860c1c76f4a5ead3ccf11d1'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
@@ -28,6 +28,7 @@ package() {
     'sddm-theme-sweet-git'
     'waybar'
     'hyprland'
+    'hyprlang2lua'
     'kvantum-qt5'
     'kvantum'
     'ttf-fira-code'
