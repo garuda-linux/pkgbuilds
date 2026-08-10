@@ -235,6 +235,11 @@ apply_migrations() {
 	fi
 }
 
+# Check whether a Hyprland config is still in the legacy hyprlang format.
+hyprland_conf_is_old_format() {
+	grep -qE '^\s*(\$[A-Za-z_][A-Za-z0-9_]*\s*=|(exec-once|exec|monitor|bind|bindm|binds|windowrule|windowrulev2|source|env)\s*=|(general|decoration|animations|misc|input|gestures|cursor|group|dwindle|master|resize|debug|binds|borders)\s*\{)' "$1"
+}
+
 # $1 Previous version
 # $2 Current version
 apply_user_migrations() {
@@ -350,6 +355,16 @@ EOF
 	if [[ $(vercmp 3.7.2-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/fish/conf.d/done.fish" ] && [ -f "/usr/share/fish/vendor_conf.d/done.fish" ]; then
 		rm ".config/fish/conf.d/done.fish"
 		garudalib_add_update_notice "A user's ~/.config/fish/conf.d/done.fish file was removed because it is now located at /usr/share/fish/vendor_conf.d/done.fish." || true
+	fi
+
+	if [[ $(vercmp 4.1.0-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/hypr/hyprland.conf" ] && [ ! -e ".config/hypr/hyprland.lua" ] && pacman -Qq hyprlang2lua &>/dev/null && hyprland_conf_is_old_format ".config/hypr/hyprland.conf"; then
+		local backup_file=".config/hypr/hyprland.conf.garuda-backup"
+		cp ".config/hypr/hyprland.conf" "$backup_file" || true
+		if hyprlang2lua ".config/hypr/hyprland.conf" > ".config/hypr/hyprland.lua" 2>/dev/null; then
+			garudalib_add_update_notice "Your Hyprland configuration was automatically converted from the legacy hyprlang format to the new Lua format (Hyprland 0.55+). A backup of your previous configuration was saved as \"~/$backup_file\". The hyprlang2lua package is only needed for this conversion and can be uninstalled again with: 'sudo pacman -R hyprlang2lua'." || true
+		else
+			rm -f ".config/hypr/hyprland.lua"
+		fi
 	fi
 }
 

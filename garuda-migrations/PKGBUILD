@@ -2,7 +2,7 @@
 
 pkgname=garuda-migrations
 pkgdesc="Automatically applies system configuration changes"
-pkgver=4.0.2
+pkgver=4.1.0
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -11,10 +11,10 @@ source=(garuda-migrations-runner
   garuda-migrations-runner-post
   garuda-migrations.hook
   garuda-migrations-post.hook)
-sha256sums=('8bec104ece75c97c8a8743bdd4c774f143c7ef2046e35e44779bba41f9864246'
-  '1f35481b37a25d938a7a3f95d60a9d8acd5a49111465da0184e3a1f906ddcafb'
-  '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65'
-  '2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832')
+sha256sums=('5c2a920e20f64cd65e3dcca9666da3b44a975d75a1a89720e3c541ad9184c681'
+            '1f35481b37a25d938a7a3f95d60a9d8acd5a49111465da0184e3a1f906ddcafb'
+            '6eef7ff66e8decdc668e6e49aa9bc41523d4aa9a2f722bc654d03c5d7bd83f65'
+            '2b7fb6b0168f9de755e0dc7d5eec7fda7a7e6d374f5b00b67daf26aad7735832')
 
 package() {
   install -d "$pkgdir"/usr/share/garuda/migrations
