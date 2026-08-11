@@ -83,18 +83,15 @@ options=(!emptydirs
 install=$_pkgname.install
 noextract=($_gentoo)
 source=($_pkgname-v$_pkgver.source.tar.xz::$url/-/releases/v$_pkgver/downloads/$_pkgname.source.tar.xz
-        https://dev.gentoo.org/~juippis/mozilla/patchsets/$_gentoo
-        https://github.com/mozilla-firefox/firefox/commit/df4c67dc9015f789b258e112450397049ca4337d.patch)
+        https://dev.gentoo.org/~juippis/mozilla/patchsets/$_gentoo)
 sha256sums=('cbf9c5eba7f44fda72d7b3fb8ff8324b43f1bc5eb2b1aab632f79aa7e32f91c2'
-            '9dc3e9423eea9b8bf16cd7cc2545a539717e9b32c1e4242a332988ff0add923e'
-            '8b75279f790be3613234194fc683a7f0482a9aaa7f64328fee5526ea8ffb6342')
+            '9dc3e9423eea9b8bf16cd7cc2545a539717e9b32c1e4242a332988ff0add923e')
 
 prepare() {
   mkdir -p mozbuild
   cd $_pkgname-v$_pkgver
 
   tar -Oxf "$srcdir/$_gentoo" $(printf -- '--exclude=%s' "${_gentoo_exclude[@]}") | patch -Nsp1
-  patch -Nsp1 -i "$srcdir"/df4c67dc9015f789b258e112450397049ca4337d.patch
 
   echo ". \"\$topsrcdir/browser/$_pkgname/mozconfig/edition/$_pkgname-$_branding.mozconfig\"" > ../mozconfig
   export FIREDRAGON_EDITION=$_branding
