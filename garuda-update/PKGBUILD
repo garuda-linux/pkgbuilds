@@ -3,7 +3,7 @@
 
 pkgname=garuda-update
 pkgdesc="The Garuda Linux update command, in a separate package to allow separate updating"
-pkgver=5.7.2
+pkgver=5.7.3
 pkgrel=1
 arch=('any')
 license=('GPL')
@@ -22,7 +22,7 @@ sha512sums=('294a3a2a97928634540a35cfe294985ae27ad8a779faaee60410fca4d171ed6ddd0
             '62067eb31900bd38f2b0a1b079b6ad64f3f482ce8969101cedd0dd369c0de8da8f1b4952d91144852e92675091726d730903718f941da36667684513e8e2d495'
             'fd112c212c43d631740be11064e1fd4cc3023d0951e945445173def152e8930189575654ddac0eb34ffd6a2eb5670c47993aeda66ab8fa089583ec973026e7de'
             'c8bad2a99ba05e6536a29394afa37a834ffefb0f5818ae63ac05c72003997c3cb3126136727aa329939cfb60bb1db91c05322f747e646b2773cd9bce13108e8d'
-            '4c270a312acf69ed50aab384ae74e5b94c287ada17fdacdd3bd114230ed411aa16454dba32ccacedee14c5ab8f4bec3d0546b7cc808d9d7df4b3358464b59cbc')
+            '8db556b8803d4bcbc9f1a448835e3c7a6c936a7bfd8af8595b93828a2a918345e685d6fc926e569d5c0eff4f33f043c7686128f5ffd27f24958311199193bd61')
 install=garuda-update.install
 
 package() {
