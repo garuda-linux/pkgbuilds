@@ -71,7 +71,7 @@ Post_background() {
 }
 
 Snapshot() {
-	if [ -x "/usr/lib/garuda/is-snapshot-boot" ] && /usr/lib/garuda/is-snapshot-boot && [[ ! -v GARUDA_SNAPSHOT_PACMAN ]]; then
+	if [ -x "/usr/lib/garuda/is-snapshot-boot" ] && [[ ! -v GARUDA_SNAPSHOT_PACMAN ]] && /usr/lib/garuda/is-snapshot-boot; then
 		echo -e "\033[1;31mError: You are currently booted into a snapshot. Please restore the snapshot via btrfs-assistant or snapper-tools before performing pacman transactions.\n\033[1;34mNote: You can ignore this error by setting GARUDA_SNAPSHOT_PACMAN: sudo GARUDA_SNAPSHOT_PACMAN=1 pacman [...]\n\033[1;31mAny modifications made to this snapshot will be lost next reboot.\033[0m"
 		exit 1
 	fi

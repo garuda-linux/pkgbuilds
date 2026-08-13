@@ -2,7 +2,7 @@
 # shellcheck disable=SC2015
 set -e
 
-VERSION_FLAG=7
+VERSION_FLAG=8
 
 emergency_hotfix() {
 	local HOTFIX_VERSION_CHECK
