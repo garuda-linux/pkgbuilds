@@ -1,9 +1,9 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-wallpapers
-pkgver=1.0.0
+pkgver=1.1.1
 pkgrel=1
-_commit='63c2ebeb2d3daee8a4db87e4251209dd7ac0b707'
+_commit='a0f808475c4854c90d340b3959d7733b95bbfd20'
 pkgdesc="Garuda's default wallpaper collection"
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/artwork/$pkgname"
