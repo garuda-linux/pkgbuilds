@@ -2,46 +2,49 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=wine-meta
-pkgver=1
-pkgrel=9
+pkgver=2
+pkgrel=1
 arch=('any')
 url="https://wiki.archlinux.org/index.php/wine"
 license=('GPL')
 pkgdesc="Meta-package for WINE support"
-optdepends=('q4wine: A Qt5 GUI for WINE')
 
 package() {
   depends=(
-    wine icoextract
-    wine-gecko wine-mono
-    wine-installer
-    winetricks wineasio
-    giflib
-    libpng lib32-libpng
-    libldap lib32-libldap
-    gnutls lib32-gnutls
-    mpg123 lib32-mpg123
-    openal
-    v4l-utils
-    libpulse lib32-libpulse
-    alsa-plugins lib32-alsa-plugins
-    alsa-lib lib32-alsa-lib
+    alsa-lib
     alsa-oss
-    libjpeg-turbo lib32-libjpeg-turbo
-    libxcomposite lib32-libxcomposite
-    libxinerama lib32-libxinerama
-    ncurses lib32-ncurses
-    opencl-icd-loader lib32-opencl-icd-loader
-    libxslt lib32-libxslt
-    libva lib32-libva
-    gtk3 lib32-gtk3
+    alsa-plugins
+    fluidsynth
+    giflib
+    gnutls
     gst-plugins-base-libs
-    sdl2 lib32-sdl2
-    vkd3d lib32-vkd3d
-    vulkan-icd-loader lib32-vulkan-icd-loader
-    libgpg-error lib32-libgpg-error
-    sqlite lib32-sqlite
-    libgcrypt lib32-libgcrypt
-    fluidsynth lib32-fluidsynth
-    icoutils)
+    gtk3
+    icoextract
+    icoutils
+    libgcrypt
+    libgpg-error
+    libjpeg-turbo
+    libldap
+    libpng
+    libpulse
+    libva
+    libxcomposite
+    libxinerama
+    libxslt
+    mpg123
+    ncurses
+    openal
+    opencl-icd-loader
+    sdl2
+    sqlite
+    v4l-utils
+    vkd3d
+    vulkan-icd-loader
+    wine
+    wine-gecko
+    wine-installer
+    wine-mono
+    wineasio
+    winetricks
+  )
 }
