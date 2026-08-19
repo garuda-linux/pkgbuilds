@@ -2,7 +2,7 @@
 # Contributor: CachyOS maintainers
 
 pkgbase="linux-garuda"
-pkgver="7.1.8"
+pkgver="7.2.0"
 pkgrel=1
 _fullver="${pkgver}-${pkgrel}"
 pkgdesc='Linux EEVDF + LTO + AutoFDO + Propeller Cachy Sauce Kernel by CachyOS with other patches and improvements.'
