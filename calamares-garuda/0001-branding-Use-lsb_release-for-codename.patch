@@ -1,0 +1,67 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nico <nico@garudalinux.org>
+Date: Sat, 22 Aug 2026 00:00:00 +0200
+Subject: [PATCH] branding: Use lsb_release for codename
+
+Use the Codename field from lsb_release -a instead of
+/etc/os-release VERSION_CODENAME. On Garuda, lsb_release
+reports the release codename (e.g. Temeraire) while
+os-release may report a different value.
+---
+ src/libcalamaresui/Branding.cpp | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/src/libcalamaresui/Branding.cpp b/src/libcalamaresui/Branding.cpp
+index 1234567..abcdefg 100644
+--- a/src/libcalamaresui/Branding.cpp
++++ b/src/libcalamaresui/Branding.cpp
+@@ -26,6 +26,8 @@
+ #include <QIcon>
+ #include <QMetaEnum>
+ #include <QPixmap>
++#include <QProcess>
++#include <QRegularExpression>
+ #include <QVariantMap>
+ 
+ #include <functional>
+@@ -199,6 +201,29 @@
+  * documentation for details.
+  */
+ 
++/** @brief Read the Codename field from lsb_release -a
++ *
++ * Falls back to an empty string if lsb_release is not
++ * available or does not produce output.
++ */
++static QString
++lsbReleaseCodename()
++{
++    QProcess proc;
++    proc.start( QStringLiteral( "lsb_release" ), QStringList() << QStringLiteral( "-a" ) );
++    if ( proc.waitForFinished( 5000 ) )
++    {
++        const QString output = QString::fromLocal8Bit( proc.readAllStandardOutput() );
++        const QRegularExpression re( QStringLiteral( "^Codename:\\s+(.+)$" ), QRegularExpression::MultilineOption );
++        const QRegularExpressionMatch match = re.match( output );
++        if ( match.hasMatch() )
++        {
++            return match.captured( 1 ).trimmed();
++        }
++    }
++    return QString();
++}
++
+ Branding::Branding( const QString& brandingFilePath, QObject* parent, qreal devicePixelRatio )
+     : QObject( parent )
+     , m_descriptorPath( brandingFilePath )
+@@ -244,7 +269,7 @@
+                 { QStringLiteral( "VERSION" ), relInfo.version() },
+                 { QStringLiteral( "ID" ), relInfo.id() },
+                 { QStringLiteral( "ID_LIKE" ), relInfo.idLike().join( ' ' ) },
+-                { QStringLiteral( "VERSION_CODENAME" ), relInfo.versionCodename() },
++                { QStringLiteral( "VERSION_CODENAME" ), lsbReleaseCodename().isEmpty() ? relInfo.versionCodename() : lsbReleaseCodename() },
+                 { QStringLiteral( "VERSION_ID" ), relInfo.versionId() },
+                 { QStringLiteral( "PRETTY_NAME" ), relInfo.prettyName() },
+                 { QStringLiteral( "HOME_URL" ), relInfo.homeUrl() },
+-- 
+2.50.1

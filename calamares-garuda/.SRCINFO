@@ -34,6 +34,7 @@ pkgbase = calamares-garuda
 	replaces = calamares-dev
 	source = git+https://codeberg.org/Calamares/calamares.git#commit=841b478570c35261cd73e48c5aeb6acefd3db425
 	source = 0001-welcome-Add-efi-check.patch
+	source = 0001-branding-Use-lsb_release-for-codename.patch
 	source = garuda-specific-patches.patch
 	source = garuda-fswhitelist.patch
 	source = https://github.com/CachyOS/cachyos-calamares/commit/69ae039b037e466eb35dd20c674ff821f5bfa1be.patch
@@ -41,6 +42,7 @@ pkgbase = calamares-garuda
 	source = https://github.com/CachyOS/cachyos-calamares/commit/5afd22bd00176b00ff6d4a4a08855f1cabf6c820.patch
 	sha256sums = c06dd6c394438a3a49570297fb28ef3cc615eb0b2171e978deaeeeb7e86db90d
 	sha256sums = f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a
+	sha256sums = edce6a79ed131670d5be8d11e4ec8430f277cab872318eb3fda7d592990f25c4
 	sha256sums = a28aedc641fb27c8cfc0e24d8b1123baa4d97025d4f17add57e2f70e897447de
 	sha256sums = 5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32
 	sha256sums = 6eee897e6f2c4a55daaaa02db1e939b4c48adb95405ffe9c113142fecc73c5b8
