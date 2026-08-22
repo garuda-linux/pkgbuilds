@@ -91,7 +91,9 @@ prepare() {
   mkdir -p mozbuild
   cd $_pkgname-v$_pkgver
 
-  tar -Oxf "$srcdir/$_gentoo" $(printf -- '--exclude=%s' "${_gentoo_exclude[@]}") | patch -Nsp1
+  for patch in $(tar -tf "$srcdir/$_gentoo" --wildcards '*.patch' $(printf -- '--exclude=%s' "${_gentoo_exclude[@]}")); do
+    tar -Oxf "$srcdir/$_gentoo" "$patch" | patch -Nsp1
+  done
 
   echo ". \"\$topsrcdir/browser/$_pkgname/mozconfig/edition/$_pkgname-$_branding.mozconfig\"" > ../mozconfig
   export FIREDRAGON_EDITION=$_branding
