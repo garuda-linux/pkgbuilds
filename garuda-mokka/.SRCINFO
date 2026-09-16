@@ -1,6 +1,6 @@
 pkgbase = garuda-mokka
 	pkgdesc = Garuda Mokka desktop settings and presets
-	pkgver = 2.0.7
+	pkgver = 2.0.8
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka
 	install = garuda-mokka.install
@@ -15,7 +15,7 @@ pkgbase = garuda-mokka
 	conflicts = plasma5-themes-sweet-full-git
 	conflicts = plasma5-themes-sweet-kde-git
 	conflicts = kwin-effects-forceblur
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/227de2336f99416c99bb7d421b5d22752694abb3/garuda-mokka-227de2336f99416c99bb7d421b5d22752694abb3.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-mokka/-/archive/3d5a621dec0f21cbb4c78b23fb666abb5cd04e24/garuda-mokka-3d5a621dec0f21cbb4c78b23fb666abb5cd04e24.tar.gz
 	source = git+https://github.com/catppuccin/kde.git#commit=da69a64d239731fa344cc22ba14f3651dde540ac
 	source = git+https://github.com/catppuccin/micro.git#commit=015a2bb208f61a2d5a33121de2644bf4a059436b
 	source = git+https://github.com/catppuccin/conky.git#commit=eff06f767736fbf6d72641d5aef5ea1e507bb760
@@ -24,7 +24,7 @@ pkgbase = garuda-mokka
 	source = git+https://github.com/catppuccin/grub.git#commit=0a37ab19f654e77129b409fed371891c01ffd0b9
 	source = git+https://github.com/vinceliuice/Colloid-gtk-theme.git#commit=fd805dbeeacb12f7971b98408c415c3f472e5aef
 	source = install.sh
-	sha256sums = SKIP
+	sha256sums = 208433a3baaa7b93a2b9ee91d5a07652dd3c71c1a707b674caa98c5723cdbb41
 	sha256sums = 914beff2114add4050422c1f5fd8b6e520b70d17ce408cf7dd0846a8af363b05
 	sha256sums = 0fd3d84a7f6cb994eb025676f9204e1137a028d555031ceae0a02a0ba47bb7f7
 	sha256sums = 11810db2a7716bc1d9e93187ddd413e64a7155f5ef99c3b61b408e790e1adae3
