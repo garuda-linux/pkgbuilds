@@ -1,6 +1,6 @@
 pkgbase = garuda-dr460nized
 	pkgdesc = Dr460nized settings
-	pkgver = 5.0.3
+	pkgver = 5.0.4
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized
 	install = garuda-dr460nized.install
@@ -15,9 +15,9 @@ pkgbase = garuda-dr460nized
 	conflicts = plasma5-wallpapers-blurredwallpaper
 	conflicts = kwin-effects-forceblur
 	replaces = garuda-dr460nized-next
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/c69cc046d55db2ce7be37c2215187a41083ba884/garuda-dr460nized-c69cc046d55db2ce7be37c2215187a41083ba884.tar.gz
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-dr460nized/-/archive/03c6289f94d335655ece38eea410da4855fe6660/garuda-dr460nized-03c6289f94d335655ece38eea410da4855fe6660.tar.gz
 	source = dr460nized-patch.hook
-	sha256sums = SKIP
+	sha256sums = f142061b8138bc9ee07001c346b299b82e059cc7bc838701f28a7c2b15a3b0a2
 	sha256sums = 4121188ba1198f415f151a293a808c507c53128daa4165eb628e4b0e794a0c5f
 
 pkgname = garuda-dr460nized
@@ -28,7 +28,6 @@ pkgname = garuda-dr460nized
 	depends = garuda-wallpapers
 	depends = kvantum
 	depends = kvantum-qt5
-	depends = kwin-effects-better-blur-dx
 	depends = plasma-applet-window-buttons
 	depends = plasma-login-manager
 	depends = plasma-systemmonitor
