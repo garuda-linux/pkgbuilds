@@ -1,9 +1,9 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-toolbox
-pkgver=6.2.0
+pkgver=6.3.0
 pkgrel=1
-_commit='eec393edc0eb4dc73587935f58b6456068aef25c'
+_commit='746a4a653383e07531aaa9f58ad7b5cc487e21bc'
 _electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
@@ -18,7 +18,7 @@ optdepends=('paru: show pending AUR updates'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 options=('!strip' '!emptydirs' '!debug')
 source=("https://gitlab.com/garuda-linux/applications/toolbox/-/archive/${_commit}/toolbox-${_commit}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('4bd6a0301eded7e3b2afe3cb4bb494e15fed3da88f155a0cecff813ac5ff1967')
 # Replaces all of garuda-settings-manager
 replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani'
   'garuda-boot-options' 'garuda-boot-repair' 'garuda-assistant' 'garuda-welcome' 'garuda-gamer')
