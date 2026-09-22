@@ -1,6 +1,6 @@
 pkgbase = garuda-nix-subsystem
 	pkgdesc = Creates and manages the Garuda Nix Subsystem
-	pkgver = 0.2.1
+	pkgver = 1.0.0
 	pkgrel = 1
 	arch = any
 	license = GPL
@@ -10,8 +10,8 @@ pkgbase = garuda-nix-subsystem
 	source = garuda-nix-subsystem
 	source = updater
 	source = installer
-	sha512sums = 69f9d1cb2abf9d64a37c942cfd00c881bdd3c9f3ec63430ea8cf2376ba42dbda4f33c4df3dd10ee39cc4c53109f9009efc642388551825e40440e6e9d2d934b1
-	sha512sums = fe56eabebfbb120811483c84a9d88c29a34eea364f8b0f6f897933df0596f781672c51fe1e4e905f5c61ea9f170d66324ca7ffbe9a454bc8dbf796a67322a39d
-	sha512sums = e5fc53c3ca11f596951e7e6e6c14d570255630ea6eb88f177f2bebc79f2ac78f8a165d8cf80d2db4b24eb5998349e9a836a80d94d46fc10a70c86e1fbd5b1941
+	sha512sums = 06eafbccfec6e4d6b4d452b44e208f2e952456b29684d0e155e7dccae16882390f3d5f8f758ce473136eb9d269726a767417ca5cc3affa250bbc42f2ae6e4764
+	sha512sums = db9a51c6f1da8928ad57a22f6b6f3c65dc22b906850a1b6f2dd536192194384f8c578c394e090dae1ee148e53c11259233119163d4921e23a4fb9f109d64235a
+	sha512sums = 974ba72afc93e6d4c4bd623af5644dba33d7309aa97a3106e54db90d606f7db14001ef2c65c73fc26c6db48f371b93b3b1449d6e5f873e52ad0ab79cdb0d2ae4
 
 pkgname = garuda-nix-subsystem

@@ -10,7 +10,7 @@ fi
 # Switch case $1
 case $1 in
     "install")
-        exec /usr/lib/garuda/garuda-nix-subsystem/installer
+        exec /usr/lib/garuda/garuda-nix-subsystem/installer "${@:2}"
         ;;
     "" | "update")
         exec /usr/lib/garuda/garuda-nix-subsystem/updater
