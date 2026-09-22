@@ -1,0 +1,82 @@
+#!/bin/bash
+set -e
+
+if [[ $EUID -ne 0 ]]; then
+  echo -e "\033[1;31mError: Uninstaller must run as root. Use garuda-nix-subsystem uninstall. ❌\033[0m"
+  exit 1
+fi
+
+YES=false
+DRY=false
+for arg in "$@"; do
+  case "$arg" in
+    --yes|-y) YES=true ;;
+    --dry-run|-n) DRY=true ;;
+    *) echo "Unknown option: $arg (use --dry-run/-n or --yes/-y)" >&2; exit 1 ;;
+  esac
+done
+
+BTRFS_UUID="$(findmnt -n -o UUID /)"
+MNT_DIR="$(mktemp -d)"
+mount "UUID=$BTRFS_UUID" "$MNT_DIR"
+trap 'umount "$MNT_DIR" 2>/dev/null || true; rmdir "$MNT_DIR" 2>/dev/null || true' EXIT
+
+HAS_SUBSYSTEM=false
+[ -d "$MNT_DIR/@nix-subsystem" ] && HAS_SUBSYSTEM=true
+HAS_NIX=false
+[ -d "$MNT_DIR/@nix" ] && HAS_NIX=true
+
+if ! $HAS_SUBSYSTEM && ! $HAS_NIX; then
+  echo "Garuda Nix Subsystem is not installed. Nothing to do."
+  exit 0
+fi
+
+echo "This will delete:"
+if $HAS_SUBSYSTEM; then echo "  - subvolume @nix-subsystem"; fi
+if $HAS_NIX; then echo "  - subvolume @nix"; fi
+
+if $DRY; then
+  echo "Dry run - nothing was changed."
+  exit 0
+fi
+
+if ! $YES; then
+  read -rp "Continue? [y/N] " answer
+  if [[ "$answer" != "y" && "$answer" != "Y" ]]; then
+    echo "Aborted."
+    exit 1
+  fi
+fi
+
+echo -e "\n\033[1;33m-->\033[1;34m Uninstalling Lix (native uninstaller)\033[0m"
+if [ -x /nix/nix-installer ]; then
+  /nix/nix-installer uninstall --no-confirm || true
+else
+  curl -sSf -L https://install.lix.systems/lix | sh -s -- uninstall --no-confirm || true
+fi
+
+echo -e "\033[1;33m-->\033[1;34m Unmounting subsystem subvolumes\033[0m"
+while IFS= read -r mnt; do
+  umount "$mnt" 2>/dev/null || true
+done < <(awk '$3 == "btrfs" && match($4, /subvol=@nix(-subsystem)?([,)]|$)/) {print $2}' /proc/mounts)
+
+if $HAS_SUBSYSTEM; then
+  echo -e "\033[1;33m-->\033[1;34m Deleting @nix-subsystem subvolume\033[0m"
+  btrfs subvolume delete "$MNT_DIR/@nix-subsystem"
+fi
+if $HAS_NIX; then
+  echo -e "\033[1;33m-->\033[1;34m Deleting @nix subvolume\033[0m"
+  umount /nix 2>/dev/null || true
+  btrfs subvolume delete "$MNT_DIR/@nix"
+  rm -rf /nix 2>/dev/null || true
+fi
+
+echo -e "\033[1;33m-->\033[1;34m Removing /nix from /etc/fstab\033[0m"
+cp -a /etc/fstab /etc/fstab.gns-bak
+sed -i '/[[:space:]]\/nix[[:space:]].*subvol=@nix\([,[:space:]]\)/d' /etc/fstab
+
+echo -e "\033[1;33m-->\033[1;34m Removing Garuda Nix Subsystem grub entry\033[0m"
+rm -f /etc/grub.d/25-garudanix
+
+echo -e "\n\033[1;32mGaruda Nix Subsystem uninstalled. 🍵\033[0m"
+echo "If your host bootloader picked up the subsystem (os-prober), re-run grub-mkconfig."

@@ -15,6 +15,9 @@ case $1 in
     "" | "update")
         exec /usr/lib/garuda/garuda-nix-subsystem/updater
         ;;
+    "uninstall")
+        exec /usr/lib/garuda/garuda-nix-subsystem/uninstaller "${@:2}"
+        ;;
     *)
         echo "Unknown command: $1"
         exit 1

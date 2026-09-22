@@ -26,12 +26,17 @@ rmdir "$MNT_DIR"
 
 echo -e "\033[1;33m-->\033[1;34m Mounting nix subvolume\033[0m"
 mkdir -p /nix
-echo "UUID=$BTRFS_UUID /nix btrfs subvol=@nix,nodatacow,x-initrd.mount 0 0" >> /etc/fstab
-mount -a
+if ! grep -q "[[:space:]]/nix[[:space:]].*subvol=@nix" /etc/fstab 2>/dev/null; then
+  echo "UUID=$BTRFS_UUID /nix btrfs subvol=@nix,nodatacow,x-initrd.mount 0 0" >> /etc/fstab
+  systemctl daemon-reload 2>/dev/null || true
+fi
+if ! mountpoint -q /nix 2>/dev/null; then
+  mount /nix || mount -a
+fi
 
 if [ ! -e "/nix/var/nix/profiles/default" ]; then
   echo -e "\n\033[1;33m-->\033[1;34m Installing Nix 🍵\033[0m\n"
-  sh <(curl -L https://nixos.org/nix/install) < /dev/null --daemon
+  curl -sSf -L https://install.lix.systems/lix | sh -s -- install --no-confirm
 
   echo -e "\n\033[1;33m-->\033[1;34m Configuring Nix\033[0m"
   cat >> /etc/nix/nix.conf << EOF
