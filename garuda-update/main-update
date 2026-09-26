@@ -149,7 +149,7 @@ fi
 
 # Parse CLI options
 PARAMETERS=("$@")
-PARSED_OPTIONS=$(getopt --options="ah" --longoptions="help,aur,skip-mirrorlist,no-space-check,noconfirm" --name "$0" -- "${PARAMETERS[@]}")
+PARSED_OPTIONS=$(getopt --options="ahU" --longoptions="help,aur,skip-mirrorlist,no-space-check,noconfirm,upgrade" --name "$0" -- "${PARAMETERS[@]}")
 # shellcheck disable=SC2181
 if [[ $? -ne 0 ]]; then
   echo -e "\033[1;31m\nFailed to parse CLI options\n\033[0m"
@@ -175,6 +175,10 @@ while true; do
     ;;
   --noconfirm)
     PACMAN_NOCONFIRM=1
+    shift
+    ;;
+  -U | --upgrade)
+    UPGRADE=1
     shift
     ;;
   --)
@@ -213,11 +217,31 @@ self_update "${PARAMETERS[@]}"
 # Run pre-update routines and hotfixes
 /usr/lib/garuda/garuda-update/update-helper-scripts pre-update-routines || { if [ "$?" -eq 2 ]; then self_update "${PARAMETERS[@]}"; fi; }
 
-pacman_args=("-Su")
-if [ "$DATABASE_UPDATED" == false ]; then pacman_args+=("-y"); elif [ "$DATABASE_UPDATED" == "force" ]; then pacman_args+=("-yy"); fi
-while IFS= read -r line; do
-  pacman_args+=("$line")
-done < <(/usr/lib/garuda/garuda-update/update-helper-scripts package-replaces)
+pacman_args=()
+IS_UPGRADE=false
+if [[ -v UPGRADE ]]; then
+  IS_UPGRADE=true
+elif [[ -v PACMAN_EXTRA_OPTS ]]; then
+  for _arg in "${PACMAN_EXTRA_OPTS[@]}"; do
+    if [[ "$_arg" == "-U" || "$_arg" == "--upgrade" ]]; then IS_UPGRADE=true; break; fi
+  done
+fi
+
+if [[ "$IS_UPGRADE" == "true" ]]; then
+  _has_op=false
+  if [[ -v PACMAN_EXTRA_OPTS ]]; then
+    for _arg in "${PACMAN_EXTRA_OPTS[@]}"; do
+      if [[ "$_arg" == "-U" || "$_arg" == "--upgrade" ]]; then _has_op=true; break; fi
+    done
+  fi
+  if [[ "$_has_op" == "false" ]]; then pacman_args+=("-U"); fi
+else
+  pacman_args=("-Su")
+  if [ "$DATABASE_UPDATED" == false ]; then pacman_args+=("-y"); elif [ "$DATABASE_UPDATED" == "force" ]; then pacman_args+=("-yy"); fi
+  while IFS= read -r line; do
+    pacman_args+=("$line")
+  done < <(/usr/lib/garuda/garuda-update/update-helper-scripts package-replaces)
+fi
 
 if [ -v PACMAN_EXTRA_OPTS ]; then
   pacman_args+=("${PACMAN_EXTRA_OPTS[@]}")

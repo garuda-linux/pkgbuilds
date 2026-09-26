@@ -41,6 +41,7 @@ array set auto_replace_conflicts {
     lib32-opencl-nvidia lib32-opencl-nvidia-580xx
     nvidia-dkms nvidia-580xx-dkms
     kwin-effects-forceblur {garuda-dr460nized garuda-mokka}
+    lib32-fluidsynth wine-meta
 }
 
 if { $::conflictsfile_set } {
@@ -123,6 +124,8 @@ set timeout -1
 
 expect {
     "Starting full system upgrade..." { }
+    "loading packages..." { }
+    "resolving dependencies..." { }
     eof doExit
 }
 

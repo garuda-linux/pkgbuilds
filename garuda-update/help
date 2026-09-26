@@ -8,6 +8,7 @@ Usage:
 	–skip-mirrorlist -> Don't update the mirrorlist before applying the system update (SKIP_MIRRORLIST=1)
 	–aur/-a -> Update AUR packages via paru/yay after system update (UPDATE_AUR=1)
 	–noconfirm -> Emulate a custom (safer) version of --noconfirm for pacman (PACMAN_NOCONFIRM=1)
+	-U/--upgrade -> Install local packages via pacman -U instead of a full system update, e.g. garuda-update -U foo.pkg.tar.zst
 
 	[extra pacman parameters] Add extra pacman parameters, everything after the two dashes (PACMAN_EXTRA_OPTS="…")
 
