@@ -1,6 +1,6 @@
 pkgbase = garuda-common-settings
 	pkgdesc = Garuda Linux common settings
-	pkgver = 2.13.0
+	pkgver = 2.14.0
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings
 	install = garuda-common-settings.install
@@ -18,8 +18,8 @@ pkgbase = garuda-common-settings
 	backup = etc/sudoers.d/editor
 	backup = etc/sudoers.d/insults
 	backup = etc/sudoers.d/pwfeedback
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/b66bfdc4c53a23c50d5356e04e9021ad9886f9e6/garuda-common-settings-b66bfdc4c53a23c50d5356e04e9021ad9886f9e6.tar.gz
-	sha256sums = SKIP
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/a1fe3b8426bfec6ae6aa1ba524bc657b3a0a2a17/garuda-common-settings-a1fe3b8426bfec6ae6aa1ba524bc657b3a0a2a17.tar.gz
+	sha256sums = 9102ad1e705bd794b4c85ad9c09ea02c640723de0c7f910672ff3684aa82fcc0
 
 pkgname = garuda-common-settings
 	depends = btrfsmaintenance
