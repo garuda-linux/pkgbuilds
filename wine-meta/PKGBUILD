@@ -3,13 +3,20 @@
 
 pkgname=wine-meta
 pkgver=2
-pkgrel=2
+pkgrel=3
 arch=('any')
 url="https://wiki.archlinux.org/index.php/wine"
 license=('GPL')
 pkgdesc="Meta-package for WINE support"
 
 package() {
+  conflicts=(
+    # https://forum.garudalinux.org/t/error-on-today-update/48812
+    # Specifically add this package only so auto-pacman can resolve
+    # the conflict with lib32-fluidsynth during update. The rest 
+    # of the remaining lib32 packages should be removed as orphans.
+    lib32-fluidsynth
+  )
   depends=(
     alsa-lib
     alsa-oss
