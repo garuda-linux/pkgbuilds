@@ -106,6 +106,8 @@ function __garuda_fastfetch
     if status --is-interactive && type -q fastfetch
       if test -f /usr/share/fastfetch/presets/mokka.jsonc
         fastfetch --config mokka.jsonc
+      else if test -f /usr/share/fastfetch/presets/dr460nized.jsonc
+        fastfetch --config dr460nized.jsonc
       else
         fastfetch --config neofetch.jsonc
       end
