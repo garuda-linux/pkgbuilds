@@ -10,4 +10,4 @@ step() {
 }
 
 step "Launching updater 🍵"
-GNS_FROM_HOST=true /nix/var/nix/profiles/default/bin/nix develop --refresh --accept-flake-config gitlab:garuda-linux/garuda-nix-subsystem/stable#gns-update -c "gns-update"
+GNS_FROM_HOST=true /nix/var/nix/profiles/default/bin/nix develop --refresh --accept-flake-config "git+https://gitlab.com/garuda-linux/garuda-nix-subsystem.git?ref=stable#gns-update" -c "gns-update"
