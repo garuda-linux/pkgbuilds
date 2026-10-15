@@ -42,6 +42,8 @@ array set auto_replace_conflicts {
     nvidia-dkms nvidia-580xx-dkms
     kwin-effects-forceblur {garuda-dr460nized garuda-mokka}
     lib32-fluidsynth wine-meta
+    lib32-audit wine-meta
+    lib32-libcap wine-meta
 }
 
 if { $::conflictsfile_set } {
