@@ -6,7 +6,7 @@ _rdns=org.garudalinux.$__pkgname
 _pkgver=13.9.0
 _branding=catppuccin
 _gentoo=firefox-158-patches-01.tar.xz
-_gentoo_exclude=(0015-bgo-940031-wasm-support-firefox-155.patch)
+_gentoo_exclude=(0014-bgo-940031-wasm-support-firefox-155.patch)
 
 pkgname=$__pkgname
 pkgver=${_pkgver//-/_}
