@@ -2,7 +2,7 @@
 
 pkgname=plasma-applet-window-buttons
 pkgver=0.14.0
-pkgrel=4
+pkgrel=5
 _commit=9b1112474dca0390408ccd0a0bbda5fa18161633
 pkgdesc='Plasma applet in order to show window buttons in your panels'
 arch=(x86_64)
