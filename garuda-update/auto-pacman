@@ -44,6 +44,11 @@ array set auto_replace_conflicts {
     lib32-fluidsynth wine-meta
     lib32-audit wine-meta
     lib32-libcap wine-meta
+    lib32-pam wine-meta
+    lib32-gstreamer wine-meta
+    lib32-gst-plugins-base-libs wine-meta
+    lib32-gst-plugins-base wine-meta
+    lib32-gst-plugins-good wine-meta
 }
 
 if { $::conflictsfile_set } {

@@ -1,6 +1,6 @@
 pkgbase = garuda-update
 	pkgdesc = The Garuda Linux update command, in a separate package to allow separate updating
-	pkgver = 5.8.1
+	pkgver = 5.8.2
 	pkgrel = 1
 	install = garuda-update.install
 	arch = any
@@ -18,7 +18,7 @@ pkgbase = garuda-update
 	source = logrotate
 	source = main-update
 	source = update-helper-scripts
-	sha512sums = 94c608241b283a1aa984b72863b048a79f2e26a36394322cf9139c863902bda8fcf4d6516bc4cde440ac79e34b56bcad91dcc1b03533c17e82716294a840f390
+	sha512sums = 4f58eda1fede2acedc1fe1a4a8d672a526ac1dba269fb45e85432de7025c7bba269b404b622ac271143281bf244515123a228af2d91350fd6aada62c9efea19b
 	sha512sums = ae8a65873260bbbf94e6aac4eb679e85765227149c0603fc68aa44e6cffd2cf8c9d2f8b1c6c2cd9be5783d4eaf0b666347c51a368d4c1894d1838dcebe73e55a
 	sha512sums = 616ee6f0d4d8e2e9cef717883e034ccecc64715851556fa20b66d8d41475e18d24eb238a0435869587b0208907066d38e8556c1af1cc024474f7d1798e18f682
 	sha512sums = ba3f22f436ac062feb53915ff51ffaa3020110f7ba2570c06737c71150a3f2a0a963c92fce825c84b03693cfccd859ac6435013da244876b545580a050c75f01
