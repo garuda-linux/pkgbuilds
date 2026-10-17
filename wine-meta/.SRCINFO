@@ -1,7 +1,7 @@
 pkgbase = wine-meta
 	pkgdesc = Meta-package for WINE support
 	pkgver = 2
-	pkgrel = 4
+	pkgrel = 5
 	url = https://wiki.archlinux.org/index.php/wine
 	arch = any
 	license = GPL
@@ -45,3 +45,8 @@ pkgname = wine-meta
 	conflicts = lib32-fluidsynth
 	conflicts = lib32-audit
 	conflicts = lib32-libcap
+	conflicts = lib32-pam
+	conflicts = lib32-gstreamer
+	conflicts = lib32-gst-plugins-base-libs
+	conflicts = lib32-gst-plugins-base
+	conflicts = lib32-gst-plugins-good

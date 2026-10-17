@@ -3,7 +3,7 @@
 
 pkgname=wine-meta
 pkgver=2
-pkgrel=4
+pkgrel=5
 arch=('any')
 url="https://wiki.archlinux.org/index.php/wine"
 license=('GPL')
@@ -19,6 +19,11 @@ package() {
     # The same goes for these (https://forum.garudalinux.org/t/49193)
     lib32-audit
     lib32-libcap
+    lib32-pam
+    lib32-gstreamer
+    lib32-gst-plugins-base-libs
+    lib32-gst-plugins-base
+    lib32-gst-plugins-good
   )
   depends=(
     alsa-lib
