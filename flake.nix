@@ -103,6 +103,8 @@
         in
         {
           default = pkgs.mkShell {
+            name = "chaotic-devshell";
+
             packages =
               with pkgs;
               [
