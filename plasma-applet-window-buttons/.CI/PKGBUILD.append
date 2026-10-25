@@ -1,0 +1,3 @@
+_commit=9b1112474dca0390408ccd0a0bbda5fa18161633
+source=("git+https://github.com/optionmishra/applet-window-buttons6.git#commit=$_commit")
+sha256sums=('27c67af84367c78da8e31b83e6690c24b2d85238be7390c02aab7394c0c162a1')
