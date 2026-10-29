@@ -121,8 +121,9 @@ prepare() {
   corepack enable --install-directory "$srcdir"/.bin
 
   pushd browser/$_pkgname > /dev/null
-  corepack pnpm install --frozen-lockfile
-  corepack pnpm all:build
+  corepack install
+  pnpm install --frozen-lockfile
+  pnpm all:build
   popd > /dev/null
 
   cat >> ../mozconfig <<END
