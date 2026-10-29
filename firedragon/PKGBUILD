@@ -48,6 +48,7 @@ depends=(alsa-lib
          ttf-font)
 makedepends=(cbindgen
              clang
+             corepack
              diffutils
              imake
              jack
@@ -57,7 +58,6 @@ makedepends=(cbindgen
              nasm
              nodejs
              onnxruntime
-             pnpm
              python
              rust
              unzip
@@ -113,8 +113,13 @@ prepare() {
     export FIREDRAGON_TARGET=linux-arm64
   fi
 
-  pnpm -C browser/$_pkgname install --frozen-lockfile
-  pnpm -C browser/$_pkgname all:build
+  export COREPACK_HOME="$srcdir"/.corepack
+  export PNPM_HOME="$srcdir"/.pnpm
+
+  pushd browser/$_pkgname > /dev/null
+  corepack pnpm install --frozen-lockfile
+  corepack pnpm all:build
+  popd > /dev/null
 
   cat >> ../mozconfig <<END
 ac_add_options --enable-linker=lld
