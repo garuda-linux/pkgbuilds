@@ -3,7 +3,7 @@ set -e
 
 # Elevate once and stop asking for the password constantly
 if [[ $EUID -ne 0 ]]; then
-    exec sudo /usr/bin/garuda-nix-subsystem "$@"
+    exec sudo --preserve-env=GARUDA_UPDATE_REPO,GARUDA_UPDATE_REF,GARUDA_UPDATE_NO_NIX /usr/bin/garuda-nix-subsystem "$@"
     exit 1
 fi
 
@@ -13,7 +13,7 @@ case $1 in
         exec /usr/lib/garuda/garuda-nix-subsystem/installer "${@:2}"
         ;;
     "" | "update")
-        exec /usr/lib/garuda/garuda-nix-subsystem/updater
+        exec /usr/lib/garuda/garuda-nix-subsystem/updater "${@:2}"
         ;;
     "uninstall")
         exec /usr/lib/garuda/garuda-nix-subsystem/uninstaller "${@:2}"
