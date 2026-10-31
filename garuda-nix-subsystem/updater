@@ -9,5 +9,37 @@ step() {
   fi
 }
 
+REPO="${GARUDA_UPDATE_REPO:-https://gitlab.com/garuda-linux/garuda-nix.git}"
+REF="${GARUDA_UPDATE_REF:-stable}"
+NIX_FLAGS=(--extra-experimental-features "nix-command flakes" --accept-flake-config)
+
+export GNS_FROM_HOST=true
+export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+
 step "Launching updater 🍵"
-GNS_FROM_HOST=true /nix/var/nix/profiles/default/bin/nix develop --refresh --accept-flake-config "git+https://gitlab.com/garuda-linux/garuda-nix-subsystem.git?ref=stable#gns-update" -c "gns-update"
+if [ "${GARUDA_UPDATE_NO_NIX:-}" != "1" ] &&
+  runner="$(nix build "${NIX_FLAGS[@]}" --refresh --no-link --print-out-paths "git+$REPO?ref=$REF#garuda-update-runner")"; then
+  exec "$runner/bin/garuda-update-runner" "$@"
+fi
+
+# Same runner without fetching it through Nix, for the case that Nix can not fetch it
+step "Nix could not fetch the updater, trying git instead"
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+
+if ! git clone --quiet --depth 1 --branch "$REF" "$REPO" "$tmp/garuda-nix"; then
+  echo -e "\033[1;31mError: Unable to fetch the updater from $REPO ($REF). The system was not updated. ❌\033[0m" >&2
+  exit 1
+fi
+
+runner="$tmp/garuda-nix/packages/garuda-update/runner.py"
+
+# The fixes edit Nix files with tree-sitter-nix.
+# shellcheck disable=SC2016
+python_env='(builtins.getFlake "nixpkgs").legacyPackages.${builtins.currentSystem}.python3.withPackages (ps: [ ps.tree-sitter ps.tree-sitter-grammars.tree-sitter-nix ])'
+if nix shell "${NIX_FLAGS[@]}" --impure --expr "$python_env" -c python3 -c "import tree_sitter_nix" 2>/dev/null; then
+  nix shell "${NIX_FLAGS[@]}" --impure --expr "$python_env" -c python3 "$runner" "$@"
+else
+  step "tree-sitter-nix is not available, the fixes are skipped"
+  python3 "$runner" "$@"
+fi
