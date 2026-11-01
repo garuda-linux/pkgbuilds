@@ -1,9 +1,9 @@
 # Maintainer: TNE <tne@garudalinux.org>
 
 pkgname=garuda-system-maintenance
-pkgver="3.1.0"
-_commit='0bb1ee7ba071b446bae95cfcb256df96a434e5ae'
-pkgrel=4
+pkgver=3.1.1
+_commit='3f33d080618c33541f7c12f04c9d146e77ebca0c'
+pkgrel=1
 pkgdesc="Automated Garuda system maintenance tool"
 arch=('x86_64')
 url="https://gitlab.com/garuda-linux/applications/$pkgname"
@@ -11,7 +11,7 @@ license=('GPL')
 depends=('qt6-base' 'knotifications' 'kstatusnotifieritem' 'garuda-libs' 'snapper-tools')
 makedepends=('qt6-tools' 'cmake' 'git' 'polkit')
 source=("https://gitlab.com/garuda-linux/applications/garuda-system-maintenance/-/archive/${_commit}/garuda-system-maintenance-${_commit}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('1b16b534e705731d4e5e703518b1cd0618c36944da6cea834eefe33e19e573e4')
 
 build() {
   cmake -B build -S "$pkgname-$_commit" \
