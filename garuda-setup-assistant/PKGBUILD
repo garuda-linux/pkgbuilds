@@ -2,8 +2,8 @@
 # Maintainer: TNE <tne at garudalinux dot org>
 
 pkgname=garuda-setup-assistant
-pkgver="5.1.0"
-_commit='2266cddee9249f480052aab1371d927318dfee26'
+pkgver=5.1.1
+_commit='64256fe5ea9c5d50faee17003894ca2848d117ca'
 pkgrel=1
 pkgdesc="A setup utility for Garuda Linux which helps setting up & installing applications"
 arch=('any')
@@ -14,7 +14,7 @@ optdepends=('pamac')
 makedepends=('git' 'cmake' 'qt6-tools')
 groups=('garuda')
 source=("https://gitlab.com/garuda-linux/applications/garuda-setup-assistant/-/archive/${_commit}/garuda-setup-assistant-${_commit}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('daff34950efc0c1f0391a483f1630fa34878c4ef87e30bbcf5cce5e798b9758c')
 
 build() {
   cmake -B build -S "$pkgname-$_commit" \
