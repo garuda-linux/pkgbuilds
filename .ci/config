@@ -2,6 +2,7 @@ BUILD_REPO=garuda
 CI_LIB_DB="https://builds.garudalinux.org/repos/garuda/x86_64/garuda.db https://builds.garudalinux.org/arch-mirror/core/os/x86_64/core.db https://builds.garudalinux.org/arch-mirror/extra/os/x86_64/extra.db https://builds.garudalinux.org/repos/chaotic-aur/x86_64/chaotic-aur.db"
 CI_HUMAN_REVIEW=false
 CI_MANAGE_AUR=true
+CI_NVCHECKER_REVIEW=false
 GIT_AUTHOR_EMAIL=ci@chaotic.cx
 GIT_AUTHOR_NAME="GitLab CI"
 REDIS_SSH_HOST=aerialis.garudalinux.org
