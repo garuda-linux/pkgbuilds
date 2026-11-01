@@ -147,6 +147,11 @@ if [ -f /etc/garuda/garuda-update/config ]; then
   source /etc/garuda/garuda-update/config
 fi
 
+# Older Toolbox versions and the old config template used NO_CHECK_SPACE. Keep that name working.
+if [[ -v NO_CHECK_SPACE ]] && [[ ! -v NO_SPACE_CHECK ]]; then
+  NO_SPACE_CHECK="$NO_CHECK_SPACE"
+fi
+
 # Parse CLI options
 PARAMETERS=("$@")
 PARSED_OPTIONS=$(getopt --options="ahU" --longoptions="help,aur,skip-mirrorlist,no-space-check,noconfirm,upgrade" --name "$0" -- "${PARAMETERS[@]}")
