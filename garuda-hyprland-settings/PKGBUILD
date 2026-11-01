@@ -3,15 +3,15 @@
 # Co-Maintainer: Ankur <forum dot garudalinux dot org slash u slash ankur slash summary>
 
 pkgname=garuda-hyprland-settings
-pkgver=0.5.115
+pkgver=0.5.116
 pkgrel=1
-_commit='2f452587a917a51fbebf4ce9f739a2fc6e6b636a'
+_commit='d65cb76ca1970b28959c6051e4c773a5f43e390d'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 makedepends=('coreutils')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/${_commit}/garuda-hyprland-settings-${_commit}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('26e6122ae92b02fe23696df53f5fc7477f75d96b5761aea42b41328aa2eccced')
 pkgdesc='Garuda Linux Hyprland settings'
 conflicts=(garuda-desktop-settings)
 provides=(garuda-desktop-settings)

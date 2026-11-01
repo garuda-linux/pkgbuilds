@@ -1,6 +1,6 @@
 pkgbase = garuda-hyprland-settings
 	pkgdesc = Garuda Linux Hyprland settings
-	pkgver = 0.5.115
+	pkgver = 0.5.116
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings
 	install = garuda-hyprland-settings.install
@@ -9,8 +9,8 @@ pkgbase = garuda-hyprland-settings
 	makedepends = coreutils
 	provides = garuda-desktop-settings
 	conflicts = garuda-desktop-settings
-	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/2f452587a917a51fbebf4ce9f739a2fc6e6b636a/garuda-hyprland-settings-2f452587a917a51fbebf4ce9f739a2fc6e6b636a.tar.gz
-	sha256sums = SKIP
+	source = https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-hyprland-settings/-/archive/d65cb76ca1970b28959c6051e4c773a5f43e390d/garuda-hyprland-settings-d65cb76ca1970b28959c6051e4c773a5f43e390d.tar.gz
+	sha256sums = 26e6122ae92b02fe23696df53f5fc7477f75d96b5761aea42b41328aa2eccced
 
 pkgname = garuda-hyprland-settings
 	depends = beautyline
