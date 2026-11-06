@@ -2,19 +2,23 @@
 
 pkgname=garuda-dracut-support
 pkgdesc="Dracut support for Garuda Linux"
-pkgver=1.6.0
-pkgrel=2
+pkgver=1.6.1
+pkgrel=1
 arch=('any')
 license=('GPL')
-source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda dracut-rebuild 90-dracut-install.hook grub.cfg grub-btrfs.cfg)
+source=(05-garuda.conf snapshot-overlay.sh module-setup.sh dracut-install-garuda dracut-remove-garuda dracut-rebuild 90-dracut-install.hook 60-dracut-remove.hook grub.cfg grub-btrfs.cfg garuda-dracut-support.install)
 sha256sums=('8b48b3aa1b7599fa5060b0b3c08896d6845da0e1ccd7bf1bfc9b1892c48bf7e2'
-  '017588cd975eff20ce60f9d2f498932cc60e7627aefdf9dc21470b2a95da6a32'
-  'cdf87309be00c23c2b74dd936be8861b7930edf51f5ea1d3f8f7b1d7dee37924'
-  'df88a0f0e876e8dc093d00bf41809c75f6af37d7819771232ec1fff752d1e90b'
-  '61afced29230d7169c27bb2802f20b22ae9b26eee7b9806adcc15046eeb31d44'
-  '169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f'
-  '97120ee23d901d39e62942094ebbca116429d6dad6d46fa47a8d74f6cacbab4b'
-  '869f28a1a2b715c10ff17dcc118fc83ff6e6dfe74b4ee0056444f6140579ffe5')
+            '017588cd975eff20ce60f9d2f498932cc60e7627aefdf9dc21470b2a95da6a32'
+            'cdf87309be00c23c2b74dd936be8861b7930edf51f5ea1d3f8f7b1d7dee37924'
+            'df88a0f0e876e8dc093d00bf41809c75f6af37d7819771232ec1fff752d1e90b'
+            '49f4a72ba740807a634ef45cb78c303b1ab1c23f82879a6f7de022b9571f4bd7'
+            '61afced29230d7169c27bb2802f20b22ae9b26eee7b9806adcc15046eeb31d44'
+            '169f26e3ca8c2af94d8ac0d79e1c6d043b70dcca69f0876c93472ff6035cc12f'
+            'ba8752c31ce8f01b8004ea78a0ef1e3177d5287092780cc2c1bbd8aaeaf1d052'
+            '97120ee23d901d39e62942094ebbca116429d6dad6d46fa47a8d74f6cacbab4b'
+            '869f28a1a2b715c10ff17dcc118fc83ff6e6dfe74b4ee0056444f6140579ffe5'
+            '1469e5c090fdbfa6823dd1182ba9334df9a0538afcb1bd1442d7549a97a4fea2')
+install=$pkgname.install
 
 package() {
   depends=('dracut>=108' 'zstd' 'diffutils')
@@ -35,6 +39,8 @@ package() {
   # Custom version of the dracut hooks from Arch Linux
   install -Dm644 90-dracut-install.hook "${pkgdir}/etc/pacman.d/hooks/90-dracut-install.hook"
   install -Dm755 dracut-install-garuda "${pkgdir}/usr/share/libalpm/scripts/dracut-install-garuda"
+  install -Dm644 60-dracut-remove.hook "${pkgdir}/etc/pacman.d/hooks/60-dracut-remove.hook"
+  install -Dm755 dracut-remove-garuda "${pkgdir}/usr/share/libalpm/scripts/dracut-remove-garuda"
 
   # Rebuild script
   install -Dm755 dracut-rebuild "${pkgdir}/usr/bin/dracut-rebuild"
