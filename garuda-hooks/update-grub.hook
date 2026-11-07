@@ -14,4 +14,4 @@ Target = grub
 Description = GRUB update after transactions...
 When = PostTransaction
 Depends = grub
-Exec = /bin/sh -c "/usr/bin/update-grub"
+Exec = /bin/sh -c "[ ! -f /boot/grub/grub.cfg ] || /usr/bin/update-grub"

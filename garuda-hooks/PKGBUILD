@@ -4,10 +4,12 @@
 pkgname=garuda-hooks
 pkgdesc="Additions and enhancements for Garuda Linux"
 pkgver=2.16.0
-pkgrel=1
+pkgrel=2
 arch=('any')
 license=('GPL')
-depends=('pacman' 'pacman-contrib' 'chaotic-mirrorlist' 'nss-mdns' 'kernel-modules-hook' 'grub' 'update-grub' 'awk' 'garuda-libs' 'gcc-libs')
+depends=('pacman' 'pacman-contrib' 'chaotic-mirrorlist' 'nss-mdns' 'kernel-modules-hook' 'awk' 'garuda-libs' 'gcc-libs')
+optdepends=('grub: GRUB update hooks'
+            'update-grub: regenerate grub.cfg after kernel and GRUB updates')
 makedepends=('cargo' 'git')
 conflicts=(check-broken-packages-pacman-hook-git)
 install=${pkgname}.install
@@ -32,7 +34,7 @@ sha256sums=('096f1e934c2e8786040f9f9b28af6a8363ab8eea616794b341db6c569e37f084'
             'd707d87bba72a0f5c722f8cd2b39b8bf1c7c36b9f19dd74fe89f808a99cf506b'
             '3ac110495379bb1cd1977a721277e8bf7eff8d9b1b86016dac55be9ed2b9cd41'
             '7afd242365880d29ea337a70d36860c757ea1913bf57ae24b0c6b32562cb714e'
-            '87bbb12ba5f9cbba13478c9d447a9bfbe7dd7ced24c26454b49522bd9c5e5444'
+            '67b117660806a532f86c0c8cb142b1451d7847c6c9baaec1357bfa73ae7b035d'
             '12a795a9dc8661289fb6893a6f3ce7fc9b4d9a42e57f5583753a8591deedbbd7'
             'a17c8b58f7f6923988782bd62bfb2d41e719828c981ea4944545301bb7581681'
             '88b11963b98e65bd6147687f45ee30b27380dc9d0b5aaaabd1d3965134d851e0'
