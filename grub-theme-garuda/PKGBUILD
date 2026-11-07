@@ -7,16 +7,16 @@
 
 pkgbase=grub-theme-garuda
 pkgname=('grub-theme-garuda-live-common' 'grub-theme-garuda-live' 'grub-theme-garuda')
-pkgver=1.0.0
-pkgrel=3
-_commit='3227828e441b2d4b30e553b0a939f5ed3acb8528'
+pkgver=1.0.1
+pkgrel=1
+_commit='e7b235acb00ad03cf662550357fbefe458cd00bf'
 pkgdesc='Garuda Linux GRUB theme'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/grub-theme-garuda"
 license=('GPL')
 
 source=("https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda/-/archive/${_commit}/grub-theme-garuda-${_commit}.tar.gz")
-sha256sums=('SKIP')
+sha256sums=('4b0edc90a1403b63dbdee31036b5a005fc8255bedf26cc26306b6038a741b8a4')
 
 package_grub-theme-garuda-live-common() {
   depends=('grub')

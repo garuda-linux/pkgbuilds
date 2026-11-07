@@ -1,12 +1,12 @@
 pkgbase = grub-theme-garuda
 	pkgdesc = Garuda Linux GRUB theme
-	pkgver = 1.0.0
-	pkgrel = 3
+	pkgver = 1.0.1
+	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/themes-and-settings/grub-theme-garuda
 	arch = any
 	license = GPL
-	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda/-/archive/3227828e441b2d4b30e553b0a939f5ed3acb8528/grub-theme-garuda-3227828e441b2d4b30e553b0a939f5ed3acb8528.tar.gz
-	sha256sums = SKIP
+	source = https://gitlab.com/garuda-linux/themes-and-settings/artwork/grub-theme-garuda/-/archive/e7b235acb00ad03cf662550357fbefe458cd00bf/grub-theme-garuda-e7b235acb00ad03cf662550357fbefe458cd00bf.tar.gz
+	sha256sums = 4b0edc90a1403b63dbdee31036b5a005fc8255bedf26cc26306b6038a741b8a4
 
 pkgname = grub-theme-garuda-live-common
 	depends = grub
