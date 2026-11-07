@@ -46,6 +46,9 @@ Post() {
 }
 
 Post_background() {
+	# Image builds have no log, mkosi runs pacman with --logfile=/dev/null
+	[[ -f /var/log/pacman.log ]] || return 0
+
 	# Did this transaction install or upgrade a package? Other actions are not considered partial upgrades.
 	if [[ ! -z $(tac /var/log/pacman.log | gawk '/\[ALPM\] transaction completed/ {
   begin = 1
