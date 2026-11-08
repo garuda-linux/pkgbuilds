@@ -1,0 +1,10 @@
+#!/bin/bash
+
+post_install() {
+	/usr/bin/systemctl preset systemd-boot-update.service >/dev/null 2>&1 || true
+	/usr/lib/garuda/kernel-install-uki add || true
+}
+
+pre_remove() {
+	/usr/bin/systemctl disable systemd-boot-update.service >/dev/null 2>&1 || true
+}

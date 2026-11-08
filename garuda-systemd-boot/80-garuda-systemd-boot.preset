@@ -1,0 +1,3 @@
+# Updates systemd-boot on the ESP at boot when the systemd package brought a
+# newer one. Without systemd-boot on the ESP it does nothing (--graceful).
+enable systemd-boot-update.service

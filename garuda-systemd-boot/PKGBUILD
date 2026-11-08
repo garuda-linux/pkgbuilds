@@ -1,0 +1,39 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=garuda-systemd-boot
+pkgver=0.0.1
+pkgrel=1
+pkgdesc='systemd-boot with unified kernel images (UKI) for Garuda Linux'
+arch=(any)
+url='https://gitlab.com/garuda-linux/tools/image-builder'
+license=(GPL3)
+depends=(bash systemd systemd-ukify garuda-dracut-support)
+backup=(etc/kernel/install.conf etc/kernel/tries etc/kernel/uki.conf)
+install=$pkgname.install
+source=('install.conf'
+  'tries'
+  'uki.conf'
+  'kernel-install-uki'
+  '95-garuda-fallback.install'
+  '95-garuda-kernel-install.hook'
+  '61-garuda-kernel-install-remove.hook'
+  '80-garuda-systemd-boot.preset')
+sha256sums=('83c9d1cfef70205c5daa8783b9806b20c6f13657f8487734542e597d64930991'
+            '1121cfccd5913f0a63fec40a6ffd44ea64f9dc135c66634ba001d10bcf4302a2'
+            '94ff4ff1ce273e81683cf25024de07d2cefed4ca4ae1781fb269d296f131da3c'
+            '9eaaa746c08b85a75d432928c90e940333e2869545190eaa783a6a69d1522c70'
+            '302da0cadb41f51909194429c53f3a0ee602c1a06898310a9ecf740a2ecea8f8'
+            'dd201ebe3a88bc6d8326958510f74ccda4d35e3a6ba9268025d2fe26723b7714'
+            'ee77bb47acf458208c41055b49e1f7c4ac9ba5a47f1a89efd184b0aa412b4546'
+            '9b48b91c6ae29259c07a0f272dd58f1f6c701af4c5e59db82964b317967c069c')
+
+package() {
+  install -Dm644 install.conf "$pkgdir/etc/kernel/install.conf"
+  install -Dm644 tries "$pkgdir/etc/kernel/tries"
+  install -Dm644 uki.conf "$pkgdir/etc/kernel/uki.conf"
+  install -Dm755 kernel-install-uki "$pkgdir/usr/lib/garuda/kernel-install-uki"
+  install -Dm755 95-garuda-fallback.install "$pkgdir/usr/lib/kernel/install.d/95-garuda-fallback.install"
+  install -Dm644 95-garuda-kernel-install.hook "$pkgdir/usr/share/libalpm/hooks/95-garuda-kernel-install.hook"
+  install -Dm644 61-garuda-kernel-install-remove.hook "$pkgdir/usr/share/libalpm/hooks/61-garuda-kernel-install-remove.hook"
+  install -Dm644 80-garuda-systemd-boot.preset "$pkgdir/usr/lib/systemd/system-preset/80-garuda-systemd-boot.preset"
+}

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# kernel-install(8) plugin: a fallback UKI next to the normal one, built from
+# the no-hostonly /boot/initramfs-<pkgbase>-fallback.img of dracut-install-garuda.
+# No boot counting suffix: it is the entry to pick when the normal one fails.
+
+set -euo pipefail
+
+COMMAND="${1:?}"
+KERNEL_VERSION="${2:?}"
+KERNEL_IMAGE="${4:-}"
+
+[[ "${KERNEL_INSTALL_LAYOUT:-}" == uki ]] || exit 0
+
+dest="$KERNEL_INSTALL_BOOT_ROOT/EFI/Linux/$KERNEL_INSTALL_ENTRY_TOKEN-$KERNEL_VERSION-fallback.efi"
+
+case "$COMMAND" in
+  add)
+    pkgbase="/usr/lib/modules/$KERNEL_VERSION/pkgbase"
+    [[ -f "$pkgbase" ]] || exit 0
+
+    initrd="/boot/initramfs-$(<"$pkgbase")-fallback.img"
+    [[ -f "$initrd" ]] || exit 0
+
+    # Without a command line the UKI would not find the root file system
+    if [[ ! -s /etc/kernel/cmdline ]]; then
+      echo "95-garuda-fallback: /etc/kernel/cmdline missing, no fallback UKI for $KERNEL_VERSION" >&2
+      exit 0
+    fi
+
+    # Its own title in the menu
+    osrel="$(mktemp)"
+    trap 'rm -f "$osrel"' EXIT
+    sed 's/^PRETTY_NAME="\(.*\)"$/PRETTY_NAME="\1 (fallback initramfs)"/' /etc/os-release >"$osrel"
+
+    config=()
+    [[ -f /etc/kernel/uki.conf ]] && config=(--config=/etc/kernel/uki.conf)
+
+    mkdir -p "${dest%/*}"
+    ukify build "${config[@]}" --linux="$KERNEL_IMAGE" --initrd="$initrd" \
+      --cmdline=@/etc/kernel/cmdline --uname="$KERNEL_VERSION" --os-release="@$osrel" --output="$dest"
+    ;;
+  remove)
+    rm -f "$dest"
+    ;;
+esac

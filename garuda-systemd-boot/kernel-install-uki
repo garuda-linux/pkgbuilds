@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Keeps the UKIs on the ESP in step with /boot on systemd-boot systems.
+#   kernel-install-uki add      every installed kernel, after dracut-install-garuda
+#   kernel-install-uki remove   the kernels named on stdin (usr/lib/modules/<kver>/pkgbase)
+# Does nothing when systemd-boot is not installed, so GRUB systems are not touched.
+
+set -euo pipefail
+
+bootctl is-installed --graceful >/dev/null 2>&1 || exit 0
+
+case "${1:-}" in
+  add)
+    status=0
+    for pkgbase in /usr/lib/modules/*/pkgbase; do
+      [[ -f "$pkgbase" ]] || continue
+
+      dir="${pkgbase%/pkgbase}"
+      kver="${dir##*/}"
+      initrd="/boot/initramfs-$(<"$pkgbase").img"
+      if [[ ! -f "$initrd" ]]; then
+        echo "kernel-install-uki: $initrd missing, no UKI for $kver" >&2
+        status=1
+        continue
+      fi
+
+      # The initrd argument makes 50-dracut.install skip its own dracut run
+      kernel-install add "$kver" "$dir/vmlinuz" "$initrd" || status=1
+    done
+    exit "$status"
+    ;;
+  remove)
+    while read -r target; do
+      kver="${target#usr/lib/modules/}"
+      kver="${kver%/pkgbase}"
+      kernel-install remove "$kver"
+    done
+    ;;
+  *)
+    echo "usage: ${0##*/} add|remove" >&2
+    exit 2
+    ;;
+esac
