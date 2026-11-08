@@ -1,0 +1,293 @@
+#!/usr/bin/env bash
+# snapper-sdboot: systemd-boot entries for the snapper snapshots of /.
+#   snapper-sdboot sync   add entries for new snapshots, drop those of deleted ones
+#   snapper-sdboot list   print the snapshot entries on the ESP
+#   snapper-sdboot clean  remove all snapshot entries and UKIs from the ESP
+#
+# Each snapshot gets its own UKI, built from the snapshot's own kernel, initrd
+# and /etc/kernel/cmdline, plus a cmdline addon in <uki>.extra.d/ with
+# rootflags=subvol=<snapshot>. systemd-stub appends the addon to the UKI's
+# command line, and btrfs takes the last subvol=, so the snapshot is mounted.
+# Read-only snapshots get their writable overlay from the dracut module
+# 50btrfs-snapshot-overlay (garuda-dracut-support).
+#
+# The UKIs live in EFI/snapper-sdboot/<number>/ and not in EFI/Linux, so
+# systemd-boot does not list them on its own and kernel-install never removes
+# them. Settings: /etc/snapper-sdboot.conf.
+
+set -euo pipefail
+
+FREE_SPACE_FLOOR_MIB=512
+SKIP_TYPES="post"
+
+# shellcheck source=/dev/null
+[[ -f /etc/snapper-sdboot.conf ]] && . /etc/snapper-sdboot.conf
+
+readonly SNAPSHOTS=/.snapshots
+readonly NAME=snapper-sdboot
+SYNCED="" # the snapshot list of the last sync_once round
+
+log() { echo "$NAME: $*"; }
+warn() { echo "$NAME: $*" >&2; }
+
+# field <info.xml> <tag>: the text of a top-level tag of a snapper info.xml
+field() {
+  sed -n "s|.*<$2>\(.*\)</$2>.*|\1|p" "$1" | head -n1 |
+    sed -e 's/&lt;/</g' -e 's/&gt;/>/g' -e 's/&quot;/"/g' -e "s/&apos;/'/g" -e 's/&amp;/\&/g'
+}
+
+# The snapshot numbers that get an entry, newest first
+wanted_snapshots() {
+  local dir n type
+  for dir in "$SNAPSHOTS"/[0-9]*/; do
+    n="${dir%/}"
+    n="${n##*/}"
+    [[ "$n" =~ ^[0-9]+$ ]] || continue
+    [[ -f "$dir/info.xml" && -d "$dir/snapshot" ]] || continue
+    type="$(field "$dir/info.xml" type)"
+    [[ " $SKIP_TYPES " == *" $type "* ]] && continue
+    echo "$n"
+  done | sort -rn
+}
+
+size_k() {
+  du -sk "$1" 2>/dev/null | cut -f1
+}
+
+# kernel_of <snapshot root>: prints "<pkgbase> <kernel version>". The booted
+# kernel package if the snapshot has it, otherwise its first kernel.
+kernel_of() {
+  local snap="$1" booted="" pkgbase="" file
+  booted="$(cat "/usr/lib/modules/$(uname -r)/pkgbase" 2>/dev/null || true)"
+
+  if [[ -n "$booted" && -f "$snap/boot/vmlinuz-$booted" ]]; then
+    pkgbase="$booted"
+  else
+    for file in "$snap"/boot/vmlinuz-*; do
+      [[ -f "$file" ]] || continue
+      pkgbase="${file##*/vmlinuz-}"
+      break
+    done
+  fi
+
+  [[ -n "$pkgbase" ]] || return 1
+
+  for file in "$snap"/usr/lib/modules/*/pkgbase; do
+    [[ -f "$file" && "$(<"$file")" == "$pkgbase" ]] || continue
+    file="${file%/pkgbase}"
+    echo "$pkgbase ${file##*/}"
+    return 0
+  done
+
+  return 1
+}
+
+# estimate_k <snapshot number>: ESP space a new entry needs
+estimate_k() {
+  local snap="$SNAPSHOTS/$1/snapshot" kernel pkgbase
+  kernel="$(kernel_of "$snap")" || {
+    echo 0
+    return
+  }
+  pkgbase="${kernel%% *}"
+  echo $(($(size_k "$snap/boot/vmlinuz-$pkgbase") + $(size_k "$snap/boot/initramfs-$pkgbase.img") + 256))
+}
+
+write_entry() {
+  local esp="$1" n="$2" info="$SNAPSHOTS/$2/info.xml" title date description
+  date="$(field "$info" date)"
+  description="$(field "$info" description)"
+  title="Garuda Linux snapshot $n${date:+, ${date% *}}${description:+: $description}"
+  title="${title//$'\n'/ }"
+
+  mkdir -p "$esp/loader/entries"
+  {
+    echo "title    $title"
+    echo "version  $n"
+    echo "sort-key $NAME"
+    echo "uki      /EFI/$NAME/$n/snapshot.efi"
+  } >"$esp/loader/entries/$NAME-$n.conf.tmp"
+  mv "$esp/loader/entries/$NAME-$n.conf.tmp" "$esp/loader/entries/$NAME-$n.conf"
+}
+
+build() {
+  local esp="$1" n="$2" subvol="$3"
+  local snap="$SNAPSHOTS/$n/snapshot" dir="$esp/EFI/$NAME/$n" kernel pkgbase kver cmdline osrel
+
+  if ! kernel="$(kernel_of "$snap")"; then
+    warn "snapshot $n has no kernel in /boot, no entry"
+    return 1
+  fi
+  pkgbase="${kernel%% *}"
+  kver="${kernel#* }"
+
+  if [[ ! -f "$snap/boot/initramfs-$pkgbase.img" ]]; then
+    warn "snapshot $n has no /boot/initramfs-$pkgbase.img, no entry"
+    return 1
+  fi
+
+  cmdline="$snap/etc/kernel/cmdline"
+  [[ -s "$cmdline" ]] || cmdline=/etc/kernel/cmdline
+  if [[ ! -s "$cmdline" ]]; then
+    warn "no /etc/kernel/cmdline in snapshot $n or on the system, no entry"
+    return 1
+  fi
+
+  osrel="$(mktemp)"
+  sed "s/^PRETTY_NAME=\"\(.*\)\"$/PRETTY_NAME=\"\1 (snapshot $n)\"/" \
+    "$snap/usr/lib/os-release" >"$osrel"
+
+  local config=()
+  [[ -f /etc/kernel/uki.conf ]] && config=(--config=/etc/kernel/uki.conf)
+
+  rm -rf -- "$dir.tmp"
+  mkdir -p "$dir.tmp/snapshot.efi.extra.d"
+  if ! ukify build "${config[@]}" --linux="$snap/boot/vmlinuz-$pkgbase" \
+    --initrd="$snap/boot/initramfs-$pkgbase.img" --cmdline="@$cmdline" \
+    --uname="$kver" --os-release="@$osrel" --output="$dir.tmp/snapshot.efi" ||
+    ! ukify build "${config[@]}" --cmdline="rootflags=subvol=$subvol" \
+      --output="$dir.tmp/snapshot.efi.extra.d/snapshot.addon.efi"; then
+    rm -f "$osrel"
+    rm -rf -- "$dir.tmp"
+    warn "building the UKI of snapshot $n failed"
+    return 1
+  fi
+  rm -f "$osrel"
+
+  rm -rf -- "$dir"
+  mv "$dir.tmp" "$dir"
+  log "added snapshot $n ($kver)"
+}
+
+remove() {
+  local esp="$1" n="$2"
+  rm -f "$esp/loader/entries/$NAME-$n.conf"
+  rm -rf -- "${esp:?}/EFI/$NAME/$n"
+  log "removed snapshot $n"
+}
+
+# The numbers that have an entry or a UKI directory on the ESP
+present_snapshots() {
+  local esp="$1" path n
+  for path in "$esp/EFI/$NAME"/* "$esp/loader/entries/$NAME"-*.conf; do
+    [[ -e "$path" ]] || continue
+    n="${path##*/}"
+    n="${n#"$NAME"-}"
+    n="${n%.conf}"
+    [[ "$n" =~ ^[0-9]+$ ]] && echo "$n"
+  done | sort -un
+}
+
+sync_once() {
+  local esp="$1" subvol_prefix="$2"
+  local wanted=() keep=() n size budget existing_k=0 avail_k
+
+  mapfile -t wanted < <(wanted_snapshots)
+
+  for n in $(present_snapshots "$esp"); do
+    [[ -d "$esp/EFI/$NAME/$n" ]] && existing_k=$((existing_k + $(size_k "$esp/EFI/$NAME/$n")))
+  done
+  avail_k="$(df --output=avail -k "$esp" | tail -n1 | tr -d ' ')"
+
+  # Newest first, as long as the ESP keeps its free-space floor
+  budget=$((avail_k + existing_k - FREE_SPACE_FLOOR_MIB * 1024))
+  for n in "${wanted[@]}"; do
+    if [[ -f "$esp/EFI/$NAME/$n/snapshot.efi" ]]; then
+      size="$(size_k "$esp/EFI/$NAME/$n")"
+    else
+      size="$(estimate_k "$n")"
+    fi
+
+    if ((size > budget)); then
+      warn "the ESP has no room for snapshot $n and older ones (floor ${FREE_SPACE_FLOOR_MIB} MiB)"
+      break
+    fi
+    budget=$((budget - size))
+    keep+=("$n")
+  done
+
+  for n in $(present_snapshots "$esp"); do
+    [[ " ${keep[*]} " == *" $n "* ]] || remove "$esp" "$n"
+  done
+
+  for n in "${keep[@]}"; do
+    if [[ ! -f "$esp/EFI/$NAME/$n/snapshot.efi" ]]; then
+      build "$esp" "$n" "$subvol_prefix/$n/snapshot" || continue
+    fi
+
+    # Also refreshes the title after snapper modify
+    write_entry "$esp" "$n"
+  done
+
+  SYNCED="$(printf '%s\n' "${wanted[@]}")"
+}
+
+cmd_sync() {
+  if ! bootctl is-installed --graceful >/dev/null 2>&1; then
+    log "systemd-boot is not installed, nothing to do"
+    return 0
+  fi
+
+  # A snapshot boot runs a read-only copy of the system, its entries stay as they are
+  if grep -qE 'subvol=[^ ,]*\.snapshots/[0-9]+/snapshot' /proc/cmdline; then
+    log "booted from a snapshot, not changing the entries"
+    return 0
+  fi
+  [[ -d "$SNAPSHOTS" ]] || return 0
+
+  local esp root subvol_prefix
+  esp="$(bootctl --print-esp-path)"
+
+  # The subvolume of /, for example /@. The snapshots are below it.
+  root="$(findmnt -n -o FSROOT /)"
+  root="${root#/}"
+  subvol_prefix="${root:+$root/}.snapshots"
+
+  mkdir -p /run/lock
+  exec 9>"/run/lock/$NAME.lock"
+  flock 9
+
+  # Snapshots made while the sync runs are picked up by another round
+  for _ in 1 2 3; do
+    sync_once "$esp" "$subvol_prefix"
+    [[ "$SYNCED" == "$(wanted_snapshots)" ]] && return 0
+  done
+}
+
+cmd_list() {
+  local esp file
+  esp="$(bootctl --print-esp-path)"
+  for file in "$esp/loader/entries/$NAME"-*.conf; do
+    [[ -f "$file" ]] && sed -n 's/^title *//p' "$file"
+  done
+}
+
+cmd_clean() {
+  bootctl is-installed --graceful >/dev/null 2>&1 || return 0
+  local esp n
+  esp="$(bootctl --print-esp-path)"
+
+  mkdir -p /run/lock
+  exec 9>"/run/lock/$NAME.lock"
+  flock 9
+
+  for n in $(present_snapshots "$esp"); do
+    remove "$esp" "$n"
+  done
+  rmdir --ignore-fail-on-non-empty "$esp/EFI/$NAME" 2>/dev/null || true
+}
+
+# The ESP is mounted for root only (umask=0077), so even list needs root
+if [[ "${1:-}" =~ ^(sync|list|clean)$ && $EUID -ne 0 ]]; then
+  exec sudo "$0" "$@"
+fi
+
+case "${1:-}" in
+sync) cmd_sync ;;
+list) cmd_list ;;
+clean) cmd_clean ;;
+*)
+  echo "usage: $NAME sync|list|clean" >&2
+  exit 2
+  ;;
+esac

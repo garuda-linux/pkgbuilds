@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# snapper(8) plugin: updates the systemd-boot snapshot entries of / in the
+# background. Plugins must return within seconds and must not call snapper,
+# so the work runs in snapper-sdboot.service.
+
+case "${1:-}" in
+  create-snapshot-post | delete-snapshot-post | modify-snapshot-post | rollback-post)
+    [[ "${2:-}" == / ]] || exit 0
+
+    # Fails harmlessly without a running systemd, for example in a chroot
+    systemctl --no-block start snapper-sdboot.service >/dev/null 2>&1 || true
+    ;;
+esac
+exit 0

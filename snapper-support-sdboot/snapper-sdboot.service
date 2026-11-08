@@ -1,0 +1,12 @@
+[Unit]
+Description=systemd-boot entries for the snapper snapshots of /
+Documentation=https://gitlab.com/garuda-linux/tools/image-builder/-/blob/main/docs/architecture.md
+ConditionPathIsDirectory=/.snapshots
+After=local-fs.target
+
+# Started by the snapper plugin /usr/lib/snapper/plugins/50-snapper-sdboot
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/snapper-sdboot sync
+Nice=10
+IOSchedulingClass=idle

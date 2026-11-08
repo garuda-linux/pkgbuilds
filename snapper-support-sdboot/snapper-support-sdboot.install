@@ -1,0 +1,27 @@
+#!/bin/bash
+# snapper-support for systemd-boot systems: the same snapper setup as
+# snapper-support, without grub-btrfs. The snapshot entries come from
+# snapper-sdboot, started by its snapper plugin.
+
+post_install() {
+	/usr/bin/systemctl daemon-reload
+	/usr/bin/systemctl enable --now snapper-cleanup.timer
+	#/usr/bin/systemctl enable snapper-timeline.timer
+
+	if [ ! -f /etc/snapper/configs/root ]; then
+		echo "Creating snapper config for root"
+		/usr/bin/snapper create-config --template garuda /
+	fi
+
+	# Entries for the snapshots that already exist.
+	/usr/bin/snapper-sdboot sync || true
+}
+
+pre_remove() {
+	/usr/bin/snapper-sdboot clean || true
+
+	echo "Deleting snapper config for root"
+	/usr/bin/snapper delete-config
+	/usr/bin/systemctl disable --now snapper-cleanup.timer
+	#/usr/bin/systemctl disable snapper-timeline.timer
+}

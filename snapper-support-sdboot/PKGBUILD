@@ -1,0 +1,31 @@
+# Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
+
+pkgname=snapper-support-sdboot
+pkgver=0.0.1
+pkgrel=1
+pkgdesc='Support package for enabling Snapper with snap-pac and bootable snapshots in systemd-boot'
+arch=(any)
+url='https://gitlab.com/garuda-linux/tools/image-builder'
+license=(GPL3)
+depends=(snapper snap-pac garuda-systemd-boot util-linux)
+conflicts=(snapper-support timeshift-support timeshift timeshift-autosnap)
+backup=(etc/snapper-sdboot.conf)
+install=$pkgname.install
+source=('snapper-template-garuda'
+  'snapper-sdboot'
+  '50-snapper-sdboot'
+  'snapper-sdboot.service'
+  'snapper-sdboot.conf')
+sha256sums=('36e573d6965ad3fe74e81507a962c31ed0b6414d4eec990025903ca897d8bee2'
+            'c785410fad813f3583cf3c44e03617ce252599feb6a3d7af8692e07c4cd43211'
+            'e0717dab8cb5cb5d23e0c3570a12e95da8b89b325fe038be48280d1afe7caad3'
+            'd5287c389ff06f2ad7f104a83313aaa7f1e74d2763f7d43ff6c5e0b2789c857e'
+            '4f937c498644f80b1c3d7eeff88e9d93eea2a87b5772f833baeb55da4a523f2a')
+
+package() {
+  install -Dm644 snapper-template-garuda "$pkgdir/etc/snapper/config-templates/garuda"
+  install -Dm755 snapper-sdboot "$pkgdir/usr/bin/snapper-sdboot"
+  install -Dm755 50-snapper-sdboot "$pkgdir/usr/lib/snapper/plugins/50-snapper-sdboot"
+  install -Dm644 snapper-sdboot.service "$pkgdir/usr/lib/systemd/system/snapper-sdboot.service"
+  install -Dm644 snapper-sdboot.conf "$pkgdir/etc/snapper-sdboot.conf"
+}
