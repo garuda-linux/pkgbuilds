@@ -1,0 +1,144 @@
+Subject: [PATCH] partition: keep Next disabled while a background scan runs
+
+The actions of the choice page revert the device and, for Erase, run the
+autopartitioning in the callback of a background scan (ScanningDialog).
+Next stays enabled meanwhile. Leaving the page before the callback ran
+collects the partitioning jobs of an unchanged device, so the
+installation creates no partitions and fails at the mount job. A person
+hardly gets there in time, autoProceed does.
+
+Run the scans through runScan(), which counts them, and report Next as
+disabled while one is running.
+---
+--- a/src/modules/partition/gui/ChoicePage.h
++++ b/src/modules/partition/gui/ChoicePage.h
+@@ -19,11 +19,14 @@
+ #include "Config.h"
+ #include "core/OsproberEntry.h"
+ 
++#include <QFuture>
+ #include <QMutex>
+ #include <QPointer>
+ #include <QSet>
+ #include <QWidget>
+ 
++#include <functional>
++
+ class QBoxLayout;
+ class QComboBox;
+ class QLabel;
+@@ -133,6 +136,14 @@
+     void doAlongsideApply();
+     void setupEfiSystemPartitionSelector();
+ 
++    /** @brief Runs @p future with the scanning dialog, then @p callback
++     *
++     * Next stays disabled until the callback has run: the revert and the
++     * autopartitioning of the actions happen in the background, and leaving
++     * the page before they finish takes no partitioning jobs along.
++     */
++    void runScan( const QFuture< void >& future, const std::function< void() >& callback, QWidget* parent );
++
+     // Translations support
+     void updateSwapChoicesTr();
+     void updateChoiceButtonsTr();
+@@ -176,6 +187,7 @@
+     bool m_preCheckActivated = false;
+ 
+     QMutex m_coreMutex;
++    int m_scansRunning = 0;  ///< background scans started by runScan() that have not finished
+ };
+ 
+ #endif  // CHOICEPAGE_H
+--- a/src/modules/partition/gui/ChoicePage.cpp
++++ b/src/modules/partition/gui/ChoicePage.cpp
+@@ -409,7 +409,7 @@
+ 
+     if ( m_core->isDirty() )
+     {
+-        ScanningDialog::run(
++        runScan(
+             QtConcurrent::run(
+                 [ = ]
+                 {
+@@ -515,7 +515,7 @@
+ 
+         if ( m_core->isDirty() )
+         {
+-            ScanningDialog::run(
++            runScan(
+                 QtConcurrent::run(
+                     [ = ]
+                     {
+@@ -539,7 +539,7 @@
+     case InstallChoice::Replace:
+         if ( m_core->isDirty() )
+         {
+-            ScanningDialog::run(
++            runScan(
+                 QtConcurrent::run(
+                     [ = ]
+                     {
+@@ -565,7 +565,7 @@
+     case InstallChoice::Alongside:
+         if ( m_core->isDirty() )
+         {
+-            ScanningDialog::run(
++            runScan(
+                 QtConcurrent::run(
+                     [ = ]
+                     {
+@@ -591,7 +591,7 @@
+     case InstallChoice::Manual:
+         if ( m_core->isDirty() )
+         {
+-            ScanningDialog::run(
++            runScan(
+                 QtConcurrent::run(
+                     [ = ]
+                     {
+@@ -824,7 +824,7 @@
+     // This will be deleted by the second lambda, below.
+     QString* homePartitionPath = new QString();
+ 
+-    ScanningDialog::run(
++    runScan(
+         QtConcurrent::run(
+             [ this, current, homePartitionPath ]( bool doReuseHomePartition )
+             {
+@@ -1505,6 +1505,12 @@
+ bool
+ ChoicePage::calculateNextEnabled() const
+ {
++    if ( m_scansRunning > 0 )
++    {
++        cDebug() << "Partitioning is still being prepared in the background";
++        return false;
++    }
++
+     auto sm_p = m_beforePartitionBarsView ? m_beforePartitionBarsView->selectionModel() : nullptr;
+ 
+     switch ( m_config->installChoice() )
+@@ -1558,6 +1564,22 @@
+ }
+ 
+ void
++ChoicePage::runScan( const QFuture< void >& future, const std::function< void() >& callback, QWidget* parent )
++{
++    ++m_scansRunning;
++    updateNextEnabled();
++    ScanningDialog::run(
++        future,
++        [ this, callback ]
++        {
++            callback();
++            --m_scansRunning;
++            updateNextEnabled();
++        },
++        parent );
++}
++
++void
+ ChoicePage::updateNextEnabled()
+ {
+     bool enabled = calculateNextEnabled();

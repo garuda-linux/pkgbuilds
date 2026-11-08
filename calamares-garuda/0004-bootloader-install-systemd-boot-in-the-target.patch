@@ -1,0 +1,72 @@
+Subject: [PATCH] bootloader: install systemd-boot in the target and check it
+
+- bootctl ran on the live system with --path, ignoring its exit code. A
+  failed install left a system without boot loader behind a successful
+  installation. It now runs in the target with --esp-path, so it uses the
+  systemd-boot, machine ID and kernel-install configuration of the new
+  system, and a failure stops the installation. --variables=yes, because
+  bootctl leaves the EFI variables alone in a chroot otherwise.
+- The machine ID directory on the ESP is only created when kernel-install
+  has no layout=uki. With UKIs it stayed empty.
+---
+--- a/src/modules/bootloader/main.py
++++ b/src/modules/bootloader/main.py
+@@ -205,6 +205,26 @@
+     return kernel_params
+ 
+ 
++def kernel_install_layout(installation_root_path):
++    """
++    Returns the layout= of kernel-install in the target, or "" when none is set.
++    /etc/kernel/install.conf overrides /usr/lib/kernel/install.conf.
++
++    :param installation_root_path: A string containing the absolute path to the root of the installation
++    """
++    layout = ""
++    for conf in ("usr/lib/kernel/install.conf", "etc/kernel/install.conf"):
++        try:
++            with open(os.path.join(installation_root_path, conf), 'r') as conf_file:
++                for line in conf_file:
++                    key, sep, value = line.strip().partition("=")
++                    if sep and key.strip() == "layout":
++                        layout = value.strip()
++        except FileNotFoundError:
++            pass
++    return layout
++
++
+ def create_systemd_boot_conf(installation_root_path, efi_dir, uuid, kernel, kernel_version):
+     """
+     Creates systemd-boot configuration files based on given parameters.
+@@ -230,9 +250,12 @@
+     with open(os.path.join(installation_root_path, "etc", "machine-id"), 'r') as machineid_file:
+         machine_id = machineid_file.read().rstrip('\n')
+ 
+-    # Ensure the directory exists
+-    machine_dir = os.path.join(installation_root_path + efi_dir, machine_id)
+-    os.makedirs(machine_dir, exist_ok=True)
++    # The entry directory makes kernel-install pick the Type 1 (bls) layout when
++    # nothing configures one. With layout=uki the UKIs go to EFI/Linux and the
++    # directory would stay empty on the ESP.
++    if kernel_install_layout(installation_root_path) != "uki":
++        machine_dir = os.path.join(installation_root_path + efi_dir, machine_id)
++        os.makedirs(machine_dir, exist_ok=True)
+ 
+     # Call kernel-install for each kernel
+     libcalamares.utils.target_env_process_output(["kernel-install",
+@@ -542,9 +565,12 @@
+     loader_path = os.path.join(install_efi_directory,
+                                "loader",
+                                "loader.conf")
+-    subprocess.call(["bootctl",
+-                     "--path={!s}".format(install_efi_directory),
+-                     "install"])
++    # In the target, so bootctl uses the systemd-boot, machine ID and
++    # kernel-install configuration of the new system.
++    check_target_env_call(["bootctl",
++                           "install",
++                           "--esp-path={!s}".format(efi_directory),
++                           "--variables=yes"])
+ 
+     for (kernel, kernel_type, kernel_version) in get_kernels(installation_root_path):
+         create_systemd_boot_conf(installation_root_path,

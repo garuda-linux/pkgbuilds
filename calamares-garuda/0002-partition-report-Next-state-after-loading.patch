@@ -1,0 +1,26 @@
+Subject: [PATCH] partition: report the Next state after loading the choice page
+
+ChoicePage::init() applies initialPartitioningChoice and emits
+nextStatusChanged before PartitionViewStep::continueLoading() connects
+to it. The step keeps reporting Next as disabled from the time the
+waiting widget was shown, and ChoicePage only emits again when its
+state changes. With a preset choice, Next stays disabled until the
+user picks another choice, and autoProceed never proceeds.
+
+Emit the current state once after connecting.
+---
+--- a/src/modules/partition/PartitionViewStep.cpp
++++ b/src/modules/partition/PartitionViewStep.cpp
+@@ -100,6 +100,12 @@
+ 
+     connect( m_core, &PartitionCoreModule::hasRootMountPointChanged, this, &PartitionViewStep::nextPossiblyChanged );
+     connect( m_choicePage, &ChoicePage::nextStatusChanged, this, &PartitionViewStep::nextPossiblyChanged );
++
++    // ChoicePage::init() already applied the initial partitioning choice and
++    // emitted nextStatusChanged before the connection above existed. Report
++    // the current state now, otherwise Next stays disabled until the user
++    // changes the choice, and autoProceed never proceeds.
++    nextPossiblyChanged( true );
+ }
+ 
+ PartitionViewStep::~PartitionViewStep()

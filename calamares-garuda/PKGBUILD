@@ -4,9 +4,9 @@
 # Contributor: Philip Müller <philm[at]manjaro[dog]org>
 
 pkgname=calamares-garuda
-pkgver=3.4.3.r3.g841b47857
-_commit=841b478570c35261cd73e48c5aeb6acefd3db425
-pkgrel=2
+pkgver=3.4.3.r19.gd62849a39
+_commit=d62849a39a97dbcd4bd9389ebc38e9643a81fa86
+pkgrel=1
 pkgdesc='Distribution-independent installer framework'
 arch=('i686' 'x86_64')
 url="https://calamares.codeberg.page"
@@ -21,6 +21,9 @@ makedepends=('extra-cmake-modules' 'qt6-tools' 'qt6-translations' 'git' 'boost')
 
 source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   0001-welcome-Add-efi-check.patch
+  0002-partition-report-Next-state-after-loading.patch
+  0003-partition-keep-Next-disabled-while-scanning.patch
+  0004-bootloader-install-systemd-boot-in-the-target.patch
   garuda-specific-patches.patch
   garuda-fswhitelist.patch
   # CachyOS keyboard patch
@@ -29,8 +32,11 @@ source+=(git+https://codeberg.org/Calamares/calamares.git#commit="${_commit}"
   https://github.com/CachyOS/cachyos-calamares/compare/f6b250ddbbc250c87319809ce7383c062ae13b11%5E..94fcc8b989295f5b626656ebab46e153185f3cf6.patch
   # CachyOS keyboard patch
   https://github.com/CachyOS/cachyos-calamares/commit/5afd22bd00176b00ff6d4a4a08855f1cabf6c820.patch)
-sha256sums=('c06dd6c394438a3a49570297fb28ef3cc615eb0b2171e978deaeeeb7e86db90d'
+sha256sums=('269d3d9b383254d4d60d671c47300b5e4a6dd24e348c70b57b52868774d49b79'
             'f0d818c865bccd7af4b3ffa9451f84c7d95afb27e3f58d478941990cbf7daa1a'
+            '517aa76e7cc6e220f14a8be6316c706e842ad10d101c410fdd62b49dd2d54d03'
+            '6b3855ccccaa7f729cc94e8ecee2b5e9bd1b51ce052ddc3b8f342da73af4623f'
+            'fdc7676ffa797d4c62a6a558978c32af97c39968fdcd29d8a36efb474c24cb02'
             'a28aedc641fb27c8cfc0e24d8b1123baa4d97025d4f17add57e2f70e897447de'
             '5a4e5d1628125a4185741437111085dc77e05da3951f9741cfaee439572fdf32'
             '6eee897e6f2c4a55daaaa02db1e939b4c48adb95405ffe9c113142fecc73c5b8'
