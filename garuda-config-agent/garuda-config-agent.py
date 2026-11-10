@@ -22,7 +22,7 @@ def parse_configs(directory):
         return {}
 
     # Iterate over all files
-    for filename in os.listdir(directory):
+    for filename in sorted(os.listdir(directory)):
         if filename.endswith(".yaml") or filename.endswith(".yml"):
             filepath = os.path.join(directory, filename)
 
@@ -221,7 +221,7 @@ def pre(configs, connection):
     cursor = connection.cursor()
     existing_files = []
 
-    for target_file in modified_files:
+    for target_file in sorted(modified_files):
         if not os.path.exists(target_file):
             continue
 
@@ -266,7 +266,7 @@ def post(configs, connection, new_only):
         new_files = set(modified_files).difference(set(existing_files))
     expand_modified_files(modified_files, configs)
 
-    for target_file in modified_files:
+    for target_file in sorted(modified_files):
         if target_file not in configs or not os.path.exists(target_file):
             continue
 
