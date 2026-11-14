@@ -1,6 +1,7 @@
 [Unit]
 Description=Garuda Linux virtualmachine guest target
-Wants=vboxservice.service vboxclient.service vmtoolsd.service spice-vdagentd.socket qemu-guest-agent.service
+# No qemu-guest-agent.service: its udev rule starts it once the guest agent port exists.
+Wants=vboxservice.service vboxclient.service vmtoolsd.service spice-vdagentd.socket
 
 [Install]
 WantedBy=multi-user.target
