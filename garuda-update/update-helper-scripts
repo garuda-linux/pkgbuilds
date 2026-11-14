@@ -252,6 +252,8 @@ post-update-routines() {
 
 end-routines() {
 	set -euo pipefail
+	[ -d /run/systemd/system ] || return 0
+
 	# Update plocate index in the background
 	if [ -x /usr/bin/locate ]; then
 		systemctl start plocate-updatedb.service --no-block
