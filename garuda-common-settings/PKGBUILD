@@ -2,14 +2,14 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=garuda-common-settings
-pkgver=2.14.0
+pkgver=2.14.1
 pkgrel=1
-_commit='a1fe3b8426bfec6ae6aa1ba524bc657b3a0a2a17'
+_commit='fe57834ca611505ac005647ff4da1bc5ff050ed5'
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-common-settings/-/archive/${_commit}/garuda-common-settings-${_commit}.tar.gz")
-sha256sums=('9102ad1e705bd794b4c85ad9c09ea02c640723de0c7f910672ff3684aa82fcc0')
+sha256sums=('44484a76c3f78c86bbf65a1041350201a2e991105a5ba3c929b8b8658ecc240d')
 pkgdesc='Garuda Linux common settings'
 optdepends=('garuda-browser-settings: Garuda Linux Browser settings'
   'performance-tweaks: Tuning for best performance'
