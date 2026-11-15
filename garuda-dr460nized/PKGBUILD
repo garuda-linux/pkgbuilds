@@ -33,7 +33,6 @@ package() {
     'garuda-icons'
     'garuda-wallpapers'
     'kvantum'
-    'kvantum-qt5'
     'plasma-applet-window-buttons'
     'plasma-login-manager'
     'plasma-systemmonitor'
