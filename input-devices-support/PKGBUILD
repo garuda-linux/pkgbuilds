@@ -2,35 +2,24 @@
 # Contributor: Librewish <librewish@gmail.com>
 
 pkgname=input-devices-support
-pkgdesc="Meta-package for commonly used input devices such as fingerprint sensors or Wacom tablets"
-pkgver=1.0.3
+pkgver=1.1.0
 pkgrel=1
 arch=('any')
 url="https://wiki.archlinux.org/index.php/Category:Input_devices"
 license=('GPL')
 pkgdesc="Meta package for input devices support"
+# X11-only parts (xdotool, libinput-gestures, xf86-input-*) are installed by
+# the X11 desktops themselves. xorg-server brings xf86-input-libinput.
 depends=("android-udev"
   "bolt"
   "brightnessctl"
   "fprintd"
   "game-devices-udev"
   "iio-sensor-proxy"
-  "libinput-gestures"
   "linuxconsole"
   "lirc"
-  "v4l-utils"
-  "xdotool"
-  "xf86-input-elographics"
-  "xf86-input-evdev"
-  "xf86-input-libinput"
-  "xf86-input-void"
-  "xf86-input-wacom")
+  "v4l-utils")
 optdepends=('piper: GTK application to configure gaming mice'
   'antimicrox: GUI for mapping keyboard keys to controller'
   'plasma-thunderbolt: Plasma integration for managing Thunderbolt devices')
 install="$pkgname".install
-
-package() {
-  install -d "$pkgdir/etc/xdg/autostart"
-  ln -s /usr/share/applications/libinput-gestures.desktop "$pkgdir/etc/xdg/autostart/libinput-gestures.desktop"
-}

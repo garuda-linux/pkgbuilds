@@ -24,10 +24,22 @@ add_group() {
 }
 
 post_install() {
-	post_upgrade
+	add_group
 }
 
 post_upgrade() {
-	systemctl --global enable libinput-gestures
 	add_group
+
+	if [ "$(vercmp "$2" 1.0.3)" -le 0 ]; then
+		cat <<'EOF'
+==> input-devices-support no longer depends on xdotool, libinput-gestures and
+    xf86-input-{elographics,evdev,void,wacom}, and no longer autostarts
+    libinput-gestures. On Wayland desktops (Plasma, GNOME, Hyprland, Sway,
+    COSMIC) they are not needed, and KDE Plasma has its own touchpad gestures:
+      sudo systemctl --global disable libinput-gestures
+    On X11 desktops (Cinnamon, Xfce, i3), keep them installed:
+      sudo pacman -D --asexplicit xdotool libinput-gestures xf86-input-elographics xf86-input-evdev xf86-input-void xf86-input-wacom
+    Without that, removing orphaned packages also removes them.
+EOF
+	fi
 }
