@@ -1,6 +1,6 @@
 pkgbase = snapper-support-sdboot
 	pkgdesc = Support package for enabling Snapper with snap-pac and bootable snapshots in systemd-boot
-	pkgver = 0.0.2
+	pkgver = 0.0.3
 	pkgrel = 1
 	url = https://gitlab.com/garuda-linux/tools/image-builder
 	install = snapper-support-sdboot.install
@@ -21,9 +21,9 @@ pkgbase = snapper-support-sdboot
 	source = snapper-sdboot.service
 	source = snapper-sdboot.conf
 	sha256sums = 36e573d6965ad3fe74e81507a962c31ed0b6414d4eec990025903ca897d8bee2
-	sha256sums = b3a9eb29cdc62648cb60644088627648f615c466da14f4888951ef50e9e0098a
+	sha256sums = 40a8b8dce312c7ebcb31cee227bd01f8553c4a8e0a4ddddf85ba0039cb18ec2e
 	sha256sums = e0717dab8cb5cb5d23e0c3570a12e95da8b89b325fe038be48280d1afe7caad3
 	sha256sums = d5287c389ff06f2ad7f104a83313aaa7f1e74d2763f7d43ff6c5e0b2789c857e
-	sha256sums = 4f937c498644f80b1c3d7eeff88e9d93eea2a87b5772f833baeb55da4a523f2a
+	sha256sums = 5c0014f1dbbca9f545b47770bda05b6102ef234d66c8b49fdcb89ca36a5a36f5
 
 pkgname = snapper-support-sdboot

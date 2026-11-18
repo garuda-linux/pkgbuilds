@@ -3,6 +3,9 @@
 #   snapper-sdboot sync   add entries for new snapshots, drop those of deleted ones
 #   snapper-sdboot list   print the snapshot entries on the ESP
 #   snapper-sdboot clean  remove all snapshot entries and UKIs from the ESP
+#   snapper-sdboot pin <number>...    give the snapshots their entry first
+#   snapper-sdboot unpin <number>...  remove the pin
+#   snapper-sdboot pins   print the pinned snapshots
 #
 # Snapshots with the same kernel version and the same initramfs share one
 # multi-profile UKI, built from the kernel and initramfs in their /boot. Each
@@ -15,10 +18,12 @@
 # The UKIs live in EFI/snapper-sdboot/<pkgbase>-<version>-<initramfs hash>/
 # and not in EFI/Linux, so systemd-boot does not list them on its own and
 # kernel-install never removes them. Settings: /etc/snapper-sdboot.conf.
+# Snapshots with the snapper userdata sdboot=pin get their entry first.
 
 set -euo pipefail
 
 FREE_SPACE_FLOOR_MIB=512
+MAX_GROUPS=10
 SKIP_TYPES="post"
 
 # shellcheck source=/dev/null
@@ -60,6 +65,23 @@ wanted_snapshots() {
     [[ " $SKIP_TYPES " == *" $type "* ]] && continue
     echo "$n"
   done | sort -rn
+}
+
+is_pinned() {
+  tr -d ' \t\n' <"$SNAPSHOTS/$1/info.xml" | grep -q '<userdata><key>sdboot</key><value>pin</value></userdata>'
+}
+
+# budget_order <snapshot>...: the pinned snapshots, then the others, each in the given order
+budget_order() {
+  local n pinned=() others=()
+  for n in "$@"; do
+    if is_pinned "$n"; then
+      pinned+=("$n")
+    else
+      others+=("$n")
+    fi
+  done
+  printf '%s\n' "${pinned[@]}" "${others[@]}" | sed '/^$/d'
 }
 
 size_k() {
@@ -216,27 +238,33 @@ present_groups() {
 
 sync_once() {
   local esp="$1" subvol_prefix="$2"
-  local wanted=() keep=() n info group version size budget existing_k=0 avail_k
-  local -A group_of_n=() kernel_of_group=() members=() per_version=() counted=()
+  local wanted=() keep=() n info group version size budget existing_k=0 avail_k groups=0
+  local -A group_of_n=() kernel_of_group=() members=() per_version=() counted=() skipped=()
 
   mapfile -t wanted < <(wanted_snapshots)
 
   [[ -d "$esp/EFI/$NAME" ]] && existing_k="$(size_k "$esp/EFI/$NAME")"
   avail_k="$(df --output=avail -k "$esp" | tail -n1 | tr -d ' ')"
 
-  # Newest first, as long as the ESP keeps its free-space floor. A snapshot
-  # only costs space when it starts a new UKI.
+  # Pinned first, then newest first, within the free-space floor and
+  # MAX_GROUPS. A snapshot only costs space when it starts a new UKI.
   budget=$((avail_k + existing_k - FREE_SPACE_FLOOR_MIB * 1024))
-  for n in "${wanted[@]}"; do
+  for n in $(budget_order "${wanted[@]}"); do
     info="$(group_of "$n")" || continue
     group="${info%% *}"
     version="${info#* }"
 
-    if ((${per_version[$version]:-0} >= MAX_PER_KERNEL)); then
+    if ((${per_version[$version]:-0} >= MAX_PER_KERNEL)) || [[ -n "${skipped[$group]:-}" ]]; then
       continue
     fi
 
     if [[ -z "${counted[$group]:-}" ]]; then
+      if ((groups >= MAX_GROUPS)); then
+        warn "no entry for snapshot $n and others of $group, MAX_GROUPS=$MAX_GROUPS reached"
+        skipped[$group]=1
+        continue
+      fi
+
       if [[ -f "$esp/EFI/$NAME/$group/snapshots.efi" ]]; then
         size="$(size_k "$esp/EFI/$NAME/$group")"
       else
@@ -244,11 +272,13 @@ sync_once() {
       fi
 
       if ((size > budget)); then
-        warn "the ESP has no room for snapshot $n and older ones (floor ${FREE_SPACE_FLOOR_MIB} MiB)"
-        break
+        warn "the ESP has no room for snapshot $n and others of $group (floor ${FREE_SPACE_FLOOR_MIB} MiB)"
+        skipped[$group]=1
+        continue
       fi
 
       budget=$((budget - size))
+      groups=$((groups + 1))
       counted[$group]=1
       kernel_of_group[$group]="$version"
     fi
@@ -336,11 +366,60 @@ cmd_sync() {
 }
 
 cmd_list() {
-  local esp file
+  local esp n title
   esp="$(bootctl --print-esp-path)"
-  for file in "$esp/loader/entries/$NAME"-*.conf; do
-    [[ -f "$file" ]] && sed -n 's/^title *//p' "$file"
+  for n in $(present_entries "$esp" | sort -rn); do
+    title="$(sed -n 's/^title *//p' "$esp/loader/entries/$NAME-$n.conf")"
+    if [[ -f "$SNAPSHOTS/$n/info.xml" ]] && is_pinned "$n"; then
+      echo "$title (pinned)"
+    else
+      echo "$title"
+    fi
   done
+}
+
+# set_pin <userdata value> <number>...: the snapper plugin then syncs the entries
+set_pin() {
+  local value="$1" n type
+  shift
+  (($# > 0)) || {
+    warn "no snapshot number given"
+    exit 2
+  }
+
+  for n in "$@"; do
+    if [[ ! "$n" =~ ^[0-9]+$ || ! -f "$SNAPSHOTS/$n/info.xml" ]]; then
+      warn "there is no snapshot $n"
+      exit 1
+    fi
+    type="$(field "$SNAPSHOTS/$n/info.xml" type)"
+    if [[ -n "$value" && " $SKIP_TYPES " == *" $type "* ]]; then
+      warn "snapshot $n is a $type snapshot, which gets no entry (SKIP_TYPES)"
+      exit 1
+    fi
+  done
+
+  local done=unpinned
+  [[ -n "$value" ]] && done=pinned
+  for n in "$@"; do
+    snapper -c root modify --userdata "sdboot=$value" "$n"
+    log "$done snapshot $n"
+  done
+}
+
+cmd_pins() {
+  local esp="" n info entry
+  bootctl is-installed --graceful >/dev/null 2>&1 && esp="$(bootctl --print-esp-path)"
+
+  for info in "$SNAPSHOTS"/[0-9]*/info.xml; do
+    [[ -f "$info" ]] || continue
+    n="${info%/info.xml}"
+    n="${n##*/}"
+    is_pinned "$n" || continue
+    entry=""
+    [[ -n "$esp" && ! -f "$esp/loader/entries/$NAME-$n.conf" ]] && entry=" (no entry)"
+    echo "$n $(field "$info" date) $(field "$info" description)$entry"
+  done | sort -rn
 }
 
 cmd_clean() {
@@ -359,7 +438,7 @@ cmd_clean() {
 }
 
 # The ESP is mounted for root only (umask=0077), so even list needs root
-if [[ "${1:-}" =~ ^(sync|list|clean)$ && $EUID -ne 0 ]]; then
+if [[ "${1:-}" =~ ^(sync|list|clean|pin|unpin|pins)$ && $EUID -ne 0 ]]; then
   exec sudo "$0" "$@"
 fi
 
@@ -367,8 +446,11 @@ case "${1:-}" in
 sync) cmd_sync ;;
 list) cmd_list ;;
 clean) cmd_clean ;;
+pin) set_pin pin "${@:2}" ;;
+unpin) set_pin "" "${@:2}" ;;
+pins) cmd_pins ;;
 *)
-  echo "usage: $NAME sync|list|clean" >&2
+  echo "usage: $NAME sync|list|clean|pins|pin <number>...|unpin <number>..." >&2
   exit 2
   ;;
 esac
