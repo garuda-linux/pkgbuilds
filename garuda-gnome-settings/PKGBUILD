@@ -1,14 +1,14 @@
 # Maintainer: dr460nf1r3 <dr460nf1r3 at garudalinux dot org>
 
 pkgname=garuda-gnome-settings
-pkgver="1.6.0"
-_commit='062659fcc3de8dd0ace3926c7b1bc68ecf6f035e'
+pkgver=1.5.10
+_commit='a5eec3926f1613f900d74d1276e72b3252be7482'
 pkgrel=1
 arch=('any')
 url="https://gitlab.com/garuda-linux/themes-and-settings/settings/$pkgname"
 license=('GPL')
 source=("https://gitlab.com/garuda-linux/themes-and-settings/settings/garuda-gnome-settings/-/archive/${_commit}/garuda-gnome-settings-${_commit}.tar.gz")
-sha256sums=('2018e3a7816f0c855bf20f07df33ec7fc99d7cafd334e284c726eec1ef937297')
+sha256sums=('22b5542730e65560b5dbd610dcbbcbd5913692335a53ec77ec099a6a6618e3fa')
 pkgdesc='Garuda Linux GNOME settings'
 install=$pkgname.install
 depends=('garuda-backgrounds'
