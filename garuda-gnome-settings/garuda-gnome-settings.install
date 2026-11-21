@@ -1,29 +1,16 @@
-# Font-icon directories
-FONT_DIRS="/usr/share/fonts/TTF /usr/share/fonts/OTF /usr/share/fonts/misc"
-ICON_DIR="/usr/share/icons/hicolor"
-GLIB_SCHEMA_DIR="usr/share/glib-2.0/schemas"
-
-# Font-related commands
-update_fonts() {
-	mkfontscale "$FONT_DIRS" >/dev/null 2>&1
-	mkfontdir "$FONT_DIRS" >/dev/null 2>&1
-	fc-cache -s >/dev/null
-}
-
-# GTK related commands
-update_gtk() {
-	glib-compile-schemas $GLIB_SCHEMA_DIR
-	gtk-update-icon-cache -ftq $ICON_DIR
-	/bin/sh -c 'dconf update'
-}
-
-# Post installation
-post_install() {
-	post_upgrade
-}
-
-# Post upgrade
 post_upgrade() {
-	update_fonts
-	update_gtk
+	if [ "$(vercmp "$2" 1.5.10)" -le 0 ]; then
+		cat <<'EOF'
+==> garuda-gnome-settings no longer depends on ttf-fira-sans and ttf-firacode-nerd.
+    New users get GNOME's default fonts, Adwaita Sans and Adwaita Mono.
+    Accounts set up by an older version still use the Fira fonts. Either keep them:
+      sudo pacman -D --asexplicit ttf-fira-sans ttf-firacode-nerd
+    or switch each account to the GNOME defaults, as that user:
+      gsettings reset org.gnome.desktop.interface font-name
+      gsettings reset org.gnome.desktop.interface document-font-name
+      gsettings reset org.gnome.desktop.interface monospace-font-name
+      gsettings reset org.gnome.desktop.wm.preferences titlebar-font
+    Without either, removing orphaned packages also removes the fonts.
+EOF
+	fi
 }
