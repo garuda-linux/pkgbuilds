@@ -1,9 +1,9 @@
 # Maintainer: dr460nf1r3 <root at dr460nf1r3 dot org>
 
 pkgname=garuda-toolbox
-pkgver=6.3.0
+pkgver=6.3.1
 pkgrel=1
-_commit='746a4a653383e07531aaa9f58ad7b5cc487e21bc'
+_commit='140f7a7501804ade7a0e8ddce6456942ea89d42a'
 _electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
@@ -18,7 +18,7 @@ optdepends=('paru: show pending AUR updates'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 options=('!strip' '!emptydirs' '!debug')
 source=("https://gitlab.com/garuda-linux/applications/toolbox/-/archive/${_commit}/toolbox-${_commit}.tar.gz")
-sha256sums=('4bd6a0301eded7e3b2afe3cb4bb494e15fed3da88f155a0cecff813ac5ff1967')
+sha256sums=('2c858b74d90bbc87bc480bf37a5181ae90697937b564e1be654959fbe44ef4df')
 # Replaces all of garuda-settings-manager
 replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani'
   'garuda-boot-options' 'garuda-boot-repair' 'garuda-assistant' 'garuda-welcome' 'garuda-gamer')
@@ -60,6 +60,7 @@ build() {
 package() {
   install -Dm755 "${srcdir}/toolbox-$_commit/assets/garuda-toolbox.sh" "${pkgdir}/usr/bin/${pkgname}"
   install -Dm755 "${srcdir}/toolbox-$_commit/assets/garuda-toolbox-pty-wrapper" "${pkgdir}/usr/libexec/garuda-toolbox-pty-wrapper"
+  install -Dm755 "${srcdir}/toolbox-$_commit"/assets/garuda-toolbox-read-{grub,grub-cfg,locked-users,pacman-log} -t "${pkgdir}/usr/libexec"
   install -Dm644 "${srcdir}/toolbox-$_commit/dist/linux-unpacked/resources/app.asar" -t "${pkgdir}/usr/lib/${pkgname}"
   install -Dm644 "${srcdir}/toolbox-$_commit/assets/${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
   install -Dm644 "${srcdir}/toolbox-$_commit/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
