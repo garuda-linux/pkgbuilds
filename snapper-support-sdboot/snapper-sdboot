@@ -151,12 +151,19 @@ cmdline_of() {
   echo "$(tr '\n' ' ' <"$cmdline") rootflags=subvol=$2"
 }
 
-write_entry() {
-  local esp="$1" n="$2" group="$3" profile="$4" info="$SNAPSHOTS/$2/info.xml" title date description
+# title_of <snapshot number> <kernel version>
+title_of() {
+  local info="$SNAPSHOTS/$1/info.xml" title date description
   date="$(field "$info" date)"
   description="$(field "$info" description)"
-  title="Garuda Linux snapshot $n${date:+, ${date% *}}${description:+: $description}"
-  title="${title//$'\n'/ }"
+  title="Snapshot $1 [$2]${date:+ ${date% *}}${description:+ $description}"
+  echo "${title//$'\n'/ }"
+}
+
+# write_entry <esp> <snapshot number> <group> <profile> <kernel version>
+write_entry() {
+  local esp="$1" n="$2" group="$3" profile="$4" title
+  title="$(title_of "$n" "$5")"
 
   mkdir -p "$esp/loader/entries"
   {
@@ -188,7 +195,7 @@ build() {
     [[ -n "$base_cmdline" ]] || base_cmdline="$cmdline"
 
     if ! ukify build --profile="ID=snapshot-$n
-TITLE=Snapshot $n" --cmdline="$cmdline" --output="$dir.tmp/profiles/$n.efi" >/dev/null; then
+TITLE=$(title_of "$n" "$kver")" --cmdline="$cmdline" --output="$dir.tmp/profiles/$n.efi" >/dev/null; then
       rm -rf -- "$dir.tmp"
       return 1
     fi
@@ -327,7 +334,7 @@ sync_once() {
   for group in "${built[@]}"; do
     profile=1
     for n in ${members[$group]}; do
-      write_entry "$esp" "$n" "$group" "$profile"
+      write_entry "$esp" "$n" "$group" "$profile" "${kernel_of_group[$group]#* }"
       profile=$((profile + 1))
     done
   done
