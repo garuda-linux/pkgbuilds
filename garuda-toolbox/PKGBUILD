@@ -2,8 +2,8 @@
 
 pkgname=garuda-toolbox
 pkgver=6.3.1
-pkgrel=2
-_commit='69aa1f4b22b09932393e53c11b5baf59c9ce3eac'
+pkgrel=3
+_commit='51501ad8528f7937142434256c9c3d5214b9d623'
 _electronversion=43
 pkgdesc="Garuda Toolbox - A collection of useful tools to manage your Garuda Linux system"
 arch=('any')
@@ -18,7 +18,7 @@ optdepends=('paru: show pending AUR updates'
   'btrfs-assistant: easily manage Btrfs snapshots and further settings')
 options=('!strip' '!emptydirs' '!debug')
 source=("https://gitlab.com/garuda-linux/applications/toolbox/-/archive/${_commit}/toolbox-${_commit}.tar.gz")
-sha256sums=('b10ad627c58390065e8c3e846798dbbef96a1bca66272ee2357b7b71e3f2faee')
+sha256sums=('785e136a8060b9b93c692d254ea71eade4452abebde1221b552b094998952943')
 # Replaces all of garuda-settings-manager
 replaces=('garuda-settings-manager' 'garuda-settings-manager-git' 'garuda-settings-manager-kcm' 'garuda-settings-manager-kcm-git' 'garuda-settings-manager-notifier' 'garuda-settings-manager-knotifier' 'garuda-settings-manager-knotifier-git' 'garuda-settings-manager-notifier-git' 'garuda-rani'
   'garuda-boot-options' 'garuda-boot-repair' 'garuda-assistant' 'garuda-welcome' 'garuda-gamer')
