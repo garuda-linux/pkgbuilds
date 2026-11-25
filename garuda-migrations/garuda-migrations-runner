@@ -366,6 +366,13 @@ EOF
 			rm -f ".config/hypr/hyprland.lua"
 		fi
 	fi
+
+	if [[ $(vercmp 4.1.1-1 $1) -gt 0 ]] && [ "$IS_NEW_INSTALL" == "false" ] && [ -f ".config/environment.d/garuda.conf" ]; then
+		if grep -q '^VISUAL=“kate -b”$' ".config/environment.d/garuda.conf"; then
+			sed -i 's/^VISUAL=“kate -b”$/VISUAL="kate -b"/' ".config/environment.d/garuda.conf" 2>/dev/null &&
+				garudalib_add_update_notice "The VISUAL variable in a user's ~/.config/environment.d/garuda.conf was fixed to use plain quotes instead of typographic quotes. This takes effect after the next login." || true
+		fi
+	fi
 }
 
 apply_migrations "$applied_version" "$pending_version"
